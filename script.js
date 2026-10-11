@@ -7,6 +7,9 @@ const CONFIG = {
   onBuy(p){ snack('ສັ່ງຊື້ ' + p.n + ' — ເຊື່ອມລະບົບຊຳລະເງິນທີ່ CONFIG.onBuy'); }
 };
 
+/* เปิด/ปิดการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
+const SHOW = { categories:false, products:false, featured:false };
+
 const $ = (s, r=document) => r.querySelector(s);
 const ic = (id, cls='') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
 let snackT;
@@ -82,26 +85,23 @@ function artSq(key){
 
 /* products */
 const products = [
-  {n:'UNBAN FIVEM', p:'฿150', o:'฿200', left:'96', sold:'1,431', d:'-25%', hot:true, art:'unban', cat:'fivem'},
-  {n:'DEVIL STAR', p:'฿188', o:'฿250', left:'24', sold:'754', d:'-25%', art:'devil', cat:'fivem'},
-  {n:'CARD (ຄ່າຍຂາວ)', p:'฿188', o:'฿250', left:'29', sold:'251', d:'-25%', art:'card', cat:'fivem'},
-  {n:'SETTING PERFECTX', p:'฿250', o:'฿500', left:'45', sold:'148', d:'-50%', art:'setting', cat:'fivem'},
-  {n:'CMD XLIGHT', p:'฿19 - ฿113', o:'(฿25 - ฿150)', left:'55', sold:'62', d:'-25%', art:'xlight', cat:'fivem', wrap:true},
-  {n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'฿79', o:'(฿99)', left:'2', sold:'25', d:'-฿20', art:'unlock', cat:'fivem'},
-  {n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'฿188', o:'(฿250)', left:'12', sold:'22', d:'-25%', art:'collection', cat:'fivem'},
-  {n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'฿113', o:'(฿150)', left:'1', sold:'10', d:'-25%', art:'upcri', cat:'fivem'}
+  {n:'UNBAN FIVEM', p:'฿0', left:'0', sold:'0', art:'unban', cat:'fivem'},
+  {n:'DEVIL STAR', p:'฿0', left:'0', sold:'0', art:'devil', cat:'fivem'},
+  {n:'CARD (ຄ່າຍຂາວ)', p:'฿0', left:'0', sold:'0', art:'card', cat:'fivem'},
+  {n:'SETTING PERFECTX', p:'฿0', left:'0', sold:'0', art:'setting', cat:'fivem'},
+  {n:'CMD XLIGHT', p:'฿0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
+  {n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'฿0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
+  {n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'฿0', left:'0', sold:'0', art:'collection', cat:'fivem'},
+  {n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'฿0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
 ];
-const oldFmt = o => o.startsWith('(') ? o : `(${o})`;
 function renderProducts(cat){
   const list = products.filter(p => p.cat === cat);
   $('#grid').innerHTML = list.length ? list.map((p,i) => `
     <article class="pc">
-      <div class="pimg">${artSq(p.art)}<span class="badge">ຫຼຸດ ${p.d}</span>${p.hot?`<span class="hot">${ic('flame')}ຍອດຮິດ</span>`:''}</div>
+      <div class="pimg">${artSq(p.art)}</div>
       <div class="pb">
         <h3 class="pn">${p.n}</h3>
-        <div class="pinfo">${p.wrap
-          ? `<div class="pr wrap"><span class="now">${p.p}</span><div class="row2"><span class="old" style="margin:0">${oldFmt(p.o)}</span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div></div>`
-          : `<div class="pr"><span class="pl"><span class="now">${p.p}</span><span class="old">${oldFmt(p.o)}</span></span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div>`}</div>
+        <div class="pinfo"><div class="pr"><span class="pl"><span class="now">${p.p}</span></span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div></div>
         <button class="buy" data-buy="${i}">${ic('cart')}ຊື້ເລີຍ</button>
         <div class="sold">${ic('flame')}ຂາຍໄປແລ້ວ ${p.sold} ຊິ້ນ</div>
       </div>
@@ -112,13 +112,13 @@ renderProducts('fivem');
 
 /* featured carousel */
 const feat = [
-  {n:'UNBAN FIVEM', p:'฿150', art:'unban'}, {n:'DEVIL STAR', p:'฿188', art:'devil'},
-  {n:'BR MODS', p:'฿20 - ฿500', art:'br', hot:true}, {n:'PHANTOM (AD+IOS)', p:'฿350', art:'phantom'},
-  {n:'ZENTNITYX (AD+IOS)', p:'฿299', art:'zent'}, {n:'CMD XLIGHT', p:'฿19 - ฿113', art:'xlight'}
+  {n:'UNBAN FIVEM', p:'฿0', art:'unban'}, {n:'DEVIL STAR', p:'฿0', art:'devil'},
+  {n:'BR MODS', p:'฿0', art:'br'}, {n:'PHANTOM (AD+IOS)', p:'฿0', art:'phantom'},
+  {n:'ZENTNITYX (AD+IOS)', p:'฿0', art:'zent'}, {n:'CMD XLIGHT', p:'฿0', art:'xlight'}
 ];
 (function(){
   const tr = $('#featTrack'), dots = $('#featDots');
-  tr.innerHTML = feat.map(f => `<a class="fcard" href="#products"><div class="fi">${f.hot?`<span class="tag">${ic('flame')}ຍອດນິຍົມ</span>`:''}${artSq(f.art)}</div><div class="fn">${f.n}</div><div class="fp">${f.p}</div></a>`).join('');
+  tr.innerHTML = feat.map(f => `<a class="fcard" href="#products"><div class="fi">${artSq(f.art)}</div><div class="fn">${f.n}</div><div class="fp">${f.p}</div></a>`).join('');
   dots.innerHTML = feat.map((_,i) => `<button aria-label="ສະໄລດ໌ ${i+1}"></button>`).join('');
   let i = 0, timer;
   const set = n => { i = (n + feat.length) % feat.length; tr.style.transform = `translateX(-${i*100}%)`; [...dots.children].forEach((d,k) => d.classList.toggle('on', k===i)); };
@@ -127,41 +127,12 @@ const feat = [
   set(0); start();
 })();
 
-/* recent purchases */
-const recent = [
-  {n:'PHANTOM (AD+IOS)', u:'pou***', t:'28 ນາທີກ່ອນ', art:'phantom'},
-  {n:'ZENTNITYX (AD+IOS)', u:'Ton***', t:'29 ນາທີກ່ອນ', art:'zent'},
-  {n:'[ ໂຄ້ດ ] ສຸ່ມເລເວວ ໄອດີຊຸດຊາສຶເກະ', u:'tar***', t:'22 ນາທີກ່ອນ', art:'level'},
-  {n:'PHANTOM (AD+IOS)', u:'ຫີສ***', t:'25 ນາທີກ່ອນ', art:'phantom'},
-  {n:'ZENTNITYX (AD+IOS)', u:'ຊຸດ***', t:'30 ນາທີກ່ອນ', art:'zent'}
-];
-(function(){
-  const card = r => `<div class="rc-card"><div class="th" style="position:relative">${artSq(r.art)}</div><div style="min-width:0"><div class="nm">${r.n.length>16?r.n.slice(0,15)+'…':r.n}</div><div class="mt">${ic('user')}${r.u}</div><div class="mt">${ic('clock')}${r.t}</div></div></div>`;
-  const h = recent.map(card).join('');
-  $('#rcTrack').innerHTML = h + h;
-})();
-
-/* toast */
-(function(){
-  const el = $('#toast'), bar = $('#tBar');
-  let i = 0;
-  function show(){
-    const r = recent[i % recent.length]; i++;
-    $('#tImg').innerHTML = `<div style="position:relative;width:100%;height:100%">${artSq(r.art)}</div>`;
-    $('#tName').textContent = r.n; $('#tUser').textContent = r.u; $('#tTime').textContent = r.t;
-    el.classList.remove('out');
-    bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
-    setTimeout(() => el.classList.add('out'), 4600);
-  }
-  show(); setInterval(show, 5200);
-})();
-
 /* categories */
 const cats = [
-  {k:'fivem', t1:'FIVEM GAME', n:'FIVEM', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem', c:15},
-  {k:'cheat', t1:'CHEAT', n:'CHEAT', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ', c:3},
-  {k:'random', t1:'RANDOM ID', n:'RANDOM ID', d:'ສຸ່ມໄອດີເກມ', c:25},
-  {k:'freefire', t1:'FREE FIRE', n:'FREE FIRE', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Free Fire', c:12}
+  {k:'fivem', t1:'FIVEM GAME', n:'FIVEM', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem', c:0},
+  {k:'cheat', t1:'CHEAT', n:'CHEAT', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ', c:0},
+  {k:'random', t1:'RANDOM ID', n:'RANDOM ID', d:'ສຸ່ມໄອດີເກມ', c:0},
+  {k:'freefire', t1:'FREE FIRE', n:'FREE FIRE', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Free Fire', c:0}
 ];
 $('#catList').innerHTML = cats.map(c => `
   <button class="cat" data-cat="${c.k}">
@@ -177,3 +148,8 @@ $('#catList').addEventListener('click', e => {
   $('#products').scrollIntoView({behavior:'smooth'});
 });
 $('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'FIVEM'; renderProducts('fivem'); });
+
+/* apply show/hide flags */
+$('#cats').hidden = !SHOW.categories;
+$('#products').hidden = !SHOW.products;
+$('#featSec').hidden = !SHOW.featured;
