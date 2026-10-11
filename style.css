@@ -236,3 +236,17 @@ html,body{
 }
 *{ touch-action:manipulation; } /* กันแตะ 2 ครั้งแล้วซูม */
 input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูมเองตอนกดช่องพิมพ์/ค้นหา */
+
+/* ===== เมนูข้าง: พื้นหลังกระจกใส ===== */
+.panel{
+  background:rgba(255,255,255,.28);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  backdrop-filter:blur(22px) saturate(160%);
+  border-left:1px solid rgba(255,255,255,.35);
+  box-shadow:-8px 0 30px rgba(0,0,0,.18);
+}
+:root[data-theme="dark"] .panel{
+  background:rgba(28,28,34,.38);
+  border-left:1px solid rgba(255,255,255,.12);
+}
+.dr-f .l{background:rgba(255,255,255,.08)}
