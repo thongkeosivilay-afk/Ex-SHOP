@@ -1,5 +1,5 @@
 :root{
-  --red:#d42a1e; --red2:#e23c2d; --red-d:#b81e15;
+  --red:#FF0000; --red2:#FF0000; --red-d:#FF0000;
   --bg:#fbfbfb; --card:#ffffff; --text:#1b1b1d; --muted:#8a8a90; --border:#ececee;
   --pink:#fbe5e5; --pink2:#f7dada; --glass:rgba(235,235,238,.75);
   --shadow:0 2px 8px rgba(0,0,0,.08);
@@ -7,7 +7,7 @@
 }
 :root[data-theme="dark"]{
   --bg:#0e0e10; --card:#18181b; --text:#f3f3f4; --muted:#9a9aa3; --border:#2a2a30;
-  --pink:rgba(212,42,30,.2); --pink2:rgba(212,42,30,.28); --glass:rgba(60,60,66,.7);
+  --pink:rgba(255,0,0,.2); --pink2:rgba(255,0,0,.28); --glass:rgba(60,60,66,.7);
   --shadow:0 2px 10px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -28,16 +28,16 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* header */
 .header{top:calc(env(safe-area-inset-top,0px) + 36px);height:52px;background:var(--bg);display:flex;align-items:center;gap:5px;padding:0 20px 0 12px;border-bottom:1px solid var(--border)}
-.header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,42,30,.35),transparent)}
+.header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,0,0,.35),transparent)}
 .brand{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
 .hb{height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13.5px;flex:none;white-space:nowrap}
-.hb-chat{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(212,42,30,.45);background:var(--pink);color:var(--red)}
+.hb-chat{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,0,0,.45);background:var(--pink);color:var(--red)}
 .hb-chat svg{width:15px;height:15px}
 .hb-theme{width:33px;height:33px;border-radius:10px;background:var(--glass);border:1px solid var(--border);color:var(--muted)}
 .hb-theme svg{width:16px;height:16px}
 .hb-login{padding:0 9px;border:1px solid var(--border);background:var(--card)}
 .hb-login svg,.hb-reg svg{width:16px;height:16px}
-.hb-reg{padding:0 9px;background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(212,42,30,.3)}
+.hb-reg{padding:0 9px;background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(255,0,0,.3)}
 .burger{width:24px;height:24px;display:flex;flex-direction:column;justify-content:center;gap:5px;margin-left:8px}
 .burger i{display:block;height:2.5px;background:var(--text);border-radius:2px}
 
@@ -52,7 +52,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .hero-cta{position:relative;display:flex;gap:16px;margin-top:26px}
 .btn{height:43px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;padding:0 20px}
 .btn svg{width:20px;height:20px}
-.btn-red{background:linear-gradient(180deg,var(--red2),var(--red-d));color:#fff;box-shadow:0 6px 14px rgba(212,42,30,.35)}
+.btn-red{background:linear-gradient(180deg,var(--red2),var(--red-d));color:#fff;box-shadow:0 6px 14px rgba(255,0,0,.35)}
 .btn-glass{background:var(--glass);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 
 /* banner */
@@ -73,7 +73,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* stats */
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:25px 12px;margin:25px 15px 0}
-.stat{position:relative;height:66px;border-radius:12px;border:1px solid rgba(212,42,30,.3);overflow:hidden;display:flex;align-items:center;gap:12px;padding:0 12px;background:linear-gradient(105deg,#fdeaea 0%,#f4d5d5 38%,#6e5f5f 72%,#0f0f10 100%)}
+.stat{position:relative;height:66px;border-radius:12px;border:1px solid rgba(255,0,0,.3);overflow:hidden;display:flex;align-items:center;gap:12px;padding:0 12px;background:linear-gradient(105deg,#fdeaea 0%,#f4d5d5 38%,#6e5f5f 72%,#0f0f10 100%)}
 .stat .ic{width:40px;height:40px;border-radius:10px;background:#f9dcdc;color:var(--red);display:flex;align-items:center;justify-content:center;flex:none}
 .stat .ic svg{width:21px;height:21px}
 .stat .tx{position:relative;line-height:1}
@@ -141,12 +141,12 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .cb .art{position:absolute;right:18px;top:6px;width:130px;height:105px;background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,.02));clip-path:polygon(25% 100%,25% 40%,40% 14%,60% 4%,80% 14%,92% 45%,100% 100%);opacity:.55}
 .cb .t1{position:absolute;left:36px;top:24px;font-weight:800;font-size:19px;line-height:1;display:flex;align-items:center;gap:6px;font-style:italic;letter-spacing:.5px}
 .cb .t1::before{content:"";position:absolute;left:-14px;top:0;width:3px;height:18px;background:#fff}
-.cb .t2{position:absolute;left:33px;top:36px;font-weight:900;font-size:55px;line-height:1.1;color:#e63329;letter-spacing:-1.5px;text-shadow:0 2px 0 #6e0b10}
+.cb .t2{position:absolute;left:33px;top:36px;font-weight:900;font-size:55px;line-height:1.1;color:#FF0000;letter-spacing:-1.5px;text-shadow:0 2px 0 #6e0b10}
 .cb .tg{position:absolute;left:43px;top:90px;display:flex;gap:6px}
 .cb .tg i{font-style:normal;font-size:5px;padding:1.5px 5px;border:1px solid rgba(255,255,255,.35);border-radius:6px;background:rgba(0,0,0,.35);font-weight:600}
 .cb .cl{position:absolute;right:11px;bottom:9px;background:#0b0b0c;font-size:10.5px;font-weight:800;border-radius:10px;padding:2px 8px 2px 5px;display:flex;align-items:center;gap:3px;font-style:italic}
-.cb .cl::before{content:"";width:7px;height:7px;border-radius:50%;background:#e63329}
-.cb .ln{position:absolute;left:50px;right:50px;bottom:0;height:3px;background:#d42a1e;border-radius:3px 3px 0 0}
+.cb .cl::before{content:"";width:7px;height:7px;border-radius:50%;background:#FF0000}
+.cb .ln{position:absolute;left:50px;right:50px;bottom:0;height:3px;background:#FF0000;border-radius:3px 3px 0 0}
 .cat-b{display:flex;align-items:center;justify-content:space-between;padding:16px 25px 14px 24px;height:59px}
 .cat-b h3{font-size:19px;font-weight:400;line-height:1.1}
 .cat-b p{font-size:15.5px;color:var(--muted);line-height:1.4}
@@ -164,7 +164,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .pimg{position:relative;aspect-ratio:1/1;overflow:hidden;color:#fff;font-family:'Outfit','Noto Sans Lao Looped',sans-serif}
 .pimg .tp{position:absolute;left:0;right:0;text-align:center;font-weight:800;line-height:1.05}
 .pimg .bg2{position:absolute;inset:0}
-.badge{position:absolute;left:6px;top:7px;z-index:3;background:#d42a1e;color:#fff;font-size:13px;font-weight:500;border-radius:12px;padding:0 10px;height:24px;line-height:24px;white-space:nowrap}
+.badge{position:absolute;left:6px;top:7px;z-index:3;background:#FF0000;color:#fff;font-size:13px;font-weight:500;border-radius:12px;padding:0 10px;height:24px;line-height:24px;white-space:nowrap}
 .hot{position:absolute;right:7px;top:7px;z-index:3;background:linear-gradient(90deg,#f6a02a,#e8571c);color:#fff;font-size:15px;font-weight:600;border-radius:14px;padding:0 12px 0 8px;height:27px;display:flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .hot svg{width:16px;height:16px;fill:#fff}
 .pb{padding:0 12px;display:flex;flex-direction:column;flex:1;min-width:0}
@@ -176,7 +176,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .pr .pl{display:flex;align-items:baseline;min-width:0}
 .pr.wrap{flex-direction:column;align-items:stretch}
 .pr.wrap .row2{display:flex;justify-content:space-between;align-items:baseline;line-height:20px}
-.buy{margin:9px 0 0;width:100%;height:44px;border-radius:12px;background:linear-gradient(180deg,var(--red2),var(--red-d));color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:17px;box-shadow:0 5px 12px rgba(212,42,30,.35)}
+.buy{margin:9px 0 0;width:100%;height:44px;border-radius:12px;background:linear-gradient(180deg,var(--red2),var(--red-d));color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:17px;box-shadow:0 5px 12px rgba(255,0,0,.35)}
 .buy svg{width:19px;height:19px}
 .sold{margin-top:14px;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:14px;line-height:20px;white-space:nowrap}
 .sold svg{color:#f08a24;width:20px;height:20px;flex:none}
