@@ -67,8 +67,8 @@ const arts = {
   setting:{bg:'linear-gradient(170deg,#1b0609,#3d0a10 60%,#150407)', top:'<div style="position:absolute;left:25%;right:12%;top:8%;height:60%;background:linear-gradient(180deg,#444,#111);clip-path:polygon(15% 100%,20% 25%,50% 6%,80% 25%,90% 100%);opacity:.7"></div>', t:[['SETTING PERFECTX','#d6281f','8.4cqw','74%']]},
   xlight:{bg:'linear-gradient(180deg,#14090b,#2c0a0e)', top:'<div style="position:absolute;left:18%;right:18%;top:26%;height:5px;background:linear-gradient(90deg,#555,#ccc,#555);transform:rotate(-40deg)"></div>', t:[['CMD','#fff','12cqw','56%'],['XLIGHT','#e63329','17cqw','67%'],['SUPER MODE','#ffb21f','4.6cqw','86%']]},
   unlock:{bg:'linear-gradient(160deg,#241012,#4a0c12 70%,#190507)', top:'<div style="position:absolute;left:5%;top:12%;width:40%;height:70%;background:linear-gradient(180deg,#8d8d94,#2b2b30);border-radius:40% 40% 0 0"></div><div style="position:absolute;right:6%;top:10%;font-style:italic;color:#ffc425;font-size:8cqw;font-weight:900;transform:rotate(-8deg);line-height:.95;text-align:right">STAR<br><span style="font-size:5cqw">COMMUNITY</span></div>', t:[['ປົດລັອກສະກິນ','#e63329','14cqw','73%']]},
-  collection:{bg:'linear-gradient(160deg,#3a0a10,#14090c)', top:'<div style="position:absolute;left:10%;top:16%;width:34%;height:52%;background:linear-gradient(180deg,#9a7a70,#2a1a1a);border-radius:40% 40% 8% 8%"></div>', t:[['COLLECTION','#fff','15cqw','70%']]},
-  upcri:{bg:'linear-gradient(160deg,#4a0a10,#0d0709 65%)', top:'<div style="position:absolute;left:18%;right:18%;top:36%;height:30%;background:linear-gradient(135deg,#2b2b30,#0a0a0c);border:1px solid #555;border-radius:6px;transform:rotate(-4deg)"></div>', t:[['UPCRI','#fff','25cqw','2%'],['ຄຣີປັບໄດ້ ຄຣີໜ້າ ຄຣີຂ້າງ ຄຣີຫຼັງ','#fff','4.5cqw','86%']]},
+  collection:{bg:'linear-gradient(160deg,#3a0a10,#14090c)', top:'<div style="position:absolute;left:10%;top:16%;width:34%;height:52%;background:linear-gradient(180deg,#9a7a70,#2a1a1a);border-radius:40% 40% 8% 8%"></div>', t:[['COLLECTION','#fff','11.5cqw','72%']]},
+  upcri:{bg:'linear-gradient(160deg,#4a0a10,#0d0709 65%)', top:'<div style="position:absolute;left:18%;right:18%;top:36%;height:30%;background:linear-gradient(135deg,#2b2b30,#0a0a0c);border:1px solid #555;border-radius:6px;transform:rotate(-4deg)"></div>', t:[['UPCRI','#fff','20cqw','8%'],['ຄຣີປັບໄດ້ ຄຣີໜ້າ ຄຣີຂ້າງ ຄຣີຫຼັງ','#fff','4.5cqw','86%']]},
   phantom:{bg:'linear-gradient(160deg,#222,#050505)', top:'', t:[['PHANTOM','#ddd','9cqw','38%']]},
   zent:{bg:'linear-gradient(160deg,#5b2bd8,#14062e)', top:'', t:[['ZENTNITYX','#e9dcff','7cqw','42%']]},
   level:{bg:'linear-gradient(160deg,#6f3bd0,#1c0a3f)', top:'', t:[['LEVEL?','#fff','11cqw','40%']]},
@@ -99,9 +99,9 @@ function renderProducts(cat){
       <div class="pimg">${artSq(p.art)}<span class="badge">ຫຼຸດ ${p.d}</span>${p.hot?`<span class="hot">${ic('flame')}ຍອດຮິດ</span>`:''}</div>
       <div class="pb">
         <h3 class="pn">${p.n}</h3>
-        ${p.wrap
+        <div class="pinfo">${p.wrap
           ? `<div class="pr wrap"><span class="now">${p.p}</span><div class="row2"><span class="old" style="margin:0">${oldFmt(p.o)}</span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div></div>`
-          : `<div class="pr"><span class="pl"><span class="now">${p.p}</span><span class="old">${oldFmt(p.o)}</span></span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div>`}
+          : `<div class="pr"><span class="pl"><span class="now">${p.p}</span><span class="old">${oldFmt(p.o)}</span></span><span class="left">ເຫຼືອ ${p.left} ຊິ້ນ</span></div>`}</div>
         <button class="buy" data-buy="${i}">${ic('cart')}ຊື້ເລີຍ</button>
         <div class="sold">${ic('flame')}ຂາຍໄປແລ້ວ ${p.sold} ຊິ້ນ</div>
       </div>
