@@ -7,7 +7,7 @@ const CONFIG = {
   onBuy(p){ snack('ສັ່ງຊື້ ' + p.n + ' — ເຊື່ອມລະບົບຊຳລະເງິນທີ່ CONFIG.onBuy'); }
 };
 
-/* เปิด/ปิดการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
+/* เປິດ/ປິດการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
 const SHOW = { categories:false, products:false, featured:false };
 
 const $ = (s, r=document) => r.querySelector(s);
@@ -16,6 +16,7 @@ let snackT;
 function snack(msg){ const s=$('#snack'); s.textContent=msg; s.classList.add('show'); clearTimeout(snackT); snackT=setTimeout(()=>s.classList.remove('show'),2400); }
 function go(route){
   const u = CONFIG.routes[route];
+  if(!u && (route==='login' || route==='register') && window.openAuth){ openAuth(route); return; }
   if(u){ location.href = u; } else { snack('ຍັງບໍ່ໄດ້ຕັ້ງລິ້ງປາຍທາງ (CONFIG.routes.' + route + ')'); }
 }
 document.addEventListener('click', e => {
@@ -46,8 +47,8 @@ $('#btnChat').addEventListener('click', () => go('chat'));
 
 /* drawer */
 const ov = $('#ov');
-function openMenu(){ ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-function closeMenu(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+function openMenu(){ $('#btnMenu').classList.add('is-open'); ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+function closeMenu(){ $('#btnMenu').classList.remove('is-open'); ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
 $('#btnMenu').addEventListener('click', openMenu);
 $('#btnClose').addEventListener('click', closeMenu);
 ov.addEventListener('click', e => { if(e.target === ov) closeMenu(); });
