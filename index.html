@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>
 <title>ຮ້ານຄ້າ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -10,6 +11,7 @@
 <link rel="stylesheet" href="auth.css">
 <link rel="stylesheet" href="glass.css">
 <link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="welcome.css">
 </head>
 <body>
 
@@ -40,6 +42,7 @@
 <symbol id="mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
 <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
 <symbol id="eye-off" viewBox="0 0 24 24"><path d="M10.7 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-2.2 3.2M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6M14.1 14.1a3 3 0 0 1-4.2-4.2M2 2l20 20"/></symbol>
+<symbol id="tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
 <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
 <symbol id="alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
 <symbol id="check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
@@ -183,9 +186,29 @@
     <button class="soon-ok" type="button" data-soon-close>ຮັບຊາບ</button>
   </div>
 </div>
+<!-- เลือกโหมดสี (ครั้งแรก) -->
+<div class="wl" id="wl" aria-hidden="true" inert>
+  <div class="wl-bg"></div>
+  <div class="wl-c" role="dialog" aria-modal="true" aria-labelledby="wlT" aria-describedby="wlD">
+    <h2 id="wlT">ເລືອກໂໝດສີທີ່ທ່ານມັກ</h2>
+    <p id="wlD">ປ່ຽນໄດ້ທຸກເວລາຈາກປຸ່ມດວງຈັນ/ດວງອາທິດດ້ານເທິງ</p>
+    <div class="wl-opts" role="radiogroup" aria-label="ເລືອກໂໝດສີ">
+      <button class="wl-o" type="button" role="radio" aria-checked="false" data-t="dark"><div class="wl-mock dark" aria-hidden="true"><div class="mk-h"><i></i><b></b><u></u></div><div class="mk-t"></div><div class="mk-l"></div><div class="mk-b"></div><div class="mk-ban"></div><div class="mk-st"><i></i><i></i></div></div><span class="wl-n"><svg class="i"><use href="#moon"/></svg>ໂໝດມືດ</span><span class="wl-s">ດຳສະໜິດ ສະບາຍຕາຕອນກາງຄືນ</span><span class="wl-ck" aria-hidden="true"><svg class="i"><use href="#tick"/></svg></span></button>
+      <button class="wl-o" type="button" role="radio" aria-checked="false" data-t="light"><div class="wl-mock light" aria-hidden="true"><div class="mk-h"><i></i><b></b><u></u></div><div class="mk-t"></div><div class="mk-l"></div><div class="mk-b"></div><div class="mk-ban"></div><div class="mk-st"><i></i><i></i></div></div><span class="wl-n"><svg class="i"><use href="#sun"/></svg>ໂໝດສະຫວ່າງ</span><span class="wl-s">ຂາວສະອາດ ຊັດເຈນຕອນກາງເວັນ</span><span class="wl-ck" aria-hidden="true"><svg class="i"><use href="#tick"/></svg></span></button>
+    </div>
+    <button class="cta" id="wlGo" type="button">
+      <span class="cta-fill" aria-hidden="true"></span>
+      <span class="cta-l"><svg class="i cta-ic" aria-hidden="true"><use href="#moon"/></svg><span class="cta-t">ໃຊ້ໂໝດມືດ</span></span>
+      <span class="cta-chip" aria-hidden="true"><svg class="i"><use href="#arrow"/></svg></span>
+      <span class="cta-ok" aria-hidden="true"><svg class="i"><use href="#tick"/></svg>ພ້ອມແລ້ວ</span>
+    </button>
+  </div>
+</div>
 <div class="snack" id="snack"></div>
 
 <script src="script.js"></script>
 <script src="auth.js"></script>
+<script src="welcome.js"></script>
+<script src="refraction.js"></script>
 </body>
 </html>
