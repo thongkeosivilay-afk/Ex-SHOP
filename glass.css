@@ -88,3 +88,14 @@
   .am{background:var(--bg)}
 }
 @media (prefers-reduced-motion:reduce){.hb,.btn{transition:none}}
+
+/* แถบบนบนจอแคบ: กันปุ่มเบอร์เกอร์ถูกบีบจนหาย */
+.burger{flex:none}
+@media (max-width:420px){
+  .header{gap:4px;padding:0 12px 0 8px}
+  .hb{font-size:13px}
+  .hb-login,.hb-reg{padding:0 10px}
+  .hb-login svg,.hb-reg svg{display:none}
+  .burger{margin-left:4px}
+}
+@media (max-width:340px){.hb{font-size:12px}.hb-login,.hb-reg{padding:0 7px}.hb-theme{width:30px}}
