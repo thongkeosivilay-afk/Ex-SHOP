@@ -8,7 +8,7 @@ const CONFIG = {
 };
 
 /* เປິດ/ປິດการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
-const SHOW = { categories:false, products:false, featured:false };
+const SHOW = { categories:true, products:true, featured:true };
 
 const $ = (s, r=document) => r.querySelector(s);
 const ic = (id, cls='') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
