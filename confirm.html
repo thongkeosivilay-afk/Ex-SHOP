@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="lo" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>ຢືນຢັນການສັ່ງຊື້</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="confirm.css">
+</head>
+<body class="cf-page">
+<header class="cf-top">
+  <a class="cf-back" id="cfBack" href="index.html" aria-label="ກັບຄືນ"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+  <h1>ຢືນຢັນການສັ່ງຊື້</h1>
+</header>
+<main class="cf-sheet" id="cfApp"></main>
+<div class="snack" id="snack"></div>
+<script src="confirm.js"></script>
+<script>document.getElementById('cfBack').addEventListener('click',function(e){if(document.referrer&&history.length>1){e.preventDefault();history.back()}});</script>
+</body>
+</html>

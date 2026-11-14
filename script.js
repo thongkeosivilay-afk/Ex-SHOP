@@ -4,7 +4,7 @@ const CONFIG = {
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
     login:'', register:'', topup:'', orders:'', hwid:'', chat:''
   },
-  onBuy(p){ snack('ສັ່ງຊື້ ' + p.n + ' — ເຊື່ອມລະບົບຊຳລະເງິນທີ່ CONFIG.onBuy'); }
+  onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
 };
 
 /* เປິດ/ປິດการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
