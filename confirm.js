@@ -1,22 +1,29 @@
 /* ===== confirm.js — หน้ายืนยันสั่งซื้อ (confirm.html) =====
    สินค้า/ตัวเลือก/รูป มาจากฐานข้อมูลผ่าน data.js (products) — ลิงก์: confirm.html?p=<id สินค้า> */
 
-/* ===== หน้ายืนยันสั่งซื้อ (โหมดทดลอง) =====
-   ข้อมูลในนี้เป็นข้อมูลจำลองทั้งหมด (DEMO) ยังไม่ตัดเงินจริง
-   เมื่อเชื่อมระบบจริง ให้แก้ DEMO.balance และฟังก์ชัน doPurchase() */
+/* ===== หน้ายืนยันสั่งซื้อ (ขายจริง) =====
+   - ยอดเงิน: member_me (ฝั่งเซิร์ฟเวอร์)    - ตรวจโค้ดส่วนลด: member_promo
+   - ซื้อ: member_buy → ตัดเงินสมาชิก + ตัดโค้ดจากคลัง + บันทึกออเดอร์ ในธุรกรรมเดียว (หน้าเว็บทำได้แค่ขอซื้อ ตัดสินใจที่เซิร์ฟเวอร์) */
 (function(){
-  const DEMO = {
-    balance: (()=>{ try{ return Number(JSON.parse(localStorage.getItem('exshop_balance')||'0'))||0; }catch(e){ return 0; } })(),   // ยอดเงินเดียวกับหน้าเติมเงิน/แถบหัว
-    promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ₭5'} }
-  };
-  /* ตัวเลือกของสินค้า = ตัวเลือกราคาที่ตั้งในหน้าแอดมิน (ไม่มี = 1 ตัวเลือกตามราคาสินค้า) สต็อกใช้ของสินค้า */
+  let bal = null;   // ยอดเงินสมาชิก (null = ยังไม่ล็อกอิน/ยังโหลดไม่เสร็จ)
+  /* ตัวเลือกของสินค้า = ตัวเลือกราคาที่ตั้งในหน้าแอดมิน; สต็อกแยกตามตัวเลือก (จำนวนโค้ดที่เหลือ) ไม่มีตัวเลือก = ขายตามราคาสินค้า */
   function optionsOf(p){
-    const st = Number(p.left) || 0;
-    const base = p.durs && p.durs.length ? p.durs : [{ label: p.n, price: p.price }];
-    return base.map(d => ({ l: d.label, o: d.price, p: d.price, s: st }));
+    const tot = Number(p.left) || 0;
+    if(p.durs && p.durs.length) return p.durs.map(d => ({ l: d.label, k: d.label, o: d.price, p: d.price, s: d.stock == null ? tot : d.stock }));
+    return [{ l: p.n, k: '', o: p.price, p: p.price, s: tot }];
   }
 
-  const saveBal = () => { try{ localStorage.setItem('exshop_balance', JSON.stringify(DEMO.balance)); }catch(e){} };
+  /* ยอดเงินบนแถบหัว/โปรไฟล์ อ่านจาก localStorage 'exshop_balance' → ซิงก์ค่าจริงจากเซิร์ฟเวอร์ลงไป */
+  const setBal = n => { bal = n; try{ localStorage.setItem('exshop_balance', JSON.stringify(n)); }catch(e){} };
+  const loggedIn = () => !!(window.exLoggedIn && exLoggedIn());
+  function loadBal(){
+    if(!loggedIn()){ bal = null; if(cur) render(); return; }
+    exRpc('member_me', { p_token: exToken() }).then(j => {
+      if(j && j.ok){ setBal(Number(j.balance) || 0); }
+      else { exClearLocal(); bal = null; }
+      if(cur) render();
+    }, () => { if(cur) render(); });
+  }
   const $ = (s,r=document)=>r.querySelector(s);
   let toastT; function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>s.classList.remove('show'),2200); }
   const fmt = n => '₭' + (Math.round(n*100)/100).toLocaleString('en-US');
@@ -30,7 +37,6 @@
 
   const root = document.getElementById('cfApp');
   root.innerHTML = `<div class="cf-form">
-      <span class="cf-demo">ໂໝດທົດລອງ · ຍັງບໍ່ຕັດເງິນຈິງ</span>
       <div class="cf-hero" id="cfImg"></div>
       <div class="cf-meta"><div class="cf-th" id="cfTh"></div>
         <div class="cf-mt"><div class="cf-title" id="cfName"></div><div class="cf-stock" id="cfStock"></div></div></div>
@@ -58,25 +64,12 @@
         <div class="cf-row"><span>ຍອດເງິນຂອງທ່ານ</span><b id="cfBal"></b></div>
         <div class="cf-row rem"><span>ເຫຼືອຫຼັງຊື້</span><b id="cfRem"></b></div>
       </div>
-      <div class="cf-warn" id="cfWarn"><span>ຍອດເງິນບໍ່ພໍ ກະລຸນາເຕີມເງິນ</span><button id="cfTop">ເຕີມເງິນ</button></div>
+      <div class="cf-warn" id="cfWarn"><span id="cfWarnT">ຍອດເງິນບໍ່ພໍ ກະລຸນາເຕີມເງິນ</span><button id="cfTop">ເຕີມເງິນ</button></div>
       <div class="cf-act"><button class="cf-ok" id="cfOk">${OKI}ຢືນຢັນຊື້</button></div>
-      <div class="cf-det">
+      <div class="cf-det" id="cfDet">
         <h4>ລາຍລະອຽດສິນຄ້າ</h4>
         <div class="cf-notice" id="cfNotice" hidden></div>
         <div class="cf-rich" id="cfDesc"></div>
-        <ul>
-          <li>ສົ່ງສິນຄ້າອັດຕະໂນມັດທັນທີຫຼັງຊຳລະເງິນ</li>
-          <li>ຮອງຮັບ iOS ແລະ Android</li>
-          <li>ມີການຮັບປະກັນ ຖ້າໃຊ້ງານບໍ່ໄດ້ ຕິດຕໍ່ແອດມິນໄດ້ທຸກເວລາ</li>
-          <li>ບໍ່ສາມາດຄືນເງິນໄດ້ຫຼັງຈາກໄດ້ຮັບໂຄ້ດແລ້ວ</li>
-        </ul>
-        <h5>ວິທີໃຊ້ງານ</h5>
-        <ol>
-          <li>ຮັບໂຄ້ດສິນຄ້າຫຼັງຈາກສັ່ງຊື້ສຳເລັດ</li>
-          <li>ເປີດໂປຣແກຣມ ແລ້ວໃສ່ໂຄ້ດທີ່ໄດ້ຮັບ</li>
-          <li>ເລີ່ມໃຊ້ງານໄດ້ທັນທີ</li>
-        </ol>
-        <p class="cf-det-n">* ຂໍ້ຄວາມຕົວຢ່າງ — ແກ້ໄຂໄດ້ໃນ confirm.js</p>
       </div>
     </div>
     <div class="cf-done rs" id="cfRes" data-s="load" aria-live="polite">
@@ -94,10 +87,22 @@
     </div>
   `;
 
-  let cur=null, opts=[], sel=0, qty=1, applied=null, q='';
+  let cur=null, opts=[], sel=0, qty=1, applied=null, typed=null, q='', pseq=0, pt;
   const totalStock = () => opts.reduce((s,o)=>s+o.s,0);
   const disc = (sub, pr) => !pr ? 0 : Math.min(sub, pr.type==='pct' ? sub*pr.v/100 : pr.v);
-  const promoOf = () => DEMO.promos[$('#cfCode').value.trim().toUpperCase()];
+  const toPromo = j => ({ code: j.code, type: j.kind, v: Number(j.value) || 0, t: j.kind === 'pct' ? 'ຫຼຸດ ' + j.value + '%' : 'ຫຼຸດ ' + fmt(j.value) });
+  /* ตรวจโค้ดกับเซิร์ฟเวอร์ (หน่วงเล็กน้อยระหว่างพิมพ์) → typed = โค้ดที่ถูกต้อง (ยังไม่กด "ใช้") */
+  function checkCode(){
+    clearTimeout(pt); typed = null; applied = null;
+    const c = $('#cfCode').value.trim();
+    render();
+    if(!c || !loggedIn()) return;
+    const my = ++pseq;
+    pt = setTimeout(() => exRpc('member_promo', { p_token: exToken(), p_code: c }).then(j => {
+      if(my !== pseq) return;
+      typed = (j && j.ok) ? toPromo(j) : false; render();
+    }, () => { if(my === pseq){ typed = false; render(); } }), 350);
+  }
 
   function renderList(){
     const kw = q.trim().toLowerCase();
@@ -122,32 +127,40 @@
     document.querySelector('.cf-info .b').style.display = mx>0 ? '' : 'none';
     $('#cfQty').textContent = qty;
     $('#cfMinus').disabled = qty<=1; $('#cfPlus').disabled = qty>=stock;
-    const sub = unit*qty, typed = promoOf(), d = disc(sub, applied), tot = sub-d, rem = DEMO.balance-tot;
-    $('#cfTot').textContent = fmt(tot); $('#cfBal').textContent = fmt(DEMO.balance);
-    const r = $('#cfRem'); r.textContent = fmt(rem); r.classList.toggle('neg', rem<0);
-    $('#cfWarn').classList.toggle('show', rem<0);
+    const sub = unit*qty, d = disc(sub, applied), tot = sub-d, rem = bal == null ? null : bal-tot;
+    $('#cfTot').textContent = fmt(tot);
+    $('#cfBal').textContent = bal == null ? (loggedIn() ? '...' : '—') : fmt(bal);
+    const r = $('#cfRem'); r.textContent = rem == null ? '—' : fmt(rem); r.classList.toggle('neg', rem != null && rem<0);
+    $('#cfWarnT').textContent = loggedIn() ? 'ຍອດເງິນບໍ່ພໍ ກະລຸນາເຕີມເງິນ' : 'ກະລຸນາເຂົ້າສູ່ລະບົບເພື່ອເບິ່ງຍອດເງິນ ແລະ ຊື້ສິນຄ້າ';
+    $('#cfTop').textContent = loggedIn() ? 'ເຕີມເງິນ' : 'ເຂົ້າສູ່ລະບົບ';
+    $('#cfWarn').classList.toggle('show', rem != null ? rem<0 : !loggedIn());
     $('#cfOk').disabled = !stock;   // เงินไม่พอก็กดได้ → ไปหน้าผลลัพธ์แบบ ✕
     const h = $('#cfHint'); h.className='cf-hint';
     if(applied){ h.classList.add('ok'); h.textContent = '✓ ໃຊ້ໂຄ້ດແລ້ວ · ' + applied.t + ' (-' + fmt(d) + ')'; }
     else if(typed){ h.classList.add('ok'); h.textContent = 'ຈະໄດ້ຮັບສ່ວນຫຼຸດ -' + fmt(disc(sub,typed)) + ' · ກົດ "ໃຊ້" ເພື່ອຢືນຢັນ'; }
-    else if($('#cfCode').value.trim()){ h.classList.add('bad'); h.textContent = 'ໂຄ້ດບໍ່ຖືກຕ້ອງ'; }
+    else if($('#cfCode').value.trim()){
+      if(!loggedIn()){ h.textContent = 'ເຂົ້າສູ່ລະບົບເພື່ອໃຊ້ໂຄ້ດສ່ວນຫຼຸດ'; }
+      else if(typed === false){ h.classList.add('bad'); h.textContent = 'ໂຄ້ດບໍ່ຖືກຕ້ອງ ຫຼື ໝົດສິດແລ້ວ'; }
+    }
     $('#cfApply').disabled = !typed || !!applied;
-    const st=$('#cfCpSt'); st.textContent = applied ? '✓ ' + $('#cfCode').value.trim().toUpperCase() : ''; st.classList.toggle('on', !!applied);
+    const st=$('#cfCpSt'); st.textContent = applied ? '✓ ' + applied.code : ''; st.classList.toggle('on', !!applied);
   }
 
   function open(p){
     cur = p;
     opts = optionsOf(p);
     sel = Math.max(0, opts.findIndex(o=>o.s>0));
-    qty = 1; applied = null; q = ''; $('#cfCode').value = ''; $('#cfSearch').value = '';
+    qty = 1; applied = null; typed = null; q = ''; $('#cfCode').value = ''; $('#cfSearch').value = '';
     $('#cfBox').classList.remove('closed'); $('#cfPw').classList.remove('open'); $('#cfCp').classList.remove('open');
     root.classList.remove('done');
     $('#cfName').textContent = p.n;
-    $('#cfDesc').innerHTML = cleanHTML(p.desc) || '<p>' + escH(p.n) + '</p>';
+    const dh = cleanHTML(p.desc);
+    $('#cfDesc').innerHTML = dh; $('#cfDesc').hidden = !dh.trim();
     const nt = $('#cfNotice'); nt.textContent = p.notice || ''; nt.hidden = !p.notice;
+    $('#cfDet').hidden = !dh.trim() && !p.notice;   // ไม่มีรายละเอียดที่แอดมินใส่ = ไม่โชว์กล่อง
     $('#cfImg').innerHTML = artSq('', p.img);
     $('#cfTh').innerHTML = artSq('', p.img, true);
-    render();
+    render(); loadBal();
   }
   function home(){ location.href = 'index.html'; }
 
@@ -200,35 +213,55 @@
     setTimeout(fire, 3500);
   }
 
+  const ERR = {
+    unavailable: ['ຊື້ບໍ່ໄດ້', 'ສິນຄ້ານີ້ກຳລັງອັບເດດ ຫຼື ປິດຂາຍຊົ່ວຄາວ'],
+    notfound: ['ຊື້ບໍ່ໄດ້', 'ບໍ່ພົບສິນຄ້ານີ້ ຫຼື ປິດຂາຍແລ້ວ'],
+    dur_notfound: ['ຊື້ບໍ່ໄດ້', 'ຕົວເລືອກນີ້ຖືກປ່ຽນແປງແລ້ວ ກະລຸນາເລືອກໃໝ່'],
+    bad_promo: ['ຊື້ບໍ່ໄດ້', 'ໂຄ້ດສ່ວນຫຼຸດບໍ່ຖືກຕ້ອງ ຫຼື ໝົດສິດແລ້ວ'],
+    bad_qty: ['ຊື້ບໍ່ໄດ້', 'ຈຳນວນບໍ່ຖືກຕ້ອງ'],
+    net: ['ເຊື່ອມຕໍ່ບໍ່ໄດ້', 'ກະລຸນາກວດຍອດເງິນກ່ອນລອງຊື້ໃໝ່ ຖ້າເງິນຖືກຕັດແລ້ວ ຕິດຕໍ່ແອດມິນພ້ອມຊື່ບັນຊີ']
+  };
   function doPurchase(){
     if(busy || needLogin()) return;
     const o = opts[sel]; if(!o.s) return;
-    const sub = o.p*qty, d = disc(sub, applied), tot = sub - d;
+    const code = applied ? applied.code : null;
     busy = true; showLoading();
-    spinThen(() => DEMO.balance >= tot ? success(o, d, tot) : fail(tot));
+    /* ส่งคำขอซื้อไปเซิร์ฟเวอร์ทันที — ไอคอนหมุนอย่างน้อย 2 รอบระหว่างรอผล */
+    const req = exRpc('member_buy', { p_token: exToken(), p_product_id: Number(cur.id), p_dur_label: o.k, p_qty: qty, p_promo: code })
+      .catch(() => ({ ok:false, code:'net' }));
+    spinThen(() => req.then(j => {
+      if(j && j.ok) return success(o, j);
+      const c = j && j.code;
+      if(c === 'credit'){ if(j.have != null) setBal(Number(j.have) || 0); return fail(Number(j.need) || 0, Number(j.have) || 0); }
+      if(c === 'bad_session'){ busy = false; exClearLocal(); root.classList.remove('done'); toast('ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'); setTimeout(()=>exNeedLogin(), 900); return; }
+      if(c === 'stock') return failMsg('ສິນຄ້າບໍ່ພໍ', 'ເຫຼືອພຽງ ' + (Number(j.have) || 0) + ' ຊິ້ນ ກະລຸນາປັບຈຳນວນ');
+      const e = ERR[c] || ['ຊື້ບໍ່ສຳເລັດ', 'ມີບາງຢ່າງຜິດພາດ ກະລຸນາລອງໃໝ່'];
+      failMsg(e[0], e[1]);
+    }));
   }
 
-  function success(o, d, tot){
-    DEMO.balance -= tot; saveBal(); o.s -= qty;           // จำลองการตัดเงินและสต็อก (ของจริงให้ทำฝั่งเซิร์ฟเวอร์)
-    const codes = Array.from({length:qty}, () => 'EX-'+rnd()+'-'+rnd());
-    order = { no:'EX'+Date.now().toString().slice(-8), at:new Date(), name:cur.n, opt:o.l, qty:qty, codes:codes };
-    if(window.ExLog) ExLog.addOrder({ no:order.no, name:order.name, opt:order.opt, qty:qty, total:tot });   // บันทึกประวัติให้หน้าโปรไฟล์
+  function success(o, j){
+    const tot = Number(j.total) || 0, d = Number(j.discount) || 0;
+    setBal(Number(j.balance) || 0); o.s = Math.max(0, o.s - qty);
+    const codes = Array.isArray(j.codes) ? j.codes : [];
+    order = { no:j.no, at:new Date(j.at), name:cur.n, opt:o.l, qty:qty, codes:codes };
+    if(window.ExLog) ExLog.addOrder({ no:order.no, name:order.name, opt:order.opt, qty:qty, total:tot });   // ประวัติในเครื่อง (หน้าโปรไฟล์)
     res.dataset.s = 'ok';
     setHead('ສັ່ງຊື້ສຳເລັດ!', 'ໂຄ້ດສິນຄ້າຂອງທ່ານພ້ອມແລ້ວ');
     const row = (l, v, c) => `<div class="rs-r${c?' '+c:''}"><span>${l}</span><b>${v}</b></div>`;
     let i = 0;
     const sum = `<div class="rs-card" style="--i:${i++}">
       ${row('ເລກທີ່ຄຳສັ່ງຊື້', order.no)}${row('ວັນທີ / ເວລາ', stamp(order.at))}
-      ${row('ສິນຄ້າ', order.name+' · '+order.opt+' × '+qty)}
+      ${row('ສິນຄ້າ', escH(order.name)+' · '+escH(order.opt)+' × '+qty)}
       ${d>0 ? row('ສ່ວນຫຼຸດ', '-'+fmt(d), 'ok') : ''}
-      ${row('ຈ່າຍແລ້ວ', fmt(tot))}${row('ເງິນຄົງເຫຼືອ', fmt(DEMO.balance))}
+      ${row('ຈ່າຍແລ້ວ', fmt(tot))}${row('ເງິນຄົງເຫຼືອ', fmt(bal))}
     </div>`;
     const cards = codes.map((c,k) => `<div class="rs-card" style="--i:${i++}">
       <div class="rs-ch"><span class="rs-th">${artSq('', cur.img)}</span>
         <div class="rs-ct"><b>${escH(cur.n)}</b><span>${escH(o.l)}</span></div><span class="rs-no">${k+1}/${codes.length}</span></div>
-      <div class="rs-cd"><code class="rs-code">${c}</code>
+      <div class="rs-cd"><code class="rs-code">${escH(c)}</code>
         <button class="rs-ib" data-eye type="button" aria-label="ເຊື່ອງ / ສະແດງໂຄ້ດ">${ICON.eye}</button>
-        <button class="rs-ib" data-copy="${c}" type="button" aria-label="ຄັດລອກໂຄ້ດ">${ICON.copy}</button></div>
+        <button class="rs-ib" data-copy="${escH(c)}" type="button" aria-label="ຄັດລອກໂຄ້ດ">${ICON.copy}</button></div>
     </div>`).join('');
     rsBody.innerHTML = sum + cards + `<div class="rs-act" style="--i:${i++}">
       <div class="rs-row2"><button class="rs-sec" data-all type="button">${ICON.copy}ຄັດລອກທັງໝົດ</button><button class="rs-sec" data-dl type="button">${ICON.dl}ບັນທຶກເປັນໄຟລ໌</button></div>
@@ -238,18 +271,28 @@
     busy = false;
   }
 
-  function fail(tot){
+  function fail(need, have){
     res.dataset.s = 'no';
     setHead('ຊື້ບໍ່ສຳເລັດ', 'ຍອດເງິນຂອງທ່ານບໍ່ພໍ');
     const row = (l, v, c) => `<div class="rs-r${c?' '+c:''}"><span>${l}</span><b>${v}</b></div>`;
     rsBody.innerHTML = `<div class="rs-card" style="--i:0">
-      ${row('ຍອດທີ່ຕ້ອງຈ່າຍ', fmt(tot))}${row('ຍອດເງິນຂອງທ່ານ', fmt(DEMO.balance))}${row('ຍັງຂາດອີກ', fmt(tot-DEMO.balance), 'neg')}
+      ${row('ຍອດທີ່ຕ້ອງຈ່າຍ', fmt(need))}${row('ຍອດເງິນຂອງທ່ານ', fmt(have))}${row('ຍັງຂາດອີກ', fmt(need-have), 'neg')}
     </div>
     <div class="rs-act" style="--i:1">
       <button class="cf-ok" data-topup type="button">${ICON.wallet}ເຕີມເງິນ</button>
       <button class="rs-sec" data-back type="button">ກັບໄປແກ້ໄຂຄຳສັ່ງຊື້</button>
       <button class="rs-link" data-home type="button">ກັບໄປໜ້າຮ້ານ</button></div>`;
     busy = false;
+  }
+  /* ผิดพลาดอื่นๆ (สต็อกไม่พอ/สินค้าปิดขาย/เน็ตหลุด ฯลฯ) — โหลดสต็อกล่าสุดก่อนกลับไปแก้ไข */
+  function failMsg(h, p){
+    res.dataset.s = 'no';
+    setHead(h, p);
+    rsBody.innerHTML = `<div class="rs-act" style="--i:0">
+      <button class="cf-ok" data-back type="button">ກັບໄປແກ້ໄຂຄຳສັ່ງຊື້</button>
+      <button class="rs-link" data-home type="button">ກັບໄປໜ້າຮ້ານ</button></div>`;
+    busy = false; loadBal();
+    loadProducts().then(() => { const np = products.find(x => String(x.id) === String(cur.id)); if(np) cur = np; });
   }
 
   function orderText(){
@@ -280,9 +323,9 @@
   $('#cfSearch').addEventListener('input', e=>{ q=e.target.value; renderList(); });
   $('#cfMinus').onclick = ()=>{ qty--; render(); };
   $('#cfPlus').onclick = ()=>{ qty++; render(); };
-  $('#cfCode').addEventListener('input', ()=>{ applied=null; render(); });
-  $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
-  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; saveBal(); if(window.ExLog) ExLog.addTopup(100,'demo'); render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
+  $('#cfCode').addEventListener('input', checkCode);
+  $('#cfApply').onclick = ()=>{ applied = typed || null; render(); };
+  $('#cfTop').onclick = ()=>{ if(needLogin()) return; location.href = 'topup.html'; };
   $('#cfOk').onclick = doPurchase;
 
   // อ่านสินค้าจาก URL: confirm.html?p=<id>  (ส่งมาจากการ์ดสินค้า) — รอข้อมูลจากฐานข้อมูล

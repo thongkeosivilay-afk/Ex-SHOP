@@ -62,13 +62,14 @@ function cleanHTML(html){
 /* แถวจากฐานข้อมูล → รูปแบบที่การ์ดสินค้าใช้ */
 function mapProduct(r){
   const imgs = Array.isArray(r.imgs) ? r.imgs.filter(Boolean) : [];
-  const durs = (Array.isArray(r.durs) ? r.durs : []).map(d => ({ label: String(d.label || ''), price: Number(d.price) || 0 }));
+  const durs = (Array.isArray(r.durs) ? r.durs : []).map(d => ({ label: String(d.label || ''), price: Number(d.price) || 0, stock: d.stock == null ? null : Number(d.stock) || 0 }));
   const from = durs.length ? Math.min(...durs.map(d => d.price)) : (Number(r.price) || 0);
   return {
     id: r.id, n: r.name || '', cat: r.cat || '',
     p: fmtKip(from), price: from,
     left: String(Number(r.stock) || 0), sold: String(Number(r.sold) || 0),
-    img: imgs[0] || '', imgs, desc: r.desc || '', notice: r.notice || '', durs
+    img: imgs[0] || '', imgs, desc: r.desc || '', notice: r.notice || '', durs,
+    update: r.status === 'update'
   };
 }
 function setProducts(rows){
