@@ -301,3 +301,18 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 .cph-b{font-size:3.1cqw;margin-top:.6cqw}
 .cph::before{inset:2cqw;border-radius:3cqw}
 .fph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(90% 90% at 50% 40%,#5a0a12,#120204);color:#ffb3b3;font:700 11px 'Outfit',sans-serif;letter-spacing:.3px}
+
+/* ===== ป้ายปิดอัปเดต (สินค้าที่ใส่ update:true) ===== */
+.grid .pc.is-upd{cursor:not-allowed}
+.pc.is-upd .pci > *{filter:blur(4px) grayscale(1) brightness(.6);pointer-events:none}
+.pupd{position:absolute;left:50%;top:48cqw;transform:translate(-50%,-50%) rotate(-8deg);z-index:5;pointer-events:none;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:center;gap:2.4cqw;padding:3.4cqw 5cqw 4cqw;
+  border:1.1cqw solid #c97b2c;border-radius:4.4cqw;color:#c97b2c;font-family:'Outfit',sans-serif;
+  background:rgba(0,0,0,.22);box-shadow:inset 0 0 0 .5cqw rgba(201,123,44,.3),0 .8cqw 3.4cqw rgba(0,0,0,.55)}
+.pupd-a{font-size:max(17px,12.5cqw);font-weight:700;letter-spacing:.08em;line-height:1;text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.pupd-b{font-family:'Noto Sans Lao Looped','Outfit',sans-serif;font-size:max(12px,6.4cqw);font-weight:700;line-height:1.1;color:#241406;background:#c97b2c;border-radius:2.4cqw;padding:2.2cqw 5cqw}
+
+/* ป้ายสินค้าหมดสต็อก (สินค้าที่ใส่ soldout:true) — สไตล์เดียวกับป้ายอัปเดต แต่สีแดง */
+.pc.is-out .pupd{border-color:#e02b2b;color:#e02b2b;box-shadow:inset 0 0 0 .5cqw rgba(224,43,43,.3),0 .8cqw 3.4cqw rgba(0,0,0,.55)}
+.pc.is-out .pupd-a{font-size:max(15px,10.6cqw)}
+.pc.is-out .pupd-b{background:#e02b2b;color:#fff}

@@ -100,15 +100,15 @@ const products = [
   {n:'DEVIL STAR', p:'฿0', left:'0', sold:'0', art:'devil', cat:'fivem'},
   {n:'CARD (ຄ່າຍຂາວ)', p:'฿0', left:'0', sold:'0', art:'card', cat:'fivem'},
   {n:'SETTING PERFECTX', p:'฿0', left:'0', sold:'0', art:'setting', cat:'fivem'},
-  {n:'CMD XLIGHT', p:'฿0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
-  {n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'฿0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
-  {n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'฿0', left:'0', sold:'0', art:'collection', cat:'fivem'},
-  {n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'฿0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
+  {soldout:true, n:'CMD XLIGHT', p:'฿0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
+  {soldout:true, n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'฿0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
+  {update:true, n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'฿0', left:'0', sold:'0', art:'collection', cat:'fivem'},
+  {update:true, n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'฿0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
 ];
 function renderProducts(cat){
   const list = products.filter(p => p.cat === cat);
   $('#grid').innerHTML = list.length ? list.map((p,i) => `
-    <article class="pc" data-buy="${i}" role="button" tabindex="0">
+    <article class="pc${(p.update || p.soldout) ? ' is-upd' : ''}${(p.soldout && !p.update) ? ' is-out' : ''}" data-buy="${i}" role="button" tabindex="0"${(p.update || p.soldout) ? ' aria-disabled="true"' : ''}>
       <div class="pci">
         <div class="pimg">
           ${artSq(p.art, p.img)}
@@ -122,9 +122,10 @@ function renderProducts(cat){
           <span class="pk"><i>ຂາຍແລ້ວ</i><b class="g">${p.sold}</b></span>
         </div>
       </div>
+      ${p.update ? `<div class="pupd"><span class="pupd-a">UPDATE</span><span class="pupd-b">ກຳລັງອັບເດດ</span></div>` : p.soldout ? `<div class="pupd"><span class="pupd-a">SOLD OUT</span><span class="pupd-b">ສິນຄ້າໝົດສະຕັອກ</span></div>` : ''}
     </article>`).join('') : `<div class="empty">ຍັງບໍ່ມີສິນຄ້າໃນໝວດນີ້</div>`;
   $('#grid').querySelectorAll('[data-buy]').forEach(b => {
-    const go = () => CONFIG.onBuy(list[+b.dataset.buy]);
+    const go = () => { const p = list[+b.dataset.buy]; if(p.update || p.soldout){ snack(p.update ? 'ກຳລັງອັບເດດ' : 'ສິນຄ້າໝົດສະຕັອກ'); return; } CONFIG.onBuy(p); };
     b.addEventListener('click', go);
     b.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
   });
