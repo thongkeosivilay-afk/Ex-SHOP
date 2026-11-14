@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.dataset.theme="dark"</script>
+<title>ຈັດການແຜງຮ້ານ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--bg:#fbfbfb;--card:#ffffff;--text:#1b1b1d;--muted:#8a8a90;--border:#ececee;
+  --glow:rgba(255,0,0,.10);--redline:rgba(255,0,0,.28);--redsoft:rgba(255,0,0,.07);--crumb:#e00000;
+  --ibg:#fbe5e5;--blue:#2f6fe0;--bluebg:#e6efff;--pur:#8a4fe0;--purbg:#f0e8ff;--amb:#d98a00;--ambbg:#fff2d6;
+  --font:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#000;--card:#0a0a0b;--text:#f3f3f4;--muted:#9a9aa3;--border:#1f1f23;
+  --glow:rgba(255,0,0,.12);--redline:rgba(255,0,0,.32);--redsoft:rgba(255,0,0,.10);--crumb:#e00000;
+  --ibg:#000;--blue:#5b9cff;--bluebg:#111c33;--pur:#b07cff;--purbg:#241638;--amb:#ffb62e;--ambbg:#2e2008}
+html{background:#000;color-scheme:dark;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.menu-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.menu-btn svg{width:20px;height:20px}
+h1{margin:0;font-size:18px;font-weight:700}
+.dot{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
+main{min-height:calc(100vh - 80px);padding:17px}
+
+/* การ์ดสถานะเວັບໄຊ */
+.sub-card{position:relative;overflow:hidden;border-radius:26px;padding:18px 17px 17px;background:radial-gradient(120% 90% at 0% 0%,var(--glow),transparent 60%),var(--card);border:1px solid var(--redline);box-shadow:0 0 40px var(--redsoft)}
+.sub-top{display:flex;align-items:center;gap:16px}
+.sub-ico{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--redsoft);box-shadow:0 0 28px var(--redsoft)}
+.sub-ico svg{width:30px;height:30px;color:var(--red)}
+.sub-body{min-width:0}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red)}
+.sub-title{margin:10px 0 6px;font-size:24px;line-height:1.3;font-weight:700}
+.sub-desc{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.sub-btn{margin-top:20px;width:100%;height:46px;border:0;border-radius:15px;background:var(--red);color:#fff;font:700 15px var(--font);display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 6px 24px rgba(255,0,0,.35);transition:transform .15s}
+.sub-btn:active{transform:scale(.98)}
+.sub-btn svg{width:18px;height:18px}
+.crumb{margin:16px 0 18px 1px;font-size:12.5px;color:var(--crumb)}
+
+/* ภาพรวมสถิติ */
+.adm{position:relative;overflow:hidden;border-radius:24px;padding:19px 19px 20px;background:radial-gradient(110% 100% at 0% 100%,var(--glow),transparent 65%),var(--card);border:1px solid var(--redline);box-shadow:0 0 36px var(--redsoft)}
+.adm-top{display:flex;align-items:center;gap:16px}
+.adm-ico{flex:none;width:43px;height:43px;border-radius:14px;background:var(--ibg);border:1px solid var(--border);display:grid;place-items:center}
+.adm-ico svg{width:22px;height:22px;color:var(--red)}
+.adm-lbl{display:flex;align-items:center;gap:9px;color:var(--red);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.adm-lbl i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red)}
+.adm-title{margin:4px 0 0;font-size:22px;font-weight:600;line-height:1.3}
+.adm-pill{margin-top:18px;display:inline-flex;align-items:center;gap:10px;padding:9px 17px;border-radius:999px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font:700 15px var(--font)}
+.adm-pill svg{width:18px;height:18px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.st{border-radius:22px;padding:16px 17px;background:var(--card);border:1px solid var(--border);min-height:121px;display:flex;flex-direction:column}
+.st-h{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.st-t{font-size:13.5px;color:var(--muted);line-height:1.35;padding-top:4px}
+.st-i{flex:none;width:35px;height:35px;border-radius:12px;display:grid;place-items:center}
+.st-i svg{width:18px;height:18px}
+.st-v{margin-top:auto;font-size:26px;font-weight:700;line-height:1.15}
+.st-s{margin-top:8px;font-size:14px;font-weight:500;line-height:1.35}
+.c-red .st-i{background:var(--ibg);border:1px solid var(--border);color:var(--red)}.c-red .st-s{color:var(--red)}
+.c-blue .st-i{background:var(--bluebg);color:var(--blue)}.c-blue .st-s{color:var(--blue)}
+.c-pur .st-i{background:var(--purbg);color:var(--pur)}.c-pur .st-v,.c-pur .st-s{color:var(--pur)}
+.c-amb .st-i{background:var(--ambbg);color:var(--amb)}.c-amb .st-v,.c-amb .st-s{color:var(--amb)}
+.note{margin:0 0 14px;padding:10px 14px;border-radius:14px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font-size:13px;line-height:1.5}
+.st-v.ld,.adm-pill.ld{opacity:.55}
+</style>
+</head>
+<body>
+<header>
+  <button class="menu-btn" type="button" aria-label="ເມນູ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+  <h1>ຈັດການແຜງຮ້ານ</h1>
+  <span class="dot"></span>
+</header>
+<main>
+  <section class="sub-card">
+    <div class="sub-top">
+      <div class="sub-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/></svg></div>
+      <div class="sub-body">
+        <span class="pill"><i></i>Website Status: Active</span>
+        <h2 class="sub-title" id="subTitle">ຍັງບໍ່ນັບ</h2>
+        <p class="sub-desc" id="subDesc">ຍັງບໍ່ໄດ້ເລີ່ມນັບເວລາແພັກເກັດຮ້ານ</p>
+      </div>
+    </div>
+    <button class="sub-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.5-4.2L3 9.5"/><path d="M3 4v5.5h5.5"/><path d="M4 13a8 8 0 0 0 14.5 4.2L21 14.5"/><path d="M21 20v-5.5h-5.5"/></svg>ຕໍ່ອາຍຸເວັບໄຊ</button>
+  </section>
+  <div class="crumb">ແຜງຄວບຄຸມລະບົບ / ພາບລວມລະບົບ / ລາຍໄດ້ສະສົມ</div>
+  <div class="note" id="note" hidden></div>
+
+  <section class="adm">
+    <div class="adm-top">
+      <div class="adm-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3.2a9 9 0 1 0 9.8 9.8H11z"/><path d="M13.2 2.2a9 9 0 0 1 8.6 8.6h-8.6z"/></svg></div>
+      <div><div class="adm-lbl"><i></i>Admin Dashboard</div><h2 class="adm-title">ພາບລວມສະຖິຕິລາຍໄດ້</h2></div>
+    </div>
+    <div class="adm-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.5-4.2L3 9.5"/><path d="M3 4v5.5h5.5"/><path d="M4 13a8 8 0 0 0 14.5 4.2L21 14.5"/><path d="M21 20v-5.5h-5.5"/></svg><span>ຍອດມື້ນີ້: <span id="vToday">₭0</span></span></div>
+  </section>
+
+  <div class="stats">
+    <div class="st c-red">
+      <div class="st-h"><span class="st-t">ສະມາຊິກທັງໝົດ</span><span class="st-i"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg></span></div>
+      <div class="st-v" id="vMembers">1 ຄົນ</div><div class="st-s" id="vMembersToday">ມື້ນີ້ເພີ່ມ +1 ຄົນ</div>
+    </div>
+    <div class="st c-blue">
+      <div class="st-h"><span class="st-t">ສິນຄ້າທີ່ຂາຍແລ້ວ</span><span class="st-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span></div>
+      <div class="st-v" id="vSold">0 ຊິ້ນ</div><div class="st-s" id="vSoldToday">ມື້ນີ້ 0 ຊິ້ນ</div>
+    </div>
+    <div class="st c-pur">
+      <div class="st-h"><span class="st-t">ຍອດຂາຍສິນຄ້າສະສົມ</span><span class="st-i"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 8V7a3.5 3.5 0 0 1 7 0v1h2.2c.8 0 1.5.7 1.5 1.5v9c0 1.4-1.1 2.5-2.5 2.5H7.3c-1.4 0-2.5-1.1-2.5-2.5v-9c0-.8.7-1.5 1.5-1.5zm2 0h3V7a1.5 1.5 0 0 0-3 0z"/></svg></span></div>
+      <div class="st-v" id="vSales">₭0</div><div class="st-s">ຍອດຂາຍສິນຄ້າທັງໝົດ</div>
+    </div>
+    <div class="st c-amb">
+      <div class="st-h"><span class="st-t">ລູກຄ້າເຕີມເງິນທັງໝົດ</span><span class="st-i"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H6.5A2.5 2.5 0 0 1 4 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg></span></div>
+      <div class="st-v" id="vTopup">₭0</div><div class="st-s">ບໍ່ນັບຍອດແອດມິນ</div>
+    </div>
+  </div>
+</main>
+<script>
+/* ===== ດຶງຂໍ້ມູນຈິງຈາກ Supabase (ຟັງຊັນ st_dashboard_stats) =====
+   - ໃຊ້ publishable key (ໃສ່ໃນເວັບໄດ້) ຫ້າມໃສ່ service_role ຢູ່ບ່ອນນີ້
+   - ຕ້ອງມີ token ຂອງແອດມິນ (ຄືກັບຟັງຊັນ st_* ອື່ນ) ຖ້າບໍ່ມີ/ໝົດອາຍຸ ຈະສະແດງຂໍ້ຄວາມແຈ້ງ
+   - "ມື້ນີ້" = ຕາມເວລາລາວ (Asia/Vientiane)
+   - ສິນຄ້າທີ່ຂາຍແລ້ວ = ຈຳນວນຊິ້ນຈາກທຸກອໍເດີ (credit_tx ປະເພດ buy)
+   - ຍອດຂາຍສະສົມ = ຜົນລວມເງິນທຸກອໍເດີ
+   - ລູກຄ້າເຕີມເງິນ = ຄຳຂໍເຕີມເງິນທີ່ອະນຸມັດແລ້ວ (topup_requests) ບໍ່ນັບແອດມິນເຕີມເອງ */
+(function () {
+  var SB = { url: 'https://mjalctpfeizjukuprqti.supabase.co', key: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ' };
+  var TOKEN_KEY = 'exSession'; /* ປ່ຽນບ່ອນນີ້ ຖ້າລະບົບແອດມິນເກັບ token ໄວ້ໃນຊື່ອື່ນ */
+  var IDS = ['vToday', 'vMembers', 'vMembersToday', 'vSold', 'vSoldToday', 'vSales', 'vTopup'];
+  var $ = function (id) { return document.getElementById(id); };
+  var nf = new Intl.NumberFormat('en-US');
+  var money = function (n) { return '\u20ad' + nf.format(Number(n) || 0); };
+  var running = false;
+
+  function tok() {
+    try {
+      if (window.exToken) return window.exToken();
+      return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || '';
+    } catch (e) { return ''; }
+  }
+  function note(t) { var n = $('note'); if (!t) { n.hidden = true; return; } n.textContent = t; n.hidden = false; }
+  function busy(on) {
+    IDS.forEach(function (i) { var e = $(i); if (e) e.parentNode.classList.toggle('ld', on); });
+  }
+  function fill(d) {
+    $('vToday').textContent = money(d.sales_today);
+    $('vMembers').textContent = nf.format(d.members_total) + ' ຄົນ';
+    $('vMembersToday').textContent = 'ມື້ນີ້ເພີ່ມ +' + nf.format(d.members_today) + ' ຄົນ';
+    $('vSold').textContent = nf.format(d.sold_total) + ' ຊິ້ນ';
+    $('vSoldToday').textContent = 'ມື້ນີ້ ' + nf.format(d.sold_today) + ' ຊິ້ນ';
+    $('vSales').textContent = money(d.sales_total);
+    $('vTopup').textContent = money(d.topup_total);
+  }
+  function load() {
+    if (running) return;
+    var t = tok();
+    if (!t) { note('ກະລຸນາເຂົ້າສູ່ລະບົບແອດມິນກ່ອນ ເພື່ອເບິ່ງຂໍ້ມູນຈິງ'); return; }
+    running = true; busy(true);
+    var ctl = new AbortController(), to = setTimeout(function () { ctl.abort(); }, 15000);
+    fetch(SB.url + '/rest/v1/rpc/st_dashboard_stats', {
+      method: 'POST', signal: ctl.signal,
+      headers: { 'Content-Type': 'application/json', apikey: SB.key, Authorization: 'Bearer ' + SB.key },
+      body: JSON.stringify({ p_token: t })
+    })
+    .then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (j) {
+        if (!r.ok) throw new Error('http ' + r.status);
+        return j;
+      });
+    })
+    .then(function (d) {
+      if (!d || !d.ok) { note('ເຊດຊັນແອດມິນໝົດອາຍຸ ຫຼື ບໍ່ຖືກຕ້ອງ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'); return; }
+      note(''); fill(d);
+    })
+    .catch(function () { note('ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ ກະລຸນາລອງໃໝ່ (ແຕະປຸ່ມ "ຍອດມື້ນີ້")'); })
+    .finally(function () { clearTimeout(to); running = false; busy(false); });
+  }
+  document.querySelector('.adm-pill').addEventListener('click', load);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+  setInterval(load, 60000);
+  load();
+})();
+</script>
+</body>
+
+</html>
