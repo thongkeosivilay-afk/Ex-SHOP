@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:''
+    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html'
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -15,7 +15,7 @@ const ic = (id, cls='') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
 let snackT;
 function snack(msg){ const s=$('#snack'); s.textContent=msg; s.classList.add('show'); clearTimeout(snackT); snackT=setTimeout(()=>s.classList.remove('show'),2400); }
 /* หน้าที่ต้องล็อกอินก่อน — คนที่ยังไม่ลงชื่อกดแล้วจะเด้งหน้าต่างเข้าสู่ระบบ (ดูได้อย่างเดียว: หน้าแรก/หมวดหมู่/สินค้า/ธีม/ภาษา) */
-const NEED_LOGIN = ['topup', 'orders', 'hwid'];
+const NEED_LOGIN = ['topup', 'orders', 'hwid', 'profile'];
 function go(route){
   const u = CONFIG.routes[route];
   if(NEED_LOGIN.includes(route) && window.exLoggedIn && !exLoggedIn() && window.openAuth){
@@ -275,4 +275,43 @@ $('#featSec').hidden = !SHOW.featured;
   const start = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), WHY_MS); };
   document.addEventListener('visibilitychange', () => { if(document.hidden) clearInterval(timer); else start(); });  // แท็บไม่ได้เปิดอยู่ = หยุด ไม่ให้สลับรัวตอนกลับมา
   start();
+})();
+
+
+/* เมนูไอคอนบัญชี: กดแล้วมีตัวเลือก ໂປຣໄຟລ໌ / ອອກຈາກລະບົບ (ลอยใต้ปุ่ม ปิดเมื่อแตะข้างนอก/เลื่อน/กด Esc) */
+(function(){
+  const btn = $('#btnUser'); if(!btn) return;
+  const um = document.createElement('div');
+  um.className = 'um'; um.id = 'um'; um.setAttribute('role','menu'); um.setAttribute('aria-label','ບັນຊີ'); um.hidden = true;
+  um.innerHTML = `<div class="um-h"><span class="um-av">${ic('user')}</span><span class="um-t"><b id="umName"></b><small>ສະມາຊິກ</small></span></div>
+    <a class="um-i" role="menuitem" href="profile.html">${ic('user')}ໂປຣໄຟລ໌</a>
+    <button class="um-i um-out" role="menuitem" type="button" id="umOut">${ic('logout')}ອອກຈາກລະບົບ</button>`;
+  document.body.appendChild(um);
+  let open = false;
+  function place(){
+    const r = btn.getBoundingClientRect();
+    um.style.top = (r.bottom + 8) + 'px';
+    um.style.right = Math.max(10, document.documentElement.clientWidth - r.right) + 'px';
+  }
+  function set(on){
+    if(on === open) return; open = on;
+    btn.setAttribute('aria-expanded', on);
+    if(on){
+      const u = window.getUser && getUser(); $('#umName').textContent = (u && u.name) || '';
+      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); const f = um.querySelector('.um-i'); if(f) f.focus({preventScroll:true});
+    } else {
+      um.classList.remove('on'); setTimeout(() => { if(!open) um.hidden = true; }, 180);
+    }
+  }
+  btn.setAttribute('aria-haspopup','menu'); btn.setAttribute('aria-expanded','false');
+  btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); set(!open); });
+  document.addEventListener('click', e => { if(open && !um.contains(e.target)) set(false); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && open){ set(false); btn.focus({preventScroll:true}); } });
+  window.addEventListener('scroll', () => { if(open) set(false); }, {passive:true});
+  window.addEventListener('resize', () => { if(open) place(); });
+  $('#umOut').addEventListener('click', () => {
+    set(false);
+    if(!confirm('ຕ້ອງການອອກຈາກລະບົບບໍ?')) return;
+    if(window.exLogout) exLogout(); else location.reload();
+  });
 })();

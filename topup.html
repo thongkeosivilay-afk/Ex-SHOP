@@ -7,6 +7,7 @@
 <title>ເຕີມເງິນ</title>
 <script src="guard.js"></script>
 <script>if(!exLoggedIn())exNeedLogin('topup.html');</script>
+<script src="exlog.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -477,7 +478,7 @@ $('#wClose').onclick = closeWait;
 function approve(a){
   clearInterval(waitT); waitT=null;
   const n = Number(a) || (curReq && curReq.amount) || 0;
-  balance += n; store.set('exshop_balance', balance); localStorage.removeItem('exshop_topup_pending'); setBal();
+  balance += n; store.set('exshop_balance', balance); if(window.ExLog) ExLog.addTopup(n, bank && bank.id); localStorage.removeItem('exshop_topup_pending'); setBal();
   $('#ct').classList.remove('show');
   $('#spin').style.display='none';
   const card=$('#waitCard');

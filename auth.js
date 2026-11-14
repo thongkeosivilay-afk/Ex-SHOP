@@ -189,7 +189,8 @@ const AUTH = {
   const setTok = (t, remember = true) => {
     try {
       localStorage.removeItem(SKEY); sessionStorage.removeItem(SKEY);
-      if (t) (remember ? localStorage : sessionStorage).setItem(SKEY, t);
+      localStorage.removeItem('exSessionAt'); sessionStorage.removeItem('exSessionAt');
+      if (t) { const st = remember ? localStorage : sessionStorage; st.setItem(SKEY, t); st.setItem('exSessionAt', String(Date.now())); }
     } catch (e) {}
   };
   const getRem = () => { try { return localStorage.getItem(RKEY) || ''; } catch (e) { return ''; } };
@@ -277,14 +278,7 @@ const AUTH = {
       else { setTok(''); if (window.setUser) setUser(null); }
     }).catch(() => { /* ออฟไลน์/เซิร์ฟเวอร์ล่ม: คงสถานะเดิมไว้ก่อน */ });
 
-    /* แตะไอคอนบัญชีตอนล็อกอินอยู่ = ออกจากระบบ */
-    document.addEventListener('click', e => {
-      if (!e.target.closest('[data-route="profile"]') || !getTok()) return;
-      e.preventDefault(); e.stopImmediatePropagation();
-      if (!confirm('ຕ້ອງການອອກຈາກລະບົບບໍ?')) return;
-      const t = getTok(), fin = () => { setTok(''); if (window.setUser) setUser(null); location.reload(); };
-      rpc('member_logout', { p_token: t }).then(fin, fin);
-    }, true);
+    /* แตะไอคอนบัญชี = เมนู (โปรไฟล์ / ออกจากระบบ) — ทำใน script.js */
   }
 
   /* ถูกส่งมาจากหน้าที่ต้องล็อกอิน (เช่น หน้าเติมเงิน/ยืนยันสั่งซื้อ) → เปิดหน้าต่างเข้าสู่ระบบให้เลย */

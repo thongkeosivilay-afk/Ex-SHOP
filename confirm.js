@@ -229,6 +229,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
     DEMO.balance -= tot; saveBal(); o.s -= qty;           // จำลองการตัดเงินและสต็อก (ของจริงให้ทำฝั่งเซิร์ฟเวอร์)
     const codes = Array.from({length:qty}, () => 'EX-'+rnd()+'-'+rnd());
     order = { no:'EX'+Date.now().toString().slice(-8), at:new Date(), name:cur.n, opt:o.l, qty:qty, codes:codes };
+    if(window.ExLog) ExLog.addOrder({ no:order.no, name:order.name, opt:order.opt, qty:qty, total:tot });   // บันทึกประวัติให้หน้าโปรไฟล์
     res.dataset.s = 'ok';
     setHead('ສັ່ງຊື້ສຳເລັດ!', 'ໂຄ້ດສິນຄ້າຂອງທ່ານພ້ອມແລ້ວ');
     const row = (l, v, c) => `<div class="rs-r${c?' '+c:''}"><span>${l}</span><b>${v}</b></div>`;
@@ -298,7 +299,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   $('#cfPlus').onclick = ()=>{ qty++; render(); };
   $('#cfCode').addEventListener('input', ()=>{ applied=null; render(); });
   $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
-  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; saveBal(); render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
+  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; saveBal(); if(window.ExLog) ExLog.addTopup(100,'demo'); render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
 
   // อ่านสินค้าจาก URL: confirm.html?p=<art>  (ส่งมาจากปุ่ม "ຊື້ເລີຍ" ใน script.js)
