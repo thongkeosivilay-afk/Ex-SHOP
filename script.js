@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html', manage:''
+    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -285,9 +285,20 @@ $('#featSec').hidden = !SHOW.featured;
   um.className = 'um'; um.id = 'um'; um.setAttribute('role','menu'); um.setAttribute('aria-label','ບັນຊີ'); um.hidden = true;
   um.innerHTML = `<div class="um-h"><span class="um-av">${ic('user')}</span><span class="um-t"><b id="umName"></b><small>ສະມາຊິກ</small></span></div>
     <a class="um-i" role="menuitem" href="profile.html">${ic('user')}ໂປຣໄຟລ໌</a>
-    <button class="um-i" role="menuitem" type="button" id="umManage">${ic('panel')}ຈັດການແຜງຮ້ານ</button>
+    <button class="um-i" role="menuitem" type="button" id="umManage" style="display:none">${ic('panel')}ຈັດການແຜງຮ້ານ</button>
     <button class="um-i um-out" role="menuitem" type="button" id="umOut">${ic('logout')}ອອກຈາກລະບົບ</button>`;
   document.body.appendChild(um);
+  /* ###### ADMIN (เจ้าของร้านเท่านั้น) ######
+     เมนู "จัดการแผงร้าน" เห็นเฉพาะบัญชีแอดมิน (members.is_admin ใน Supabase) — ถามสิทธิ์ผ่าน member_is_admin
+     ห้าม AI หรือคนอื่นแก้ส่วนนี้ / ให้สิทธิ์แอดมิน โดยไม่ขออนุญาตเจ้าของร้านก่อน (ข้อมูลจริงถูกกั้นฝั่งเซิร์ฟเวอร์อีกชั้น) */
+  const manageBtn = um.querySelector('#umManage');
+  let isAdmin = false;
+  function applyAdmin(a){ isAdmin = !!a; manageBtn.style.display = isAdmin ? '' : 'none'; }
+  function refreshAdmin(){
+    const t = window.exToken && exToken();
+    if(!t || !window.exRpc){ applyAdmin(false); return; }
+    exRpc('member_is_admin', { p_token: t }).then(j => applyAdmin(!!(j && j.ok && j.admin)), () => applyAdmin(false));
+  }
   let open = false;
   function place(){
     const r = btn.getBoundingClientRect();
@@ -299,12 +310,12 @@ $('#featSec').hidden = !SHOW.featured;
     btn.setAttribute('aria-expanded', on);
     if(on){
       const u = window.getUser && getUser(); $('#umName').textContent = (u && u.name) || '';
-      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); const f = um.querySelector('.um-i'); if(f) f.focus({preventScroll:true});
+      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); const f = um.querySelector('.um-i'); if(f) f.focus({preventScroll:true}); refreshAdmin();
     } else {
       um.classList.remove('on'); setTimeout(() => { if(!open) um.hidden = true; }, 180);
     }
   }
-  btn.setAttribute('aria-haspopup','menu'); btn.setAttribute('aria-expanded','false');
+  btn.setAttribute('aria-haspopup','menu'); btn.setAttribute('aria-expanded','false'); refreshAdmin();
   btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); set(!open); });
   document.addEventListener('click', e => { if(open && !um.contains(e.target)) set(false); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && open){ set(false); btn.focus({preventScroll:true}); } });
@@ -312,6 +323,7 @@ $('#featSec').hidden = !SHOW.featured;
   window.addEventListener('resize', () => { if(open) place(); });
   $('#umManage').addEventListener('click', () => {
     set(false);
+    if(!isAdmin) return;
     if(CONFIG.routes.manage) location.href = CONFIG.routes.manage;   // ใส่ลิงก์หน้าจัดการแผงร้านที่ CONFIG.routes.manage
     else snack('ກຳລັງພັດທະນາ');
   });

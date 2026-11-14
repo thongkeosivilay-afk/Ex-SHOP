@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>document.documentElement.dataset.theme="dark"</script>
+<script>document.documentElement.dataset.theme="dark";document.documentElement.classList.add("chk")</script>
 <title>ຈັດການແຜງຮ້ານ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -64,6 +64,7 @@ main{min-height:calc(100vh - 80px);padding:17px}
 .c-blue .st-i{background:var(--bluebg);color:var(--blue)}.c-blue .st-s{color:var(--blue)}
 .c-pur .st-i{background:var(--purbg);color:var(--pur)}.c-pur .st-v,.c-pur .st-s{color:var(--pur)}
 .c-amb .st-i{background:var(--ambbg);color:var(--amb)}.c-amb .st-v,.c-amb .st-s{color:var(--amb)}
+html.chk body{visibility:hidden}
 .note{margin:0 0 14px;padding:10px 14px;border-radius:14px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font-size:13px;line-height:1.5}
 .st-v.ld,.adm-pill.ld{opacity:.55}
 
@@ -209,7 +210,23 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   document.querySelector('.adm-pill').addEventListener('click', load);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
   setInterval(load, 60000);
-  load();
+  /* กั้นหน้า: ไม่ใช่แอดมิน → เด้งกลับหน้าแรก (ข้อมูลจริงถูกกั้นฝั่งเซิร์ฟเวอร์อีกชั้นอยู่แล้ว) */
+  function gate() {
+    var root = document.documentElement, t = tok();
+    if (!t) { try { sessionStorage.setItem('exNext', 'admin.html'); } catch (e) {} location.replace('index.html?auth=login'); return; }
+    fetch(SB.url + '/rest/v1/rpc/member_is_admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SB.key, Authorization: 'Bearer ' + SB.key },
+      body: JSON.stringify({ p_token: t })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j && j.ok && j.admin) { root.classList.remove('chk'); load(); }
+      else location.replace('index.html');
+    })
+    .catch(function () { root.classList.remove('chk'); load(); });
+  }
+  gate();
 })();
 </script>
 <script>
