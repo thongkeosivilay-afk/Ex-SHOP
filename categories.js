@@ -1,5 +1,5 @@
 /* ===== หน้าหมวดหมู่ (categories.html) =====
-   ข้อมูลมาจาก data.js (products, cats) — เพิ่ม/แก้สินค้าและหมวดที่ไฟล์นั้น
+   ข้อมูลมาจาก data.js (products = ดึงจาก Supabase, cats = รายการหมวดในไฟล์นั้น)
    ฟังก์ชัน: ค้นหา (ชื่อสินค้า/ชื่อหมวด, ไฮไลต์คำที่เจอ, หลายคำพร้อมกัน), เลือกหมวด (ชิป/การ์ด),
             เรียงลำดับ, กรองเฉพาะที่พร้อมขาย, ประวัติค้นหาล่าสุด, ล้างตัวกรอง, จำสถานะใน URL */
 (function(){
@@ -12,7 +12,7 @@
   /* ----- ตั้งค่า ----- */
   const RECENT_KEY = 'recentSearch', RECENT_MAX = 6;
   const SORTS = ['default','sold','price-asc','price-desc','name','stock'];
-  const BUY_URL = p => 'confirm.html?p=' + encodeURIComponent(p.art);   // กดซื้อ → หน้ายืนยันสั่งซื้อ
+  const BUY_URL = p => 'confirm.html?p=' + encodeURIComponent(p.id);   // กดซื้อ → หน้ายืนยันสั่งซื้อ
 
   const state = { q:'', cat:'all', sort:'default', stock:false };
   let shown = [];   // รายการสินค้าที่กำลังแสดง (ไว้อ้างจาก data-buy)
@@ -145,6 +145,7 @@
   }
 
   function emptyHTML(c){
+    if(!window.productsLoaded) return `<div class="ct-empty">${ic('search')}<b>ກຳລັງໂຫຼດສິນຄ້າ...</b></div>`;
     const filtered = state.q || state.stock || state.cat !== 'all';
     const msg = state.q ? 'ລອງຄຳຄົ້ນຫາອື່ນ ຫຼື ລ້າງຕົວກອງ'
       : state.stock ? 'ຍັງບໍ່ມີສິນຄ້າທີ່ພ້ອມຂາຍໃນຕອນນີ້'
@@ -288,4 +289,6 @@
 
   readURL();
   render();
+  /* สินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ */
+  document.addEventListener('products:ready', render);
 })();

@@ -1,47 +1,26 @@
 /* ===== confirm.js — หน้ายืนยันสั่งซื้อ (confirm.html) =====
-   ข้อมูลภาพสินค้าด้านล่างคัดลอกมาจาก script.js เพื่อให้หน้านี้ทำงานแยกอิสระ */
-const arts = {
-  unban:{bg:'radial-gradient(90% 70% at 50% 40%,#7a1218,#2a0508 70%,#120204)', top:'<div style="position:absolute;left:24%;top:17%;width:52%;aspect-ratio:1;border:9px solid #FF0000;border-radius:50%"></div><div style="position:absolute;left:49%;top:14%;width:9px;height:58%;background:#FF0000;transform:rotate(45deg);transform-origin:50% 40%"></div>', t:[['UNBAN FIVEM','#fff','8.2cqw','66%'],['ປົດແບນບໍ່ມີໂດນຍ້ອນຫຼັງ','#fff','4.4cqw','80%']]},
-  devil:{bg:'linear-gradient(160deg,#0c0d1c,#2a0a14 60%,#1a0508)', top:'<div style="position:absolute;left:12%;right:10%;top:14%;height:52%;background:linear-gradient(120deg,#25306a,#3a1c3a);clip-path:polygon(0 100%,8% 30%,25% 8%,42% 22%,55% 5%,75% 12%,90% 40%,100% 100%);opacity:.9"></div>', t:[['DEVIL STAR','#FF0000','13cqw','72%']]},
-  card:{bg:'linear-gradient(180deg,#0b0e1f,#101a4a 70%,#090d28)', top:'<div style="position:absolute;left:15%;right:15%;top:20%;height:34%;background:linear-gradient(135deg,#1f2a66,#0a0f2c);border:1px solid #3d4fb0;border-radius:6px"></div>', t:[['CARD','#1d3fe0','13cqw','72%']]},
-  setting:{bg:'linear-gradient(170deg,#1b0609,#3d0a10 60%,#150407)', top:'<div style="position:absolute;left:25%;right:12%;top:8%;height:60%;background:linear-gradient(180deg,#444,#111);clip-path:polygon(15% 100%,20% 25%,50% 6%,80% 25%,90% 100%);opacity:.7"></div>', t:[['SETTING PERFECTX','#FF0000','8.4cqw','74%']]},
-  xlight:{bg:'linear-gradient(180deg,#14090b,#2c0a0e)', top:'<div style="position:absolute;left:18%;right:18%;top:26%;height:5px;background:linear-gradient(90deg,#555,#ccc,#555);transform:rotate(-40deg)"></div>', t:[['CMD','#fff','12cqw','56%'],['XLIGHT','#FF0000','17cqw','67%'],['SUPER MODE','#ffb21f','4.6cqw','86%']]},
-  unlock:{bg:'linear-gradient(160deg,#241012,#4a0c12 70%,#190507)', top:'<div style="position:absolute;left:5%;top:12%;width:40%;height:70%;background:linear-gradient(180deg,#8d8d94,#2b2b30);border-radius:40% 40% 0 0"></div><div style="position:absolute;right:6%;top:10%;font-style:italic;color:#ffc425;font-size:8cqw;font-weight:900;transform:rotate(-8deg);line-height:.95;text-align:right">STAR<br><span style="font-size:5cqw">COMMUNITY</span></div>', t:[['ປົດລັອກສະກິນ','#FF0000','14cqw','73%']]},
-  collection:{bg:'linear-gradient(160deg,#3a0a10,#14090c)', top:'<div style="position:absolute;left:10%;top:16%;width:34%;height:52%;background:linear-gradient(180deg,#9a7a70,#2a1a1a);border-radius:40% 40% 8% 8%"></div>', t:[['COLLECTION','#fff','11.5cqw','72%']]},
-  upcri:{bg:'linear-gradient(160deg,#4a0a10,#0d0709 65%)', top:'<div style="position:absolute;left:18%;right:18%;top:36%;height:30%;background:linear-gradient(135deg,#2b2b30,#0a0a0c);border:1px solid #555;border-radius:6px;transform:rotate(-4deg)"></div>', t:[['UPCRI','#fff','20cqw','8%'],['ຄຣີປັບໄດ້ ຄຣີໜ້າ ຄຣີຂ້າງ ຄຣີຫຼັງ','#fff','4.5cqw','86%']]},
-  phantom:{bg:'linear-gradient(160deg,#222,#050505)', top:'', t:[['PHANTOM','#ddd','9cqw','38%']]},
-  zent:{bg:'linear-gradient(160deg,#5b2bd8,#14062e)', top:'', t:[['ZENTNITYX','#e9dcff','7cqw','42%']]},
-  level:{bg:'linear-gradient(160deg,#6f3bd0,#1c0a3f)', top:'', t:[['LEVEL?','#fff','11cqw','40%']]},
-  br:{bg:'linear-gradient(120deg,#0d0d0f,#3a1208 70%,#15090a)', top:'', t:[]}
-};
-function artSq(key){
-  const a = arts[key];
-  const tx = a.t.map(([t,c,s,y]) => `<div class="tp" style="color:${c};font-size:${s};top:${y};text-shadow:0 2px 6px rgba(0,0,0,.6)">${t}</div>`).join('');
-  return `<div style="position:absolute;inset:0;container-type:inline-size;background:${a.bg}">${a.top}${tx}</div>`;
-}
-const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",xlight:"EXSHOP",unlock:"EXSHOP",collection:"EXSHOP",upcri:"EXSHOP"};
+   สินค้า/ตัวเลือก/รูป มาจากฐานข้อมูลผ่าน data.js (products) — ลิงก์: confirm.html?p=<id สินค้า> */
 
 /* ===== หน้ายืนยันสั่งซื้อ (โหมดทดลอง) =====
    ข้อมูลในนี้เป็นข้อมูลจำลองทั้งหมด (DEMO) ยังไม่ตัดเงินจริง
-   เมื่อเชื่อมระบบจริง ให้แก้ DEMO.balance, DEMO.items และฟังก์ชัน doPurchase() */
+   เมื่อเชื่อมระบบจริง ให้แก้ DEMO.balance และฟังก์ชัน doPurchase() */
 (function(){
-  // ตัวเลือกจำลอง: ราคาขาย = ราคาเต็ม / 2 (เหมือนในรูปตัวอย่าง)
-  const LABELS = ['12 ຊົ່ວໂມງ','1 ມື້','3 ມື້','7 ມື້','30 ມື້'];
-  const FULL   = [35,50,150,300,500];
-  const STOCK  = {unban:[0,2,1,6,7], devil:[3,5,0,2,4], card:[1,4,6,0,3], setting:[0,1,2,3,0],
-                  xlight:[2,0,1,1,2], unlock:[5,3,2,4,1], collection:[0,6,2,0,3], upcri:[8,5,4,3,2]};
   const DEMO = {
     balance: (()=>{ try{ return Number(JSON.parse(localStorage.getItem('exshop_balance')||'0'))||0; }catch(e){ return 0; } })(),   // ยอดเงินเดียวกับหน้าเติมเงิน/แถบหัว
-    promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ₭5'} },
-    items: {}
+    promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ₭5'} }
   };
-  Object.keys(STOCK).forEach(k => { DEMO.items[k] = LABELS.map((l,i)=>({l, o:FULL[i], p:FULL[i]/2, s:STOCK[k][i]})); });
+  /* ตัวเลือกของสินค้า = ตัวเลือกราคาที่ตั้งในหน้าแอดมิน (ไม่มี = 1 ตัวเลือกตามราคาสินค้า) สต็อกใช้ของสินค้า */
+  function optionsOf(p){
+    const st = Number(p.left) || 0;
+    const base = p.durs && p.durs.length ? p.durs : [{ label: p.n, price: p.price }];
+    return base.map(d => ({ l: d.label, o: d.price, p: d.price, s: st }));
+  }
 
   const saveBal = () => { try{ localStorage.setItem('exshop_balance', JSON.stringify(DEMO.balance)); }catch(e){} };
   const $ = (s,r=document)=>r.querySelector(s);
   let toastT; function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>s.classList.remove('show'),2200); }
   const fmt = n => '₭' + (Math.round(n*100)/100).toLocaleString('en-US');
-  const m2 = n => n.toFixed(2) + ' ₭';
+  const m2 = n => (Math.round(n)).toLocaleString('en-US') + ' ₭';
   const X = '<svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
   const CART = '<svg class="i" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>';
   const OKI = '<svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -83,7 +62,8 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
       <div class="cf-act"><button class="cf-ok" id="cfOk">${OKI}ຢືນຢັນຊື້</button></div>
       <div class="cf-det">
         <h4>ລາຍລະອຽດສິນຄ້າ</h4>
-        <p id="cfDesc"></p>
+        <div class="cf-notice" id="cfNotice" hidden></div>
+        <div class="cf-rich" id="cfDesc"></div>
         <ul>
           <li>ສົ່ງສິນຄ້າອັດຕະໂນມັດທັນທີຫຼັງຊຳລະເງິນ</li>
           <li>ຮອງຮັບ iOS ແລະ Android</li>
@@ -124,8 +104,8 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
     const rows = opts.map((o,i)=>({o,i})).filter(({o})=>!kw || o.l.toLowerCase().includes(kw));
     $('#cfOpts').innerHTML = rows.length ? rows.map(({o,i})=>`
       <button class="cf-or${i===sel?' on':''}${o.s?'':' off'}" data-i="${i}" ${o.s?'':'disabled'}>
-        <span class="cf-oi">${window.artSq ? artSq(cur.art) : ''}</span>
-        <span class="cf-ot"><b>${o.l}</b><span class="cf-op"><s>${m2(o.o)}</s><em>${m2(o.p)}</em></span></span>
+        <span class="cf-oi">${artSq('', cur.img)}</span>
+        <span class="cf-ot"><b>${escH(o.l)}</b><span class="cf-op">${o.o > o.p ? `<s>${m2(o.o)}</s>` : ''}<em>${m2(o.p)}</em></span></span>
         <span class="cf-ob ${o.s?'ok':'no'}">${o.s ? o.s+' ຊິ້ນ' : 'ສິນຄ້າໝົດ'}</span>
       </button>`).join('') : '<div class="cf-none">ບໍ່ພົບຕົວເລືອກ</div>';
   }
@@ -135,9 +115,11 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
     qty = Math.max(1, Math.min(qty, stock || 1));
     $('#cfStock').textContent = 'ເຫຼືອລວມ ' + totalStock() + ' ຊິ້ນ · ຕົວເລືອກນີ້ ' + stock + ' ຊິ້ນ';
     renderList();
-    const ps=opts.map(x=>x.p), mx=Math.max(...opts.map(x=>(1-x.p/x.o)*100));
-    $('#cfRange').textContent = Math.min(...ps).toFixed(2)+' – '+Math.max(...ps).toFixed(2)+' ₭';
+    const ps=opts.map(x=>x.p), mx=Math.max(...opts.map(x=>x.o ? (1-x.p/x.o)*100 : 0));
+    const lo=Math.min(...ps), hi=Math.max(...ps);
+    $('#cfRange').textContent = lo===hi ? m2(lo) : m2(lo)+' – '+m2(hi);
     $('#cfPct').textContent = mx.toFixed(2)+' %';
+    document.querySelector('.cf-info .b').style.display = mx>0 ? '' : 'none';
     $('#cfQty').textContent = qty;
     $('#cfMinus').disabled = qty<=1; $('#cfPlus').disabled = qty>=stock;
     const sub = unit*qty, typed = promoOf(), d = disc(sub, applied), tot = sub-d, rem = DEMO.balance-tot;
@@ -155,15 +137,16 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
 
   function open(p){
     cur = p;
-    opts = DEMO.items[p.art] || LABELS.map((l,i)=>({l,o:FULL[i],p:FULL[i]/2,s:3}));
+    opts = optionsOf(p);
     sel = Math.max(0, opts.findIndex(o=>o.s>0));
     qty = 1; applied = null; q = ''; $('#cfCode').value = ''; $('#cfSearch').value = '';
     $('#cfBox').classList.remove('closed'); $('#cfPw').classList.remove('open'); $('#cfCp').classList.remove('open');
     root.classList.remove('done');
     $('#cfName').textContent = p.n;
-    $('#cfDesc').textContent = p.n + ' — ໂປຣແກຣມ/ບໍລິການຄຸນນະພາບ ຈຳໜ່າຍໂດຍ ExShop ພ້ອມຮັບປະກັນຫຼັງການຂາຍ';
-    $('#cfImg').innerHTML = window.artSq ? artSq(p.art) : '';
-    $('#cfTh').innerHTML = window.artSq ? artSq(p.art) : '';
+    $('#cfDesc').innerHTML = cleanHTML(p.desc) || '<p>' + escH(p.n) + '</p>';
+    const nt = $('#cfNotice'); nt.textContent = p.notice || ''; nt.hidden = !p.notice;
+    $('#cfImg').innerHTML = artSq('', p.img);
+    $('#cfTh').innerHTML = artSq('', p.img, true);
     render();
   }
   function home(){ location.href = 'index.html'; }
@@ -241,8 +224,8 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
       ${row('ຈ່າຍແລ້ວ', fmt(tot))}${row('ເງິນຄົງເຫຼືອ', fmt(DEMO.balance))}
     </div>`;
     const cards = codes.map((c,k) => `<div class="rs-card" style="--i:${i++}">
-      <div class="rs-ch"><span class="rs-th">${window.artSq ? artSq(cur.art) : ''}</span>
-        <div class="rs-ct"><b>${cur.n}</b><span>${o.l}</span></div><span class="rs-no">${k+1}/${codes.length}</span></div>
+      <div class="rs-ch"><span class="rs-th">${artSq('', cur.img)}</span>
+        <div class="rs-ct"><b>${escH(cur.n)}</b><span>${escH(o.l)}</span></div><span class="rs-no">${k+1}/${codes.length}</span></div>
       <div class="rs-cd"><code class="rs-code">${c}</code>
         <button class="rs-ib" data-eye type="button" aria-label="ເຊື່ອງ / ສະແດງໂຄ້ດ">${ICON.eye}</button>
         <button class="rs-ib" data-copy="${c}" type="button" aria-label="ຄັດລອກໂຄ້ດ">${ICON.copy}</button></div>
@@ -302,8 +285,19 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; saveBal(); if(window.ExLog) ExLog.addTopup(100,'demo'); render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
 
-  // อ่านสินค้าจาก URL: confirm.html?p=<art>  (ส่งมาจากปุ่ม "ຊື້ເລີຍ" ใน script.js)
+  // อ่านสินค้าจาก URL: confirm.html?p=<id>  (ส่งมาจากการ์ดสินค้า) — รอข้อมูลจากฐานข้อมูล
   const key = new URLSearchParams(location.search).get('p');
-  const art = PRODUCTS[key] ? key : Object.keys(PRODUCTS)[0];
-  open({ art: art, n: PRODUCTS[art] });
+  function start(){
+    const p = products.find(x => String(x.id) === String(key));
+    if(p){ open(p); return; }
+    if(!window.productsLoaded) return;
+    root.innerHTML = '<div class="cf-form"><div class="cf-notice" style="margin-top:30px">' + (window.productsFailed ? 'ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ ກະລຸນາລອງໃໝ່' : 'ບໍ່ພົບສິນຄ້ານີ້ ຫຼື ປິດຂາຍແລ້ວ') + '</div><div class="cf-act"><button class="cf-ok" type="button" onclick="location.href=\'index.html\'">ກັບໄປໜ້າຮ້ານ</button></div></div>';
+  }
+  let started = false;
+  document.addEventListener('products:ready', () => {
+    if(!started && products.find(x => String(x.id) === String(key))){ started = true; start(); }
+    else if(!started) start();
+  });
+  if(window.productsLoaded) start();
+  else root.querySelector('.cf-form').style.opacity = '.5';
 })();

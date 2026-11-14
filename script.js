@@ -4,7 +4,7 @@ const CONFIG = {
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
     login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
   },
-  onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
+  onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.id); } // เปิดหน้ายืนยันสั่งซื้อ
 };
 
 /* เປິດ/ປິດการแสดงผล: true = แสดง, false = ซ่อน (ข้อมูลยังอยู่ครบ) */
@@ -183,38 +183,31 @@ hMenu.querySelectorAll('a[href^="#"]:not([data-route])').forEach(a => a.addEvent
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
 
 /* stats */
+function renderStats(){
 $('#stats').innerHTML = [
   ['s-users','ຜູ້ໃຊ້ງານ','0','ຄົນ'],
-  ['s-bag','ສິນຄ້າ','0','ລາຍການ'],
+  ['s-bag','ສິນຄ້າ',String(products.length),'ລາຍການ'],
   ['s-boxes','ຄຳສັ່ງຊື້','0','ລາຍການ'],
-  ['s-check','ຂາຍແລ້ວ','0','ຊິ້ນ']
+  ['s-check','ຂາຍແລ້ວ',String(products.reduce((a,p) => a + (+p.sold||0), 0)),'ຊິ້ນ']
 ].map(([i,l,n,u]) => `<div class="stat"><svg class="i wm" aria-hidden="true"><use href="#${i}"/></svg><div class="ic">${ic(i)}</div><div class="tx"><span class="lb">${l}</span><span class="nm">${n}<small>${u}</small></span></div></div>`).join('');
+}
+renderStats();
 
-/* art helpers (placeholder artwork — replace with real images via CONFIG / <img>) */
-const arts = {
-  unban:{bg:'radial-gradient(90% 70% at 50% 40%,#7a1218,#2a0508 70%,#120204)', top:'<div style="position:absolute;left:24%;top:17%;width:52%;aspect-ratio:1;border:9px solid #FF0000;border-radius:50%"></div><div style="position:absolute;left:49%;top:14%;width:9px;height:58%;background:#FF0000;transform:rotate(45deg);transform-origin:50% 40%"></div>', t:[['UNBAN FIVEM','#fff','8.2cqw','66%'],['ປົດແບນບໍ່ມີໂດນຍ້ອນຫຼັງ','#fff','4.4cqw','80%']]},
-  devil:{bg:'linear-gradient(160deg,#0c0d1c,#2a0a14 60%,#1a0508)', top:'<div style="position:absolute;left:12%;right:10%;top:14%;height:52%;background:linear-gradient(120deg,#25306a,#3a1c3a);clip-path:polygon(0 100%,8% 30%,25% 8%,42% 22%,55% 5%,75% 12%,90% 40%,100% 100%);opacity:.9"></div>', t:[['DEVIL STAR','#FF0000','13cqw','72%']]},
-  card:{bg:'linear-gradient(180deg,#0b0e1f,#101a4a 70%,#090d28)', top:'<div style="position:absolute;left:15%;right:15%;top:20%;height:34%;background:linear-gradient(135deg,#1f2a66,#0a0f2c);border:1px solid #3d4fb0;border-radius:6px"></div>', t:[['CARD','#1d3fe0','13cqw','72%']]},
-  setting:{bg:'linear-gradient(170deg,#1b0609,#3d0a10 60%,#150407)', top:'<div style="position:absolute;left:25%;right:12%;top:8%;height:60%;background:linear-gradient(180deg,#444,#111);clip-path:polygon(15% 100%,20% 25%,50% 6%,80% 25%,90% 100%);opacity:.7"></div>', t:[['SETTING PERFECTX','#FF0000','8.4cqw','74%']]},
-  xlight:{bg:'linear-gradient(180deg,#14090b,#2c0a0e)', top:'<div style="position:absolute;left:18%;right:18%;top:26%;height:5px;background:linear-gradient(90deg,#555,#ccc,#555);transform:rotate(-40deg)"></div>', t:[['CMD','#fff','12cqw','56%'],['XLIGHT','#FF0000','17cqw','67%'],['SUPER MODE','#ffb21f','4.6cqw','86%']]},
-  unlock:{bg:'linear-gradient(160deg,#241012,#4a0c12 70%,#190507)', top:'<div style="position:absolute;left:5%;top:12%;width:40%;height:70%;background:linear-gradient(180deg,#8d8d94,#2b2b30);border-radius:40% 40% 0 0"></div><div style="position:absolute;right:6%;top:10%;font-style:italic;color:#ffc425;font-size:8cqw;font-weight:900;transform:rotate(-8deg);line-height:.95;text-align:right">STAR<br><span style="font-size:5cqw">COMMUNITY</span></div>', t:[['ປົດລັອກສະກິນ','#FF0000','14cqw','73%']]},
-  collection:{bg:'linear-gradient(160deg,#3a0a10,#14090c)', top:'<div style="position:absolute;left:10%;top:16%;width:34%;height:52%;background:linear-gradient(180deg,#9a7a70,#2a1a1a);border-radius:40% 40% 8% 8%"></div>', t:[['COLLECTION','#fff','11.5cqw','72%']]},
-  upcri:{bg:'linear-gradient(160deg,#4a0a10,#0d0709 65%)', top:'<div style="position:absolute;left:18%;right:18%;top:36%;height:30%;background:linear-gradient(135deg,#2b2b30,#0a0a0c);border:1px solid #555;border-radius:6px;transform:rotate(-4deg)"></div>', t:[['UPCRI','#fff','20cqw','8%'],['ຄຣີປັບໄດ້ ຄຣີໜ້າ ຄຣີຂ້າງ ຄຣີຫຼັງ','#fff','4.5cqw','86%']]},
-  phantom:{bg:'linear-gradient(160deg,#222,#050505)', top:'', t:[['PHANTOM','#ddd','9cqw','38%']]},
-  zent:{bg:'linear-gradient(160deg,#5b2bd8,#14062e)', top:'', t:[['ZENTNITYX','#e9dcff','7cqw','42%']]},
-  level:{bg:'linear-gradient(160deg,#6f3bd0,#1c0a3f)', top:'', t:[['LEVEL?','#fff','11cqw','40%']]},
-  br:{bg:'linear-gradient(120deg,#0d0d0f,#3a1208 70%,#15090a)', top:'', t:[]}
-};
+/* สินค้าแสดงจากฐานข้อมูล (products ใน data.js) — cat ว่าง = ทุกหมวด */
+let curCat = '';
 function renderProducts(cat){
-  const list = products.filter(p => p.cat === cat);
-  $('#grid').innerHTML = list.length ? list.map((p,i) => productCardHTML(p, i)).join('') : `<div class="empty">ຍັງບໍ່ມີສິນຄ້າໃນໝວດນີ້</div>`;
+  if(cat !== undefined) curCat = cat || '';
+  const list = products.filter(p => !curCat || p.cat === curCat);
+  const msg = !window.productsLoaded ? 'ກຳລັງໂຫຼດສິນຄ້າ...' : window.productsFailed && !products.length ? 'ໂຫຼດສິນຄ້າບໍ່ໄດ້ ກະລຸນາລອງໃໝ່' : 'ຍັງບໍ່ມີສິນຄ້າໃນໝວດນີ້';
+  $('#grid').innerHTML = list.length ? list.map((p,i) => productCardHTML(p, i)).join('') : `<div class="empty">${msg}</div>`;
   $('#grid').querySelectorAll('[data-buy]').forEach(b => {
-    const go = () => { const p = list[+b.dataset.buy]; if(p.update || p.soldout){ snack(p.update ? 'ກຳລັງອັບເດດ' : 'ສິນຄ້າໝົດສະຕັອກ'); return; } CONFIG.onBuy(p); };
+    const go = () => { const p = list[+b.dataset.buy]; if(!p) return; if(p.update || p.soldout){ snack(p.update ? 'ກຳລັງອັບເດດ' : 'ສິນຄ້າໝົດສະຕັອກ'); return; } CONFIG.onBuy(p); };
     b.addEventListener('click', go);
     b.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
   });
+  const g = $('#grid'), w = $('#gridWrap'); if(g && w) w.classList.toggle('can-r', g.scrollLeft < g.scrollWidth - g.clientWidth - 8);
 }
-renderProducts('fivem');
+renderProducts('');
 
 /* เงาขอบแถวสินค้า: เปิด/ปิดตามตำแหน่งที่เลื่อน */
 (function(){
@@ -229,38 +222,48 @@ renderProducts('fivem');
   upd();
 })();
 
-/* featured carousel */
-const feat = [
-  {n:'EXSHOP', p:'₭0', art:'unban'}, {n:'EXSHOP', p:'₭0', art:'devil'},
-  {n:'EXSHOP', p:'₭0', art:'br'}, {n:'EXSHOP', p:'₭0', art:'phantom'},
-  {n:'EXSHOP', p:'₭0', art:'zent'}, {n:'EXSHOP', p:'₭0', art:'xlight'}
-];
-(function(){
+/* featured carousel — ใช้สินค้าจริงจากฐานข้อมูล (สูงสุด 6 อันแรก) ไม่มีสินค้า = ซ่อนส่วนนี้ */
+const feat = [];
+const featUI = (function(){
   const tr = $('#featTrack'), dots = $('#featDots');
-  tr.innerHTML = feat.map(f => `<a class="fcard" href="#products"><div class="fi">${artSq(f.art, f.img, true)}</div><div class="fn">${f.n}</div><div class="fp">${f.p}</div></a>`).join('');
-  dots.innerHTML = feat.map((_,i) => `<button aria-label="ສະໄລດ໌ ${i+1}"></button>`).join('');
   let i = 0, timer;
-  const set = n => { i = (n + feat.length) % feat.length; tr.style.transform = `translateX(-${i*100}%)`; [...dots.children].forEach((d,k) => d.classList.toggle('on', k===i)); };
-  const start = () => { clearInterval(timer); timer = setInterval(() => set(i+1), 3500); };
-  [...dots.children].forEach((d,k) => d.addEventListener('click', () => { set(k); start(); }));
-  set(0); start();
+  const set = n => { if(!feat.length) return; i = (n + feat.length) % feat.length; tr.style.transform = `translateX(-${i*100}%)`; [...dots.children].forEach((d,k) => d.classList.toggle('on', k===i)); };
+  const start = () => { clearInterval(timer); if(feat.length > 1) timer = setInterval(() => set(i+1), 3500); };
+  function build(){
+    feat.length = 0; products.slice(0, 6).forEach(p => feat.push(p));
+    tr.innerHTML = feat.map(f => `<a class="fcard" href="#products"><div class="fi">${artSq('', f.img, true)}</div><div class="fn">${escH(f.n)}</div><div class="fp">${escH(f.p)}</div></a>`).join('');
+    dots.innerHTML = feat.map((_,k) => `<button aria-label="ສະໄລດ໌ ${k+1}"></button>`).join('');
+    [...dots.children].forEach((d,k) => d.addEventListener('click', () => { set(k); start(); }));
+    $('#featSec').hidden = !SHOW.featured || !feat.length;
+    set(0); start();
+  }
+  return { build };
 })();
 
-$('#catList').innerHTML = cats.map(c => `
+function renderCatList(){
+  $('#catList').innerHTML = cats.map(c => `
   <button class="cat" data-cat="${c.k}">
     <div class="cb cb-img">${artCat(c.img)}</div>
-    <div class="cat-b"><div><h3>${c.n}</h3><p>${c.d}</p></div><span class="cnt">${c.c} ສິນຄ້າ</span></div>
+    <div class="cat-b"><div><h3>${c.n}</h3><p>${c.d}</p></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
   </button>`).join('');
+  if(typeof addCatTabs === 'function') addCatTabs($('#catList'));
+}
+renderCatList();
 $('#catList').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if(!b) return;
   location.href = 'categories.html?cat=' + encodeURIComponent(b.dataset.cat);   // กดการ์ดหมวด → ไปหน้าหมวดหมู่ (เลือกหมวดนั้นให้)
 });
-$('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSHOP'; renderProducts('fivem'); });
+$('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSHOP'; renderProducts(''); });
+
+/* ข้อมูลสินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ทุกส่วน */
+function onProducts(){ renderProducts(); featUI.build(); renderCatList(); renderStats(); }
+document.addEventListener('products:ready', onProducts);
+if(window.productsLoaded) onProducts();
 
 /* apply show/hide flags */
 $('#cats').hidden = !SHOW.categories;
 $('#products').hidden = !SHOW.products;
-$('#featSec').hidden = !SHOW.featured;
+$('#featSec').hidden = !SHOW.featured || !feat.length;
 
 /* การ์ด "ทำไมต้องเลือกเรา": สลับข้อความ+ไอคอนวนทุก 5 วินาที (เปลี่ยนด้วยเบลอ/จางที่ CSS .wrot) */
 (function(){
