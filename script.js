@@ -147,13 +147,21 @@ document.addEventListener('click', e => {
 })();
 
 /* drawer */
-const ov = $('#ov');
-function openMenu(){ $('#btnMenu').classList.add('is-open'); ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-function closeMenu(){ $('#btnMenu').classList.remove('is-open'); ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-$('#btnMenu').addEventListener('click', openMenu);
-$('#btnClose').addEventListener('click', closeMenu);
-ov.addEventListener('click', e => { if(e.target === ov) closeMenu(); });
-ov.querySelectorAll('a[href^="#"]:not([data-route])').forEach(a => a.addEventListener('click', closeMenu));
+const ov = $('#ov'), hdr = $('#hdr'), hMenu = $('#hMenu');
+/* เมนู: แถบบน (แคปซูล) ขยายลงมาเป็นรายการเมนู — เปิด/ปิดด้วยปุ่มเบอร์เกอร์, แตะพื้นหลัง หรือกด Esc */
+function setMenu(on){
+  $('#btnMenu').classList.toggle('is-open', on);
+  $('#btnMenu').setAttribute('aria-expanded', on);
+  hdr.classList.toggle('menu-open', on);
+  hMenu.inert = !on; hMenu.setAttribute('aria-hidden', on ? 'false' : 'true');
+  ov.classList.toggle('open', on); ov.setAttribute('aria-hidden', on ? 'false' : 'true');
+  document.body.style.overflow = on ? 'hidden' : '';
+}
+function openMenu(){ setMenu(true); }
+function closeMenu(){ setMenu(false); }
+$('#btnMenu').addEventListener('click', () => setMenu(!hdr.classList.contains('menu-open')));
+ov.addEventListener('click', closeMenu);
+hMenu.querySelectorAll('a[href^="#"]:not([data-route])').forEach(a => a.addEventListener('click', closeMenu));
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
 
 /* stats */

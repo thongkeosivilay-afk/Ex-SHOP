@@ -1,0 +1,71 @@
+/* ===== เมนู: แถบบน (แคปซูลกระจก) ขยายเลื่อนลงมาเป็นรายการเมนู =====
+   โครง: .header > .h-row (แถวปุ่มเดิม) + .h-menu (พับอยู่ → ขยายด้วย grid-template-rows 0fr→1fr ไม่ต้องรู้ความสูง)
+   เปิดเมนู = เพิ่มคลาส .menu-open ที่ .header (ทำใน script.js: setMenu)
+   แต่ละรายการมีเส้นคั่นจาง ๆ ที่ขยายออกจากกลาง และไล่โผล่ทีละอันแบบ stagger */
+
+/* โครงแถบบน */
+.fixbar.header{display:block;height:auto;padding:0;border-radius:27px;
+  transition:border-radius .5s ease,box-shadow .5s ease}
+.header .h-row{display:flex;align-items:center;gap:5px;height:52px;padding:0 12px 0 10px}
+@media (max-width:420px){.header .h-row{gap:4px;padding:0 12px 0 8px}}
+.fixbar.header.menu-open{z-index:110}      /* ลอยเหนือพื้นหลังมืด/เบลอ (.ov z=100) */
+.ov{z-index:100}
+
+/* ส่วนที่ขยาย */
+.h-menu{display:grid;grid-template-rows:0fr;visibility:hidden;
+  transition:grid-template-rows .5s cubic-bezier(.32,.72,0,1),visibility 0s .5s}
+.header.menu-open .h-menu{grid-template-rows:1fr;visibility:visible;
+  transition:grid-template-rows .62s cubic-bezier(.22,1,.36,1),visibility 0s}
+.h-in{min-height:0;overflow:hidden}
+.h-scroll{max-height:calc(100dvh - env(safe-area-inset-top,0px) - 38px - 52px - 22px);overflow-y:auto;overscroll-behavior:contain;
+  padding:0 10px 12px;scrollbar-width:none;opacity:0;transform:translateY(-10px);
+  transition:opacity .18s ease,transform .3s ease}
+.h-scroll::-webkit-scrollbar{display:none}
+.header.menu-open .h-scroll{opacity:1;transform:none;transition:opacity .4s ease .08s,transform .6s cubic-bezier(.22,1,.36,1) .04s}
+
+/* รายการเมนู */
+.header .dr-nav{padding:0;gap:0;flex:none;display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.14)}
+:root:not([data-theme="dark"]) .header .dr-nav{border-top-color:rgba(0,0,0,.08)}
+.header .dr-nav>a,.header .dr-nav>.dr-lang-btn{position:relative;height:50px;border-radius:16px;font-size:16.5px;
+  opacity:0;translate:0 -12px;
+  transition:opacity .15s,translate .15s,background .3s,color .3s}
+.header.menu-open .dr-nav>a,.header.menu-open .dr-nav>.dr-lang-btn{opacity:1;translate:0 0;
+  transition:opacity .4s ease var(--dl),translate .65s cubic-bezier(.22,1,.36,1) var(--dl),background .3s,color .3s}
+.header .dr-nav>a:active,.header .dr-nav>.dr-lang-btn:active{background:rgba(255,255,255,.08)}
+
+/* เส้นคั่นระหว่างตัวเลือก: ขยายจากกลางออกสองข้าง */
+.header .dr-nav>a:not(:first-child)::before,.header .dr-nav>.dr-lang-btn::before{content:"";position:absolute;left:16px;right:16px;top:-.5px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2) 18%,rgba(255,255,255,.2) 82%,transparent);
+  transform:scaleX(0);transition:transform .3s ease}
+:root:not([data-theme="dark"]) .header .dr-nav>a:not(:first-child)::before,
+:root:not([data-theme="dark"]) .header .dr-nav>.dr-lang-btn::before{background:linear-gradient(90deg,transparent,rgba(0,0,0,.14) 18%,rgba(0,0,0,.14) 82%,transparent)}
+.header.menu-open .dr-nav>a:not(:first-child)::before,.header.menu-open .dr-nav>.dr-lang-btn::before{transform:scaleX(1);
+  transition:transform .6s cubic-bezier(.22,1,.36,1) var(--dl)}
+/* เส้นข้าง ๆ รายการที่เลือกอยู่ ไม่ให้ชนขอบมน */
+.header .dr-nav>a.on::before,.header .dr-nav>a.on+a::before,.header .dr-nav>a.on+.dr-lang-btn::before{opacity:.0}
+
+/* ลำดับโผล่ทีละอัน */
+.header .dr-nav>*{--dl:.1s}
+.header .dr-nav>:nth-child(1){--dl:.10s}.header .dr-nav>:nth-child(2){--dl:.15s}.header .dr-nav>:nth-child(3){--dl:.20s}
+.header .dr-nav>:nth-child(4){--dl:.25s}.header .dr-nav>:nth-child(5){--dl:.30s}.header .dr-nav>:nth-child(6){--dl:.35s}
+.header .dr-nav>:nth-child(7){--dl:.40s}.header .dr-nav>:nth-child(8){--dl:.40s}
+
+/* ปุ่มเข้าสู่ระบบ/สมัคร ท้ายเมนู (ซ่อนเองเมื่อล็อกอินแล้ว) */
+.header .dr-f{flex-direction:row;gap:10px;padding:12px 2px 2px;margin-top:6px;border-top:1px solid rgba(255,255,255,.14)}
+:root:not([data-theme="dark"]) .header .dr-f{border-top-color:rgba(0,0,0,.08)}
+.header .dr-f button{flex:1;min-width:0;opacity:0;translate:0 -12px;transition:opacity .15s,translate .15s}
+.header.menu-open .dr-f button{opacity:1;translate:0 0;
+  transition:opacity .4s ease .46s,translate .65s cubic-bezier(.22,1,.36,1) .46s}
+.header.menu-open .dr-f button:nth-child(2){transition-delay:.52s}
+html.is-in .header .dr-f{display:none}
+
+/* ช่องภาษาที่กางออกในเมนู */
+.header .lg-pad{padding:10px 4px 6px}
+
+@media (prefers-reduced-motion:reduce){
+  .fixbar.header,.h-menu,.header.menu-open .h-menu,.h-scroll,.header.menu-open .h-scroll,
+  .header .dr-nav>a,.header .dr-nav>.dr-lang-btn,.header.menu-open .dr-nav>a,.header.menu-open .dr-nav>.dr-lang-btn,
+  .header .dr-f button,.header.menu-open .dr-f button,
+  .header .dr-nav>a::before,.header .dr-nav>.dr-lang-btn::before{transition-duration:.01ms!important;transition-delay:0s!important}
+  .header .dr-nav>a,.header .dr-nav>.dr-lang-btn,.header .dr-f button{translate:none}
+}
