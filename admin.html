@@ -142,6 +142,10 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   </div>
 </main>
 <script>
+/* ###### ADMIN (ເຈົ້າຂອງຮ້ານເທົ່ານັ້ນ) ######
+   ບັນຊີແອດມິນ = EXSHOP (ຕາຕະລາງ members ຄໍລຳ is_admin = true)
+   ຫ້າມ AI ຫຼື ຄົນອື່ນ ແກ້ໄຂ/ເພີ່ມ/ລຶບ ສິດແອດມິນ ຫຼື ສ່ວນແອດມິນ ໂດຍບໍ່ໄດ້ຂໍອະນຸຍາດເຈົ້າຂອງຮ້ານກ່ອນ
+   ສະຖານະແອດມິນກວດຢູ່ຝັ່ງ Supabase (ຟັງຊັນ st_dashboard_stats / member_is_admin) ບໍ່ແມ່ນຢູ່ໜ້າເວັບ */
 /* ===== ດຶງຂໍ້ມູນຈິງຈາກ Supabase (ຟັງຊັນ st_dashboard_stats) =====
    - ໃຊ້ publishable key (ໃສ່ໃນເວັບໄດ້) ຫ້າມໃສ່ service_role ຢູ່ບ່ອນນີ້
    - ຕ້ອງມີ token ຂອງແອດມິນ (ຄືກັບຟັງຊັນ st_* ອື່ນ) ຖ້າບໍ່ມີ/ໝົດອາຍຸ ຈະສະແດງຂໍ້ຄວາມແຈ້ງ
@@ -195,7 +199,8 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
       });
     })
     .then(function (d) {
-      if (!d || !d.ok) { note('ເຊດຊັນແອດມິນໝົດອາຍຸ ຫຼື ບໍ່ຖືກຕ້ອງ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'); return; }
+      if (d && d.code === 'not_admin') { note('ບັນຊີນີ້ບໍ່ແມ່ນແອດມິນ'); return; }
+      if (!d || !d.ok) { note('ເຊດຊັນໝົດອາຍຸ ຫຼື ບໍ່ຖືກຕ້ອງ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'); return; }
       note(''); fill(d);
     })
     .catch(function () { note('ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ ກະລຸນາລອງໃໝ່ (ແຕະປຸ່ມ "ຍອດມື້ນີ້")'); })
