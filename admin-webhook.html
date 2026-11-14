@@ -140,15 +140,29 @@ button{cursor:pointer;border:0;background:none}
     if(!RX.test(u)){ mark(k, true); toast('URL ຂອງ “' + LABEL[k] + '” ບໍ່ແມ່ນ Discord Webhook ທີ່ຖືກຕ້ອງ'); return Promise.resolve(false); }
     mark(k, false);
     var sp = btn && btn.querySelector('span'); if(btn){ btn.disabled = true; btn.className = 'tst'; sp.textContent = 'ກຳລັງສົ່ງ...'; }
-    return exRpc('adm_webhook_test', { p_token: tok(), p_label: LABEL[k], p_url: u }).then(function(j){
-      var ok = !!(j && j.ok);
+    function done(ok, detail){
       if(btn){ btn.disabled = false; btn.className = 'tst ' + (ok ? 'ok' : 'bad'); sp.textContent = ok ? 'ສົ່ງແລ້ວ' : 'ບໍ່ສຳເລັດ'; setTimeout(function(){ btn.className = 'tst'; sp.textContent = 'ທົດສອບ'; }, 3000); }
       if(!ok) mark(k, true);
-      return ok ? true : (j && j.status ? 'HTTP ' + j.status : false);
-    }).catch(function(){
-      if(btn){ btn.disabled = false; btn.className = 'tst bad'; sp.textContent = 'ບໍ່ສຳເລັດ'; setTimeout(function(){ btn.className = 'tst'; sp.textContent = 'ທົດສອບ'; }, 3000); }
-      return false;
-    });
+      return ok ? true : (detail || false);
+    }
+    /* ขั้น 1: สั่งส่ง (ได้เลขคำขอกลับมาทันที) → ขั้น 2: ถามผลตอบกลับจาก Discord ซ้ำทุก 0.7 วินาที */
+    return exRpc('adm_webhook_test', { p_token: tok(), p_label: LABEL[k], p_url: u }).then(function(j){
+      if(!(j && j.ok && j.id)) return done(false);
+      var tries = 0;
+      return new Promise(function(resolve){
+        (function poll(){
+          exRpc('adm_webhook_result', { p_token: tok(), p_id: j.id }).then(function(r){
+            if(r && r.ok && r.done){
+              if(r.success) return resolve(done(true));
+              var m = r.status === 404 ? 'Webhook ນີ້ບໍ່ມີຢູ່ ຫຼື ຖືກລຶບແລ້ວ (404)' : r.status === 401 ? 'Token ຂອງ Webhook ບໍ່ຖືກຕ້ອງ (401)' : (r.status ? 'Discord ຕອບກັບ HTTP ' + r.status : (r.msg || 'ເຊື່ອມຕໍ່ Discord ບໍ່ໄດ້'));
+              return resolve(done(false, m));
+            }
+            if(++tries >= 12) return resolve(done(false, 'Discord ບໍ່ຕອບກັບ (ໝົດເວລາ)'));
+            setTimeout(poll, 700);
+          }).catch(function(){ if(++tries >= 12) resolve(done(false)); else setTimeout(poll, 700); });
+        })();
+      });
+    }).catch(function(){ return done(false); });
   }
 
   document.addEventListener('click', function(e){
@@ -156,7 +170,7 @@ button{cursor:pointer;border:0;background:none}
     var k = b.dataset.k;
     testOne(k, b).then(function(r){
       if(r === true) toast('ສົ່ງຂໍ້ຄວາມທົດສອບແລ້ວ — ກວດເບິ່ງໃນຊ່ອງ Discord');
-      else if(r !== null && r !== false) toast('Discord ຕອບກັບ ' + r + ' — ກວດ URL ອີກຄັ້ງ');
+      else if(typeof r === 'string') toast(r);
       else if(r === false && !document.querySelector('#toast.show')) toast('ສົ່ງບໍ່ສຳເລັດ ກວດ URL ອີກຄັ້ງ');
     });
   });
