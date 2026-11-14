@@ -547,7 +547,16 @@ function rejected(j){
 }
 
 /* ---------- เริ่มต้น ---------- */
-setBal(); syncBal(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
+/* โหลด QR / เลขบัญชี ที่แอดมินตั้งไว้จากฐานข้อมูล — มีธนาคารไหนตั้งไว้ จะแสดงเฉพาะธนาคารนั้น */
+function loadPay(){
+  exRpc('shop_payment', {}).then(rows=>{
+    if(!Array.isArray(rows) || !rows.length) return;
+    rows.forEach(r=>{ const b = BANKS.find(x=>x.id===r.bank); if(b){ b.qr = r.qr; b.acct = r.acct || ''; b.holder = r.holder || ''; b.on = true; } });
+    const on = BANKS.filter(b=>b.on);
+    if(on.length){ BANKS.splice(0, BANKS.length, ...on); bank = BANKS[0]; renderTabs(); renderBank(); }
+  }).catch(()=>{});
+}
+setBal(); syncBal(); loadPay(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
 </script>
 </body>
 </html>

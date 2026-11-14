@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ຕັ້ງຄ່າ QR ຊຳລະເງິນ</title>
+<script src="guard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff4d4d;--card:#0b0b0d;--line:#2a2a30;--mut:#bdbdc7;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.top{position:sticky;top:0;z-index:10;background:#000;border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;display:flex;align-items:center;gap:12px}
+.back{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);font-size:18px}
+.top h1{font-size:17px;font-weight:700}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.box{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:14px;margin-bottom:14px}
+.box h2{font-size:15px;font-weight:700;margin-bottom:10px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 5px}
+.in{width:100%;height:44px;border-radius:12px;border:1px solid var(--line);background:#000;padding:0 12px;outline:none}
+.in:focus{border-color:var(--red)}
+select.in{appearance:none}
+.up{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:150px;border:1.5px dashed var(--line);border-radius:14px;cursor:pointer;color:var(--mut);font-size:13.5px;text-align:center;padding:10px}
+.up img{max-width:170px;max-height:170px;border-radius:10px;background:#fff}
+.up input{display:none}
+.btn{width:100%;height:46px;margin-top:14px;border-radius:12px;background:var(--red);font-weight:700}
+.btn:disabled{opacity:.5}
+.it{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;background:var(--card)}
+.it img{width:64px;height:64px;border-radius:8px;background:#fff;object-fit:contain;flex:none}
+.it .t{flex:1;min-width:0}.it b{display:block;font-size:15px}.it small{color:var(--mut);font-size:12.5px;word-break:break-all}
+.it .e,.it .d{height:36px;padding:0 10px;border-radius:9px;border:1px solid var(--line);font-size:13px;font-weight:600}
+.it .d{color:#ff8a87;border-color:#d95b58}
+.empty{text-align:center;color:var(--mut);padding:20px 0;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90%}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="top"><button class="back" id="back" type="button" aria-label="back">‹</button><h1>QR ຊຳລະເງິນ</h1></div>
+<div class="wrap">
+  <div class="box">
+    <h2>ເພີ່ມ / ແກ້ໄຂ QR</h2>
+    <label for="bk">ທະນາຄານ</label>
+    <select class="in" id="bk"></select>
+    <label>ຮູບ QR Code</label>
+    <label class="up" id="up" style="margin:0"><input type="file" id="fi" accept="image/*"><span id="upT">ແຕະເພື່ອເລືອກຮູບ QR</span></label>
+    <label for="ac">ເລກບັນຊີ (ບໍ່ບັງຄັບ)</label>
+    <input class="in" id="ac" autocomplete="off" inputmode="numeric">
+    <label for="ho">ຊື່ບັນຊີ (ບໍ່ບັງຄັບ)</label>
+    <input class="in" id="ho" autocomplete="off">
+    <button class="btn" id="sv" type="button">ບັນທຶກ</button>
+  </div>
+  <div id="list"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var BANKS = [['bcel','BCEL'],['ldb','LDB'],['jdb','JDB'],['apb','APB'],['lvb','LVB'],['stb','STB'],['psvb','PSVB'],['idcb','IDCB'],['acleda','ACLEDA'],['mjbl','MJBL'],['bic','BIC'],['vtb','VietinBank'],['vcb','Vietcombank'],['bfl','BFL'],['icbc','ICBC'],['boc','BOC'],['pbl','Public Bank'],['lcnb','LCNB']];
+  var data = '', rows = [], tt;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2600); }
+  function tok(){ return exToken(); }
+  function name(id){ for(var i=0;i<BANKS.length;i++) if(BANKS[i][0]===id) return BANKS[i][1]; return id; }
+
+  $('#bk').innerHTML = BANKS.map(function(b){ return '<option value="'+b[0]+'">'+b[1]+'</option>'; }).join('');
+  $('#back').onclick = function(){ location.href = 'admin.html'; };
+
+  function resetForm(){ data = ''; $('#up').querySelector('img') && $('#up').querySelector('img').remove(); $('#upT').style.display = ''; $('#fi').value = ''; $('#ac').value = ''; $('#ho').value = ''; }
+
+  $('#fi').addEventListener('change', function(e){
+    var f = e.target.files && e.target.files[0]; if(!f) return;
+    if(!/^image\//.test(f.type)){ toast('ກະລຸນາເລືອກໄຟລ໌ຮູບພາບ'); return; }
+    var url = URL.createObjectURL(f), im = new Image();
+    im.onload = function(){
+      var k = Math.min(1, 900 / Math.max(im.width, im.height));
+      var c = document.createElement('canvas'); c.width = Math.round(im.width*k); c.height = Math.round(im.height*k);
+      var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(im,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      data = c.toDataURL('image/png');
+      if(data.length > 600000) data = c.toDataURL('image/jpeg', .92);
+      var old = $('#up').querySelector('img'); if(old) old.remove();
+      var p = new Image(); p.src = data; $('#up').appendChild(p); $('#upT').style.display = 'none';
+    };
+    im.onerror = function(){ toast('ອ່ານຮູບບໍ່ໄດ້'); };
+    im.src = url;
+  });
+
+  $('#sv').onclick = function(){
+    if(!data){ toast('ກະລຸນາເລືອກຮູບ QR'); return; }
+    var b = $('#sv'); b.disabled = true;
+    exRpc('adm_payment_save', { p_token: tok(), p_bank: $('#bk').value, p_qr: data, p_acct: $('#ac').value.trim(), p_holder: $('#ho').value.trim() }).then(function(j){
+      b.disabled = false;
+      if(j && j.ok){ toast('ບັນທຶກແລ້ວ — ລູກຄ້າຈະເຫັນ QR ນີ້ໃນໜ້າເຕີມເງິນ'); resetForm(); load(); }
+      else toast(j && j.code === 'qr_big' ? 'ຮູບໃຫຍ່ເກີນໄປ' : 'ບັນທຶກບໍ່ສຳເລັດ');
+    }).catch(function(){ b.disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
+  };
+
+  function load(){
+    exRpc('shop_payment', {}).then(function(r){
+      rows = Array.isArray(r) ? r : [];
+      if(!rows.length){ $('#list').innerHTML = '<div class="empty">ຍັງບໍ່ມີ QR</div>'; return; }
+      $('#list').innerHTML = rows.map(function(r){
+        return '<div class="it"><img src="'+esc(r.qr)+'" alt="QR"><div class="t"><b>'+esc(name(r.bank))+'</b><small>'+esc(r.acct)+(r.acct && r.holder ? ' • ' : '')+esc(r.holder)+'</small></div>'
+          + '<button class="e" data-e="'+esc(r.bank)+'" type="button">ແກ້ໄຂ</button><button class="d" data-d="'+esc(r.bank)+'" type="button">ລຶບ</button></div>';
+      }).join('');
+    }).catch(function(){ $('#list').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້</div>'; });
+  }
+
+  $('#list').addEventListener('click', function(e){
+    var d = e.target.closest('[data-d]'), ed = e.target.closest('[data-e]');
+    if(ed){
+      var r = rows.filter(function(x){ return x.bank === ed.dataset.e; })[0]; if(!r) return;
+      $('#bk').value = r.bank; $('#ac').value = r.acct || ''; $('#ho').value = r.holder || ''; data = r.qr;
+      var old = $('#up').querySelector('img'); if(old) old.remove();
+      var p = new Image(); p.src = data; $('#up').appendChild(p); $('#upT').style.display = 'none'; window.scrollTo(0,0);
+    }
+    if(d){
+      if(!confirm('ລຶບ QR ຂອງ ' + name(d.dataset.d) + ' ?')) return;
+      exRpc('adm_payment_delete', { p_token: tok(), p_bank: d.dataset.d }).then(function(j){
+        toast(j && j.ok ? 'ລຶບແລ້ວ' : 'ລຶບບໍ່ສຳເລັດ'); load();
+      }).catch(function(){ toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
+    }
+  });
+
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-payment.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin) load(); else location.replace('index.html');
+    }).catch(function(){ $('#list').innerHTML = '<div class="empty">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div>'; });
+  }
+  gate();
+})();
+</script>
+</body>
+</html>
