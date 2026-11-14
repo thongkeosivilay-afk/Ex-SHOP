@@ -78,6 +78,40 @@ document.addEventListener('click', e => {
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
 })();
 
+/* แถบ "ประกาศ" ใต้แบนเนอร์ — ข้อความเลื่อนวน (หลักการเดียวกับแถบบนสุด: วัดความกว้างจริง ซ้ำให้เต็ม เลื่อนเท่า 1 ชุดแล้ววน) */
+(function(){
+  const SPEED = 40;   // px ต่อวินาที
+  const vp = $('.announce .an-r'); if(!vp) return;
+  const item = `<span class="an-item">${CONFIG.announce}</span>`;
+  let copies = 0, lastW = 0, raf = 0, ro, track;
+  function build(n){
+    copies = n;
+    const g = `<div class="an-group">${item.repeat(n)}</div>`;
+    vp.innerHTML = `<div class="an-track">${g}${g.replace('class="an-group"','class="an-group" aria-hidden="true"')}</div>`;
+    track = vp.firstChild;
+    if(ro){ ro.disconnect(); ro.observe(vp); const f = vp.querySelector('.an-item'); if(f) ro.observe(f); }
+    schedule();
+  }
+  function measure(){
+    raf = 0;
+    const g1 = vp.querySelector('.an-group'), first = vp.querySelector('.an-item'); if(!g1 || !first) return;
+    const itemW = first.getBoundingClientRect().width + 44;      // 44 = ช่องว่างท้ายแต่ละข้อความ
+    if(itemW < 60) return;
+    const need = Math.max(2, Math.ceil((vp.clientWidth + 40) / itemW) + 1);
+    if(need !== copies){ build(need); return; }
+    const w = g1.getBoundingClientRect().width;
+    if(Math.abs(w - lastW) < 0.5) return;
+    lastW = w;
+    track.style.setProperty('--mq-dn', -w + 'px');
+    track.style.setProperty('--mq-t', (w / SPEED).toFixed(2) + 's');
+  }
+  const schedule = () => { if(!raf) raf = requestAnimationFrame(measure); };
+  if(window.ResizeObserver) ro = new ResizeObserver(schedule);
+  build(2);
+  window.addEventListener('resize', schedule);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+})();
+
 /* theme */
 (function(){
   const root = document.documentElement, btn = $('#btnTheme');
