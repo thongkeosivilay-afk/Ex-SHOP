@@ -152,9 +152,22 @@ document.addEventListener('click', e => {
     const el = $('#balNum'); if(el) el.textContent = '₭' + short(n);
   }
   window.setBalance = n => { try { localStorage.setItem(BK, JSON.stringify(Number(n) || 0)); } catch(e){} paintBal(); };
-  window.addEventListener('pageshow', paintBal);
+  /* ดึงยอดจริงจาก Supabase (member_me) มาแสดงบนแถบหัว — ไม่มี token = ยังไม่ล็อกอิน แสดง ₭0 */
+  let balBusy = false;
+  function syncBal(){
+    const t = window.exToken && exToken();
+    if(!t || !window.exRpc){ if(!t){ try { localStorage.setItem(BK, '0'); } catch(e){} paintBal(); } return; }
+    if(balBusy) return; balBusy = true;
+    exRpc('member_me', { p_token: t }).then(j => {
+      if(j && j.ok) window.setBalance(j.balance);
+    }).catch(() => { /* ออฟไลน์: ใช้ค่าที่แคชไว้ */ }).finally(() => { balBusy = false; });
+  }
+  window.syncBalance = syncBal;
+  window.addEventListener('pageshow', () => { paintBal(); syncBal(); });
   window.addEventListener('storage', e => { if(e.key === BK) paintBal(); });
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) syncBal(); });
   paintBal();
+  syncBal();
   window.getUser = get;
   window.setUser = function(u){
     try { u ? localStorage.setItem(KEY, JSON.stringify(u)) : localStorage.removeItem(KEY); } catch(e){}
