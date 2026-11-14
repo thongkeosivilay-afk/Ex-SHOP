@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>จัดการผู้ใช้</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--redbtn:#e8321f;--bg:#000;--card:#050505;--line:#1f1f23;--txt:#fff;--mut:#8b8b95;--ok:#5ecb7a;--f:'Outfit','Noto Sans Thai','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:22px 16px calc(env(safe-area-inset-bottom,0px) + 48px)}
+
+/* หัวเรื่อง */
+.ttl{display:flex;align-items:stretch;gap:12px}
+.ttl i{width:5px;border-radius:3px;background:var(--redbtn);box-shadow:0 0 12px rgba(255,40,20,.6);flex:none}
+.ttl h2{font-size:30px;font-weight:700;line-height:1.2}
+.sub{margin:10px 0 18px 17px;color:var(--mut);font-size:15px}
+
+/* ค้นหา */
+.search{display:block;position:relative;margin-bottom:14px}
+.search svg{position:absolute;left:16px;top:50%;width:20px;height:20px;transform:translateY(-50%);color:#7a7a84;pointer-events:none}
+.search input{width:100%;height:54px;border-radius:16px;border:1px solid var(--line);background:#000;padding:0 16px 0 48px;outline:none;font-size:16px}
+.search input::placeholder{color:#6d6d77}
+.search input:focus{border-color:#4a1713}
+
+/* ปุ่มเพิ่ม */
+.add{width:100%;height:54px;border-radius:16px;background:var(--redbtn);color:#fff;font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 26px rgba(232,50,31,.35);margin-bottom:16px;transition:transform .15s,opacity .15s}
+.add:active{transform:scale(.985);opacity:.9}
+.add svg{width:20px;height:20px}
+
+/* การ์ดสถิติ */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.st{display:flex;align-items:center;gap:12px;padding:18px 12px;border:1px solid var(--line);border-radius:20px;background:var(--card);min-width:0}
+.st .ic{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;flex:none}
+.st .ic svg{width:26px;height:26px}
+.st b{display:block;font-size:34px;line-height:1.1;font-weight:500;letter-spacing:-.01em}
+.st small{display:block;margin-top:2px;color:var(--mut);font-size:15px;white-space:nowrap}
+.st .tx{min-width:0;flex:1}
+.st .tx b.money{font-size:clamp(14px,3.9vw,22px);font-weight:600;color:var(--ok);white-space:nowrap;line-height:1.3}
+.c-blue{background:#0b1426;color:#6c9cf0}.c-purple{background:#1a1228;color:#b585f0}
+.c-green{background:#0b1b10;color:var(--ok)}.c-cyan{background:#0a1d26;color:#5bc8ec}
+
+/* รายชื่อ */
+.lst{border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden}
+.lh{display:flex;align-items:center;justify-content:space-between;padding:20px 18px;border-bottom:1px solid var(--line)}
+.lh .l{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:500}
+.lh .l svg{width:22px;height:22px;color:#ee3b2d}
+.lh .n{color:var(--mut);font-weight:700;font-size:15px}
+.th,.tr{display:grid;grid-template-columns:1.15fr 1fr;align-items:center;gap:8px}
+.th{padding:14px 18px;background:#0a0a0b;border-bottom:1px solid var(--line);color:var(--mut);font-size:14px;font-weight:600}
+.th span{text-align:center}
+.tr{padding:16px 18px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.tr:last-child{border-bottom:0}
+.tr:active{background:#0d0d0f}
+.u{display:flex;align-items:center;gap:14px;min-width:0}
+.av{width:50px;height:50px;border-radius:50%;border:1px solid #2a2a2f;background:#111;display:grid;place-items:center;font-weight:600;font-size:18px;color:#ddd;flex:none;text-transform:uppercase}
+.tr.adm .av{border-color:#5a1a15;color:#ff8a80}
+.u .t{min-width:0}
+.u .t b{display:block;font-size:18px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.u .t small{display:block;margin-top:3px;color:#74747e;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rl{display:flex;flex-direction:column;align-items:center;gap:3px;color:#9a9aa4;font-weight:600;font-size:16px}
+.rl span{display:flex;align-items:center;gap:8px}
+.rl svg{width:16px;height:16px;flex:none}
+.tr.adm .rl{color:#c9a4f5}
+.rl em{font-style:normal;color:#5d9d70;font-size:12.5px;font-weight:500}
+.empty{text-align:center;color:var(--mut);padding:34px 0;font-size:15px}
+
+/* หน้าต่างเพิ่มผู้ใช้ */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:560px;background:#09090a;border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 22px);animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet h3{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.sheet h3 button{width:36px;height:36px;border-radius:50%;background:#18181b;font-size:15px}
+.fld{margin-bottom:12px}
+.fld label{display:block;margin-bottom:6px;color:var(--mut);font-size:13.5px}
+.fld input{width:100%;height:50px;border-radius:14px;border:1px solid var(--line);background:#000;padding:0 14px;outline:none;font-size:16px}
+.fld input:focus{border-color:#6b211b}
+.fld small{display:block;margin-top:5px;color:#666670;font-size:12.5px}
+.go{width:100%;height:52px;border-radius:14px;background:var(--redbtn);color:#fff;font-weight:700;font-size:16px;margin-top:6px}
+.go:disabled{opacity:.5}
+.det{display:grid;gap:10px;margin-bottom:8px}
+.det div{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;font-size:15px}
+.det span{color:var(--mut)}.det b{font-weight:600;text-align:right;word-break:break-all}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid #2a2a30;padding:11px 18px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.25s;z-index:70;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:380px){.st b{font-size:28px}.st .ic{width:46px;height:46px}.ttl h2{font-size:26px}}
+</style>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<div class="wrap">
+  <div class="ttl"><i></i><h2>จัดการผู้ใช้</h2></div>
+  <p class="sub">จัดการข้อมูลผู้ใช้งานในระบบ • <span id="today"></span></p>
+
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="ค้นหาด้วย ชื่อผู้ใช้ หรือ อีเมล..." autocomplete="off" autocapitalize="off">
+  </label>
+
+  <button class="add" id="addBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>เพิ่มผู้ใช้ใหม่</button>
+
+  <div class="stats">
+    <div class="st"><div class="ic c-blue"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg></div><div class="tx"><b id="sAll">–</b><small>ผู้ใช้ทั้งหมด</small></div></div>
+    <div class="st"><div class="ic c-purple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 4.5 5.4v5.7c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4z"/></svg></div><div class="tx"><b id="sAdm">–</b><small>ผู้ดูแลระบบ</small></div></div>
+    <div class="st"><div class="ic c-green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg></div><div class="tx"><b class="money" id="sBal">–</b><small>ยอดเงินรวม</small></div></div>
+    <div class="st"><div class="ic c-cyan"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 20c0-3.9 3.6-6.5 8-6.5s8 2.6 8 6.5z"/></svg></div><div class="tx"><b id="sUsr">–</b><small>ผู้ใช้ทั่วไป</small></div></div>
+  </div>
+
+  <div class="lst">
+    <div class="lh">
+      <div class="l"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/></svg>รายชื่อผู้ใช้งาน</div>
+      <div class="n" id="cnt">0 รายการ</div>
+    </div>
+    <div class="th"><span>ผู้ใช้</span><span>บทบาท</span></div>
+    <div id="rows"><div class="empty">กำลังโหลด...</div></div>
+  </div>
+</div>
+
+<!-- เพิ่มผู้ใช้ใหม่ -->
+<div class="ov" id="ovAdd">
+  <form class="sheet" id="fAdd" autocomplete="off">
+    <h3>เพิ่มผู้ใช้ใหม่ <button type="button" data-close>✕</button></h3>
+    <div class="fld"><label for="fu">ชื่อผู้ใช้</label><input id="fu" maxlength="20" autocapitalize="off" spellcheck="false" required><small>ตัวอักษร a-z, ตัวเลข หรือ _ ความยาว 3–20 ตัว</small></div>
+    <div class="fld"><label for="fe">อีเมล (ไม่บังคับ)</label><input id="fe" type="email" inputmode="email" autocapitalize="off" maxlength="254"></div>
+    <div class="fld"><label for="fp">รหัสผ่าน</label><input id="fp" type="text" minlength="6" maxlength="72" autocapitalize="off" spellcheck="false" required><small>อย่างน้อย 6 ตัวอักษร — ผู้ใช้ที่เพิ่มจะเป็นผู้ใช้ทั่วไป</small></div>
+    <button class="go" id="fgo" type="submit">สร้างผู้ใช้</button>
+  </form>
+</div>
+
+<!-- รายละเอียดผู้ใช้ -->
+<div class="ov" id="ovDet">
+  <div class="sheet">
+    <h3><span id="dName">ผู้ใช้</span> <button type="button" data-close>✕</button></h3>
+    <div class="det" id="dBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var nf = new Intl.NumberFormat('en-US');
+  var all = [], tt;
+  var fmt = function(n){ return '₭' + nf.format(Number(n) || 0); };
+  var ICON_U = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 20c0-3.9 3.6-6.5 8-6.5s8 2.6 8 6.5z"/></svg>';
+  var ICON_A = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 4.5 5.4v5.7c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4z"/></svg>';
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2600); }
+  function tok(){ return exToken(); }
+  $('#today').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
+  /* ตรวจสิทธิ์แอดมิน (ตรวจซ้ำที่ฝั่ง Supabase ทุกครั้งที่เรียกข้อมูล) */
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-members.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
+    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</div>'; });
+  }
+
+  function load(){
+    return exRpc('adm_member_list', { p_token: tok() }).then(function(j){
+      if(!j || !j.ok){ $('#rows').innerHTML = '<div class="empty">ไม่มีสิทธิ์เข้าถึง</div>'; return; }
+      all = j.rows || [];
+      stats(); render();
+    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">โหลดข้อมูลไม่ได้ กรุณาลองใหม่</div>'; });
+  }
+
+  function stats(){
+    var adm = all.filter(function(r){ return r.is_admin; }).length;
+    var sum = all.reduce(function(a, r){ return a + (Number(r.balance) || 0); }, 0);
+    $('#sAll').textContent = nf.format(all.length);
+    $('#sAdm').textContent = nf.format(adm);
+    $('#sUsr').textContent = nf.format(all.length - adm);
+    $('#sBal').textContent = fmt(sum);
+  }
+
+  function render(){
+    var q = $('#q').value.trim().toLowerCase();
+    var rows = all.filter(function(r){
+      return !q || String(r.username).toLowerCase().indexOf(q) > -1 || String(r.email || '').toLowerCase().indexOf(q) > -1;
+    });
+    $('#cnt').textContent = nf.format(rows.length) + ' รายการ';
+    if(!rows.length){ $('#rows').innerHTML = '<div class="empty">' + (q ? 'ไม่พบผู้ใช้ที่ค้นหา' : 'ยังไม่มีผู้ใช้') + '</div>'; return; }
+    $('#rows').innerHTML = rows.map(function(r){
+      var a = !!r.is_admin;
+      return '<div class="tr' + (a ? ' adm' : '') + '" data-id="' + esc(r.id) + '">'
+        + '<div class="u"><div class="av">' + esc(String(r.username).charAt(0)) + '</div>'
+        + '<div class="t"><b>' + esc(r.username) + '</b><small>' + (r.email ? esc(r.email) : '-') + '</small></div></div>'
+        + '<div class="rl"><span>' + (a ? ICON_A + 'ผู้ดูแลระบบ' : ICON_U + 'ผู้ใช้ทั่วไป') + '</span><em>' + fmt(r.balance) + '</em></div></div>';
+    }).join('');
+  }
+
+  $('#q').addEventListener('input', render);
+
+  /* รายละเอียด */
+  $('#rows').addEventListener('click', function(e){
+    var row = e.target.closest('.tr'); if(!row) return;
+    var r = all.filter(function(x){ return String(x.id) === row.dataset.id; })[0]; if(!r) return;
+    $('#dName').textContent = r.username;
+    $('#dBody').innerHTML =
+      '<div><span>อีเมล</span><b>' + (r.email ? esc(r.email) : '-') + '</b></div>' +
+      '<div><span>บทบาท</span><b>' + (r.is_admin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป') + '</b></div>' +
+      '<div><span>ยอดเงินคงเหลือ</span><b style="color:var(--ok)">' + fmt(r.balance) + '</b></div>' +
+      '<div><span>สมัครเมื่อ</span><b>' + esc(new Date(r.created_at).toLocaleString('en-GB', { hour12:false })) + '</b></div>';
+    $('#ovDet').classList.add('show');
+  });
+
+  /* เปิด/ปิดหน้าต่าง */
+  function closeAll(){ document.querySelectorAll('.ov').forEach(function(o){ o.classList.remove('show'); }); }
+  document.querySelectorAll('.ov').forEach(function(o){
+    o.addEventListener('click', function(e){ if(e.target === o || e.target.closest('[data-close]')) closeAll(); });
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  $('#addBtn').onclick = function(){ $('#fAdd').reset(); $('#ovAdd').classList.add('show'); setTimeout(function(){ $('#fu').focus(); }, 60); };
+
+  /* เพิ่มผู้ใช้ใหม่ */
+  var MSG = {
+    bad_username: 'ชื่อผู้ใช้ต้องเป็น a-z, 0-9 หรือ _ ยาว 3–20 ตัว',
+    bad_password: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
+    bad_email: 'รูปแบบอีเมลไม่ถูกต้อง',
+    taken: 'ชื่อผู้ใช้นี้มีคนใช้แล้ว',
+    not_admin: 'ไม่มีสิทธิ์ดำเนินการ'
+  };
+  $('#fAdd').addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = $('#fgo'); if(btn.disabled) return;
+    btn.disabled = true;
+    exRpc('adm_member_create', { p_token: tok(), p_username: $('#fu').value.trim(), p_email: $('#fe').value.trim(), p_password: $('#fp').value })
+      .then(function(j){
+        btn.disabled = false;
+        if(j && j.ok){ closeAll(); toast('เพิ่มผู้ใช้ ' + j.username + ' แล้ว'); load(); }
+        else toast(MSG[j && j.code] || 'เพิ่มผู้ใช้ไม่สำเร็จ');
+      }).catch(function(){ btn.disabled = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+  });
+
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && !document.querySelector('.ov.show')) load(); });
+  gate();
+})();
+</script>
+</body>
+</html>
