@@ -45,10 +45,21 @@ button{cursor:pointer;border:0;background:none}
 .ov .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;width:40px;height:40px;border-radius:50%;background:#1a1a1d;font-size:18px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90%}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+.mn{position:fixed;inset:0;z-index:40;display:none}
+.mn.show{display:block}
+.mn .bg{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.mn .pn{position:absolute;left:14px;right:14px;top:calc(env(safe-area-inset-top,0px) + 62px);max-width:420px;background:#0b0b0d;border:1px solid var(--line);border-radius:16px;padding:8px;animation:mnin .2s ease both}
+.mn a{display:flex;align-items:center;gap:12px;height:48px;padding:0 12px;border-radius:11px;color:#fff;text-decoration:none;font-weight:600;font-size:15px}
+.mn a svg{width:20px;height:20px;flex:none}
+.mn a.on{background:rgba(255,77,77,.14);color:#ff4d4d}
+@keyframes mnin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.back svg{width:20px;height:20px}
 </style>
 </head>
 <body>
-<div class="top"><button class="back" id="back" type="button" aria-label="back">‹</button><h1>ອະນຸມັດເຕີມເງິນ</h1></div>
+<div class="top"><button class="back" id="mbtn" type="button" aria-label="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><h1>ອະນຸມັດເຕີມເງິນ</h1></div>
+<div class="mn" id="mn"><div class="bg" id="mnbg"></div><nav class="pn"><a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg><span>ໜ້າເວັບ</span></a><a href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a><a href="admin-topup.html" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/></svg><span>ອະນຸມັດເຕີມເງິນ</span></a><a href="admin-payment.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>QR ຊຳລະເງິນ</span></a></nav></div>
 <div class="wrap">
   <div class="box">
     <h2>ເຕີມເງິນໃຫ້ສະມາຊິກໂດຍກົງ</h2>
@@ -81,7 +92,10 @@ button{cursor:pointer;border:0;background:none}
   function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2600); }
   function tok(){ return exToken(); }
 
-  $('#back').onclick = function(){ location.href = 'admin.html'; };
+  function mset(o){ $('#mn').classList.toggle('show',o); $('#mbtn').setAttribute('aria-expanded',o?'true':'false'); }
+  $('#mbtn').onclick = function(){ mset(!$('#mn').classList.contains('show')); };
+  $('#mnbg').onclick = function(){ mset(false); };
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') mset(false); });
 
   function gate(){
     if(!tok()){ try{ sessionStorage.setItem('exNext','admin-topup.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
