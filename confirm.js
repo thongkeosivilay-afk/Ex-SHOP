@@ -19,7 +19,7 @@ function artSq(key){
   const tx = a.t.map(([t,c,s,y]) => `<div class="tp" style="color:${c};font-size:${s};top:${y};text-shadow:0 2px 6px rgba(0,0,0,.6)">${t}</div>`).join('');
   return `<div style="position:absolute;inset:0;container-type:inline-size;background:${a.bg}">${a.top}${tx}</div>`;
 }
-const PRODUCTS = {unban:"UNBAN FIVEM",devil:"DEVIL STAR",card:"CARD (ຄ່າຍຂາວ)",setting:"SETTING PERFECTX",xlight:"CMD XLIGHT",unlock:"UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ",collection:"CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]",upcri:"UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ"};
+const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",xlight:"EXSHOP",unlock:"EXSHOP",collection:"EXSHOP",upcri:"EXSHOP"};
 
 /* ===== หน้ายืนยันสั่งซื้อ (โหมดทดลอง) =====
    ข้อมูลในนี้เป็นข้อมูลจำลองทั้งหมด (DEMO) ยังไม่ตัดเงินจริง

@@ -19,22 +19,22 @@ function artCat(src){
 
 /* products */
 const products = [
-  {n:'UNBAN FIVEM', p:'₭0', left:'0', sold:'0', art:'unban', cat:'fivem'},
-  {n:'DEVIL STAR', p:'₭0', left:'0', sold:'0', art:'devil', cat:'fivem'},
-  {n:'CARD (ຄ່າຍຂາວ)', p:'₭0', left:'0', sold:'0', art:'card', cat:'fivem'},
-  {n:'SETTING PERFECTX', p:'₭0', left:'0', sold:'0', art:'setting', cat:'fivem'},
-  {soldout:true, n:'CMD XLIGHT', p:'₭0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
-  {soldout:true, n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'₭0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
-  {update:true, n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'₭0', left:'0', sold:'0', art:'collection', cat:'fivem'},
-  {update:true, n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'₭0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
+  {n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'unban', cat:'fivem'},
+  {n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'devil', cat:'fivem'},
+  {n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'card', cat:'fivem'},
+  {n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'setting', cat:'fivem'},
+  {soldout:true, n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
+  {soldout:true, n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
+  {update:true, n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'collection', cat:'fivem'},
+  {update:true, n:'EXSHOP', p:'₭0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
 ];
 
 /* categories */
 const cats = [
-  {k:'fivem', t1:'FIVEM GAME', n:'FIVEM', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem', c:0},
-  {k:'cheat', t1:'CHEAT', n:'CHEAT', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ', c:0},
-  {k:'random', t1:'RANDOM ID', n:'RANDOM ID', d:'ສຸ່ມໄອດີເກມ', c:0},
-  {k:'freefire', t1:'FREE FIRE', n:'FREE FIRE', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Free Fire', c:0}
+  {k:'fivem', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem', c:0},
+  {k:'cheat', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ', c:0},
+  {k:'random', t1:'EXSHOP', n:'EXSHOP', d:'ສຸ່ມໄອດີເກມ', c:0},
+  {k:'freefire', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Free Fire', c:0}
 ];
 
 /* การ์ดสินค้า 1 ใบ (ใช้ร่วมกันทั้งหน้าแรกและหน้าหมวดหมู่)

@@ -91,9 +91,9 @@ renderProducts('fivem');
 
 /* featured carousel */
 const feat = [
-  {n:'UNBAN FIVEM', p:'₭0', art:'unban'}, {n:'DEVIL STAR', p:'₭0', art:'devil'},
-  {n:'BR MODS', p:'₭0', art:'br'}, {n:'PHANTOM (AD+IOS)', p:'₭0', art:'phantom'},
-  {n:'ZENTNITYX (AD+IOS)', p:'₭0', art:'zent'}, {n:'CMD XLIGHT', p:'₭0', art:'xlight'}
+  {n:'EXSHOP', p:'₭0', art:'unban'}, {n:'EXSHOP', p:'₭0', art:'devil'},
+  {n:'EXSHOP', p:'₭0', art:'br'}, {n:'EXSHOP', p:'₭0', art:'phantom'},
+  {n:'EXSHOP', p:'₭0', art:'zent'}, {n:'EXSHOP', p:'₭0', art:'xlight'}
 ];
 (function(){
   const tr = $('#featTrack'), dots = $('#featDots');
@@ -115,9 +115,24 @@ $('#catList').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if(!b) return;
   location.href = 'categories.html?cat=' + encodeURIComponent(b.dataset.cat);   // กดการ์ดหมวด → ไปหน้าหมวดหมู่ (เลือกหมวดนั้นให้)
 });
-$('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'FIVEM'; renderProducts('fivem'); });
+$('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSHOP'; renderProducts('fivem'); });
 
 /* apply show/hide flags */
 $('#cats').hidden = !SHOW.categories;
 $('#products').hidden = !SHOW.products;
 $('#featSec').hidden = !SHOW.featured;
+
+/* การ์ด "ทำไมต้องเลือกเรา": สลับข้อความ+ไอคอนวนทุก 5 วินาที (เปลี่ยนด้วยเบลอ/จางที่ CSS .wrot) */
+(function(){
+  const box = $('#whyRot'); if(!box) return;
+  const slides = [...box.querySelectorAll('.wslide')]; if(slides.length < 2) return;
+  const WHY_MS = 5000;   // เวลารอก่อนสลับ (มิลลิวินาที)
+  let i = 0, timer;
+  const show = n => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s,k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+  };
+  const start = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), WHY_MS); };
+  document.addEventListener('visibilitychange', () => { if(document.hidden) clearInterval(timer); else start(); });  // แท็บไม่ได้เปิดอยู่ = หยุด ไม่ให้สลับรัวตอนกลับมา
+  start();
+})();
