@@ -642,6 +642,188 @@
 "Không cần nạp để mua skin",
 "स्किन खरीदने के लिए टॉप अप ज़रूरी नहीं",
 "Sem precisar recarregar para comprar skins"
+],
+"ໝວດໝູ່": [
+"หมวดหมู่",
+"Categories",
+"Danh mục",
+"श्रेणियाँ",
+"Categorias"
+],
+"ຄົ້ນຫາສິນຄ້າ ຫຼື ໝວດໝູ່...": [
+"ค้นหาสินค้าหรือหมวดหมู่...",
+"Search products or categories...",
+"Tìm sản phẩm hoặc danh mục...",
+"उत्पाद या श्रेणी खोजें...",
+"Buscar produtos ou categorias..."
+],
+"ຄົ້ນຫາ": [
+"ค้นหา",
+"Search",
+"Tìm kiếm",
+"खोजें",
+"Buscar"
+],
+"ລ້າງ": [
+"ล้าง",
+"Clear",
+"Xóa",
+"साफ़ करें",
+"Limpar"
+],
+"ຄົ້ນຫາຫຼ້າສຸດ": [
+"ค้นหาล่าสุด",
+"Recent searches",
+"Tìm kiếm gần đây",
+"हाल की खोजें",
+"Pesquisas recentes"
+],
+"ຮຽງຕາມປົກກະຕິ": [
+"เรียงตามปกติ",
+"Default order",
+"Thứ tự mặc định",
+"डिफ़ॉल्ट क्रम",
+"Ordem padrão"
+],
+"ຂາຍດີທີ່ສຸດ": [
+"ขายดีที่สุด",
+"Best selling",
+"Bán chạy nhất",
+"सबसे ज़्यादा बिकने वाले",
+"Mais vendidos"
+],
+"ລາຄາ ຕ່ຳ → ສູງ": [
+"ราคา ต่ำ → สูง",
+"Price: low → high",
+"Giá: thấp → cao",
+"कीमत: कम → ज़्यादा",
+"Preço: menor → maior"
+],
+"ລາຄາ ສູງ → ຕ່ຳ": [
+"ราคา สูง → ต่ำ",
+"Price: high → low",
+"Giá: cao → thấp",
+"कीमत: ज़्यादा → कम",
+"Preço: maior → menor"
+],
+"ຊື່ A → Z": [
+"ชื่อ A → Z",
+"Name A → Z",
+"Tên A → Z",
+"नाम A → Z",
+"Nome A → Z"
+],
+"ຄັງຫຼາຍສຸດ": [
+"สต็อกมากที่สุด",
+"Most in stock",
+"Tồn kho nhiều nhất",
+"सबसे ज़्यादा स्टॉक",
+"Maior estoque"
+],
+"ຮຽງລຳດັບ": [
+"เรียงลำดับ",
+"Sort",
+"Sắp xếp",
+"क्रमबद्ध करें",
+"Ordenar"
+],
+"ພ້ອມຂາຍ": [
+"พร้อมขาย",
+"In stock only",
+"Chỉ còn hàng",
+"केवल उपलब्ध",
+"Somente disponíveis"
+],
+"ໝວດໝູ່ທັງໝົດ": [
+"หมวดหมู่ทั้งหมด",
+"All categories",
+"Tất cả danh mục",
+"सभी श्रेणियाँ",
+"Todas as categorias"
+],
+"ສິນຄ້າທັງໝົດ": [
+"สินค้าทั้งหมด",
+"All products",
+"Tất cả sản phẩm",
+"सभी उत्पाद",
+"Todos os produtos"
+],
+"ທັງໝົດ": [
+"ทั้งหมด",
+"All",
+"Tất cả",
+"सभी",
+"Todos"
+],
+"ຜົນການຄົ້ນຫາ": [
+"ผลการค้นหา",
+"Search results",
+"Kết quả tìm kiếm",
+"खोज परिणाम",
+"Resultados da busca"
+],
+"ພົບ": [
+"พบ",
+"Found",
+"Tìm thấy",
+"मिले",
+"Encontrados"
+],
+"ລ້າງຕົວກອງ": [
+"ล้างตัวกรอง",
+"Clear filters",
+"Xóa bộ lọc",
+"फ़िल्टर हटाएँ",
+"Limpar filtros"
+],
+"ລ້າງຕົວກອງທັງໝົດ": [
+"ล้างตัวกรองทั้งหมด",
+"Clear all filters",
+"Xóa tất cả bộ lọc",
+"सभी फ़िल्टर हटाएँ",
+"Limpar todos os filtros"
+],
+"ລອງຄຳຄົ້ນຫາອື່ນ ຫຼື ລ້າງຕົວກອງ": [
+"ลองคำค้นอื่นหรือล้างตัวกรอง",
+"Try another search or clear the filters",
+"Thử từ khóa khác hoặc xóa bộ lọc",
+"कोई और शब्द आज़माएँ या फ़िल्टर हटाएँ",
+"Tente outra busca ou limpe os filtros"
+],
+"ຍັງບໍ່ມີສິນຄ້າທີ່ພ້ອມຂາຍໃນຕອນນີ້": [
+"ตอนนี้ยังไม่มีสินค้าที่พร้อมขาย",
+"No products are available right now",
+"Hiện chưa có sản phẩm sẵn sàng bán",
+"अभी कोई उत्पाद उपलब्ध नहीं है",
+"Nenhum produto disponível no momento"
+],
+"ຍັງບໍ່ມີສິນຄ້າ": [
+"ยังไม่มีสินค้า",
+"No products yet",
+"Chưa có sản phẩm",
+"अभी कोई उत्पाद नहीं",
+"Ainda não há produtos"
+],
+"ບໍ່ພົບສິນຄ້າທີ່ຄົ້ນຫາ": [
+"ไม่พบสินค้าที่ค้นหา",
+"No products found",
+"Không tìm thấy sản phẩm",
+"कोई उत्पाद नहीं मिला",
+"Nenhum produto encontrado"
+],
+"ບໍ່ມີສິນຄ້າ": [
+"ไม่มีสินค้า",
+"No products",
+"Không có sản phẩm",
+"कोई उत्पाद नहीं",
+"Sem produtos"
+],
+"ກັບຄືນ": [
+"กลับ",
+"Back",
+"Quay lại",
+"वापस",
+"Voltar"
 ]
 };
   const HTML_LANG = { lo: 'lo', th: 'th', en: 'en', vi: 'vi', hi: 'hi', pt: 'pt-BR' };

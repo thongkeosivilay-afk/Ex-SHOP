@@ -1,0 +1,88 @@
+/* ===== หน้าหมวดหมู่ (categories.html) ===== */
+body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px)}
+
+/* แถบบนสุด: กลับ / ชื่อหน้า / ปุ่มธีม */
+.ct-top{position:sticky;top:0;z-index:30;max-width:520px;margin:0 auto;background:var(--bg);display:flex;align-items:center;gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 8px) 14px 8px}
+.ct-back,.ct-theme{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--text);flex:none}
+.ct-theme{margin-left:auto;color:var(--muted);border-radius:12px}
+.ct-theme svg{width:18px;height:18px}
+.ct-top h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:9px}
+.ct-top h1 svg{color:var(--red);width:22px;height:22px}
+
+/* แถบค้นหา + ตัวกรอง (ติดอยู่ใต้แถบบน ตอนเลื่อนหน้า) */
+.ct-sticky{position:sticky;top:calc(env(safe-area-inset-top,0px) + 54px);z-index:25;max-width:520px;margin:0 auto;background:var(--bg);padding:6px 16px 10px;border-bottom:1px solid var(--border)}
+.ct-search{position:relative;display:flex;align-items:center;height:48px;border-radius:16px;background:var(--card);border:1.5px solid var(--border);transition:border-color .2s,box-shadow .2s}
+.ct-search:focus-within{border-color:var(--red);box-shadow:0 0 0 4px rgba(255,0,0,.12)}
+.ct-s-ic{position:absolute;left:15px;width:20px;height:20px;color:var(--muted);pointer-events:none}
+.ct-search:focus-within .ct-s-ic{color:var(--red)}
+.ct-search input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;color:var(--text);font:inherit;padding:0 46px 0 46px;border-radius:16px;-webkit-appearance:none;appearance:none}
+.ct-search input::placeholder{color:var(--muted)}
+.ct-search input::-webkit-search-cancel-button,.ct-search input::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.ct-clear{position:absolute;right:9px;width:30px;height:30px;border-radius:50%;background:var(--glass);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ct-clear[hidden]{display:none}
+.ct-clear svg{width:16px;height:16px}
+
+/* ค้นหาล่าสุด */
+.ct-recent{margin-top:10px}
+.ct-recent[hidden]{display:none}
+.ct-recent-h{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.ct-recent-h span{display:flex;align-items:center;gap:6px}
+.ct-recent-h svg{width:14px;height:14px}
+.ct-recent-h button{color:var(--red);font-size:12.5px;padding:2px 4px}
+.ct-recent-l{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.ct-recent-l button{height:30px;padding:0 12px;border-radius:15px;background:var(--card);border:1px solid var(--border);font-size:13.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ชิปเลือกหมวด (เลื่อนซ้าย-ขวา) */
+.ct-chips{display:flex;gap:8px;margin:11px -16px 0;padding:0 16px 2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ct-chips::-webkit-scrollbar{display:none}
+.ct-chip{flex:none;height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.ct-chip b{font-weight:500;font-size:12px;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;background:var(--glass);color:var(--muted)}
+.ct-chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.ct-chip.on b{background:rgba(255,255,255,.25);color:#fff}
+.ct-chip.dim{opacity:.45}
+
+/* เรียงลำดับ + สวิตช์พร้อมขาย */
+.ct-tools{display:flex;align-items:center;gap:10px;margin-top:10px}
+.ct-sort{position:relative;display:flex;align-items:center;flex:1.35;min-width:0;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card)}
+.ct-sort>svg:first-child{position:absolute;left:11px;width:17px;height:17px;color:var(--muted);pointer-events:none}
+.ct-sort-ch{position:absolute;right:9px;width:16px;height:16px;color:var(--muted);pointer-events:none}
+.ct-sort select{width:100%;height:100%;border:0;outline:0;background:transparent;color:var(--text);font:inherit;padding:0 30px 0 36px;-webkit-appearance:none;appearance:none;border-radius:12px;cursor:pointer;font-size:14px!important}
+.ct-sort:focus-within{border-color:var(--red)}
+.ct-sort option{color:#111;background:#fff}
+.ct-toggle{display:flex;align-items:center;gap:7px;height:38px;padding:0 10px 0 9px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:13px;white-space:nowrap;flex:1;min-width:0;justify-content:center}
+.ct-toggle span{overflow:hidden;text-overflow:ellipsis}
+.ct-toggle i{position:relative;width:32px;height:19px;border-radius:10px;background:var(--border);transition:background .2s;flex:none}
+.ct-toggle i::after{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .2s}
+.ct-toggle[aria-checked="true"]{border-color:rgba(255,0,0,.55);background:var(--pink)}
+.ct-toggle[aria-checked="true"] i{background:var(--red)}
+.ct-toggle[aria-checked="true"] i::after{transform:translateX(13px)}
+
+/* เนื้อหา */
+.ct-main{max-width:520px;margin:0 auto;padding:14px 16px 0}
+.ct-status{min-height:20px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ct-status:empty{display:none}
+.ct-status button{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-size:13px}
+.ct-status button svg{width:14px;height:14px}
+.ct-status mark,.pname mark,.cat-b mark{background:rgba(255,0,0,.22);color:inherit;border-radius:3px;padding:0 1px}
+.ct-sec{margin-top:18px}
+.ct-sec[hidden]{display:none}
+.ct-sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.ct-sec-h h2{font-size:19px;font-weight:600}
+.ct-sec-h span{font-size:13.5px;color:var(--muted)}
+.ct-sec .cat-list{margin-top:6px}
+.ct-sec .grid{margin-top:16px}
+.ct-sec .cat-list > .cat:first-child{margin-top:42px}
+
+/* การ์ดหมวดที่เลือกอยู่ */
+.cat.is-on .cb.cb-img{outline:2px solid var(--red);outline-offset:-2px}
+.cat:focus-visible{outline:none}
+.cat:focus-visible .cb.cb-img{outline:2px solid var(--red);outline-offset:-2px}
+
+/* ผลลัพธ์ว่าง */
+.ct-empty{grid-column:1/-1;text-align:center;padding:46px 10px 20px;color:var(--muted)}
+.ct-empty svg{width:44px;height:44px;color:var(--red);opacity:.7;margin-bottom:10px}
+.ct-empty b{display:block;color:var(--text);font-weight:600;font-size:16.5px;margin-bottom:4px}
+.ct-empty p{font-size:14px}
+.ct-empty button{margin-top:16px;height:40px;padding:0 20px;border-radius:12px;background:var(--red);color:#fff;font-weight:500}
+.cat-list .ct-empty{padding-top:24px}

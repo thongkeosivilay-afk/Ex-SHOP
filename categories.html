@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>
+<title>ໝວດໝູ່</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lang.css">
+<link rel="stylesheet" href="catcard.css">
+<link rel="stylesheet" href="categories.css">
+</head>
+<body class="ct-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-2.93 1.41-1.41m11.32-11.32 1.41-1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="tag" viewBox="0 0 24 24"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".6" fill="currentColor"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="sorticon" viewBox="0 0 24 24"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></symbol>
+<symbol id="reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+</defs>
+</svg>
+
+<header class="ct-top">
+  <a class="ct-back" id="ctBack" href="index.html" aria-label="ກັບຄືນ"><svg class="i"><use href="#back"/></svg></a>
+  <h1><svg class="i"><use href="#tag"/></svg>ໝວດໝູ່</h1>
+  <button class="ct-theme" id="btnTheme" type="button" aria-label="ປ່ຽນທີມ"><svg class="i"><use href="#sun"/></svg></button>
+</header>
+
+<div class="ct-sticky">
+  <form class="ct-search" id="ctForm" role="search" autocomplete="off">
+    <svg class="i ct-s-ic"><use href="#search"/></svg>
+    <input id="q" type="search" name="q" placeholder="ຄົ້ນຫາສິນຄ້າ ຫຼື ໝວດໝູ່..." enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="ຄົ້ນຫາ">
+    <button class="ct-clear" id="qClear" type="button" aria-label="ລ້າງ" hidden><svg class="i"><use href="#x"/></svg></button>
+  </form>
+
+  <!-- ประวัติค้นหาล่าสุด: โชว์ตอนกดช่องค้นหาที่ยังว่าง -->
+  <div class="ct-recent" id="ctRecent" hidden>
+    <div class="ct-recent-h"><span><svg class="i"><use href="#clock"/></svg>ຄົ້ນຫາຫຼ້າສຸດ</span><button type="button" id="recentClear">ລ້າງ</button></div>
+    <div class="ct-recent-l" id="recentList"></div>
+  </div>
+
+  <div class="ct-chips" id="ctChips" role="tablist" aria-label="ໝວດໝູ່"></div>
+
+  <div class="ct-tools">
+    <label class="ct-sort"><svg class="i"><use href="#sorticon"/></svg>
+      <select id="sort" aria-label="ຮຽງລຳດັບ">
+        <option value="default">ຮຽງຕາມປົກກະຕິ</option>
+        <option value="sold">ຂາຍດີທີ່ສຸດ</option>
+        <option value="price-asc">ລາຄາ ຕ່ຳ → ສູງ</option>
+        <option value="price-desc">ລາຄາ ສູງ → ຕ່ຳ</option>
+        <option value="name">ຊື່ A → Z</option>
+        <option value="stock">ຄັງຫຼາຍສຸດ</option>
+      </select>
+      <svg class="i ct-sort-ch"><use href="#chev"/></svg>
+    </label>
+    <button class="ct-toggle" id="stockOnly" type="button" role="switch" aria-checked="false"><i></i><span>ພ້ອມຂາຍ</span></button>
+  </div>
+</div>
+
+<main class="ct-main">
+  <div class="ct-status" id="ctStatus" aria-live="polite"></div>
+
+  <section class="ct-sec" id="ctCatsSec">
+    <div class="ct-sec-h"><h2>ໝວດໝູ່ທັງໝົດ</h2><span id="catCount"></span></div>
+    <div class="cat-list" id="catList"></div>
+  </section>
+
+  <section class="ct-sec" id="ctProdsSec">
+    <div class="ct-sec-h"><h2><span id="prodTitle">ສິນຄ້າທັງໝົດ</span></h2><span id="prodCount"></span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<div class="snack" id="snack"></div>
+
+<script src="i18n.js"></script>
+<script src="data.js"></script>
+<script src="cat-trial.js"></script>
+<script src="categories.js"></script>
+</body>
+</html>

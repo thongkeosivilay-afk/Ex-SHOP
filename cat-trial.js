@@ -1,10 +1,12 @@
-/* ทดลอง: ตัวเลขสถานะบนแท็บมุมขวาบนของการ์ดหมวดหมู่
+/* ตัวเลขสถานะบนแท็บมุมขวาบนของการ์ดหมวดหมู่
    แดง  = จำนวนสินค้าที่ไม่พร้อมขาย (คงเหลือ = 0)
    เขียว = จำนวนสินค้าที่พร้อมขาย (คงเหลือ > 0)
-   นับจากรายการ products ใน script.js — อยากกำหนดเองใส่ no:10, ok:20 ในรายการ cats */
-(function(){
+   นับจากรายการ products ใน data.js — อยากกำหนดเองใส่ no:10, ok:20 ในรายการ cats
+   เรียก addCatTabs(root) ซ้ำได้ทุกครั้งที่วาดการ์ดใหม่ (หน้าหมวดหมู่ใช้ตอนค้นหา) */
+function addCatTabs(root){
   if (typeof cats === 'undefined' || typeof products === 'undefined') return;
-  document.querySelectorAll('.cat[data-cat]').forEach(function(b){
+  (root || document).querySelectorAll('.cat[data-cat]').forEach(function(b){
+    if (b.querySelector('.ctab')) return;
     var c = cats.find(function(x){ return x.k === b.dataset.cat; }); if (!c) return;
     var list = products.filter(function(p){ return p.cat === c.k; });
     var ok = typeof c.ok === 'number' ? c.ok : list.filter(function(p){ return +p.left > 0; }).length;
@@ -14,4 +16,5 @@
     t.innerHTML = '<b class="n no">' + no + '</b><i class="dv"></i><b class="n ok">' + ok + '</b>';
     b.appendChild(t);
   });
-})();
+}
+addCatTabs(document);
