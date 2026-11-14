@@ -31,12 +31,13 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   const STOCK  = {unban:[0,2,1,6,7], devil:[3,5,0,2,4], card:[1,4,6,0,3], setting:[0,1,2,3,0],
                   xlight:[2,0,1,1,2], unlock:[5,3,2,4,1], collection:[0,6,2,0,3], upcri:[8,5,4,3,2]};
   const DEMO = {
-    balance: 150,
+    balance: (()=>{ try{ return Number(JSON.parse(localStorage.getItem('exshop_balance')||'0'))||0; }catch(e){ return 0; } })(),   // ยอดเงินเดียวกับหน้าเติมเงิน/แถบหัว
     promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ₭5'} },
     items: {}
   };
   Object.keys(STOCK).forEach(k => { DEMO.items[k] = LABELS.map((l,i)=>({l, o:FULL[i], p:FULL[i]/2, s:STOCK[k][i]})); });
 
+  const saveBal = () => { try{ localStorage.setItem('exshop_balance', JSON.stringify(DEMO.balance)); }catch(e){} };
   const $ = (s,r=document)=>r.querySelector(s);
   let toastT; function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>s.classList.remove('show'),2200); }
   const fmt = n => '₭' + (Math.round(n*100)/100).toLocaleString('en-US');
@@ -225,7 +226,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   }
 
   function success(o, d, tot){
-    DEMO.balance -= tot; o.s -= qty;           // จำลองการตัดเงินและสต็อก (ของจริงให้ทำฝั่งเซิร์ฟเวอร์)
+    DEMO.balance -= tot; saveBal(); o.s -= qty;           // จำลองการตัดเงินและสต็อก (ของจริงให้ทำฝั่งเซิร์ฟเวอร์)
     const codes = Array.from({length:qty}, () => 'EX-'+rnd()+'-'+rnd());
     order = { no:'EX'+Date.now().toString().slice(-8), at:new Date(), name:cur.n, opt:o.l, qty:qty, codes:codes };
     res.dataset.s = 'ok';
@@ -297,7 +298,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   $('#cfPlus').onclick = ()=>{ qty++; render(); };
   $('#cfCode').addEventListener('input', ()=>{ applied=null; render(); });
   $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
-  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
+  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; saveBal(); render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
 
   // อ่านสินค้าจาก URL: confirm.html?p=<art>  (ส่งมาจากปุ่ม "ຊື້ເລີຍ" ใน script.js)

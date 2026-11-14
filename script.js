@@ -143,6 +143,18 @@ document.addEventListener('click', e => {
     const b = $('#btnUser');
     if(b){ const n = u && u.name ? String(u.name) : ''; b.title = n; b.setAttribute('aria-label', n ? 'ບັນຊີ: ' + n : 'ບັນຊີຂອງຂ້ອຍ'); }
   }
+  /* ยอดเงินบนแถบหัว: อ่านจาก localStorage 'exshop_balance' (ตัวเดียวกับหน้าเติมเงิน/ยืนยันสั่งซื้อ)
+     ต่อระบบจริง: เรียก setBalance(ตัวเลข) หลังดึงยอดจาก Supabase */
+  const BK = 'exshop_balance';
+  const short = n => n >= 1e6 ? (Math.round(n / 1e5) / 10) + 'M' : n.toLocaleString('en-US');
+  function paintBal(){
+    let n = 0; try { n = Number(JSON.parse(localStorage.getItem(BK) || '0')) || 0; } catch(e){}
+    const el = $('#balNum'); if(el) el.textContent = '₭' + short(n);
+  }
+  window.setBalance = n => { try { localStorage.setItem(BK, JSON.stringify(Number(n) || 0)); } catch(e){} paintBal(); };
+  window.addEventListener('pageshow', paintBal);
+  window.addEventListener('storage', e => { if(e.key === BK) paintBal(); });
+  paintBal();
   window.getUser = get;
   window.setUser = function(u){
     try { u ? localStorage.setItem(KEY, JSON.stringify(u)) : localStorage.removeItem(KEY); } catch(e){}

@@ -367,3 +367,11 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 .an-group{display:flex;flex:none}
 .an-item{flex:none;margin-right:44px}
 @media (prefers-reduced-motion:reduce){.an-track{animation:none}}
+
+/* ชิปยอดเงินบนแถบหัว (แสดงเมื่อล็อกอินแล้ว) — แตะ = ไปหน้าเติมเงิน */
+.hb-bal{display:none;gap:6px;height:34px;padding:0 12px 0 10px;max-width:46vw;font-weight:600;color:var(--text);background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.hb-bal svg{width:17px;height:17px;color:var(--red)}
+.hb-bal span{overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.hb-bal:active{transform:scale(.95)}
+html.is-in .hb-bal{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) backwards}
+@media (max-width:340px){.hb-bal{padding:0 9px 0 8px}.hb-bal svg{display:none}}
