@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'', orders:'', hwid:'', chat:''
+    login:'', register:'', topup:'', orders:'', hwid:'', chat:'', profile:''
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -25,10 +25,57 @@ document.addEventListener('click', e => {
 });
 
 
-/* marquee */
+/* แบนเนอร์: ใส่รูปที่ IMG.banner ใน data.js (1500 × 512 px) — ว่าง = โชว์ขนาดที่แนะนำ */
 (function(){
-  const one = `<span class="mq-item">${ic('bell')}${CONFIG.announce}</span>`;
-  $('#mq').innerHTML = (one.repeat(6)) + (one.repeat(6));
+  const b = $('#bnArt'); if(!b) return;
+  /* ถ้า data.js เป็นไฟล์เก่า (ยังไม่มี artBanner) ใช้ตัวสำรองนี้ — ห้ามให้สคริปต์ทั้งหน้าพัง */
+  const fallback = '<div class="cph"><span class="cph-a">ຂະໜາດຮູບທີ່ແນະນຳ</span><span class="cph-n">1500 × 512<small>px</small></span><span class="cph-b">ສຳລັບຮູບແບນເນີ · ຮູບແນວນອນ · PNG ຫຼື JPG</span></div>';
+  try { b.innerHTML = (typeof artBanner === 'function') ? artBanner() : fallback; } catch(e){ b.innerHTML = fallback; }
+})();
+
+/* marquee — เลื่อนวนไม่มีสะดุด
+   วัดความกว้างจริงของข้อความ → ซ้ำให้เต็มจอ → เลื่อนไปเท่าความกว้างของ 1 ชุดพอดีแล้ววนใหม่
+   คำนวณใหม่อัตโนมัติเมื่อขนาดจอ/ฟอนต์/ภาษา (i18n) เปลี่ยน ความเร็ว = MQ_SPEED px ต่อวินาที */
+(function(){
+  const MQ_SPEED = 55;
+  const mq = $('#mq'); if(!mq) return;
+  const item = `<span class="mq-item">${ic('bell')}${CONFIG.announce}</span>`;
+  let copies = 0, lastW = 0, raf = 0;
+
+  function build(n){
+    copies = n;
+    const g = `<div class="mq-group">${item.repeat(n)}</div>`;
+    mq.innerHTML = g + g.replace('class="mq-group"', 'class="mq-group" aria-hidden="true"');
+    watch();
+  }
+  function measure(){
+    raf = 0;
+    const g1 = mq.querySelector('.mq-group'); if(!g1) return;
+    const first = g1.querySelector('.mq-item'); if(!first) return;
+    const itemW = first.getBoundingClientRect().width + 36;          // 36 = margin-right ของแต่ละอัน
+    if(itemW < 40) return;                                            // ยังโหลดฟอนต์/เลย์เอาต์ไม่เสร็จ
+    const need = Math.max(2, Math.ceil((mq.parentElement.clientWidth + 40) / itemW) + 1);
+    if(need !== copies){ build(need); return; }
+    const w = g1.getBoundingClientRect().width;
+    if(Math.abs(w - lastW) < 0.5) return;
+    lastW = w;
+    mq.style.setProperty('--mq-dn', -w + 'px');
+    mq.style.setProperty('--mq-t', (w / MQ_SPEED).toFixed(2) + 's');
+  }
+  const schedule = () => { if(!raf) raf = requestAnimationFrame(measure); };
+  let ro;
+  function watch(){
+    if(!window.ResizeObserver){ schedule(); return; }
+    if(!ro) ro = new ResizeObserver(schedule);
+    ro.disconnect();
+    ro.observe(mq.parentElement);
+    const f = mq.querySelector('.mq-item'); if(f) ro.observe(f);
+    schedule();
+  }
+  build(4);
+  window.addEventListener('resize', schedule);
+  window.addEventListener('orientationchange', schedule);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
 })();
 
 /* theme */
@@ -43,7 +90,27 @@ document.addEventListener('click', e => {
     try { localStorage.setItem('theme', t); } catch(e){}
   });
 })();
-$('#btnChat').addEventListener('click', () => go('chat'));
+
+/* สถานะล็อกอิน (UI) — ล็อกอินแล้ว: ปุ่ม "สมัครสมาชิก" ในแถบบนกลายเป็นไอคอนบัญชี
+   ฝั่งหลังบ้านเรียก setUser({name:'ชื่อ'}) หลังล็อกอินสำเร็จ / setUser(null) ตอนออกจากระบบ
+   (เก็บใน localStorage key: exUser) ลองดูในคอนโซลได้: setUser({name:'test'}) */
+(function(){
+  const KEY = 'exUser';
+  const get = () => { try { const u = JSON.parse(localStorage.getItem(KEY) || 'null'); return u && typeof u === 'object' ? u : null; } catch(e){ return null; } };
+  function paint(){
+    const u = get();
+    document.documentElement.classList.toggle('is-in', !!u);
+    const b = $('#btnUser');
+    if(b){ const n = u && u.name ? String(u.name) : ''; b.title = n; b.setAttribute('aria-label', n ? 'ບັນຊີ: ' + n : 'ບັນຊີຂອງຂ້ອຍ'); }
+  }
+  window.getUser = get;
+  window.setUser = function(u){
+    try { u ? localStorage.setItem(KEY, JSON.stringify(u)) : localStorage.removeItem(KEY); } catch(e){}
+    paint();
+  };
+  window.addEventListener('storage', e => { if(e.key === KEY) paint(); });
+  paint();
+})();
 
 /* drawer */
 const ov = $('#ov');

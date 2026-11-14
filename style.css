@@ -336,3 +336,11 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 /* แบนเนอร์ใช้กรอบรูปแบบเดียวกับการ์ดหมวดหมู่ (อัตราส่วนเท่ากัน) */
 .banner::before{display:none}
 .banner .cb.cb-img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0}
+
+/* ===== หน้าแรก: สินค้าแถวเดียว เลื่อนซ้าย-ขวาดูสินค้าอื่น (เฉพาะสินค้าในหมวดที่เลือก) ===== */
+#products .grid{display:flex;gap:13px;margin:22px -24px 0;padding:4px 24px 6px;
+  overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scroll-padding-inline:24px;scrollbar-width:none}
+#products .grid::-webkit-scrollbar{display:none}
+#products .grid .pc{flex:0 0 calc((100% - 13px) / 2);scroll-snap-align:start}
+#products .grid .empty{flex:1 0 100%;grid-column:auto}
