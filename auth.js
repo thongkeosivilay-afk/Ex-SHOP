@@ -182,8 +182,20 @@ const AUTH = {
 
   /* ส่งข้อมูล */
   const SKEY = 'exSession';
-  const getTok = () => { try { return localStorage.getItem(SKEY) || ''; } catch (e) { return ''; } };
-  const setTok = t => { try { t ? localStorage.setItem(SKEY, t) : localStorage.removeItem(SKEY); } catch (e) {} };
+  /* จดจำบัญชี: ติ๊ก = เก็บ token ใน localStorage (อยู่ถาวรจนกว่าจะออกจากระบบ) + จำชื่อผู้ใช้ไว้เติมช่องให้ครั้งหน้า
+     ไม่ติ๊ก = เก็บใน sessionStorage (หายเมื่อปิดแท็บ/เบราว์เซอร์) — ไม่เก็บรหัสผ่านไว้ที่ไหนทั้งสิ้น */
+  const RKEY = 'exRemember';
+  const getTok = () => { try { return localStorage.getItem(SKEY) || sessionStorage.getItem(SKEY) || ''; } catch (e) { return ''; } };
+  const setTok = (t, remember = true) => {
+    try {
+      localStorage.removeItem(SKEY); sessionStorage.removeItem(SKEY);
+      if (t) (remember ? localStorage : sessionStorage).setItem(SKEY, t);
+    } catch (e) {}
+  };
+  const getRem = () => { try { return localStorage.getItem(RKEY) || ''; } catch (e) { return ''; } };
+  const setRem = n => { try { n ? localStorage.setItem(RKEY, n) : localStorage.removeItem(RKEY); } catch (e) {} };
+  window.authNotice = t => say('info', t);
+  { const n = getRem(); if (n) { $('#l-id').value = n; $('#l-rem').checked = true; } }
   const useSb = () => !!(AUTH.supabaseUrl && AUTH.supabaseKey);
   async function rpc(fn, body) {
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), AUTH.timeoutMs);
@@ -203,12 +215,12 @@ const AUTH = {
     locked: 'ລອງຜິດຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າ 10 ນາທີ ແລ້ວລອງໃໝ່',
     bad_username: M.newId, bad_password: M.newPw, bad_email: M.mail
   };
-  async function send(kind, data) {
+  async function send(kind, data, remember = true) {
     if (useSb()) {
       const j = kind === 'login'
         ? await rpc('member_login', { p_username: data.username, p_password: data.password })
         : await rpc('member_register', { p_username: data.username, p_email: data.email || '', p_password: data.password });
-      if (j && j.ok && j.token) { setTok(j.token); return { ok: true, name: j.username }; }
+      if (j && j.ok && j.token) { setTok(j.token, remember); return { ok: true, name: j.username }; }
       return { ok: false, message: CODE[j && j.code] };
     }
     const url = AUTH.endpoints[kind];
@@ -235,14 +247,17 @@ const AUTH = {
     data.turnstileToken = tokens[kind];
     let done = false;
     try {
-      const r = await send(kind, data);
+      const remember = kind === 'login' ? form.elements.remember.checked : true;
+      const r = await send(kind, data, remember);
       if (r.demo) {
         say('info', 'ໂໝດທົດລອງ: ຂໍ້ມູນຖືກຮູບແບບ ແຕ່ຍັງບໍ່ໄດ້ເຊື່ອມລະບົບຫຼັງບ້ານ ຈຶ່ງຍັງ' + (kind === 'login' ? 'ບໍ່ໄດ້ເຂົ້າສູ່ລະບົບ' : 'ບໍ່ໄດ້ສ້າງບັນຊີ'));
       } else if (r.ok) {
         say('success', kind === 'login' ? 'ເຂົ້າສູ່ລະບົບສຳເລັດ' : 'ສະໝັກສະມາຊິກສຳເລັດ');
         done = true;
+        if (kind === 'login') setRem(remember ? (r.name || data.username) : '');
         if (window.setUser) setUser({ name: r.name || data.username });
-        setTimeout(() => { AUTH.redirect ? (location.href = AUTH.redirect) : location.reload(); }, 900);
+        let next = ''; try { next = sessionStorage.getItem('exNext') || ''; sessionStorage.removeItem('exNext'); } catch (e) {}
+        setTimeout(() => { next ? (location.href = next) : AUTH.redirect ? (location.href = AUTH.redirect) : location.reload(); }, 900);
       } else {
         say('error', r.message || (kind === 'login' ? 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ' : 'ສະໝັກບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່'));
       }
@@ -270,5 +285,11 @@ const AUTH = {
       const t = getTok(), fin = () => { setTok(''); if (window.setUser) setUser(null); location.reload(); };
       rpc('member_logout', { p_token: t }).then(fin, fin);
     }, true);
+  }
+
+  /* ถูกส่งมาจากหน้าที่ต้องล็อกอิน (เช่น หน้าเติมเงิน/ยืนยันสั่งซื้อ) → เปิดหน้าต่างเข้าสู่ระบบให้เลย */
+  if (/[?&]auth=login/.test(location.search)) {
+    history.replaceState(null, '', location.pathname);
+    setTimeout(() => { openAuth('login'); say('info', 'ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານສ່ວນນີ້'); }, 300);
   }
 })();

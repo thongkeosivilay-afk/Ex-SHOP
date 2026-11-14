@@ -160,7 +160,13 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   }
   function home(){ location.href = 'index.html'; }
 
+  /* คนยังไม่ลงชื่อ: ดูสินค้า/ราคา/ตัวเลือกได้ แต่กดยืนยันซื้อหรือเติมเงินไม่ได้ → พาไปเข้าสู่ระบบแล้วกลับมาหน้านี้ */
+  function needLogin(){
+    if(window.exLoggedIn && exLoggedIn()) return false;
+    toast('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນຊື້ສິນຄ້າ'); setTimeout(()=>exNeedLogin(), 900); return true;
+  }
   function doPurchase(){
+    if(needLogin()) return;
     const o = opts[sel], sub = o.p*qty, tot = sub - disc(sub, applied);
     DEMO.balance -= tot; o.s -= qty;           // จำลองการตัดเงินและสต็อก
     const codes = Array.from({length:qty},()=>'EX-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase());
@@ -177,7 +183,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   $('#cfPlus').onclick = ()=>{ qty++; render(); };
   $('#cfCode').addEventListener('input', ()=>{ applied=null; render(); });
   $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
-  $('#cfTop').onclick = ()=>{ DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
+  $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
   $('#cfClose').onclick = home;
 

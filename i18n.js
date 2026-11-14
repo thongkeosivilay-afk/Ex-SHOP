@@ -6,6 +6,9 @@
 (function () {
   const ORDER = ['th', 'en', 'vi', 'hi', 'pt'];
   const D = {
+"ຈື່ບັນຊີນີ້": ["จดจำบัญชีนี้", "Remember this account", "Ghi nhớ tài khoản này", "इस खाते को याद रखें", "Lembrar desta conta"],
+"ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານສ່ວນນີ້": ["กรุณาเข้าสู่ระบบก่อนใช้งานส่วนนี้", "Please sign in to use this feature", "Vui lòng đăng nhập để sử dụng tính năng này", "इस सुविधा का उपयोग करने के लिए कृपया साइन इन करें", "Faça login para usar este recurso"],
+"ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນຊື້ສິນຄ້າ": ["กรุณาเข้าสู่ระบบก่อนซื้อสินค้า", "Please sign in before buying", "Vui lòng đăng nhập trước khi mua", "खरीदने से पहले कृपया साइन इन करें", "Faça login antes de comprar"],
 "ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ": ["ชื่อผู้ใช้นี้ถูกใช้แล้ว", "This username is already taken", "Tên người dùng này đã được sử dụng", "यह उपयोगकर्ता नाम पहले से लिया जा चुका है", "Este nome de usuário já está em uso"],
 "ລອງຜິດຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າ 10 ນາທີ ແລ້ວລອງໃໝ່": ["ลองผิดหลายครั้งเกินไป กรุณารอ 10 นาทีแล้วลองใหม่", "Too many failed attempts. Please wait 10 minutes and try again", "Thử sai quá nhiều lần. Vui lòng đợi 10 phút rồi thử lại", "बहुत अधिक गलत प्रयास। कृपया 10 मिनट प्रतीक्षा करें और फिर प्रयास करें", "Muitas tentativas incorretas. Aguarde 10 minutos e tente novamente"],
 "ຮ້ານບໍລິການຈຳໜ່າຍໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem / ປົດແບນ Fivem ຈຳໜ່າຍໂປຣແກຣມຊ່ວຍຫຼິ້ນ Rov / Valorant / Pugb ແລະ ເກມອື່ນໆ Account Social / App Premium ອື່ນໆ ຕອບໂຈດທຸກການນຳໃຊ້": [

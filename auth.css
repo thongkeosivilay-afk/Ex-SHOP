@@ -91,3 +91,15 @@
 @keyframes soonp{50%{transform:scale(.45);opacity:.5}}
 .soon-ok{display:block;margin:18px auto 0;min-height:44px;padding:0 24px;color:var(--text);font-size:15px;font-weight:500;border-bottom:2px solid #5865F2;border-radius:0}
 @media (prefers-reduced-motion:reduce){.soon,.soon-c{transition-duration:.01ms!important}.soon-line::before,.soon-st b{animation:none}}
+
+/* ติ๊ก "จดจำบัญชีนี้" */
+.rem{position:relative;display:flex;align-items:center;gap:10px;width:fit-content;margin:4px 2px 2px;font-size:14px;color:var(--muted);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.rem input{position:absolute;opacity:0;width:22px;height:22px;margin:0;cursor:pointer}
+.rem .bx{flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--border);background:var(--field);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,box-shadow .2s,transform .15s}
+.rem .bx svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .28s var(--ease)}
+.rem input:checked+.bx{background:var(--red);border-color:var(--red)}
+.rem input:checked+.bx svg{stroke-dashoffset:0}
+.rem input:focus-visible+.bx{box-shadow:0 0 0 3px rgba(255,0,0,.25)}
+.rem:active .bx{transform:scale(.9)}
+.rem input:checked~.rt{color:var(--text)}
+@media (prefers-reduced-motion:reduce){.rem .bx,.rem .bx svg{transition-duration:.01ms!important}}
