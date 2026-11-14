@@ -96,14 +96,14 @@ function artCat(src){
 
 /* products */
 const products = [
-  {n:'UNBAN FIVEM', p:'฿0', left:'0', sold:'0', art:'unban', cat:'fivem'},
-  {n:'DEVIL STAR', p:'฿0', left:'0', sold:'0', art:'devil', cat:'fivem'},
-  {n:'CARD (ຄ່າຍຂາວ)', p:'฿0', left:'0', sold:'0', art:'card', cat:'fivem'},
-  {n:'SETTING PERFECTX', p:'฿0', left:'0', sold:'0', art:'setting', cat:'fivem'},
-  {soldout:true, n:'CMD XLIGHT', p:'฿0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
-  {soldout:true, n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'฿0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
-  {update:true, n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'฿0', left:'0', sold:'0', art:'collection', cat:'fivem'},
-  {update:true, n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'฿0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
+  {n:'UNBAN FIVEM', p:'₭0', left:'0', sold:'0', art:'unban', cat:'fivem'},
+  {n:'DEVIL STAR', p:'₭0', left:'0', sold:'0', art:'devil', cat:'fivem'},
+  {n:'CARD (ຄ່າຍຂາວ)', p:'₭0', left:'0', sold:'0', art:'card', cat:'fivem'},
+  {n:'SETTING PERFECTX', p:'₭0', left:'0', sold:'0', art:'setting', cat:'fivem'},
+  {soldout:true, n:'CMD XLIGHT', p:'₭0', left:'0', sold:'0', art:'xlight', cat:'fivem'},
+  {soldout:true, n:'UnlockSkin (Starcommu) ບໍ່ຕ້ອງເຕີມຊື້ສະກິນ', p:'₭0', left:'0', sold:'0', art:'unlock', cat:'fivem'},
+  {update:true, n:'CMD COLLECTION [ສັ່ງຄ່າຍຊຶ່ງ]', p:'₭0', left:'0', sold:'0', art:'collection', cat:'fivem'},
+  {update:true, n:'UPCRI ປັບອົງສາຄຣີ ເຊັກບໍ່ເຈີ', p:'₭0', left:'0', sold:'0', art:'upcri', cat:'fivem'}
 ];
 function renderProducts(cat){
   const list = products.filter(p => p.cat === cat);
@@ -134,9 +134,9 @@ renderProducts('fivem');
 
 /* featured carousel */
 const feat = [
-  {n:'UNBAN FIVEM', p:'฿0', art:'unban'}, {n:'DEVIL STAR', p:'฿0', art:'devil'},
-  {n:'BR MODS', p:'฿0', art:'br'}, {n:'PHANTOM (AD+IOS)', p:'฿0', art:'phantom'},
-  {n:'ZENTNITYX (AD+IOS)', p:'฿0', art:'zent'}, {n:'CMD XLIGHT', p:'฿0', art:'xlight'}
+  {n:'UNBAN FIVEM', p:'₭0', art:'unban'}, {n:'DEVIL STAR', p:'₭0', art:'devil'},
+  {n:'BR MODS', p:'₭0', art:'br'}, {n:'PHANTOM (AD+IOS)', p:'₭0', art:'phantom'},
+  {n:'ZENTNITYX (AD+IOS)', p:'₭0', art:'zent'}, {n:'CMD XLIGHT', p:'₭0', art:'xlight'}
 ];
 (function(){
   const tr = $('#featTrack'), dots = $('#featDots');

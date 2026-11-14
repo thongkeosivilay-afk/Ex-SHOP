@@ -32,15 +32,15 @@ const PRODUCTS = {unban:"UNBAN FIVEM",devil:"DEVIL STAR",card:"CARD (ຄ່າ�
                   xlight:[2,0,1,1,2], unlock:[5,3,2,4,1], collection:[0,6,2,0,3], upcri:[8,5,4,3,2]};
   const DEMO = {
     balance: 150,
-    promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ฿5'} },
+    promos: { EX10:{type:'pct',v:10,t:'ຫຼຸດ 10%'}, SAVE5:{type:'amt',v:5,t:'ຫຼຸດ ₭5'} },
     items: {}
   };
   Object.keys(STOCK).forEach(k => { DEMO.items[k] = LABELS.map((l,i)=>({l, o:FULL[i], p:FULL[i]/2, s:STOCK[k][i]})); });
 
   const $ = (s,r=document)=>r.querySelector(s);
   let toastT; function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>s.classList.remove('show'),2200); }
-  const fmt = n => '฿' + (Math.round(n*100)/100).toLocaleString('en-US');
-  const m2 = n => n.toFixed(2) + ' ฿';
+  const fmt = n => '₭' + (Math.round(n*100)/100).toLocaleString('en-US');
+  const m2 = n => n.toFixed(2) + ' ₭';
   const X = '<svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
   const CART = '<svg class="i" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>';
   const OKI = '<svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -128,7 +128,7 @@ const PRODUCTS = {unban:"UNBAN FIVEM",devil:"DEVIL STAR",card:"CARD (ຄ່າ�
     $('#cfStock').textContent = 'ເຫຼືອລວມ ' + totalStock() + ' ຊິ້ນ · ຕົວເລືອກນີ້ ' + stock + ' ຊິ້ນ';
     renderList();
     const ps=opts.map(x=>x.p), mx=Math.max(...opts.map(x=>(1-x.p/x.o)*100));
-    $('#cfRange').textContent = Math.min(...ps).toFixed(2)+' – '+Math.max(...ps).toFixed(2)+' ฿';
+    $('#cfRange').textContent = Math.min(...ps).toFixed(2)+' – '+Math.max(...ps).toFixed(2)+' ₭';
     $('#cfPct').textContent = mx.toFixed(2)+' %';
     $('#cfQty').textContent = qty;
     $('#cfMinus').disabled = qty<=1; $('#cfPlus').disabled = qty>=stock;
@@ -177,7 +177,7 @@ const PRODUCTS = {unban:"UNBAN FIVEM",devil:"DEVIL STAR",card:"CARD (ຄ່າ�
   $('#cfPlus').onclick = ()=>{ qty++; render(); };
   $('#cfCode').addEventListener('input', ()=>{ applied=null; render(); });
   $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
-  $('#cfTop').onclick = ()=>{ DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +฿100'); };
+  $('#cfTop').onclick = ()=>{ DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
   $('#cfClose').onclick = home;
 
