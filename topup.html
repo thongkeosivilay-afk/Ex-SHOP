@@ -253,10 +253,10 @@ const CONFIG = {
 
   /* ส่งสลิปไปให้ระบบหลังบ้าน — ตอนนี้ยังไม่มีหลังบ้านในโปรเจกต์
      ให้แก้ฟังก์ชันนี้ให้อัปโหลด file + ข้อมูลไปที่ระบบจริง (เช่น Supabase / Discord webhook) */
-  async submitSlip(payload){ return true; },
+  /* (ใช้งานจริงแล้ว: ส่งผ่าน Supabase ฟังก์ชัน member_topup_submit ด้านล่าง) */
 
   /* โหมดทดลอง: เปิดด้วย topup.html?demo=1 จะมีปุ่มจำลองแอดมินกดยืนยัน */
-  demo: /[?&]demo=1/.test(location.search)
+  demo: false
 };
 
 /* รายชื่อธนาคารลาว — acct/holder = เลขบัญชีและชื่อบัญชีของร้านคุณ, qr = ไฟล์รูป QR ของธนาคารนั้น */
@@ -298,6 +298,26 @@ let balance = store.get('exshop_balance', 0);
 
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
 function setBal(){ $('#bal').textContent = fmt(balance); }
+function saveBal(n){ balance = Number(n) || 0; store.set('exshop_balance', balance); setBal(); }
+function syncBal(){ try{ exRpc('member_me',{p_token:exToken()}).then(j=>{ if(j && j.ok) saveBal(j.balance); }).catch(()=>{}); }catch(e){} }
+
+/* ย่อรูปสลิปเป็น JPEG ก่อนส่ง (ไม่เกิน ~1200px) */
+function slipToData(file){
+  return new Promise((res,rej)=>{
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = ()=>{
+      const k = Math.min(1, 1200/Math.max(im.width, im.height));
+      const c = document.createElement('canvas'); c.width = Math.round(im.width*k); c.height = Math.round(im.height*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      let q = .8, d = c.toDataURL('image/jpeg', q);
+      while(d.length > 700000 && q > .3){ q -= .1; d = c.toDataURL('image/jpeg', q); }
+      res(d);
+    };
+    im.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error('img')); };
+    im.src = url;
+  });
+}
 
 /* ---------- หน้าเลือก ---------- */
 function renderTabs(){
@@ -424,9 +444,19 @@ $('#slipIn').addEventListener('change', e=>{
 /* ---------- การ์ดรอแอดมิน (1 นาที) ---------- */
 function mmss(s){ s=Math.max(0,Math.ceil(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 function openWait(file){
-  curReq = { bank: bank.id, amount, name: file.name, at: Date.now() };
-  store.set('exshop_topup_pending', curReq);
-  Promise.resolve(CONFIG.submitSlip({ bank, amount, file })).catch(()=>{});
+  curReq = { bank: bank.id, amount, name: file.name, at: Date.now(), id: null };
+  const myReq = curReq;
+  slipToData(file)
+    .then(d => exRpc('member_topup_submit', { p_token: exToken(), p_amount: amount, p_bank: bank.id, p_slip: d }))
+    .then(j => {
+      if(j && j.ok){ myReq.id = j.id; store.set('exshop_topup_pending', myReq); startPoll(myReq); return; }
+      const c = j && j.code;
+      failWait(c==='bad_session' ? 'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'
+             : c==='too_many' ? 'ມີລາຍການລໍຖ້າຢູ່ຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າແອດມິນກວດສອບກ່ອນ'
+             : c==='slip_big' ? 'ຮູບສະລິບໃຫຍ່ເກີນໄປ'
+             : c==='amount' ? 'ຈຳນວນເງິນບໍ່ຖືກຕ້ອງ' : 'ສົ່ງສະລິບບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');
+    })
+    .catch(()=>failWait('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້ ກະລຸນາກວດອິນເຕີເນັດແລ້ວລອງໃໝ່'));
 
   $('#spin').style.display=''; $('#wT').textContent='ລໍຖ້າແອດມິນຢືນຢັນເງິນ';
   $('#wTime').style.display=''; $('#wBar').parentElement.style.display='';
@@ -465,7 +495,7 @@ function openContact(){
 $('#ctX').onclick = ()=>$('#ct').classList.remove('show');
 
 function closeWait(){
-  clearInterval(waitT); waitT=null;
+  clearInterval(waitT); waitT=null; stopPoll(); syncBal();
   $('#ovWait').classList.remove('show'); $('#ct').classList.remove('show');
   $('#vQR').classList.add('hide');
   const p=$('#vPick'); p.classList.remove('hide','blur-out'); p.classList.add('blur-in');
@@ -474,24 +504,50 @@ function closeWait(){
 }
 $('#wClose').onclick = closeWait;
 
-/* ---------- แอดมินยืนยันแล้ว (ให้ระบบหลังบ้านเรียกใช้ ExTopup.approve(จำนวนเงิน)) ---------- */
-function approve(a){
-  clearInterval(waitT); waitT=null;
-  const n = Number(a) || (curReq && curReq.amount) || 0;
-  balance += n; store.set('exshop_balance', balance); if(window.ExLog) ExLog.addTopup(n, bank && bank.id); localStorage.removeItem('exshop_topup_pending'); setBal();
+/* ---------- ผลจากแอดมิน (ดึงสถานะจากเซิร์ฟเวอร์ทุก 3 วินาที) ---------- */
+let pollT = null;
+function stopPoll(){ clearInterval(pollT); pollT = null; }
+function startPoll(req){
+  stopPoll();
+  const tick = ()=>exRpc('member_topup_status', { p_token: exToken(), p_id: req.id }).then(j=>{
+    if(!j || !j.ok || curReq !== req) return;
+    if(j.status === 'approved') approved(j);
+    else if(j.status === 'rejected') rejected(j);
+  }).catch(()=>{});
+  pollT = setInterval(tick, 3000); tick();
+}
+function failWait(msg){
+  clearInterval(waitT); waitT=null; stopPoll();
+  $('#spin').style.display='none'; $('#wT').textContent='ເກີດຂໍ້ຜິດພາດ';
+  $('#wTime').style.display='none'; $('#wBar').parentElement.style.display='none';
+  $('#wP').textContent = msg; $('#wClose').style.display='';
+}
+function approved(j){
+  clearInterval(waitT); waitT=null; stopPoll();
+  const n = Number(j.amount) || 0;
+  saveBal(j.balance);
+  if(window.ExLog) ExLog.addTopup(n, bank && bank.id);
+  localStorage.removeItem('exshop_topup_pending');
   $('#ct').classList.remove('show');
   $('#spin').style.display='none';
-  const card=$('#waitCard');
-  card.innerHTML = `<div class="ok"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+  $('#waitCard').innerHTML = `<div class="ok"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
     <h3>ເຕີມເງິນສຳເລັດ</h3><div class="big">+${fmt(n)}</div><p>ຍອດເງິນຄົງເຫຼືອ ${fmt(balance)}</p>
     <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
   $('#okBtn').onclick = ()=>location.reload();
 }
-$('#wDemo').onclick = ()=>approve(curReq && curReq.amount);
-window.ExTopup = { approve };
+function rejected(j){
+  clearInterval(waitT); waitT=null; stopPoll();
+  localStorage.removeItem('exshop_topup_pending');
+  $('#ct').classList.remove('show');
+  $('#spin').style.display='none';
+  const note = (j.note||'').replace(/[<>&]/g,'');
+  $('#waitCard').innerHTML = `<h3>ແອດມິນບໍ່ອະນຸມັດລາຍການ</h3><p>${note || 'ກະລຸນາກວດສອບສະລິບ ແລ້ວລອງໃໝ່ ຫຼືຕິດຕໍ່ແອດມິນ'}</p>
+    <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
+  $('#okBtn').onclick = ()=>location.reload();
+}
 
 /* ---------- เริ่มต้น ---------- */
-setBal(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
+setBal(); syncBal(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
 </script>
 </body>
 </html>

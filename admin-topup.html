@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ອະນຸມັດເຕີມເງິນ</title>
+<script src="guard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff4d4d;--bg:#000;--card:#0b0b0d;--line:#2a2a30;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.top{position:sticky;top:0;z-index:10;background:#000;border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;display:flex;align-items:center;gap:12px}
+.back{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:18px}
+.top h1{font-size:17px;font-weight:700}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.box{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:14px;margin-bottom:14px}
+.box h2{font-size:15px;font-weight:700;margin-bottom:10px}
+.row{display:flex;gap:8px}
+.in{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--line);background:#000;padding:0 12px;outline:none}
+.in:focus{border-color:var(--red)}
+.btn{height:44px;padding:0 16px;border-radius:12px;background:var(--red);color:#fff;font-weight:700;white-space:nowrap}
+.btn:disabled{opacity:.5}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;height:38px;border-radius:10px;border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
+.tab.on{border-color:var(--red);color:#fff;background:rgba(255,77,77,.12)}
+.it{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--card)}
+.it .h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.it .u{font-weight:700;font-size:15px;word-break:break-all}
+.it .a{font-weight:800;font-size:18px;color:var(--red)}
+.it .m{margin-top:4px;color:var(--mut);font-size:12.5px}
+.it .act{display:flex;gap:8px;margin-top:10px}
+.sm{flex:1;height:40px;border-radius:10px;border:1px solid var(--line);font-weight:600;font-size:13.5px}
+.sm.ok{background:var(--ok);border-color:var(--ok);color:#000}
+.sm.no{color:#ff8a87;border-color:#d95b58}
+.tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:7px;border:1px solid}
+.tag.approved{color:var(--ok);border-color:var(--ok)}.tag.rejected{color:#ff8a87;border-color:#d95b58}
+.empty{text-align:center;color:var(--mut);padding:30px 0;font-size:14px}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:18px}
+.ov.show{display:flex}
+.ov img{max-width:100%;max-height:82vh;border-radius:12px;border:1px solid var(--line)}
+.ov .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;width:40px;height:40px;border-radius:50%;background:#1a1a1d;font-size:18px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90%}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="top"><button class="back" id="back" type="button" aria-label="back">‹</button><h1>ອະນຸມັດເຕີມເງິນ</h1></div>
+<div class="wrap">
+  <div class="box">
+    <h2>ເຕີມເງິນໃຫ້ສະມາຊິກໂດຍກົງ</h2>
+    <div class="row">
+      <input class="in" id="mu" placeholder="ຊື່ຜູ້ໃຊ້" autocapitalize="off" autocomplete="off">
+      <input class="in" id="ma" placeholder="ຈຳນວນ (₭)" inputmode="numeric" autocomplete="off" style="max-width:130px">
+    </div>
+    <button class="btn" id="mgo" type="button" style="width:100%;margin-top:8px">ເຕີມເງິນ</button>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-s="pending" type="button">ລໍຖ້າ</button>
+    <button class="tab" data-s="approved" type="button">ອະນຸມັດແລ້ວ</button>
+    <button class="tab" data-s="rejected" type="button">ປະຕິເສດ</button>
+  </div>
+  <div id="list"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+</div>
+
+<div class="ov" id="ov"><button class="x" id="ovx" type="button">✕</button><img id="ovi" alt="slip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var cur = 'pending', busy = false, tt;
+  var nf = new Intl.NumberFormat('en-US');
+  var fmt = function(n){ return '₭' + nf.format(Number(n) || 0); };
+  var BANK = { bcel:'BCEL', ldb:'LDB', jdb:'JDB', apb:'APB', lvb:'LVB', stb:'STB', psvb:'PSVB', idcb:'IDCB', acleda:'ACLEDA', mjbl:'MJBL', bic:'BIC', vtb:'VietinBank', vcb:'Vietcombank', bfl:'BFL', icbc:'ICBC', boc:'BOC', pbl:'Public Bank', lcnb:'LCNB' };
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2600); }
+  function tok(){ return exToken(); }
+
+  $('#back').onclick = function(){ location.href = 'admin.html'; };
+
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-topup.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
+    }).catch(function(){ $('#list').innerHTML = '<div class="empty">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div>'; });
+  }
+
+  function load(){
+    exRpc('adm_topup_list', { p_token: tok(), p_status: cur }).then(function(j){
+      if(!j || !j.ok){ $('#list').innerHTML = '<div class="empty">ບໍ່ມີສິດເຂົ້າເຖິງ</div>'; return; }
+      render(j.rows || []);
+    }).catch(function(){ $('#list').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
+  }
+
+  function render(rows){
+    if(!rows.length){ $('#list').innerHTML = '<div class="empty">ບໍ່ມີລາຍການ</div>'; return; }
+    $('#list').innerHTML = rows.map(function(r){
+      var d = new Date(r.at).toLocaleString('en-GB', { hour12:false });
+      var bank = BANK[r.bank] || r.bank || '';
+      var act = r.status === 'pending'
+        ? '<div class="act"><button class="sm" data-a="slip" data-id="'+r.id+'" type="button">ເບິ່ງສະລິບ</button><button class="sm no" data-a="no" data-id="'+r.id+'" type="button">ປະຕິເສດ</button><button class="sm ok" data-a="ok" data-id="'+r.id+'" type="button">ອະນຸມັດ</button></div>'
+        : '<div class="act"><button class="sm" data-a="slip" data-id="'+r.id+'" type="button">ເບິ່ງສະລິບ</button></div>';
+      var tag = r.status === 'pending' ? '' : ' <span class="tag '+esc(r.status)+'">'+(r.status === 'approved' ? 'ອະນຸມັດແລ້ວ' : 'ປະຕິເສດ')+'</span>';
+      return '<div class="it"><div class="h"><span class="u">'+esc(r.username || '—')+tag+'</span><span class="a">'+fmt(r.amount)+'</span></div>'
+        + '<div class="m">'+esc(bank)+' • '+esc(d)+'</div>'+act+'</div>';
+    }).join('');
+  }
+
+  $('#tabs').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return;
+    cur = b.dataset.s;
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+    $('#list').innerHTML = '<div class="empty">ກຳລັງໂຫຼດ...</div>'; load();
+  });
+
+  $('#list').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-a]'); if(!b || busy) return;
+    var id = Number(b.dataset.id), a = b.dataset.a;
+    if(a === 'slip'){
+      exRpc('adm_topup_slip', { p_token: tok(), p_id: id }).then(function(j){
+        if(j && j.ok){ $('#ovi').src = j.slip; $('#ov').classList.add('show'); } else toast('ບໍ່ພົບສະລິບ');
+      }).catch(function(){ toast('ໂຫຼດສະລິບບໍ່ໄດ້'); });
+      return;
+    }
+    var ok = a === 'ok';
+    if(!confirm(ok ? 'ຢືນຢັນອະນຸມັດ ແລະເພີ່ມເງິນເຂົ້າບັນຊີສະມາຊິກ?' : 'ປະຕິເສດລາຍການນີ້?')) return;
+    busy = true;
+    exRpc('adm_topup_review', { p_token: tok(), p_id: id, p_approve: ok, p_note: '' }).then(function(j){
+      busy = false;
+      if(j && j.ok){ toast(ok ? 'ອະນຸມັດແລ້ວ — ຍອດໃໝ່ ' + fmt(j.balance) : 'ປະຕິເສດແລ້ວ'); }
+      else toast(j && j.code === 'nf' ? 'ລາຍການນີ້ຖືກດຳເນີນການແລ້ວ' : 'ເຮັດບໍ່ສຳເລັດ');
+      load();
+    }).catch(function(){ busy = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
+  });
+
+  $('#ov').onclick = function(){ $('#ov').classList.remove('show'); $('#ovi').removeAttribute('src'); };
+
+  $('#ma').addEventListener('input', function(e){
+    var n = parseInt(e.target.value.replace(/[^\d]/g,''), 10) || 0; e.target.value = n ? nf.format(n) : '';
+  });
+  $('#mgo').onclick = function(){
+    var u = $('#mu').value.trim(), n = parseInt($('#ma').value.replace(/[^\d]/g,''), 10) || 0;
+    if(!u || !n){ toast('ກະລຸນາໃສ່ຊື່ຜູ້ໃຊ້ ແລະຈຳນວນເງິນ'); return; }
+    if(!confirm('ເຕີມ ' + fmt(n) + ' ໃຫ້ ' + u + ' ?')) return;
+    var btn = $('#mgo'); btn.disabled = true;
+    exRpc('adm_member_topup', { p_token: tok(), p_username: u, p_amount: n }).then(function(j){
+      btn.disabled = false;
+      if(j && j.ok){ toast('ເຕີມເງິນແລ້ວ — ' + j.username + ' ຍອດ ' + fmt(j.balance)); $('#ma').value = ''; }
+      else toast(j && j.code === 'nf' ? 'ບໍ່ພົບຊື່ຜູ້ໃຊ້ນີ້' : 'ເຕີມເງິນບໍ່ສຳເລັດ');
+    }).catch(function(){ btn.disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
+  };
+
+  setInterval(function(){ if(!document.hidden && cur === 'pending') load(); }, 15000);
+  gate();
+})();
+</script>
+</body>
+</html>
