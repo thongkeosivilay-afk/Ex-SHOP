@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Webhook Discord</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--redbtn:#e8321f;--ind:#5b5ce6;--ind2:#6d6ef0;--line:#1c1c2c;--mut:#6e6e7a;--f:'IBM Plex Sans','IBM Plex Sans Thai Looped','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:22px 16px calc(env(safe-area-inset-bottom,0px) + 120px)}
+
+.ttl{display:flex;align-items:stretch;gap:12px}
+.ttl i{width:5px;border-radius:3px;background:var(--redbtn);box-shadow:0 0 12px rgba(255,40,20,.6);flex:none}
+.ttl h2{font-size:28px;font-weight:700;line-height:1.2}
+.sub{margin:10px 0 18px 17px;color:var(--mut);font-size:15px}
+
+/* การ์ดหลัก */
+.card{border:1px solid #2a2b6b;border-radius:22px;background:#05050f;padding:20px 17px 22px}
+.sec{margin-bottom:6px}
+.sec+.sec{margin-top:24px}
+.sec h3{font-size:16.5px;font-weight:600;color:var(--ind);margin-bottom:16px;letter-spacing:.01em}
+.fld{margin-bottom:17px}
+.fld:last-child{margin-bottom:0}
+.fh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.fh label{font-size:16.5px;font-weight:500;color:#f1f1f4;display:flex;align-items:center;gap:6px;min-width:0}
+.fh label .em{font-size:17px;line-height:1;flex:none}
+.tst{display:flex;align-items:center;gap:7px;color:var(--ind2);font-size:15px;font-weight:500;flex:none;padding:2px 0}
+.tst svg{width:19px;height:19px}
+.tst:disabled{opacity:.55}
+.tst.ok{color:#4cc38a}.tst.bad{color:#ff6b63}
+.inp{width:100%;height:49px;border-radius:21px;border:1px solid #1d1d2e;background:#000;padding:0 18px;outline:none;font-size:15.5px;color:#eaeaf2}
+.inp::placeholder{color:#3b3b48}
+.inp:focus{border-color:#3d3e9c;box-shadow:0 0 0 3px rgba(91,92,230,.14)}
+.inp.err{border-color:#d9463d}
+.hr{height:1px;background:var(--line);margin:22px 0 18px}
+.thr{display:flex;align-items:center;gap:6px}
+.thr label{font-size:16.5px;font-weight:500;color:#f1f1f4;display:flex;align-items:center;gap:6px}
+.thr .num{width:119px;height:49px;border-radius:21px;border:1px solid #1d1d2e;background:#000;padding:0 18px;outline:none;font-size:20px;color:#fff}
+.thr .num:focus{border-color:#3d3e9c}
+.help{margin-top:20px;font-size:14.5px;line-height:1.62;color:#6c6c78}
+
+/* ปุ่ม */
+.acts{display:flex;justify-content:flex-end;margin-top:22px}
+.all{height:50px;padding:0 22px;border-radius:19px;border:1px solid #26262c;background:#000;font-size:16px;font-weight:500;display:flex;align-items:center;gap:11px;color:#f2f2f4}
+.all svg{width:21px;height:21px}
+.all:disabled{opacity:.55}
+.fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);height:50px;padding:0 24px;border-radius:19px;background:var(--redbtn);color:#fff;font-weight:600;font-size:16.5px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 26px rgba(232,50,31,.45);z-index:20;transition:transform .15s,opacity .15s}
+.fab:active{transform:scale(.97)}
+.fab:disabled{opacity:.6}
+.fab svg{width:21px;height:21px}
+.ld{padding:60px 0;text-align:center;color:var(--mut)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid #2a2a30;padding:11px 18px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.25s;z-index:70;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<div class="wrap">
+  <div class="ttl"><i></i><h2>Webhook Discord</h2></div>
+  <p class="sub">ตั้งค่าช่องแจ้งเตือนเข้า Discord ของร้าน</p>
+
+  <div class="card" id="card"><div class="ld">กำลังโหลด...</div></div>
+  <div class="acts"><button class="all" id="allBtn" type="button" hidden>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a1.6 1.6 0 0 0-1.6 1.6v.7C7.7 5.5 6 7.8 6 10.6v3.2l-1.6 2.4a1 1 0 0 0 .84 1.55h13.5a1 1 0 0 0 .84-1.55L18 13.8v-3.2c0-2.8-1.7-5.1-4.4-5.8v-.7A1.6 1.6 0 0 0 12 2.5zM9.6 19.2a2.4 2.4 0 0 0 4.8 0z"/></svg>ทดสอบทุกช่องที่กรอกแล้ว</button></div>
+</div>
+<button class="fab" id="saveBtn" type="button" hidden>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11.2a2 2 0 0 1 1.4.6l2.8 2.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 1.8V8a1 1 0 0 0 1 1h6.2a1 1 0 0 0 1-1V4.8zM12 12.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>บันทึกการตั้งค่า</button>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var PLANE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 2.4a1 1 0 0 0-1-.2L2.9 9.1a1 1 0 0 0-.1 1.8l6.6 3 3 6.6a1 1 0 0 0 1.8-.1l6.9-17.7a1 1 0 0 0-.2-1zM10.7 13.3l-4.2-1.9 10.9-4.2z"/></svg>';
+  var SECTIONS = [
+    { t: 'การซื้อสินค้า', f: [
+      ['buy_admin',    '✅', 'ซื้อสินค้าสำเร็จสำหรับแอดมิน'],
+      ['buy_customer', '✅', 'ซื้อสินค้าสำเร็จ ลูกค้า (ไม่เห็นคีย์)'],
+      ['buy_fail',     '❌', 'ซื้อสินค้าไม่สำเร็จ'],
+      ['low_stock',    '🔥', 'สต็อกใกล้หมด'],
+      ['out_stock',    '🚫', 'สต็อกสินค้าหมด'] ] },
+    { t: 'การเติมเงิน', f: [
+      ['topup_ok',     '💵', 'เติมเงินสำเร็จ (สลิป / ซอง / พร้อมเพย์ / โค้ด)'],
+      ['topup_admin',  '🔐', 'แอดมินแอดเงินให้'] ] },
+    { t: 'สรุปยอด', f: [
+      ['summary',      '📊', 'สรุปยอดรายวัน / สัปดาห์ / เดือน'] ] }
+  ];
+  var LABEL = {}; SECTIONS.forEach(function(s){ s.f.forEach(function(f){ LABEL[f[0]] = f[2]; }); });
+  var RX = /^https:\/\/(discord|discordapp|ptb\.discord|canary\.discord)\.com\/api(\/v[0-9]+)?\/webhooks\/[0-9]{15,25}\/[A-Za-z0-9_-]{20,120}$/;
+  var tt;
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2800); }
+  function tok(){ return exToken(); }
+
+  function build(){
+    var h = SECTIONS.map(function(s){
+      return '<div class="sec"><h3>' + s.t + '</h3>' + s.f.map(function(f){
+        return '<div class="fld"><div class="fh"><label for="u_' + f[0] + '"><span class="em">' + f[1] + '</span>' + f[2] + '</label>'
+          + '<button class="tst" type="button" data-k="' + f[0] + '">' + PLANE + '<span>ทดสอบ</span></button></div>'
+          + '<input class="inp" id="u_' + f[0] + '" data-k="' + f[0] + '" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/..."></div>';
+      }).join('') + '</div>';
+    }).join('');
+    h += '<div class="hr"></div><div class="thr"><label for="low"><span class="em">🚨</span>เกณฑ์สต็อกใกล้หมด (ชิ้น)</label><input class="num" id="low" type="number" inputmode="numeric" min="1" max="1000" value="3"></div>'
+      + '<p class="help">สร้าง Webhook ใน Discord แยกตามช่อง แล้ววาง URL ให้ตรงกับหัวข้อ — ช่องที่เว้นว่างจะไม่ส่งแจ้งเตือน '
+      + 'ช่อง “เติมเงินสำเร็จ” จะแจ้งทั้งตอนมีคนส่งสลิปรอตรวจสอบและตอนอนุมัติ ส่วน “แอดมินแอดเงินให้” แจ้งเมื่อแอดมินเติมเงินให้สมาชิกโดยตรง '
+      + 'สรุปยอดส่งเองเวลา 23:50 น. ของทุกวัน (วันอาทิตย์สรุปสัปดาห์ วันสุดท้ายของเดือนสรุปเดือน) ถ้าไม่ใส่ URL สรุปจะใช้ช่องซื้อสินค้าสำเร็จสำหรับแอดมิน '
+      + 'สต็อกแจ้งตามจำนวนคีย์ที่เหลือ เมื่อลดลงถึงเกณฑ์ที่ตั้งไว้</p>';
+    $('#card').innerHTML = h;
+    $('#allBtn').hidden = false; $('#saveBtn').hidden = false;
+  }
+
+  function val(k){ return ($('#u_' + k).value || '').trim(); }
+  function mark(k, bad){ $('#u_' + k).classList.toggle('err', !!bad); }
+
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-webhook.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
+    }).catch(function(){ $('#card').innerHTML = '<div class="ld">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</div>'; });
+  }
+
+  function load(){
+    exRpc('adm_webhook_get', { p_token: tok() }).then(function(j){
+      if(!j || !j.ok){ $('#card').innerHTML = '<div class="ld">ไม่มีสิทธิ์เข้าถึง</div>'; return; }
+      build();
+      Object.keys(j.urls || {}).forEach(function(k){ var el = $('#u_' + k); if(el) el.value = j.urls[k]; });
+      $('#low').value = j.low_stock || 3;
+    }).catch(function(){ $('#card').innerHTML = '<div class="ld">โหลดข้อมูลไม่ได้ กรุณาลองใหม่</div>'; });
+  }
+
+  /* ทดสอบ 1 ช่อง → คืน true/false */
+  function testOne(k, btn){
+    var u = val(k);
+    if(!u){ toast('ยังไม่ได้กรอก URL ของช่อง “' + LABEL[k] + '”'); return Promise.resolve(null); }
+    if(!RX.test(u)){ mark(k, true); toast('URL ของ “' + LABEL[k] + '” ไม่ใช่ Discord Webhook ที่ถูกต้อง'); return Promise.resolve(false); }
+    mark(k, false);
+    var sp = btn && btn.querySelector('span'); if(btn){ btn.disabled = true; btn.className = 'tst'; sp.textContent = 'กำลังส่ง...'; }
+    return exRpc('adm_webhook_test', { p_token: tok(), p_label: LABEL[k], p_url: u }).then(function(j){
+      var ok = !!(j && j.ok);
+      if(btn){ btn.disabled = false; btn.className = 'tst ' + (ok ? 'ok' : 'bad'); sp.textContent = ok ? 'ส่งแล้ว' : 'ไม่สำเร็จ'; setTimeout(function(){ btn.className = 'tst'; sp.textContent = 'ทดสอบ'; }, 3000); }
+      if(!ok) mark(k, true);
+      return ok ? true : (j && j.status ? 'HTTP ' + j.status : false);
+    }).catch(function(){
+      if(btn){ btn.disabled = false; btn.className = 'tst bad'; sp.textContent = 'ไม่สำเร็จ'; setTimeout(function(){ btn.className = 'tst'; sp.textContent = 'ทดสอบ'; }, 3000); }
+      return false;
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('.tst'); if(!b) return;
+    var k = b.dataset.k;
+    testOne(k, b).then(function(r){
+      if(r === true) toast('ส่งข้อความทดสอบแล้ว — ตรวจดูในช่อง Discord');
+      else if(r !== null && r !== false) toast('Discord ตอบกลับ ' + r + ' — ตรวจ URL อีกครั้ง');
+      else if(r === false && !document.querySelector('#toast.show')) toast('ส่งไม่สำเร็จ ตรวจ URL อีกครั้ง');
+    });
+  });
+
+  $('#allBtn').onclick = function(){
+    var ks = Object.keys(LABEL).filter(function(k){ return val(k); });
+    if(!ks.length){ toast('ยังไม่ได้กรอก URL ช่องไหนเลย'); return; }
+    var btn = $('#allBtn'); btn.disabled = true;
+    var ok = 0, i = 0;
+    (function next(){
+      if(i >= ks.length){ btn.disabled = false; toast('ทดสอบเสร็จ — สำเร็จ ' + ok + ' / ' + ks.length + ' ช่อง'); return; }
+      var k = ks[i++];
+      testOne(k, document.querySelector('.tst[data-k="' + k + '"]')).then(function(r){ if(r === true) ok++; next(); });
+    })();
+  };
+
+  $('#saveBtn').onclick = function(){
+    var urls = {}, bad = null;
+    Object.keys(LABEL).forEach(function(k){
+      var u = val(k); mark(k, false);
+      if(u){ if(!RX.test(u)){ if(!bad) bad = k; mark(k, true); } else urls[k] = u; }
+    });
+    if(bad){ toast('URL ของ “' + LABEL[bad] + '” ไม่ถูกต้อง'); $('#u_' + bad).focus(); return; }
+    var low = parseInt($('#low').value, 10);
+    if(!(low >= 1 && low <= 1000)){ toast('เกณฑ์สต็อกต้องเป็นตัวเลข 1–1000'); return; }
+    var btn = $('#saveBtn'); btn.disabled = true;
+    exRpc('adm_webhook_save', { p_token: tok(), p_urls: urls, p_low: low }).then(function(j){
+      btn.disabled = false;
+      if(j && j.ok) toast('บันทึกการตั้งค่าแล้ว');
+      else if(j && j.code === 'bad_url'){ mark(j.field, true); toast('URL ไม่ถูกต้อง'); }
+      else toast('บันทึกไม่สำเร็จ');
+    }).catch(function(){ btn.disabled = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+  };
+
+  document.addEventListener('input', function(e){ if(e.target.classList && e.target.classList.contains('inp')) e.target.classList.remove('err'); });
+  gate();
+})();
+</script>
+</body>
+</html>
