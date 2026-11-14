@@ -6,6 +6,7 @@
 (function () {
   const ORDER = ['th', 'en', 'vi', 'hi', 'pt'];
   const D = {
+"ອອນລາຍ": ["ออนไลน์", "Online", "Trực tuyến", "ऑनलाइन", "Online"],
 "ຈື່ບັນຊີນີ້": ["จดจำบัญชีนี้", "Remember this account", "Ghi nhớ tài khoản này", "इस खाते को याद रखें", "Lembrar desta conta"],
 "ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານສ່ວນນີ້": ["กรุณาเข้าสู่ระบบก่อนใช้งานส่วนนี้", "Please sign in to use this feature", "Vui lòng đăng nhập để sử dụng tính năng này", "इस सुविधा का उपयोग करने के लिए कृपया साइन इन करें", "Faça login para usar este recurso"],
 "ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນຊື້ສິນຄ້າ": ["กรุณาเข้าสู่ระบบก่อนซื้อสินค้า", "Please sign in before buying", "Vui lòng đăng nhập trước khi mua", "खरीदने से पहले कृपया साइन इन करें", "Faça login antes de comprar"],

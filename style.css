@@ -375,3 +375,18 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 .hb-bal:active{transform:scale(.95)}
 html.is-in .hb-bal{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) backwards}
 @media (max-width:340px){.hb-bal{padding:0 9px 0 8px}.hb-bal svg{display:none}}
+
+/* ===== ส่วนท้ายเว็บ ===== */
+.foot{margin-top:44px;padding:26px 18px 6px;border-top:1px solid var(--border);text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.foot-nav{display:flex;align-items:center;gap:14px;font-size:14px;color:var(--muted)}
+.foot-nav a{padding:4px 2px;transition:color .2s}
+.foot-nav a:active{color:var(--text)}
+.foot-nav i{font-style:normal;opacity:.5}
+.foot-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px;font-size:12.5px;color:var(--muted)}
+.foot-on{display:inline-flex;align-items:center;gap:8px;color:#2fbf71}
+.foot-dot{width:9px;height:9px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 0 rgba(47,191,113,.5);animation:footPulse 2.4s ease-out infinite}
+@keyframes footPulse{70%,100%{box-shadow:0 0 0 7px rgba(47,191,113,0)}}
+.foot-brand{display:inline-flex;align-items:center;gap:5px}
+.foot-heart{width:17px;height:17px;fill:none;stroke:var(--red);stroke-width:1.8;stroke-linejoin:round}
+.foot-by{opacity:.6}
+@media (prefers-reduced-motion:reduce){.foot-dot{animation:none}}
