@@ -156,6 +156,20 @@ function renderProducts(cat){
 }
 renderProducts('fivem');
 
+/* เงาขอบแถวสินค้า: เปิด/ปิดตามตำแหน่งที่เลื่อน */
+(function(){
+  const g = $('#grid'), w = $('#gridWrap'); if(!g || !w) return;
+  const upd = () => {
+    const max = g.scrollWidth - g.clientWidth;
+    w.classList.toggle('can-l', g.scrollLeft > 8);
+    w.classList.toggle('can-r', g.scrollLeft < max - 8);
+  };
+  g.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd);
+  if(window.ResizeObserver) new ResizeObserver(upd).observe(g);
+  upd();
+})();
+
 /* featured carousel */
 const feat = [
   {n:'EXSHOP', p:'₭0', art:'unban'}, {n:'EXSHOP', p:'₭0', art:'devil'},
