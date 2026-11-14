@@ -6,7 +6,7 @@
 <script>document.documentElement.dataset.theme="dark";document.documentElement.classList.add("chk")</script>
 <title>ຈັດການແຜງຮ້ານ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--red:#ff0000;--bg:#fbfbfb;--card:#ffffff;--text:#1b1b1d;--muted:#8a8a90;--border:#ececee;
   --glow:rgba(255,0,0,.10);--redline:rgba(255,0,0,.28);--redsoft:rgba(255,0,0,.07);--crumb:#e00000;
@@ -20,8 +20,8 @@ html{background:#000;color-scheme:dark;scroll-padding-top:env(safe-area-inset-to
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
-.menu-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);display:grid;place-items:center;cursor:pointer}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;align-items:center;gap:12px;padding:12px 17px;background:var(--bg);border-bottom:1px solid #1a1a1a}
+.menu-btn{width:41px;height:41px;border-radius:13px;border:1px solid #232323;background:#0a0a0a;color:var(--text);display:grid;place-items:center;cursor:pointer}
 .menu-btn svg{width:20px;height:20px}
 h1{margin:0;font-size:18px;font-weight:700}
 .dot{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
@@ -68,36 +68,58 @@ html.chk body{visibility:hidden}
 .note{margin:0 0 14px;padding:10px 14px;border-radius:14px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font-size:13px;line-height:1.5}
 .st-v.ld,.adm-pill.ld{opacity:.55}
 
-/* เมนูแถบหัว (กดแล้วเลื່ອນລົງ) */
+/* เมนูแถบหัว (กดแล้วเลื່ອນລົງ) — วัดจากรูปอ้างอิง */
 .menu-btn{position:relative}
 .menu-btn svg{position:absolute;inset:0;margin:auto;transition:opacity .18s,transform .22s}
 .menu-btn .ic-x{opacity:0;transform:rotate(-90deg) scale(.7)}
 header.open .menu-btn .ic-menu{opacity:0;transform:rotate(90deg) scale(.7)}
 header.open .menu-btn .ic-x{opacity:1;transform:none}
-.nav{position:absolute;top:100%;left:0;right:0;background:#050505;border-bottom:1px solid var(--border);padding:13px 11px 14px;max-height:calc(100vh - 90px);overflow:auto;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .22s,transform .22s,visibility .22s;z-index:9}
+.nav{--nfont:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif;position:absolute;top:100%;left:0;right:0;background:#070707;border-bottom:1px solid #202020;padding:13px 13px 10px;max-height:calc(100vh - 90px);overflow:auto;-webkit-overflow-scrolling:touch;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .22s,transform .22s,visibility .22s;z-index:9}
 header.open .nav{opacity:1;visibility:visible;transform:none}
-.nr{display:flex;align-items:center;gap:12px;width:100%;height:41px;padding:0 11px;background:none;border:0;color:#a9a9b1;font:500 17px var(--font);text-align:left;cursor:pointer;text-decoration:none}
-.nr .ic{width:22px;height:22px;flex:none}
-.nr .chev{width:16px;height:16px;margin-left:-3px;transition:transform .2s}
-.nr[aria-expanded="true"] .chev{transform:rotate(180deg)}
-.nr:active{opacity:.7}
-.nr-web{height:36px;margin-bottom:8px;border:1px solid rgba(255,0,0,.42);border-radius:18px;color:#f00;font-weight:700}
-.sub{display:none;padding:0 11px 8px 45px;font-size:14px;color:#6f6f77}
-.sub.open{display:block}
+.nr{display:flex;align-items:center;gap:6px;width:100%;height:41px;padding:0 10.5px;background:none;border:1px solid transparent;border-radius:18px;color:#a0a0a0;font:500 13px var(--nfont);text-align:left;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s,color .2s}
+.nr .ic{width:18px;height:18px;flex:none;color:#919191;transition:color .2s}
+.nr .chev{width:13px;height:13px;margin-left:2px;flex:none;color:#5b5b5b;transition:transform .25s,color .2s}
+.nr:active{opacity:.75}
+.nr-web,.nr-dash{height:36.5px;gap:5.5px}
+.nr-web .ic,.nr-dash .ic{width:16px;height:16px}
+.nr-web{margin-bottom:4px;border-color:rgba(255,0,0,.45);color:#f00;font-weight:700}
+.nr-web .ic{color:#f00}
+.nr-dash{margin-bottom:2px}
+.nr-dash.on{background:rgba(255,0,0,.16);border-color:rgba(255,0,0,.45);color:#fff;font-weight:600}
+.nr-dash.on .ic{color:#eae6e6}
+.grp.open>.nr{height:36.5px;margin:2.5px 0 0;background:#161616;border-color:#2e2e2e;color:#fff}
+.nr-dash+.grp.open>.nr{margin-top:4.5px}
+.grp.open>.nr .ic{color:#e70202}
+.grp.open>.nr .chev{transform:rotate(180deg);color:#969696}
+.gw{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.grp.open .gw{grid-template-rows:1fr}
+.gi{overflow:hidden;min-height:0}
+.sp{margin:6px 0 2px;padding:8px;border:1px solid #232323;border-radius:16px;background:#0a0a0a}
+.si{display:flex;align-items:center;gap:11px;width:100%;height:46px;padding:0 14px 0 13px;border:0;border-radius:12px;background:none;color:#c9c9c9;font:400 14px var(--nfont);text-align:left;cursor:pointer;transition:background .2s,color .2s}
+.si .ic{width:18px;height:18px;flex:none;color:#737373;transition:color .2s}
+.si:active{opacity:.75}
+.si.on{background:#240b0a;color:#ea3323}
+.si.on .ic{color:#ea3323}
+.si.on::after{content:"";margin-left:auto;width:8px;height:8px;border-radius:50%;background:#ea3323}
+.sp .empty{padding:12px 14px;font:400 14px var(--nfont);color:#737373}
+.snack{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);padding:11px 18px;border-radius:999px;background:#18181b;border:1px solid #2a2a30;color:#f3f3f4;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50}
+.snack.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
+<div class="snack" id="snack" role="status" aria-live="polite"></div>
 <header id="hdr">
   <button class="menu-btn" id="menuBtn" type="button" aria-label="ເມນູ" aria-expanded="false" aria-controls="nav"><svg class="ic-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg><svg class="ic-x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <h1>ຈັດການແຜງຮ້ານ</h1>
   <span class="dot"></span>
   <nav class="nav" id="nav" aria-label="ເມນູ">
     <a class="nr nr-web" href="index.html"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>ໜ້າເວັບ</span></a>
-    <button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="2.5" width="8" height="8" rx="1.6"/><rect x="2.5" y="12.5" width="8" height="8.5" rx="1.6"/><rect x="13.5" y="12.5" width="8" height="8.5" rx="1.6"/></svg><span>ສິນຄ້າ &amp; ໝວດໝູ່</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="sub">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div>
-    <button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg><span>ສະມາຊິກ &amp; ລາຍການ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="sub">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div>
-    <button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg><span>ລະບົບຊຳລະເງິນ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="sub">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div>
-    <button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2.5v4.5M15 2.5v4.5M12 17.5v4" fill="none"/><path d="M5.5 7h13v3.5a6.5 6.5 0 0 1-13 0z" stroke="none"/></svg><span>ເຊື່ອມຕໍ່ API</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="sub">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div>
-    <button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 5h-8M9 5H3M21 12h-3M14 12H3M21 19h-9M8 19H3"/><path d="M11 3v4M16 10v4M10 17v4"/></svg><span>ຕັ້ງຄ່າທົ່ວໄປ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="sub">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div>
+    <a class="nr nr-dash on" href="#top" id="goDash" aria-current="page"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM5.7 11.5a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM7.800000000000001 7.2a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM13.2 7.2a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM15.3 11.5a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM10 16a2 2 0 1 0 4 0a2 2 0 1 0 -4 0z"/></svg><span>Dashboard</span></a>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="2.5" width="8" height="8" rx="1.6"/><rect x="2.5" y="12.5" width="8" height="8.5" rx="1.6"/><rect x="13.5" y="12.5" width="8" height="8.5" rx="1.6"/></svg><span>ສິນຄ້າ &amp; ໝວດໝູ່</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" data-soon="1"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5 3h14a2 2 0 0 1 2 2v2.500H3V5a2 2 0 0 1 2-2zM4.500 9h15v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zM10 12.200h4a.9.9 0 0 1 0 1.800h-4a.9.9 0 0 1 0-1.800z"/></svg><span>ຈັດການສິນຄ້າ &amp; ໝວດໝູ່</span></button></div></div></div></div>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg><span>ສະມາຊິກ &amp; ລາຍການ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" data-soon="1"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="4"/><path d="M1.800 20c0-3.600 3.200-6.200 7.200-6.200 1 0 1.900.2 2.800.5l-.6 5.700z"/><path fill-rule="evenodd" d="M18.300 12.600l.8.100.5 1.300 1.200.5 1.200-.7 1 1-.7 1.200.5 1.200 1.300.5v1.400l-1.300.5-.5 1.200.7 1.200-1 1-1.200-.7-1.200.5-.5 1.300h-1.400l-.5-1.300-1.200-.5-1.200.7-1-1 .7-1.200-.5-1.200-1.300-.5v-1.400l1.300-.5.5-1.200-.7-1.200 1-1 1.200.7 1.200-.5.5-1.300zM18 17a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800z" transform="translate(-1.800 -4.200) scale(.92)"/></svg><span>ຈັດການສະມາຊິກ</span></button><button class="si" type="button" data-soon="1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.500 2.500a1 1 0 1 0 3-3l-3.880-3.880a3 3 0 0 0-4.240 0l-.88.880a1 1 0 1 1-3-3l2.810-2.810a5.790 5.790 0 0 1 7.060-.870l.470.280a2 2 0 0 0 1.420.250L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.500 6.500a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg><span>ຕົວແທນຈຳໜ່າຍ</span></button></div></div></div></div>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg><span>ລະບົບຊຳລະເງິນ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><div class="empty">ຍັງບໍ່ມີລາຍການຍ່ອຍ</div></div></div></div></div>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2.5v4.5M15 2.5v4.5M12 17.5v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5.5 7h13v3.5a6.5 6.5 0 0 1-13 0z"/></svg><span>ເຊື່ອມຕໍ່ API</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" data-soon="1"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5 5.600Q8.200 3.700 12 3.500q3.800.2 7 2.100 2.700 4.100 3 11-2.600 2.200-5.800 3l-1.200-1.900H9L7.800 19.600q-3.200-.8-5.800-3 .3-6.900 3-11zM8.800 10.300a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800zM15.200 10.300a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800z"/></svg><span>Webhook Discord</span></button></div></div></div></div>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5h-8M9 5H3M21 12h-3M14 12H3M21 19h-9M8 19H3"/><path d="M11 3v4M16 10v4M10 17v4"/></svg><span>ຕັ້ງຄ່າທົ່ວໄປ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" data-soon="1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>ຕັ້ງຄ່າເວັບໄຊ</span></button></div></div></div></div>
   </nav>
 </header>
 <main>
@@ -231,18 +253,23 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 </script>
 <script>
 (function(){
-  var h=document.getElementById('hdr'),b=document.getElementById('menuBtn');
+  var h=document.getElementById('hdr'),b=document.getElementById('menuBtn'),sn=document.getElementById('snack'),st;
   function set(o){h.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false')}
+  function toast(t){sn.textContent=t;sn.classList.add('show');clearTimeout(st);st=setTimeout(function(){sn.classList.remove('show')},2200)}
   b.addEventListener('click',function(e){e.stopPropagation();set(!h.classList.contains('open'))});
   document.addEventListener('click',function(e){if(!h.contains(e.target))set(false)});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
-  document.querySelectorAll('.nav button.nr').forEach(function(r){
+  /* ແຕ່ລະໝວດ: ເປີດໄດ້ເທື່ອລະອັນ */
+  document.querySelectorAll('.grp>.nr').forEach(function(r){
     r.addEventListener('click',function(){
-      var o=r.getAttribute('aria-expanded')!=='true';
-      r.setAttribute('aria-expanded',o?'true':'false');
-      r.nextElementSibling.classList.toggle('open',o);
+      var g=r.parentNode,o=!g.classList.contains('open');
+      document.querySelectorAll('.grp.open').forEach(function(x){x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});
+      if(o){g.classList.add('open');r.setAttribute('aria-expanded','true')}
     });
   });
+  document.getElementById('goDash').addEventListener('click',function(e){e.preventDefault();set(false);window.scrollTo({top:0,behavior:'smooth'})});
+  /* ໜ້າຍ່ອຍເຫຼົ່ານີ້ຍັງບໍ່ໄດ້ສ້າງ — ກົດແລ້ວແຈ້ງເຕືອນກ່ອນ */
+  document.querySelectorAll('.si[data-soon]').forEach(function(x){x.addEventListener('click',function(){set(false);toast('ໜ້ານີ້ຍັງບໍ່ໄດ້ສ້າງ')})});
 })();
 </script>
 </body>
