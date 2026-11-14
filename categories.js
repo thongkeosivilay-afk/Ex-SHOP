@@ -52,15 +52,68 @@
     return String(text).split(re).map((part, i) => i % 2 ? `<mark>${esc(part)}</mark>` : esc(part)).join('');
   }
 
+  /* ----- อนิเมชันเลื่อนตอนเปลี่ยนหมวด -----
+     เนื้อหาเก่าเลื่อนออก → วาดใหม่ → เนื้อหาใหม่เลื่อนเข้ามาจากทิศทางเดียวกับที่ชิปถูกเลือก
+     (เลือกหมวดที่อยู่ขวา = เลื่อนไปทางซ้าย, เลือกหมวดที่อยู่ซ้าย = เลื่อนไปทางขวา) */
+  const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const catOrder = () => ['all'].concat(cats.map(c => c.k));
+  const dirTo = k => { const o = catOrder(), a = o.indexOf(state.cat), b = o.indexOf(k); return b === a ? 0 : (b > a ? 1 : -1); };
+  let sliding = false, pending = null;
+  function changeCat(k){
+    const dir = dirTo(k);
+    const apply = () => { state.cat = k; render(); };
+    const m = $('.ct-main');
+    if(!dir || reduceMotion() || !m || !m.animate){ apply(); return; }
+    if(sliding){ pending = {apply, dir}; return; }   // กดรัว: ใช้ค่าล่าสุดเท่านั้น
+    sliding = true;
+    const out = m.animate(
+      [{opacity:1, transform:'translateX(0)'}, {opacity:0, transform:`translateX(${-dir * 36}px)`}],
+      {duration:150, easing:'cubic-bezier(.4,0,1,1)', fill:'forwards'});
+    const enter = job => {
+      job.apply();
+      const inn = m.animate(
+        [{opacity:0, transform:`translateX(${job.dir * 56}px)`}, {opacity:1, transform:'translateX(0)'}],
+        {duration:420, easing:'cubic-bezier(.2,.9,.3,1)'});
+      out.cancel();
+      inn.onfinish = inn.oncancel = () => {
+        if(pending){ const p = pending; pending = null; sliding = false; changeCatJob(p); }
+        else sliding = false;
+      };
+    };
+    out.onfinish = () => enter({apply, dir});
+  }
+  function changeCatJob(job){ job.apply(); }   // งานที่ค้างตอนกดรัว: วาดทันที
+
   /* ----- วาดหน้า ----- */
   function renderChips(){
     const base = baseList();
     const total = base.length;
     const chips = [{k:'all', n:'ທັງໝົດ', c:total}].concat(cats.map(c => ({k:c.k, n:c.n, c:base.filter(p => p.cat === c.k).length})));
-    $('#ctChips').innerHTML = chips.map(c =>
-      `<button type="button" class="ct-chip${state.cat === c.k ? ' on' : ''}${c.k !== 'all' && !c.c && (state.q || state.stock) ? ' dim' : ''}" role="tab" aria-selected="${state.cat === c.k}" data-chip="${esc(c.k)}">${esc(c.n)}<b>${c.c}</b></button>`
-    ).join('');
-    const on = $('#ctChips .on'); if(on && on.scrollIntoView) on.scrollIntoView({block:'nearest', inline:'center'});
+    const box = $('#ctChips');
+    const have = box.querySelectorAll('[data-chip]');
+    const same = have.length === chips.length && chips.every((c, i) => have[i].dataset.chip === c.k);
+    const dimOf = c => c.k !== 'all' && !c.c && (state.q || state.stock);
+    if(same){
+      /* อัปเดตของเดิม ไม่สร้างใหม่ → สีชิปเปลี่ยนแบบนุ่ม ๆ และเลื่อนแถบชิปได้ลื่น */
+      chips.forEach((c, i) => {
+        const el = have[i];
+        el.classList.toggle('on', state.cat === c.k);
+        el.classList.toggle('dim', !!dimOf(c));
+        el.setAttribute('aria-selected', state.cat === c.k);
+        const b = el.querySelector('b'); if(b && b.textContent !== String(c.c)) b.textContent = c.c;
+      });
+    } else {
+      box.innerHTML = chips.map(c =>
+        `<button type="button" class="ct-chip${state.cat === c.k ? ' on' : ''}${dimOf(c) ? ' dim' : ''}" role="tab" aria-selected="${state.cat === c.k}" data-chip="${esc(c.k)}">${esc(c.n)}<b>${c.c}</b></button>`
+      ).join('');
+    }
+    centerChip(box);
+  }
+  function centerChip(box){
+    const on = box.querySelector('.on'); if(!on) return;
+    const left = on.offsetLeft - (box.clientWidth - on.offsetWidth) / 2;
+    try { box.scrollTo({ left: Math.max(0, left), behavior: reduceMotion() ? 'auto' : 'smooth' }); }
+    catch(e){ box.scrollLeft = Math.max(0, left); }
   }
 
   function renderCats(){
@@ -180,11 +233,11 @@
 
   $('#ctChips').addEventListener('click', e => {
     const b = e.target.closest('[data-chip]'); if(!b) return;
-    state.cat = b.dataset.chip; render();
+    changeCat(b.dataset.chip);
   });
   $('#catList').addEventListener('click', e => {
     const b = e.target.closest('[data-cat]'); if(!b) return;
-    state.cat = b.dataset.cat; render(); scrollToResults();
+    changeCat(b.dataset.cat); scrollToResults();
   });
   $('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
   $('#stockOnly').addEventListener('click', () => { state.stock = !state.stock; render(); });

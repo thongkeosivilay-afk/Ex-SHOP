@@ -86,3 +86,17 @@ body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px
 .ct-empty p{font-size:14px}
 .ct-empty button{margin-top:16px;height:40px;padding:0 20px;border-radius:12px;background:var(--red);color:#fff;font-weight:500}
 .cat-list .ct-empty{padding-top:24px}
+
+/* ===== พื้นหลังดำสนิท (ธีมมืด) ===== */
+:root[data-theme="dark"] body.ct-page{--bg:#000;--card:#000;--glass:rgba(255,255,255,.09)}
+:root[data-theme="dark"] body.ct-page,
+:root[data-theme="dark"] html{background:#000}
+
+/* ===== อนิเมชันเปลี่ยนหมวด ===== */
+.ct-main{will-change:transform,opacity}
+.ct-chip{transition:background .35s ease,border-color .35s ease,color .25s ease,opacity .25s ease,transform .25s cubic-bezier(.3,1.4,.5,1)}
+.ct-chip:active{transform:scale(.94)}
+.ct-chip.on{transform:scale(1.03)}
+.ct-chip b{transition:background .3s ease,color .3s ease}
+.cat.is-on .cb.cb-img{transition:outline-color .3s}
+@media (prefers-reduced-motion:reduce){.ct-chip,.ct-chip b{transition:none}.ct-chip.on{transform:none}}
