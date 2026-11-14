@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ເຕີມເງິນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#e8372a; --red2:#ff4a3a; --bg:#000; --card:#040404; --line:#1a1a1a;
+  --txt:#fff; --mut:#8c8c8c; --mut2:#6b6b6b;
+  --f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif;
+  --fl:'Noto Sans Lao Looped','Outfit',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:var(--txt);font-family:var(--fl);min-height:100%}
+body{padding:0 clamp(18px,7vw,48px) 40px;padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{max-width:640px;margin:0 auto;padding-top:22px}
+
+/* ---------- views + blur transition ---------- */
+.view{transition:filter .5s ease,opacity .5s ease,transform .5s ease}
+.view.hide{display:none}
+.view.blur-out{filter:blur(16px);opacity:0;transform:scale(.97);pointer-events:none}
+.view.blur-in{filter:blur(16px);opacity:0;transform:scale(1.03)}
+
+/* ---------- back link + balance ---------- */
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--mut2);font-size:12.5px;margin-bottom:10px;text-decoration:none}
+.back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.bal{font-family:var(--f);font-weight:900;font-size:34px;line-height:1.15;color:var(--red);letter-spacing:.5px;
+  text-shadow:0 0 22px rgba(232,55,42,.55),0 0 4px rgba(232,55,42,.4)}
+.sub{margin-top:6px;color:var(--mut);font-size:14.5px;font-weight:300}
+
+/* ---------- bank tabs ---------- */
+.tabs{display:flex;gap:7px;margin:14px -4px 0;padding:6px 4px 8px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;height:33px;padding:0 15px;border-radius:99px;background:#0a0a0a;border:1px solid #1d1d1d;
+  color:var(--mut);font:600 13.5px/1 var(--f);transition:.2s;white-space:nowrap}
+.tab.on{background:linear-gradient(180deg,#f04534,#dc3326);border-color:#ff6a5c;color:#fff;
+  box-shadow:0 0 18px rgba(232,55,42,.5),inset 0 1px 0 rgba(255,255,255,.18)}
+
+/* ---------- main card ---------- */
+.card{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px 20px 22px}
+.card h2{font:700 20px/1.3 var(--f);color:#fff}
+.card .s{margin-top:3px;color:var(--mut2);font-size:13.5px;font-weight:300;line-height:1.5}
+.lbl{display:block;margin-top:22px;font:700 13px/1 var(--fl);color:#d4d4d4}
+.inp{margin-top:10px;width:100%;height:53px;border-radius:14px;background:#000;border:1px solid #202020;
+  color:#fff;font:600 18px var(--f);padding:0 15px;outline:0;transition:.2s}
+.inp:focus{border-color:#5a1c17;box-shadow:0 0 0 3px rgba(232,55,42,.12)}
+.chips{display:flex;gap:6px;margin-top:14px;flex-wrap:nowrap}
+.chip{flex:1 1 auto;min-width:0;white-space:nowrap;height:31px;padding:0 4px;border-radius:9px;background:#040404;border:1px solid #1c1c1c;
+  color:var(--red);font:700 13.5px/1 var(--f);transition:.15s}
+.chip.on{color:#fff;background:#190605;border-color:#7a1f1a}
+.go{margin-top:18px;width:100%;height:49px;border-radius:12px;background:linear-gradient(180deg,#ee3d2f,#e3352a);color:#fff;
+  font:700 16px var(--fl);display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 8px 30px rgba(232,55,42,.38),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .12s}
+.go:active{transform:scale(.985)}
+.go svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hint{margin-top:14px;text-align:center;color:var(--mut2);font-size:12px;font-weight:300;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.how{margin-top:20px;font:700 16px/1.3 var(--f);color:#fff}
+.steps{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:11px}
+.steps li{display:flex;gap:11px;align-items:flex-start;color:#9a9a9a;font-size:14px;font-weight:300;line-height:1.5}
+.steps i{flex:0 0 18px;height:18px;border-radius:50%;background:var(--red);color:#fff;font:700 11px/18px var(--f);
+  text-align:center;font-style:normal;margin-top:2px;box-shadow:0 0 10px rgba(232,55,42,.35)}
+.foot{margin:26px -10px 0;border-top:1px solid #111}
+
+/* ---------- QR view ---------- */
+.qtop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.qback{display:inline-flex;align-items:center;gap:4px;color:var(--mut);font-size:13px}
+.qback svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.qamt{margin-top:14px;font:900 30px/1.1 var(--f);color:var(--red);text-shadow:0 0 20px rgba(232,55,42,.5)}
+.qbank{margin-top:4px;color:var(--mut);font-size:13.5px;font-weight:300}
+.qcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;display:flex;flex-direction:column;align-items:center}
+.ring{position:relative;width:224px;height:224px}
+.ring svg.r{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.ring .tr{stroke:#161616}
+.ring .pg{stroke:var(--red);stroke-linecap:round}
+.qrbox{position:absolute;inset:14px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.qrbox img{width:100%;height:100%;object-fit:contain;display:block}
+.qrph{display:flex;flex-direction:column;align-items:center;gap:6px;color:#444;font-size:11.5px;text-align:center;padding:10px}
+.qrph svg{width:70px;height:70px}
+.cd{margin-top:14px;color:var(--mut);font-size:13px;font-weight:300}
+.cd b{font:800 15px var(--f);color:#fff}
+.cd.low b{color:var(--red2)}
+.info{width:100%;margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:11px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px}
+.row span{color:var(--mut2);font-weight:300}
+.row b{font:600 14px var(--f);color:#e8e8e8;text-align:right;word-break:break-all}
+.cp{margin-left:8px;height:24px;padding:0 10px;border-radius:7px;background:#120606;border:1px solid #3a1511;color:var(--red);font:700 11.5px var(--fl)}
+.slip{margin-top:16px;width:100%;min-height:92px;border:1.5px dashed #3a1511;border-radius:16px;background:#070303;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#b9b9b9;font-size:13.5px;
+  cursor:pointer;position:relative;overflow:hidden;transition:.2s;text-align:center;padding:14px}
+.slip:active{border-color:var(--red)}
+.slip svg{width:26px;height:26px;fill:none;stroke:var(--red);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.slip small{color:var(--mut2);font-size:11.5px;font-weight:300}
+.slip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.slip input{display:none}
+
+/* ---------- modal cards ---------- */
+.ov{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:22px;
+  background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ov.show{display:flex}
+.pop{width:100%;max-width:340px;background:#070707;border:1px solid #241512;border-radius:24px;padding:26px 22px 22px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(232,55,42,.12);animation:pop .45s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.88)}to{opacity:1;transform:none}}
+.spin{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;border:5px solid #1c1c1c;border-top-color:var(--red);
+  animation:sp 1s linear infinite;filter:drop-shadow(0 0 8px rgba(232,55,42,.5))}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pop h3{font:700 18px/1.4 var(--fl);color:#fff}
+.pop p{margin-top:6px;color:var(--mut);font-size:13px;font-weight:300;line-height:1.55}
+.big{margin:14px 0 4px;font:900 40px/1 var(--f);color:var(--red);letter-spacing:1px;text-shadow:0 0 22px rgba(232,55,42,.55)}
+.bar{height:5px;border-radius:9px;background:#181818;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:100%;background:var(--red);border-radius:9px;box-shadow:0 0 10px rgba(232,55,42,.7);transition:width 1s linear}
+.sum{margin-top:14px;font-size:12.5px;color:var(--mut2)}
+.sum b{color:#ddd;font-weight:600}
+.link{display:block;margin:14px auto 0;color:var(--mut);font-size:12.5px;text-decoration:underline}
+.ok{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(232,55,42,.6)}
+.ok svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* contact card = bottom sheet */
+.ct{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.ct.show{display:block}
+.ct .pop{max-width:520px;margin:0 auto;text-align:left;animation:up .5s cubic-bezier(.2,1.2,.4,1) both;border-radius:22px}
+@keyframes up{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+.ct h3{font-size:16px}
+.ct .x{position:absolute;top:12px;right:14px;width:28px;height:28px;border-radius:50%;background:#141414;color:#aaa;font-size:15px}
+.ct .pop{position:relative}
+.ctl{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.ctl a{display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:13px;background:#0b0b0b;border:1px solid #1f1f1f;
+  color:#fff;text-decoration:none;font:600 14px var(--fl)}
+.ctl a em{font-style:normal;margin-left:auto;color:var(--mut2);font-size:12px;font-weight:300}
+.ctl a .d{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font:800 13px var(--f);color:#fff}
+
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:90;
+  background:#140807;border:1px solid #3a1511;color:#fff;padding:11px 18px;border-radius:99px;font-size:13px;transition:.35s;pointer-events:none;
+  box-shadow:0 8px 30px rgba(0,0,0,.6);max-width:88vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== หน้าเลือกจำนวนเงิน ===================== -->
+<section class="view" id="vPick">
+  <a class="back" href="index.html"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>ກັບໜ້າຫຼັກ</a>
+  <div class="bal" id="bal">₭0</div>
+  <p class="sub">ເລືອກທະນາຄານທີ່ສະດວກສຳລັບທ່ານ</p>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="card">
+    <h2 id="cTitle"></h2>
+    <p class="s" id="cSub"></p>
+
+    <label class="lbl" for="amt">ຈຳນວນເງິນ (ກີບ)</label>
+    <input class="inp" id="amt" type="text" inputmode="numeric" autocomplete="off" value="100,000">
+    <div class="chips" id="chips"></div>
+
+    <button class="go" id="goBtn" type="button">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg>
+      ສ້າງ QR Code
+    </button>
+    <p class="hint" id="hint"></p>
+
+    <h3 class="how" id="howT"></h3>
+    <ul class="steps" id="steps"></ul>
+  </div>
+  <div class="foot"></div>
+</section>
+
+<!-- ===================== หน้า QR + แนบสลิป ===================== -->
+<section class="view hide" id="vQR">
+  <div class="qtop">
+    <button class="qback" id="qBack" type="button"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>ກັບຄືນ</button>
+  </div>
+  <div class="qamt" id="qAmt">₭0</div>
+  <p class="qbank" id="qBank"></p>
+
+  <div class="qcard">
+    <div class="ring">
+      <svg class="r" viewBox="0 0 224 224"><circle class="tr" cx="112" cy="112" r="108" fill="none" stroke-width="5"/>
+        <circle class="pg" id="pg" cx="112" cy="112" r="108" fill="none" stroke-width="5"/></svg>
+      <div class="qrbox" id="qrbox"></div>
+    </div>
+    <p class="cd" id="cd">ເຫຼືອເວລາ <b id="cdn">30</b> ວິນາທີ</p>
+
+    <div class="info">
+      <div class="row"><span>ຊື່ບັນຊີ</span><b id="iHolder"></b></div>
+      <div class="row"><span>ເລກບັນຊີ</span><div style="display:flex;align-items:center"><b id="iAcct"></b><button class="cp" id="cpBtn" type="button">ກ໊ອບ</button></div></div>
+      <div class="row"><span>ຈຳນວນເງິນ</span><b id="iAmt"></b></div>
+    </div>
+
+    <label class="slip" id="slip">
+      <input type="file" id="slipIn" accept="image/*">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      <span id="slipT">ແນບສະລິບການໂອນ</span>
+      <small id="slipS">ແຕະເພື່ອເລືອກຮູບສະລິບ</small>
+    </label>
+  </div>
+</section>
+
+</div>
+
+<!-- การ์ดรอแอดมิน -->
+<div class="ov" id="ovWait">
+  <div class="pop" id="waitCard">
+    <div class="spin" id="spin"></div>
+    <h3 id="wT">ລໍຖ້າແອດມິນຢືນຢັນເງິນ</h3>
+    <div class="big" id="wTime">01:00</div>
+    <div class="bar"><i id="wBar"></i></div>
+    <p id="wP">ກຳລັງກວດສອບສະລິບຂອງທ່ານ ກະລຸນາຢ່າປິດໜ້ານີ້</p>
+    <p class="sum" id="wSum"></p>
+    <button class="link" id="wClose" type="button" style="display:none">ກັບໄປໜ້າເຕີມເງິນ</button>
+    <button class="link" id="wDemo" type="button" style="display:none">[ທົດລອງ] ຈຳລອງແອດມິນກົດຢືນຢັນ</button>
+  </div>
+</div>
+
+<!-- การ์ดช่องทางติดต่อ (เด้งเมื่อครบ 1 นาที) -->
+<div class="ct" id="ct">
+  <div class="pop">
+    <button class="x" id="ctX" type="button" aria-label="close">✕</button>
+    <h3>ແອດມິນຍັງບໍ່ຕອບກັບ?</h3>
+    <p>ຕິດຕໍ່ແອດມິນໂດຍກົງ ແລ້ວສົ່ງສະລິບໃຫ້ແອດມິນໄດ້ເລີຍ</p>
+    <div class="ctl" id="ctl"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   ตั้งค่า — แก้เฉพาะส่วนนี้
+   ===================================================================== */
+const CONFIG = {
+  minAmount: 10000,          // ขั้นต่ำ (กีบ)
+  maxAmount: 50000000,       // สูงสุด (กีบ)
+  qrSeconds: 30,             // เวลา QR ถ้าไม่แนบสลิป → กลับหน้าเลือกราคา
+  waitSeconds: 60,           // รอแอดมินยืนยัน ถ้าครบ → เด้งการ์ดช่องทางติดต่อ
+  amounts: [10000, 50000, 100000, 200000, 500000, 1000000],
+
+  /* ช่องทางติดต่อ — ใส่ลิงก์จริง (เว้นว่าง '' = ยังไม่แสดงปุ่มนั้น) */
+  contacts: [
+    { name:'Discord',  hint:'ແອດມິນ', short:'D', color:'#5865F2', url:'' },
+    { name:'Facebook', hint:'ແອດມິນ', short:'f', color:'#1877F2', url:'' },
+    { name:'WhatsApp', hint:'ແອດມິນ', short:'W', color:'#25D366', url:'' }
+  ],
+
+  /* ส่งสลิปไปให้ระบบหลังบ้าน — ตอนนี้ยังไม่มีหลังบ้านในโปรเจกต์
+     ให้แก้ฟังก์ชันนี้ให้อัปโหลด file + ข้อมูลไปที่ระบบจริง (เช่น Supabase / Discord webhook) */
+  async submitSlip(payload){ return true; },
+
+  /* โหมดทดลอง: เปิดด้วย topup.html?demo=1 จะมีปุ่มจำลองแอดมินกดยืนยัน */
+  demo: /[?&]demo=1/.test(location.search)
+};
+
+/* รายชื่อธนาคารลาว — acct/holder = เลขบัญชีและชื่อบัญชีของร้านคุณ, qr = ไฟล์รูป QR ของธนาคารนั้น */
+const BANKS = [
+  { id:'bcel',   tab:'BCEL',        name:'ທະນາຄານ ການຄ້າຕ່າງປະເທດລາວ (BCEL)',     acct:'', holder:'', qr:'qr/bcel.png' },
+  { id:'ldb',    tab:'LDB',         name:'ທະນາຄານ ພັດທະນາລາວ (LDB)',              acct:'', holder:'', qr:'qr/ldb.png' },
+  { id:'jdb',    tab:'JDB',         name:'ທະນາຄານ ຮ່ວມພັດທະນາ (JDB)',             acct:'', holder:'', qr:'qr/jdb.png' },
+  { id:'apb',    tab:'APB',         name:'ທະນາຄານ ສົ່ງເສີມກະສິກຳ (APB)',           acct:'', holder:'', qr:'qr/apb.png' },
+  { id:'lvb',    tab:'LVB',         name:'ທະນາຄານ ລາວ-ຫວຽດ (LVB)',                acct:'', holder:'', qr:'qr/lvb.png' },
+  { id:'stb',    tab:'STB',         name:'ທະນາຄານ ຊາກອມແບັງ ລາວ (STB)',            acct:'', holder:'', qr:'qr/stb.png' },
+  { id:'psvb',   tab:'PSVB',        name:'ທະນາຄານ ພົງສະຫວັນ (PSVB)',               acct:'', holder:'', qr:'qr/psvb.png' },
+  { id:'idcb',   tab:'IDCB',        name:'ທະນາຄານ ອິນໂດຈີນ (IDCB)',                acct:'', holder:'', qr:'qr/idcb.png' },
+  { id:'acleda', tab:'ACLEDA',      name:'ທະນາຄານ ເອຊີລີດາ ລາວ (ACLEDA)',          acct:'', holder:'', qr:'qr/acleda.png' },
+  { id:'mjbl',   tab:'MJBL',        name:'ທະນາຄານ ມາຣູຮັນ ເຈແປນ ລາວ (MJBL)',       acct:'', holder:'', qr:'qr/mjbl.png' },
+  { id:'bic',    tab:'BIC',         name:'ທະນາຄານ ບີໄອຊີ ລາວ (BIC)',               acct:'', holder:'', qr:'qr/bic.png' },
+  { id:'vtb',    tab:'VietinBank',  name:'ທະນາຄານ ຫວຽດຕິນ ລາວ (VietinBank)',        acct:'', holder:'', qr:'qr/vtb.png' },
+  { id:'vcb',    tab:'Vietcombank', name:'ທະນາຄານ ວຽດຄອມແບັງ ລາວ (Vietcombank)',    acct:'', holder:'', qr:'qr/vcb.png' },
+  { id:'bfl',    tab:'BFL',         name:'ທະນາຄານ ຝຣັ່ງ-ລາວ (BFL)',                acct:'', holder:'', qr:'qr/bfl.png' },
+  { id:'icbc',   tab:'ICBC',        name:'ທະນາຄານ ໄອຊີບີຊີ ວຽງຈັນ (ICBC)',          acct:'', holder:'', qr:'qr/icbc.png' },
+  { id:'boc',    tab:'BOC',         name:'ທະນາຄານ ແຫ່ງປະເທດຈີນ ວຽງຈັນ (BOC)',       acct:'', holder:'', qr:'qr/boc.png' },
+  { id:'pbl',    tab:'Public Bank', name:'ທະນາຄານ ພັບບລິກ ລາວ (Public Bank)',        acct:'', holder:'', qr:'qr/pbl.png' },
+  { id:'lcnb',   tab:'LCNB',        name:'ທະນາຄານ ລາວ-ຈີນ (LCNB)',                 acct:'', holder:'', qr:'qr/lcnb.png' }
+];
+
+/* =====================================================================
+   โค้ดทำงาน (ไม่ต้องแก้)
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const fmt = n => '₭' + Number(n).toLocaleString('en-US');
+const short = n => n >= 1000000 ? (n/1000000)+'M' : (n/1000)+'k';
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+
+let bank = BANKS[0], amount = 100000;
+let qrT = null, qrLeft = 0, waitT = null, waitLeft = 0, curReq = null, toastT;
+let balance = store.get('exshop_balance', 0);
+
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+function setBal(){ $('#bal').textContent = fmt(balance); }
+
+/* ---------- หน้าเลือก ---------- */
+function renderTabs(){
+  $('#tabs').innerHTML = BANKS.map(b=>`<button class="tab${b.id===bank.id?' on':''}" data-id="${b.id}" type="button">${b.tab}</button>`).join('');
+}
+function renderBank(){
+  $('#cTitle').textContent = 'ໂອນເງິນຜ່ານ ' + bank.tab;
+  $('#cSub').textContent   = bank.name;
+  $('#hint').textContent   = `ຂັ້ນຕ່ຳ ${fmt(CONFIG.minAmount)} • ສູງສຸດ ${fmt(CONFIG.maxAmount)} • QR ມີອາຍຸ ${CONFIG.qrSeconds} ວິນາທີ`;
+  $('#howT').textContent   = 'ວິທີເຕີມເງິນຜ່ານ ' + bank.tab;
+  const S = [
+    'ໃສ່ຈຳນວນເງິນທີ່ຕ້ອງການເຕີມ ແລ້ວກົດ "ສ້າງ QR Code"',
+    `ເປີດແອັບທະນາຄານ ${bank.tab} ຂອງທ່ານ ເລືອກສະແກນ QR ແລ້ວໂອນຕາມຍອດທີ່ສະແດງເປະໆ`,
+    `ແຄັບໜ້າຈໍສະລິບການໂອນ ແລ້ວກົດແນບສະລິບພາຍໃນ ${CONFIG.qrSeconds} ວິນາທີ`,
+    'ລໍຖ້າແອດມິນຢືນຢັນ ເງິນຈະເຂົ້າບັນຊີຂອງທ່ານ ຖ້າບໍ່ແນບສະລິບທັນເວລາ ລະບົບຈະກັບໄປໜ້າເລືອກຈຳນວນເງິນ'
+  ];
+  $('#steps').innerHTML = S.map((t,i)=>`<li><i>${i+1}</i><span>${t}</span></li>`).join('');
+}
+function renderChips(){
+  $('#chips').innerHTML = CONFIG.amounts.map(a=>`<button class="chip${a===amount?' on':''}" data-a="${a}" type="button">${short(a)}</button>`).join('');
+}
+function syncInput(){ $('#amt').value = amount ? amount.toLocaleString('en-US') : ''; }
+
+$('#tabs').addEventListener('click', e=>{
+  const t=e.target.closest('.tab'); if(!t) return;
+  bank = BANKS.find(b=>b.id===t.dataset.id); renderTabs(); renderBank();
+});
+$('#chips').addEventListener('click', e=>{
+  const c=e.target.closest('.chip'); if(!c) return;
+  amount = +c.dataset.a; syncInput(); renderChips();
+});
+$('#amt').addEventListener('input', e=>{
+  const n = parseInt(e.target.value.replace(/[^\d]/g,''),10) || 0;
+  amount = Math.min(n, 999999999); syncInput(); renderChips();
+});
+
+/* ---------- สลับหน้า (เบลอ) ---------- */
+function swap(from, to, cb){
+  from.classList.add('blur-out');
+  setTimeout(()=>{
+    from.classList.add('hide'); from.classList.remove('blur-out');
+    to.classList.remove('hide'); to.classList.add('blur-in');
+    window.scrollTo(0,0);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>to.classList.remove('blur-in')));
+    cb && cb();
+  }, 480);
+}
+
+/* ---------- สร้าง QR ---------- */
+function drawQR(){
+  const box = $('#qrbox');
+  const ph = `<div class="qrph"><svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>ຍັງບໍ່ໄດ້ໃສ່ຮູບ QR<br>${bank.qr}</span></div>`;
+  box.innerHTML = '';
+  if(!bank.qr){ box.innerHTML = ph; return; }
+  const img = new Image(); img.alt='QR';
+  img.onload = ()=>{ box.innerHTML=''; box.appendChild(img); };
+  img.onerror = ()=>{ box.innerHTML = ph; };
+  img.src = bank.qr;
+  box.innerHTML = ph;
+}
+
+const R = 108, CIRC = 2*Math.PI*R;
+function ringSet(f){ const p=$('#pg'); p.style.strokeDasharray = CIRC; p.style.strokeDashoffset = CIRC*(1-f); }
+
+function startQR(){
+  if(amount < CONFIG.minAmount){ toast('ຂັ້ນຕ່ຳ ' + fmt(CONFIG.minAmount)); return; }
+  if(amount > CONFIG.maxAmount){ toast('ສູງສຸດ ' + fmt(CONFIG.maxAmount)); return; }
+  $('#qAmt').textContent = fmt(amount);
+  $('#qBank').textContent = bank.name;
+  $('#iHolder').textContent = bank.holder || '—';
+  $('#iAcct').textContent = bank.acct || '—';
+  $('#iAmt').textContent = fmt(amount);
+  $('#cpBtn').style.display = bank.acct ? '' : 'none';
+  resetSlip(); drawQR();
+  swap($('#vPick'), $('#vQR'), ()=>{
+    qrLeft = CONFIG.qrSeconds; tickQR(true);
+    clearInterval(qrT);
+    const t0 = Date.now();
+    qrT = setInterval(()=>{
+      const el = (Date.now()-t0)/1000;
+      qrLeft = Math.max(0, CONFIG.qrSeconds - el);
+      tickQR();
+      if(qrLeft <= 0){ clearInterval(qrT); qrT=null; backToPick('ໝົດເວລາ ບໍ່ໄດ້ແນບສະລິບ ກະລຸນາເລືອກຈຳນວນເງິນໃໝ່'); }
+    }, 100);
+  });
+}
+function tickQR(){
+  ringSet(qrLeft / CONFIG.qrSeconds);
+  const s = Math.ceil(qrLeft);
+  $('#cdn').textContent = s;
+  $('#cd').classList.toggle('low', s <= 10);
+}
+function stopQR(){ clearInterval(qrT); qrT=null; }
+
+function backToPick(msg){
+  stopQR();
+  swap($('#vQR'), $('#vPick'), ()=>{ if(msg) toast(msg); });
+}
+$('#goBtn').onclick = startQR;
+$('#qBack').onclick = ()=>backToPick();
+$('#cpBtn').onclick = ()=>{
+  const v = bank.acct;
+  const done = ()=>toast('ກ໊ອບເລກບັນຊີແລ້ວ');
+  if(navigator.clipboard) navigator.clipboard.writeText(v).then(done, ()=>toast(v)); else toast(v);
+};
+
+/* ---------- แนบสลิป ---------- */
+function resetSlip(){
+  const s=$('#slip'); s.querySelectorAll('img').forEach(i=>i.remove());
+  $('#slipIn').value=''; $('#slipT').textContent='ແນບສະລິບການໂອນ'; $('#slipS').textContent='ແຕະເພື່ອເລືອກຮູບສະລິບ';
+}
+$('#slipIn').addEventListener('change', e=>{
+  const f = e.target.files && e.target.files[0]; if(!f) return;
+  if(!/^image\//.test(f.type)){ toast('ກະລຸນາເລືອກໄຟລ໌ຮູບພາບ'); e.target.value=''; return; }
+  if(!qrT){ return; }
+  stopQR();                                   // แนบแล้ว → หยุดนับ 30 วิ
+  const url = URL.createObjectURL(f);
+  const img = new Image(); img.src = url;
+  $('#slip').appendChild(img);
+  $('#slipT').textContent = 'ແນບສະລິບແລ້ວ'; $('#slipS').textContent = f.name;
+  setTimeout(()=>openWait(f), 700);
+});
+
+/* ---------- การ์ดรอแอดมิน (1 นาที) ---------- */
+function mmss(s){ s=Math.max(0,Math.ceil(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function openWait(file){
+  curReq = { bank: bank.id, amount, name: file.name, at: Date.now() };
+  store.set('exshop_topup_pending', curReq);
+  Promise.resolve(CONFIG.submitSlip({ bank, amount, file })).catch(()=>{});
+
+  $('#spin').style.display=''; $('#wT').textContent='ລໍຖ້າແອດມິນຢືນຢັນເງິນ';
+  $('#wTime').style.display=''; $('#wBar').parentElement.style.display='';
+  $('#wP').textContent='ກຳລັງກວດສອບສະລິບຂອງທ່ານ ກະລຸນາຢ່າປິດໜ້ານີ້';
+  $('#wSum').innerHTML = `${bank.tab} • <b>${fmt(amount)}</b>`;
+  $('#wClose').style.display='none';
+  $('#wDemo').style.display = CONFIG.demo ? '' : 'none';
+  $('#ct').classList.remove('show');
+  $('#ovWait').classList.add('show');
+
+  waitLeft = CONFIG.waitSeconds;
+  $('#wTime').textContent = mmss(waitLeft);
+  const bar=$('#wBar'); bar.style.transition='none'; bar.style.width='100%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ bar.style.transition='width 1s linear'; }));
+  clearInterval(waitT);
+  const t0 = Date.now();
+  waitT = setInterval(()=>{
+    waitLeft = Math.max(0, CONFIG.waitSeconds - Math.floor((Date.now()-t0)/1000));
+    $('#wTime').textContent = mmss(waitLeft);
+    bar.style.width = (waitLeft/CONFIG.waitSeconds*100)+'%';
+    if(waitLeft <= 0){ clearInterval(waitT); waitT=null; waitTimeout(); }
+  }, 250);
+}
+function waitTimeout(){
+  $('#wP').textContent = 'ແອດມິນຍັງບໍ່ໄດ້ຢືນຢັນ ທ່ານສາມາດຕິດຕໍ່ແອດມິນໄດ້ເລີຍ';
+  $('#wClose').style.display='';
+  openContact();
+}
+function openContact(){
+  const list = CONFIG.contacts.filter(c=>c.url);
+  $('#ctl').innerHTML = list.length
+    ? list.map(c=>`<a href="${c.url}" target="_blank" rel="noopener"><span class="d" style="background:${c.color}">${c.short}</span>${c.name}<em>${c.hint||''}</em></a>`).join('')
+    : '<p style="margin-top:0">ຍັງບໍ່ໄດ້ຕັ້ງລິ້ງຕິດຕໍ່ (CONFIG.contacts)</p>';
+  $('#ct').classList.add('show');
+}
+$('#ctX').onclick = ()=>$('#ct').classList.remove('show');
+
+function closeWait(){
+  clearInterval(waitT); waitT=null;
+  $('#ovWait').classList.remove('show'); $('#ct').classList.remove('show');
+  $('#vQR').classList.add('hide');
+  const p=$('#vPick'); p.classList.remove('hide','blur-out'); p.classList.add('blur-in');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.remove('blur-in')));
+  window.scrollTo(0,0);
+}
+$('#wClose').onclick = closeWait;
+
+/* ---------- แอดมินยืนยันแล้ว (ให้ระบบหลังบ้านเรียกใช้ ExTopup.approve(จำนวนเงิน)) ---------- */
+function approve(a){
+  clearInterval(waitT); waitT=null;
+  const n = Number(a) || (curReq && curReq.amount) || 0;
+  balance += n; store.set('exshop_balance', balance); localStorage.removeItem('exshop_topup_pending'); setBal();
+  $('#ct').classList.remove('show');
+  $('#spin').style.display='none';
+  const card=$('#waitCard');
+  card.innerHTML = `<div class="ok"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h3>ເຕີມເງິນສຳເລັດ</h3><div class="big">+${fmt(n)}</div><p>ຍອດເງິນຄົງເຫຼືອ ${fmt(balance)}</p>
+    <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
+  $('#okBtn').onclick = ()=>location.reload();
+}
+$('#wDemo').onclick = ()=>approve(curReq && curReq.amount);
+window.ExTopup = { approve };
+
+/* ---------- เริ่มต้น ---------- */
+setBal(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
+</script>
+</body>
+</html>
