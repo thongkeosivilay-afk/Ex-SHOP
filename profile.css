@@ -102,3 +102,12 @@
 .pf-toast svg{width:20px;height:20px;flex:none;color:#22c55e}
 .pf-toast[data-k="error"] svg{color:var(--red)}
 @media (prefers-reduced-motion:reduce){.pf-on i,.pf-btn .sp{animation:none}.pf-toast{transition-duration:.01ms}}
+
+/* ===== โหมดมืด: พื้นหลังดำสนิทเหมือนหน้าเติมเงิน ===== */
+:root[data-theme="dark"] .pf-page,
+:root[data-theme="dark"] .pf-page .pf-top{--bg:#000;--card:#050505;--border:#1a1a1a}
+:root[data-theme="dark"] html,
+:root[data-theme="dark"] body.pf-page{background:#000}
+:root[data-theme="dark"] .pf-live{background:radial-gradient(120% 140% at 50% 0%,rgba(255,0,0,.14),transparent 70%),#050505}
+:root[data-theme="dark"] .pf-bal{background:rgba(255,0,0,.06)}
+:root[data-theme="dark"] .pf-in{background:#000}
