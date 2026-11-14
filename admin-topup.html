@@ -8,7 +8,7 @@
 <script src="guard.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ff4d4d;--bg:#000;--card:#0b0b0d;--line:#2a2a30;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+:root{--red:#ff0000;--bg:#000;--card:#000;--line:#2a2a2e;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
 button,input{font:inherit;color:inherit}
@@ -26,7 +26,7 @@ button{cursor:pointer;border:0;background:none}
 .btn:disabled{opacity:.5}
 .tabs{display:flex;gap:8px;margin-bottom:12px}
 .tab{flex:1;height:38px;border-radius:10px;border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
-.tab.on{border-color:var(--red);color:#fff;background:rgba(255,77,77,.12)}
+.tab.on{border-color:var(--red);color:#fff;background:rgba(255,0,0,.12)}
 .it{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--card)}
 .it .h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .it .u{font-weight:700;font-size:15px;word-break:break-all}
@@ -49,10 +49,10 @@ button{cursor:pointer;border:0;background:none}
 .mn{position:fixed;inset:0;z-index:40;display:none}
 .mn.show{display:block}
 .mn .bg{position:absolute;inset:0;background:rgba(0,0,0,.6)}
-.mn .pn{position:absolute;left:14px;right:14px;top:calc(env(safe-area-inset-top,0px) + 62px);max-width:420px;background:#0b0b0d;border:1px solid var(--line);border-radius:16px;padding:8px;animation:mnin .2s ease both}
+.mn .pn{position:absolute;left:14px;right:14px;top:calc(env(safe-area-inset-top,0px) + 62px);max-width:420px;background:#000;border:1px solid var(--line);border-radius:16px;padding:8px;animation:mnin .2s ease both}
 .mn a{display:flex;align-items:center;gap:12px;height:48px;padding:0 12px;border-radius:11px;color:#fff;text-decoration:none;font-weight:600;font-size:15px}
 .mn a svg{width:20px;height:20px;flex:none}
-.mn a.on{background:rgba(255,77,77,.14);color:#ff4d4d}
+.mn a.on{background:rgba(255,0,0,.14);color:#ff0000}
 @keyframes mnin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .back svg{width:20px;height:20px}
 </style>

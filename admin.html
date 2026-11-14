@@ -9,19 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--red:#ff0000;--bg:#fbfbfb;--card:#ffffff;--text:#1b1b1d;--muted:#8a8a90;--border:#ececee;
-  --glow:rgba(255,0,0,.10);--redline:rgba(255,0,0,.28);--redsoft:rgba(255,0,0,.07);--crumb:#e00000;
+  --glow:rgba(255,0,0,.10);--redline:rgba(255,0,0,.28);--redsoft:rgba(255,0,0,.07);--crumb:#ff0000;
   --ibg:#fbe5e5;--blue:#2f6fe0;--bluebg:#e6efff;--pur:#8a4fe0;--purbg:#f0e8ff;--amb:#d98a00;--ambbg:#fff2d6;
-  --font:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif;--nfont:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif;--ac:#e93423;
+  --font:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif;--nfont:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif;--ac:#ff0000;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-:root[data-theme="dark"]{--bg:#000;--card:#0a0a0b;--text:#f3f3f4;--muted:#9a9aa3;--border:#1f1f23;
-  --glow:rgba(255,0,0,.12);--redline:rgba(255,0,0,.32);--redsoft:rgba(255,0,0,.10);--crumb:#e00000;
+:root[data-theme="dark"]{--bg:#000;--card:#000;--text:#f3f3f4;--muted:#9a9aa3;--border:#2a2a2e;
+  --glow:rgba(255,0,0,.12);--redline:rgba(255,0,0,.32);--redsoft:rgba(255,0,0,.10);--crumb:#ff0000;
   --ibg:#000;--blue:#5b9cff;--bluebg:#111c33;--pur:#b07cff;--purbg:#241638;--amb:#ffb62e;--ambbg:#2e2008}
 html{background:#000;color-scheme:dark;scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;align-items:center;gap:12px;padding:12px 17px;background:var(--bg);border-bottom:1px solid #1a1a1a}
-.menu-btn{width:41px;height:41px;border-radius:13px;border:1px solid #232323;background:#0a0a0a;color:var(--text);display:grid;place-items:center;cursor:pointer}
+.menu-btn{width:41px;height:41px;border-radius:13px;border:1px solid #232323;background:#000;color:var(--text);display:grid;place-items:center;cursor:pointer}
 .menu-btn svg{width:20px;height:20px}
 h1{margin:0;font-size:18px;font-weight:700}
 .dot{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
@@ -94,13 +94,13 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 .gw{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
 .grp.open .gw{grid-template-rows:1fr}
 .gi{overflow:hidden;min-height:0}
-.sp{margin:6px 0 2px;padding:8px;border:1px solid #232323;border-radius:16px;background:#0a0a0a}
+.sp{margin:6px 0 2px;padding:8px;border:1px solid #232323;border-radius:16px;background:#000}
 .si{display:flex;align-items:center;gap:11px;width:100%;height:46px;padding:0 14px 0 13px;border:0;border-radius:12px;background:none;color:#c9c9c9;font:400 14px var(--nfont);text-align:left;cursor:pointer;transition:background .2s,color .2s}
 .si .ic{width:18px;height:18px;flex:none;color:#737373;transition:color .2s}
 .si:active{opacity:.75}
-.si.on{background:#240b0a;color:#ea3323}
-.si.on .ic{color:#ea3323}
-.si.on::after{content:"";margin-left:auto;width:8px;height:8px;border-radius:50%;background:#ea3323}
+.si.on{background:#240b0a;color:#ff0000}
+.si.on .ic{color:#ff0000}
+.si.on::after{content:"";margin-left:auto;width:8px;height:8px;border-radius:50%;background:#ff0000}
 .sp .empty{padding:12px 14px;font:400 14px var(--nfont);color:#737373}
 /* ===== หน้า ຈັດການສິນຄ້າ & ໝວດໝູ່ ===== */
 .view[hidden]{display:none}
@@ -115,7 +115,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 .tab.on{color:#fff}
 .pane{display:none}
 .pane.on{display:block}
-.srch{margin-top:12.5px;height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid #222;border-radius:12px;background:#0a0a0a;transition:border-color .25s,box-shadow .25s}
+.srch{margin-top:12.5px;height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid #222;border-radius:12px;background:#000;transition:border-color .25s,box-shadow .25s}
 .srch:focus-within{border-color:rgba(233,52,35,.6);box-shadow:0 0 0 3px rgba(233,52,35,.12)}
 .srch svg{width:16px;height:16px;flex:none;color:#666;transition:color .25s}
 .srch:focus-within svg{color:var(--ac)}
@@ -136,15 +136,15 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 .cm-card h3 em{font-style:normal;font-weight:400;font-size:18px;color:#76767e;margin-left:8px}
 .cm-card .pm-l{margin-top:20px}
 .cm-drop{height:150px}
-.cm-drop:hover,.cm-drop.drag{border-color:#ff1a1a}
-.cm-save{margin-top:20px;width:100%;height:54px;border:0;border-radius:16px;background:#ff1a1a;color:#fff;font:600 18px var(--nfont);display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 6px 30px rgba(255,26,26,.5);transition:transform .15s,opacity .2s}
+.cm-drop:hover,.cm-drop.drag{border-color:#ff0000}
+.cm-save{margin-top:20px;width:100%;height:54px;border:0;border-radius:16px;background:#ff0000;color:#fff;font:600 18px var(--nfont);display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 6px 30px rgba(255,26,26,.5);transition:transform .15s,opacity .2s}
 .cm-save:active{transform:scale(.985)}
 .cm-save:disabled{opacity:.55;cursor:default}
 .cm-cancel{display:block;margin:12px auto 0;background:none;border:0;color:#8b8b93;font:500 15px var(--nfont);cursor:pointer;padding:6px 10px}
 .cm-list{display:grid;gap:10px;margin-top:14px}
 .cm-list:empty{display:none}
 .cm-card.plain .empty-l{padding:44px 0 36px;margin-top:6px}
-.pm-i.bad{border-color:#ff1a1a;box-shadow:0 0 0 3px rgba(255,26,26,.18)}
+.pm-i.bad{border-color:#ff0000;box-shadow:0 0 0 3px rgba(255,26,26,.18)}
 
 @media (prefers-reduced-motion:reduce){.tab-ind{transition:none}}
 .snack{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);padding:11px 18px;border-radius:999px;background:#18181b;border:1px solid #2a2a30;color:#f3f3f4;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50}
@@ -325,7 +325,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
         <label class="pm-l" for="cName" id="cNameL"></label>
         <input class="pm-i" id="cName" maxlength="80" autocomplete="off">
         <label class="pm-l" id="cImgL"></label>
-        <div class="pm-drop cm-drop" id="cDrop" role="button" tabindex="0"><div class="pm-dc"><svg viewBox="0 0 24 24"><path d="M7 19a4.6 4.6 0 0 1-.7-9.15A6.2 6.2 0 0 1 18.2 9.4 4.8 4.8 0 0 1 17.5 19z" fill="#ff1a1a"/><path d="M12 16.2v-6M9.4 12.3 12 9.7l2.6 2.6" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="cDropT"></span></div><img id="cPrev" alt="" hidden><button type="button" class="pm-rm" id="cRm" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        <div class="pm-drop cm-drop" id="cDrop" role="button" tabindex="0"><div class="pm-dc"><svg viewBox="0 0 24 24"><path d="M7 19a4.6 4.6 0 0 1-.7-9.15A6.2 6.2 0 0 1 18.2 9.4 4.8 4.8 0 0 1 17.5 19z" fill="#ff0000"/><path d="M12 16.2v-6M9.4 12.3 12 9.7l2.6 2.6" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="cDropT"></span></div><img id="cPrev" alt="" hidden><button type="button" class="pm-rm" id="cRm" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         <button type="button" class="pm-up" id="cUp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 20h16"/></svg><span id="cUpT"></span></button>
         <input type="file" id="cFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
         <input class="pm-i" id="cUrl" inputmode="url" autocapitalize="none" autocomplete="off" spellcheck="false">
