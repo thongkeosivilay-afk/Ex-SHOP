@@ -98,11 +98,18 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
         <p class="cf-det-n">* ຂໍ້ຄວາມຕົວຢ່າງ — ແກ້ໄຂໄດ້ໃນ confirm.js</p>
       </div>
     </div>
-    <div class="cf-done">
-      <div class="cf-tick">${OKI}</div><h3>ສັ່ງຊື້ສຳເລັດ!</h3>
-      <p id="cfDoneP"></p><div class="cf-code" id="cfDoneCode"></div>
-      <p>(ໂຄ້ດຕົວຢ່າງ — ໂໝດທົດລອງ)</p>
-      <div class="cf-act"><button class="cf-ok" id="cfClose">ກັບໄປໜ້າຮ້ານ</button></div>
+    <div class="cf-done rs" id="cfRes" data-s="load" aria-live="polite">
+      <div class="rs-ic" id="rsIc">
+        <svg viewBox="0 0 96 96" aria-hidden="true">
+          <circle class="rs-track" cx="48" cy="48" r="40"/>
+          <circle class="rs-arc" cx="48" cy="48" r="40"/>
+          <path class="rs-ck" pathLength="1" d="M31 50l12 12 23-26"/>
+          <path class="rs-x" pathLength="1" d="M35 35l26 26M61 35L35 61"/>
+        </svg>
+      </div>
+      <h3 class="rs-h rs-in" id="rsH">ກຳລັງດຳເນີນການ...</h3>
+      <p class="rs-p rs-in" id="rsP">ກະລຸນາລໍຖ້າ ຢ່າປິດໜ້ານີ້</p>
+      <div class="rs-body" id="rsBody"></div>
     </div>
   `;
 
@@ -136,7 +143,7 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
     $('#cfTot').textContent = fmt(tot); $('#cfBal').textContent = fmt(DEMO.balance);
     const r = $('#cfRem'); r.textContent = fmt(rem); r.classList.toggle('neg', rem<0);
     $('#cfWarn').classList.toggle('show', rem<0);
-    $('#cfOk').disabled = rem<0 || !stock;
+    $('#cfOk').disabled = !stock;   // เงินไม่พอก็กดได้ → ไปหน้าผลลัพธ์แบบ ✕
     const h = $('#cfHint'); h.className='cf-hint';
     if(applied){ h.classList.add('ok'); h.textContent = '✓ ໃຊ້ໂຄ້ດແລ້ວ · ' + applied.t + ' (-' + fmt(d) + ')'; }
     else if(typed){ h.classList.add('ok'); h.textContent = 'ຈະໄດ້ຮັບສ່ວນຫຼຸດ -' + fmt(disc(sub,typed)) + ' · ກົດ "ໃຊ້" ເພື່ອຢືນຢັນ'; }
@@ -165,15 +172,122 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
     if(window.exLoggedIn && exLoggedIn()) return false;
     toast('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນຊື້ສິນຄ້າ'); setTimeout(()=>exNeedLogin(), 900); return true;
   }
-  function doPurchase(){
-    if(needLogin()) return;
-    const o = opts[sel], sub = o.p*qty, tot = sub - disc(sub, applied);
-    DEMO.balance -= tot; o.s -= qty;           // จำลองการตัดเงินและสต็อก
-    const codes = Array.from({length:qty},()=>'EX-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase());
-    $('#cfDoneP').textContent = cur.n + ' · ' + o.l + ' × ' + qty + ' · ' + fmt(tot);
-    $('#cfDoneCode').innerHTML = codes.join('<br>');
+  /* ===== หน้าผลการสั่งซื้อ =====
+     ไอคอนโหลดโผล่แบบเบลอ → หมุน → เป็น ✓ (สำเร็จ) หรือ ✕ (เงินไม่พอ) แล้วการ์ดโผล่ตามแบบเบลอ→คม
+     ฟังก์ชัน: คัดลอกทีละโค้ด / คัดลอกทั้งหมด / ซ่อน-แสดงโค้ด / บันทึกเป็นไฟล์ .txt / ซื้ออีก / เลขที่ออเดอร์+เวลา */
+  const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ICON = {
+    copy: '<svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
+    eye:  '<svg class="i" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
+    eyeOff:'<svg class="i" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.7A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+    dl:   '<svg class="i" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 20h14"/></svg>',
+    wallet:'<svg class="i" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/><circle cx="16.5" cy="14.5" r="1"/></svg>'
+  };
+  let busy = false, order = null;
+  const res = $('#cfRes'), rsH = $('#rsH'), rsP = $('#rsP'), rsBody = $('#rsBody');
+
+  function setHead(h, p){
+    rsH.textContent = h; rsP.textContent = p;
+    [rsH, rsP].forEach(el => { el.classList.remove('rs-in'); void el.offsetWidth; el.classList.add('rs-in'); });
+  }
+  function copyText(t){
+    const fb = () => { const a=document.createElement('textarea'); a.value=t; a.style.cssText='position:fixed;opacity:0'; document.body.appendChild(a); a.select(); try{ document.execCommand('copy'); }catch(e){} a.remove(); };
+    return (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t) : Promise.reject()).catch(fb);
+  }
+  const pad = n => String(n).padStart(2,'0');
+  const stamp = d => pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+  const rnd = () => Math.random().toString(36).slice(2,6).toUpperCase();
+
+  function showLoading(){
+    window.scrollTo(0,0);
+    rsBody.innerHTML = '';
+    res.dataset.s = 'load';
+    const ic = $('#rsIc'); ic.style.animation = 'none'; void ic.offsetWidth; ic.style.animation = '';   // เล่นแอนิเมชันโผล่ใหม่ทุกครั้ง
+    setHead('ກຳລັງດຳເນີນການ...', 'ກະລຸນາລໍຖ້າ ຢ່າປິດໜ້ານີ້');
     root.classList.add('done');
   }
+  /* หมุนอย่างน้อย 2 รอบให้จบรอบพอดีแล้วค่อยเปลี่ยนเป็น ✓/✕ (ไม่กระตุก) */
+  function spinThen(cb){
+    const arc = $('#cfRes .rs-arc'); let fired = false;
+    const fire = () => { if(fired) return; fired = true; arc.removeEventListener('animationiteration', onIt); cb(); };
+    let n = 0; const onIt = () => { if(++n >= 2) fire(); };
+    if(REDUCE){ setTimeout(fire, 700); return; }
+    arc.addEventListener('animationiteration', onIt);
+    setTimeout(fire, 3500);
+  }
+
+  function doPurchase(){
+    if(busy || needLogin()) return;
+    const o = opts[sel]; if(!o.s) return;
+    const sub = o.p*qty, d = disc(sub, applied), tot = sub - d;
+    busy = true; showLoading();
+    spinThen(() => DEMO.balance >= tot ? success(o, d, tot) : fail(tot));
+  }
+
+  function success(o, d, tot){
+    DEMO.balance -= tot; o.s -= qty;           // จำลองการตัดเงินและสต็อก (ของจริงให้ทำฝั่งเซิร์ฟเวอร์)
+    const codes = Array.from({length:qty}, () => 'EX-'+rnd()+'-'+rnd());
+    order = { no:'EX'+Date.now().toString().slice(-8), at:new Date(), name:cur.n, opt:o.l, qty:qty, codes:codes };
+    res.dataset.s = 'ok';
+    setHead('ສັ່ງຊື້ສຳເລັດ!', 'ໂຄ້ດສິນຄ້າຂອງທ່ານພ້ອມແລ້ວ');
+    const row = (l, v, c) => `<div class="rs-r${c?' '+c:''}"><span>${l}</span><b>${v}</b></div>`;
+    let i = 0;
+    const sum = `<div class="rs-card" style="--i:${i++}">
+      ${row('ເລກທີ່ຄຳສັ່ງຊື້', order.no)}${row('ວັນທີ / ເວລາ', stamp(order.at))}
+      ${row('ສິນຄ້າ', order.name+' · '+order.opt+' × '+qty)}
+      ${d>0 ? row('ສ່ວນຫຼຸດ', '-'+fmt(d), 'ok') : ''}
+      ${row('ຈ່າຍແລ້ວ', fmt(tot))}${row('ເງິນຄົງເຫຼືອ', fmt(DEMO.balance))}
+    </div>`;
+    const cards = codes.map((c,k) => `<div class="rs-card" style="--i:${i++}">
+      <div class="rs-ch"><span class="rs-th">${window.artSq ? artSq(cur.art) : ''}</span>
+        <div class="rs-ct"><b>${cur.n}</b><span>${o.l}</span></div><span class="rs-no">${k+1}/${codes.length}</span></div>
+      <div class="rs-cd"><code class="rs-code">${c}</code>
+        <button class="rs-ib" data-eye type="button" aria-label="ເຊື່ອງ / ສະແດງໂຄ້ດ">${ICON.eye}</button>
+        <button class="rs-ib" data-copy="${c}" type="button" aria-label="ຄັດລອກໂຄ້ດ">${ICON.copy}</button></div>
+    </div>`).join('');
+    rsBody.innerHTML = sum + cards + `<div class="rs-act" style="--i:${i++}">
+      <div class="rs-row2"><button class="rs-sec" data-all type="button">${ICON.copy}ຄັດລອກທັງໝົດ</button><button class="rs-sec" data-dl type="button">${ICON.dl}ບັນທຶກເປັນໄຟລ໌</button></div>
+      <button class="cf-ok" data-home type="button">ກັບໄປໜ້າຮ້ານ</button>
+      <button class="rs-link" data-again type="button">ຊື້ອີກ</button></div>
+      <p class="rs-note" style="--i:${i++}">ກະລຸນາບັນທຶກໂຄ້ດໄວ້ · ບໍ່ສາມາດຄືນເງິນໄດ້ຫຼັງຈາກໄດ້ຮັບໂຄ້ດແລ້ວ<br>ຖ້າໃຊ້ງານບໍ່ໄດ້ ຕິດຕໍ່ແອດມິນໄດ້ທຸກເວລາ</p>`;
+    busy = false;
+  }
+
+  function fail(tot){
+    res.dataset.s = 'no';
+    setHead('ຊື້ບໍ່ສຳເລັດ', 'ຍອດເງິນຂອງທ່ານບໍ່ພໍ');
+    const row = (l, v, c) => `<div class="rs-r${c?' '+c:''}"><span>${l}</span><b>${v}</b></div>`;
+    rsBody.innerHTML = `<div class="rs-card" style="--i:0">
+      ${row('ຍອດທີ່ຕ້ອງຈ່າຍ', fmt(tot))}${row('ຍອດເງິນຂອງທ່ານ', fmt(DEMO.balance))}${row('ຍັງຂາດອີກ', fmt(tot-DEMO.balance), 'neg')}
+    </div>
+    <div class="rs-act" style="--i:1">
+      <button class="cf-ok" data-topup type="button">${ICON.wallet}ເຕີມເງິນ</button>
+      <button class="rs-sec" data-back type="button">ກັບໄປແກ້ໄຂຄຳສັ່ງຊື້</button>
+      <button class="rs-link" data-home type="button">ກັບໄປໜ້າຮ້ານ</button></div>`;
+    busy = false;
+  }
+
+  function orderText(){
+    return ['EXSHOP', '------------------------', 'ເລກທີ່ຄຳສັ່ງຊື້: '+order.no, 'ວັນທີ: '+stamp(order.at),
+      'ສິນຄ້າ: '+order.name+' · '+order.opt+' × '+order.qty, '', ...order.codes].join('\n');
+  }
+  rsBody.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.dataset.copy){
+      copyText(b.dataset.copy).then(()=>{ b.classList.add('ok'); b.innerHTML = OKI; toast('ຄັດລອກໂຄ້ດແລ້ວ');
+        setTimeout(()=>{ b.classList.remove('ok'); b.innerHTML = ICON.copy; }, 1600); });
+    } else if(b.hasAttribute('data-eye')){
+      const cd = b.closest('.rs-cd'), h = cd.classList.toggle('hid'); b.innerHTML = h ? ICON.eyeOff : ICON.eye;
+    } else if(b.hasAttribute('data-all')){
+      copyText(order.codes.join('\n')).then(()=>toast('ຄັດລອກໂຄ້ດທັງໝົດແລ້ວ'));
+    } else if(b.hasAttribute('data-dl')){
+      const a = document.createElement('a'), u = URL.createObjectURL(new Blob([orderText()], {type:'text/plain;charset=utf-8'}));
+      a.href = u; a.download = order.no + '.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u), 1500);
+    } else if(b.hasAttribute('data-again') || b.hasAttribute('data-back')){
+      window.scrollTo(0,0); open(cur);
+    } else if(b.hasAttribute('data-topup')){ location.href = 'topup.html';
+    } else if(b.hasAttribute('data-home')){ home(); }
+  });
 
   $('#cfOpts').addEventListener('click', e=>{ const b=e.target.closest('[data-i]'); if(!b||b.disabled) return; sel=+b.dataset.i; qty=1; render(); });
   $('#cfCp').onclick = ()=>{ const o=$('#cfPw').classList.toggle('open'); $('#cfCp').classList.toggle('open',o); if(o) setTimeout(()=>$('#cfCode').focus(),350); };
@@ -185,7 +299,6 @@ const PRODUCTS = {unban:"EXSHOP",devil:"EXSHOP",card:"EXSHOP",setting:"EXSHOP",x
   $('#cfApply').onclick = ()=>{ applied = promoOf() || null; render(); };
   $('#cfTop').onclick = ()=>{ if(needLogin()) return; DEMO.balance += 100; render(); toast('ເຕີມເງິນທົດລອງ +₭100'); };
   $('#cfOk').onclick = doPurchase;
-  $('#cfClose').onclick = home;
 
   // อ่านสินค้าจาก URL: confirm.html?p=<art>  (ส่งมาจากปุ่ม "ຊື້ເລີຍ" ใน script.js)
   const key = new URLSearchParams(location.search).get('p');
