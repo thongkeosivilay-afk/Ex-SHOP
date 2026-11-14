@@ -57,11 +57,11 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); })
 
 /* stats */
 $('#stats').innerHTML = [
-  ['user','ຜູ້ໃຊ້ງານ','0','ຄົນ'],
-  ['box','ສິນຄ້າ','0','ລາຍການ'],
-  ['trend','ຄຳສັ່ງຊື້','0','ລາຍການ'],
-  ['box','ຂາຍແລ້ວ','0','ຊິ້ນ']
-].map(([i,l,n,u]) => `<div class="stat"><svg class="i wm" style="stroke-width:1.2"><use href="#${i}"/></svg><div class="ic">${ic(i)}</div><div class="tx"><span class="lb">${l}</span><span class="nm">${n}<small>${u}</small></span></div></div>`).join('');
+  ['s-users','ຜູ້ໃຊ້ງານ','0','ຄົນ'],
+  ['s-bag','ສິນຄ້າ','0','ລາຍການ'],
+  ['s-boxes','ຄຳສັ່ງຊື້','0','ລາຍການ'],
+  ['s-check','ຂາຍແລ້ວ','0','ຊິ້ນ']
+].map(([i,l,n,u]) => `<div class="stat"><svg class="i wm" aria-hidden="true"><use href="#${i}"/></svg><div class="ic">${ic(i)}</div><div class="tx"><span class="lb">${l}</span><span class="nm">${n}<small>${u}</small></span></div></div>`).join('');
 
 /* art helpers (placeholder artwork — replace with real images via CONFIG / <img>) */
 const arts = {
@@ -113,9 +113,7 @@ $('#catList').innerHTML = cats.map(c => `
   </button>`).join('');
 $('#catList').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if(!b) return;
-  const c = cats.find(x => x.k === b.dataset.cat);
-  $('#catName').textContent = c.n; renderProducts(c.k);
-  $('#products').scrollIntoView({behavior:'smooth'});
+  location.href = 'categories.html?cat=' + encodeURIComponent(b.dataset.cat);   // กดการ์ดหมวด → ไปหน้าหมวดหมู่ (เลือกหมวดนั้นให้)
 });
 $('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'FIVEM'; renderProducts('fivem'); });
 

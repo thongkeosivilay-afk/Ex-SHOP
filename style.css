@@ -72,15 +72,15 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .an-r{flex:1;text-align:center;font-size:13.5px;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* stats */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:25px 12px;margin:25px 15px 0}
-.stat{position:relative;height:66px;border-radius:12px;border:1px solid rgba(255,0,0,.3);overflow:hidden;display:flex;align-items:center;gap:12px;padding:0 12px;background:#000}
-.stat .ic{width:40px;height:40px;border-radius:10px;background:#f9dcdc;color:var(--red);display:flex;align-items:center;justify-content:center;flex:none}
-.stat .ic svg{width:21px;height:21px}
-.stat .tx{position:relative;line-height:1}
-.stat .lb{display:block;font-size:13px;color:rgba(255,255,255,.75);height:13px;margin-bottom:2px}
-.stat .nm{font-size:23px;font-weight:400;color:var(--red);letter-spacing:.3px}
-.stat .nm small{font-size:13px;color:rgba(255,255,255,.55);margin-left:6px}
-.stat .wm{position:absolute;right:-8px;top:-12px;width:70px;height:70px;color:rgba(200,40,30,.28)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:13px 14px;margin:25px 17px 0}
+.stat{position:relative;height:68px;border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;display:flex;align-items:center;gap:13px;padding:0 10px 0 17px;background:linear-gradient(135deg,#111113 0%,#0a0a0b 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.stat .ic{position:relative;z-index:1;width:35px;height:35px;border-radius:10px;background:linear-gradient(145deg,#3d0909,#1c0404);border:1px solid rgba(255,40,40,.3);color:#ff1d1d;display:flex;align-items:center;justify-content:center;flex:none}
+.stat .ic svg{width:18px;height:18px}
+.stat .tx{position:relative;z-index:1;min-width:0;line-height:1}
+.stat .lb{display:block;font-size:12px;line-height:1.2;color:#8e8e96;margin-bottom:5px;white-space:nowrap}
+.stat .nm{display:flex;align-items:baseline;font-size:22px;font-weight:600;line-height:1;color:#fff;letter-spacing:.2px;white-space:nowrap}
+.stat .nm small{font-size:12px;font-weight:400;color:#6c6c74;margin-left:7px;letter-spacing:0}
+.stat .wm{position:absolute;right:-6px;bottom:-10px;width:62px;height:62px;color:rgba(255,0,0,.2);pointer-events:none}
 
 /* section titles */
 .sec{margin:34px 23px 0}
