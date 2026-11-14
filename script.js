@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html'
+    login:'', register:'', topup:'topup.html', orders:'', hwid:'', chat:'', profile:'profile.html', manage:''
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.art); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -285,6 +285,7 @@ $('#featSec').hidden = !SHOW.featured;
   um.className = 'um'; um.id = 'um'; um.setAttribute('role','menu'); um.setAttribute('aria-label','ບັນຊີ'); um.hidden = true;
   um.innerHTML = `<div class="um-h"><span class="um-av">${ic('user')}</span><span class="um-t"><b id="umName"></b><small>ສະມາຊິກ</small></span></div>
     <a class="um-i" role="menuitem" href="profile.html">${ic('user')}ໂປຣໄຟລ໌</a>
+    <button class="um-i" role="menuitem" type="button" id="umManage">${ic('panel')}ຈັດການແຜງຮ້ານ</button>
     <button class="um-i um-out" role="menuitem" type="button" id="umOut">${ic('logout')}ອອກຈາກລະບົບ</button>`;
   document.body.appendChild(um);
   let open = false;
@@ -309,6 +310,11 @@ $('#featSec').hidden = !SHOW.featured;
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && open){ set(false); btn.focus({preventScroll:true}); } });
   window.addEventListener('scroll', () => { if(open) set(false); }, {passive:true});
   window.addEventListener('resize', () => { if(open) place(); });
+  $('#umManage').addEventListener('click', () => {
+    set(false);
+    if(CONFIG.routes.manage) location.href = CONFIG.routes.manage;   // ใส่ลิงก์หน้าจัดการแผงร้านที่ CONFIG.routes.manage
+    else snack('ກຳລັງພັດທະນາ');
+  });
   $('#umOut').addEventListener('click', () => {
     set(false);
     if(!confirm('ຕ້ອງການອອກຈາກລະບົບບໍ?')) return;
