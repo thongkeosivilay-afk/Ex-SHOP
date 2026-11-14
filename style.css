@@ -21,10 +21,11 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 
 /* announcement marquee */
 .marquee{top:0;height:calc(env(safe-area-inset-top,0px) + 36px);padding-top:env(safe-area-inset-top,0px);background:var(--bg);overflow:hidden;display:flex;align-items:center}
-.mq-track{display:flex;white-space:nowrap;animation:mq 34s linear infinite;will-change:transform}
-.mq-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;margin-right:36px}
+.mq-track{display:flex;flex:none;width:max-content;white-space:nowrap;animation:mq var(--mq-t,30s) linear infinite;will-change:transform;backface-visibility:hidden}
+.mq-group{display:flex;flex:none}
+.mq-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;margin-right:36px;flex:none}
 .mq-item svg{color:var(--red);width:20px;height:20px}
-@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes mq{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--mq-dn,-50%),0,0)}}
 
 /* header */
 .header{top:calc(env(safe-area-inset-top,0px) + 36px);height:52px;background:var(--bg);display:flex;align-items:center;gap:5px;padding:0 20px 0 12px;border-bottom:1px solid var(--border)}
@@ -37,6 +38,11 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .hb-theme svg{width:16px;height:16px}
 .hb-login{padding:0 9px;border:1px solid var(--border);background:var(--card)}
 .hb-login svg,.hb-reg svg{width:16px;height:16px}
+.hb-user{display:none;width:36px;height:36px;padding:0;border-radius:50%;background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(255,0,0,.3)}
+.hb-user svg{width:18px;height:18px}
+html.is-in .hb-user{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) backwards}
+html.is-in .hb-reg,html.is-in .dr-f{display:none}
+@keyframes userPop{from{opacity:0;scale:.6}}
 .hb-reg{padding:0 9px;background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(255,0,0,.3)}
 .burger{width:24px;height:24px;display:flex;flex-direction:column;justify-content:center;gap:5px;margin-left:8px}
 .burger i{display:block;height:2.5px;background:var(--text);border-radius:2px}
@@ -56,7 +62,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .btn-glass{background:var(--glass);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 
 /* banner */
-.banner{position:relative;margin:40px 15px 0;height:164px;border-radius:12px;overflow:hidden;border:1.5px solid #b3231b;background:radial-gradient(120% 140% at 50% 40%,#7d1016 0%,#3d070b 55%,#1a0306 100%);color:#fff;text-align:center;font-family:'Outfit',sans-serif;box-shadow:0 4px 14px rgba(120,10,15,.35)}
+.banner{position:relative;margin:40px 15px 0;height:auto;aspect-ratio:2146/733;border-radius:12px;overflow:hidden;border:1.5px solid #b3231b;background:radial-gradient(120% 140% at 50% 40%,#7d1016 0%,#3d070b 55%,#1a0306 100%);color:#fff;text-align:center;font-family:'Outfit',sans-serif;box-shadow:0 4px 14px rgba(120,10,15,.35)}
 .banner::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 14px)}
 .bn-owner{position:relative;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;letter-spacing:.3px;padding:0 16px}
 .bn-wel{position:relative;margin-top:36px;font-size:17px;font-weight:400;letter-spacing:.2px;line-height:1}
@@ -326,3 +332,7 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 .pc.is-out .pupd{border-color:#e02b2b;color:#e02b2b;box-shadow:inset 0 0 0 .5cqw rgba(224,43,43,.3),0 .8cqw 3.4cqw rgba(0,0,0,.55)}
 .pc.is-out .pupd-a{font-size:max(15px,10.6cqw)}
 .pc.is-out .pupd-b{background:#e02b2b;color:#fff}
+
+/* แบนเนอร์ใช้กรอบรูปแบบเดียวกับการ์ดหมวดหมู่ (อัตราส่วนเท่ากัน) */
+.banner::before{display:none}
+.banner .cb.cb-img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0}

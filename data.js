@@ -3,13 +3,18 @@
    เพิ่ม/แก้สินค้าและหมวดหมู่ที่ไฟล์นี้ที่เดียว ============================== */
 /* รูปสินค้า/หมวดหมู่: ใส่ path รูปที่ IMG (ใช้ทุกการ์ด) หรือใส่ img:'...' ในแต่ละสินค้า/หมวด
    ถ้าเว้นว่างไว้ จะโชว์ข้อความแนะนำขนาดรูปแทน
-   - สินค้า: 1000 × 960 px   - หมวดหมู่: 1500 × 512 px */
-const IMG = { product:'', category:'' };
+   - สินค้า: 1000 × 960 px   - หมวดหมู่: 1500 × 512 px   - แบนเนอร์หน้าแรก: 1500 × 512 px */
+const IMG = { product:'', category:'', banner:'' };
 function artSq(key, src, mini){
   src = src || IMG.product;
   if(src) return `<img class="pimg-img" src="${src}" alt="" loading="lazy" draggable="false">`;
   if(mini) return `<div class="fph">1000×960</div>`;
   return `<div class="pph"><span class="pph-a">ຂະໜາດຮູບທີ່ແນະນຳ</span><span class="pph-n">1000 × 960<small>px</small></span><span class="pph-b">ສຳລັບຮູບສິນຄ້າ</span><span class="pph-c">ຮູບສີ່ຫຼ່ຽມ · PNG ຫຼື JPG</span></div>`;
+}
+function artBanner(src){
+  src = src || IMG.banner;
+  if(src) return `<img src="${src}" alt="" draggable="false">`;
+  return `<div class="cph"><span class="cph-a">ຂະໜາດຮູບທີ່ແນະນຳ</span><span class="cph-n">1500 × 512<small>px</small></span><span class="cph-b">ສຳລັບຮູບແບນເນີ · ຮູບແນວນອນ · PNG ຫຼື JPG</span></div>`;
 }
 function artCat(src){
   src = src || IMG.category;

@@ -43,7 +43,7 @@
 .hb-theme{background:transparent;border-color:transparent;border-radius:50%}
 .hb-login{background:transparent;border:1px solid var(--gl-bd)}
 .hb-chat{background:rgba(255,0,0,.14);border-color:rgba(255,0,0,.4)}
-.hb-reg,.btn-red{background:var(--gl-red);box-shadow:var(--gl-red-spec),0 6px 16px rgba(255,0,0,.35)}
+.hb-reg,.hb-user,.btn-red{background:var(--gl-red);box-shadow:var(--gl-red-spec),0 6px 16px rgba(255,0,0,.35)}
 .btn-glass{border-radius:14px}
 .btn{transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
 

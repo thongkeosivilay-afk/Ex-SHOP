@@ -208,6 +208,7 @@ const AUTH = {
       } else if (r.ok) {
         say('success', kind === 'login' ? 'ເຂົ້າສູ່ລະບົບສຳເລັດ' : 'ສະໝັກສະມາຊິກສຳເລັດ');
         done = true;
+        if (window.setUser) setUser({ name: data.username });
         setTimeout(() => { AUTH.redirect ? (location.href = AUTH.redirect) : location.reload(); }, 900);
       } else {
         say('error', r.message || (kind === 'login' ? 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ' : 'ສະໝັກບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່'));
