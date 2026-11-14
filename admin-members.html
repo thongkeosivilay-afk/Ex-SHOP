@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="lo">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>จัดการผู้ใช้</title>
+<title>ຈັດການຜູ້ໃຊ້</title>
 <script src="guard.js"></script>
 <link rel="stylesheet" href="admin-nav.css">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ff0000;--redbtn:#e8321f;--bg:#000;--card:#050505;--line:#1f1f23;--txt:#fff;--mut:#8b8b95;--ok:#5ecb7a;--f:'Outfit','Noto Sans Thai','Noto Sans Lao Looped',system-ui,sans-serif}
+:root{--red:#ff0000;--redbtn:#e8321f;--bg:#000;--card:#050505;--line:#1f1f23;--txt:#fff;--mut:#8b8b95;--ok:#5ecb7a;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
 button,input{font:inherit;color:inherit}
@@ -96,48 +96,48 @@ button{cursor:pointer;border:0;background:none}
 <body>
 <script src="admin-nav.js"></script>
 <div class="wrap">
-  <div class="ttl"><i></i><h2>จัดการผู้ใช้</h2></div>
-  <p class="sub">จัดการข้อมูลผู้ใช้งานในระบบ • <span id="today"></span></p>
+  <div class="ttl"><i></i><h2>ຈັດການຜູ້ໃຊ້</h2></div>
+  <p class="sub">ຈັດການຂໍ້ມູນຜູ້ໃຊ້ງານໃນລະບົບ • <span id="today"></span></p>
 
   <label class="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="ค้นหาด้วย ชื่อผู้ใช้ หรือ อีเมล..." autocomplete="off" autocapitalize="off">
+    <input id="q" type="search" placeholder="ຄົ້ນຫາດ້ວຍ ຊື່ຜູ້ໃຊ້ ຫຼື ອີເມວ..." autocomplete="off" autocapitalize="off">
   </label>
 
-  <button class="add" id="addBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>เพิ่มผู้ใช้ใหม่</button>
+  <button class="add" id="addBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>ເພີ່ມຜູ້ໃຊ້ໃໝ່</button>
 
   <div class="stats">
-    <div class="st"><div class="ic c-blue"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg></div><div class="tx"><b id="sAll">–</b><small>ผู้ใช้ทั้งหมด</small></div></div>
-    <div class="st"><div class="ic c-purple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 4.5 5.4v5.7c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4z"/></svg></div><div class="tx"><b id="sAdm">–</b><small>ผู้ดูแลระบบ</small></div></div>
-    <div class="st"><div class="ic c-green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg></div><div class="tx"><b class="money" id="sBal">–</b><small>ยอดเงินรวม</small></div></div>
-    <div class="st"><div class="ic c-cyan"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 20c0-3.9 3.6-6.5 8-6.5s8 2.6 8 6.5z"/></svg></div><div class="tx"><b id="sUsr">–</b><small>ผู้ใช้ทั่วไป</small></div></div>
+    <div class="st"><div class="ic c-blue"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg></div><div class="tx"><b id="sAll">–</b><small>ຜູ້ໃຊ້ທັງໝົດ</small></div></div>
+    <div class="st"><div class="ic c-purple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 4.5 5.4v5.7c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4z"/></svg></div><div class="tx"><b id="sAdm">–</b><small>ຜູ້ດູແລລະບົບ</small></div></div>
+    <div class="st"><div class="ic c-green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg></div><div class="tx"><b class="money" id="sBal">–</b><small>ຍອດເງິນລວມ</small></div></div>
+    <div class="st"><div class="ic c-cyan"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 20c0-3.9 3.6-6.5 8-6.5s8 2.6 8 6.5z"/></svg></div><div class="tx"><b id="sUsr">–</b><small>ຜູ້ໃຊ້ທົ່ວໄປ</small></div></div>
   </div>
 
   <div class="lst">
     <div class="lh">
-      <div class="l"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/></svg>รายชื่อผู้ใช้งาน</div>
-      <div class="n" id="cnt">0 รายการ</div>
+      <div class="l"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/></svg>ລາຍຊື່ຜູ້ໃຊ້ງານ</div>
+      <div class="n" id="cnt">0 ລາຍການ</div>
     </div>
-    <div class="th"><span>ผู้ใช้</span><span>บทบาท</span></div>
-    <div id="rows"><div class="empty">กำลังโหลด...</div></div>
+    <div class="th"><span>ຜູ້ໃຊ້</span><span>ບົດບາດ</span></div>
+    <div id="rows"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
   </div>
 </div>
 
 <!-- เพิ่มผู้ใช้ใหม่ -->
 <div class="ov" id="ovAdd">
   <form class="sheet" id="fAdd" autocomplete="off">
-    <h3>เพิ่มผู้ใช้ใหม่ <button type="button" data-close>✕</button></h3>
-    <div class="fld"><label for="fu">ชื่อผู้ใช้</label><input id="fu" maxlength="20" autocapitalize="off" spellcheck="false" required><small>ตัวอักษร a-z, ตัวเลข หรือ _ ความยาว 3–20 ตัว</small></div>
-    <div class="fld"><label for="fe">อีเมล (ไม่บังคับ)</label><input id="fe" type="email" inputmode="email" autocapitalize="off" maxlength="254"></div>
-    <div class="fld"><label for="fp">รหัสผ่าน</label><input id="fp" type="text" minlength="6" maxlength="72" autocapitalize="off" spellcheck="false" required><small>อย่างน้อย 6 ตัวอักษร — ผู้ใช้ที่เพิ่มจะเป็นผู้ใช้ทั่วไป</small></div>
-    <button class="go" id="fgo" type="submit">สร้างผู้ใช้</button>
+    <h3>ເພີ່ມຜູ້ໃຊ້ໃໝ່ <button type="button" data-close>✕</button></h3>
+    <div class="fld"><label for="fu">ຊື່ຜູ້ໃຊ້</label><input id="fu" maxlength="20" autocapitalize="off" spellcheck="false" required><small>ຕົວອັກສອນ a-z, ຕົວເລກ ຫຼື _ ຍາວ 3–20 ຕົວ</small></div>
+    <div class="fld"><label for="fe">ອີເມວ (ບໍ່ບັງຄັບ)</label><input id="fe" type="email" inputmode="email" autocapitalize="off" maxlength="254"></div>
+    <div class="fld"><label for="fp">ລະຫັດຜ່ານ</label><input id="fp" type="text" minlength="6" maxlength="72" autocapitalize="off" spellcheck="false" required><small>ຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ — ຜູ້ໃຊ້ທີ່ເພີ່ມຈະເປັນຜູ້ໃຊ້ທົ່ວໄປ</small></div>
+    <button class="go" id="fgo" type="submit">ສ້າງຜູ້ໃຊ້</button>
   </form>
 </div>
 
 <!-- รายละเอียดผู้ใช้ -->
 <div class="ov" id="ovDet">
   <div class="sheet">
-    <h3><span id="dName">ผู้ใช้</span> <button type="button" data-close>✕</button></h3>
+    <h3><span id="dName">ຜູ້ໃຊ້</span> <button type="button" data-close>✕</button></h3>
     <div class="det" id="dBody"></div>
   </div>
 </div>
@@ -161,15 +161,15 @@ button{cursor:pointer;border:0;background:none}
     if(!tok()){ try{ sessionStorage.setItem('exNext','admin-members.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
     exRpc('member_is_admin', { p_token: tok() }).then(function(j){
       if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
-    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</div>'; });
+    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div>'; });
   }
 
   function load(){
     return exRpc('adm_member_list', { p_token: tok() }).then(function(j){
-      if(!j || !j.ok){ $('#rows').innerHTML = '<div class="empty">ไม่มีสิทธิ์เข้าถึง</div>'; return; }
+      if(!j || !j.ok){ $('#rows').innerHTML = '<div class="empty">ບໍ່ມີສິດເຂົ້າເຖິງ</div>'; return; }
       all = j.rows || [];
       stats(); render();
-    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">โหลดข้อมูลไม่ได้ กรุณาลองใหม่</div>'; });
+    }).catch(function(){ $('#rows').innerHTML = '<div class="empty">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
   }
 
   function stats(){
@@ -186,14 +186,14 @@ button{cursor:pointer;border:0;background:none}
     var rows = all.filter(function(r){
       return !q || String(r.username).toLowerCase().indexOf(q) > -1 || String(r.email || '').toLowerCase().indexOf(q) > -1;
     });
-    $('#cnt').textContent = nf.format(rows.length) + ' รายการ';
-    if(!rows.length){ $('#rows').innerHTML = '<div class="empty">' + (q ? 'ไม่พบผู้ใช้ที่ค้นหา' : 'ยังไม่มีผู้ใช้') + '</div>'; return; }
+    $('#cnt').textContent = nf.format(rows.length) + ' ລາຍການ';
+    if(!rows.length){ $('#rows').innerHTML = '<div class="empty">' + (q ? 'ບໍ່ພົບຜູ້ໃຊ້ທີ່ຄົ້ນຫາ' : 'ຍັງບໍ່ມີຜູ້ໃຊ້') + '</div>'; return; }
     $('#rows').innerHTML = rows.map(function(r){
       var a = !!r.is_admin;
       return '<div class="tr' + (a ? ' adm' : '') + '" data-id="' + esc(r.id) + '">'
         + '<div class="u"><div class="av">' + esc(String(r.username).charAt(0)) + '</div>'
         + '<div class="t"><b>' + esc(r.username) + '</b><small>' + (r.email ? esc(r.email) : '-') + '</small></div></div>'
-        + '<div class="rl"><span>' + (a ? ICON_A + 'ผู้ดูแลระบบ' : ICON_U + 'ผู้ใช้ทั่วไป') + '</span><em>' + fmt(r.balance) + '</em></div></div>';
+        + '<div class="rl"><span>' + (a ? ICON_A + 'ຜູ້ດູແລລະບົບ' : ICON_U + 'ຜູ້ໃຊ້ທົ່ວໄປ') + '</span><em>' + fmt(r.balance) + '</em></div></div>';
     }).join('');
   }
 
@@ -205,10 +205,10 @@ button{cursor:pointer;border:0;background:none}
     var r = all.filter(function(x){ return String(x.id) === row.dataset.id; })[0]; if(!r) return;
     $('#dName').textContent = r.username;
     $('#dBody').innerHTML =
-      '<div><span>อีเมล</span><b>' + (r.email ? esc(r.email) : '-') + '</b></div>' +
-      '<div><span>บทบาท</span><b>' + (r.is_admin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป') + '</b></div>' +
-      '<div><span>ยอดเงินคงเหลือ</span><b style="color:var(--ok)">' + fmt(r.balance) + '</b></div>' +
-      '<div><span>สมัครเมื่อ</span><b>' + esc(new Date(r.created_at).toLocaleString('en-GB', { hour12:false })) + '</b></div>';
+      '<div><span>ອີເມວ</span><b>' + (r.email ? esc(r.email) : '-') + '</b></div>' +
+      '<div><span>ບົດບາດ</span><b>' + (r.is_admin ? 'ຜູ້ດູແລລະບົບ' : 'ຜູ້ໃຊ້ທົ່ວໄປ') + '</b></div>' +
+      '<div><span>ຍອດເງິນຄົງເຫຼືອ</span><b style="color:var(--ok)">' + fmt(r.balance) + '</b></div>' +
+      '<div><span>ສະໝັກເມື່ອ</span><b>' + esc(new Date(r.created_at).toLocaleString('en-GB', { hour12:false })) + '</b></div>';
     $('#ovDet').classList.add('show');
   });
 
@@ -222,11 +222,11 @@ button{cursor:pointer;border:0;background:none}
 
   /* เพิ่มผู้ใช้ใหม่ */
   var MSG = {
-    bad_username: 'ชื่อผู้ใช้ต้องเป็น a-z, 0-9 หรือ _ ยาว 3–20 ตัว',
-    bad_password: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
-    bad_email: 'รูปแบบอีเมลไม่ถูกต้อง',
-    taken: 'ชื่อผู้ใช้นี้มีคนใช้แล้ว',
-    not_admin: 'ไม่มีสิทธิ์ดำเนินการ'
+    bad_username: 'ຊື່ຜູ້ໃຊ້ຕ້ອງເປັນ a-z, 0-9 ຫຼື _ ຍາວ 3–20 ຕົວ',
+    bad_password: 'ລະຫັດຜ່ານຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ',
+    bad_email: 'ຮູບແບບອີເມວບໍ່ຖືກຕ້ອງ',
+    taken: 'ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ',
+    not_admin: 'ບໍ່ມີສິດດຳເນີນການ'
   };
   $('#fAdd').addEventListener('submit', function(e){
     e.preventDefault();
@@ -235,9 +235,9 @@ button{cursor:pointer;border:0;background:none}
     exRpc('adm_member_create', { p_token: tok(), p_username: $('#fu').value.trim(), p_email: $('#fe').value.trim(), p_password: $('#fp').value })
       .then(function(j){
         btn.disabled = false;
-        if(j && j.ok){ closeAll(); toast('เพิ่มผู้ใช้ ' + j.username + ' แล้ว'); load(); }
-        else toast(MSG[j && j.code] || 'เพิ่มผู้ใช้ไม่สำเร็จ');
-      }).catch(function(){ btn.disabled = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+        if(j && j.ok){ closeAll(); toast('ເພີ່ມຜູ້ໃຊ້ ' + j.username + ' ແລ້ວ'); load(); }
+        else toast(MSG[j && j.code] || 'ເພີ່ມຜູ້ໃຊ້ບໍ່ສຳເລັດ');
+      }).catch(function(){ btn.disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
   });
 
   document.addEventListener('visibilitychange', function(){ if(!document.hidden && !document.querySelector('.ov.show')) load(); });
