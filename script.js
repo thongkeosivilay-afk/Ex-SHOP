@@ -242,11 +242,12 @@ const featUI = (function(){
 
 function renderCatList(){
   $('#catList').innerHTML = cats.map(c => `
-  <button class="cat" data-cat="${c.k}">
+  <button class="cat" data-cat="${escH(c.k)}">
     <div class="cb cb-img">${artCat(c.img)}</div>
-    <div class="cat-b"><div><h3>${c.n}</h3><p>${c.d}</p></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
+    <div class="cat-b"><div><h3>${escH(c.n)}</h3></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
   </button>`).join('');
   if(typeof addCatTabs === 'function') addCatTabs($('#catList'));
+  $('#cats').hidden = !SHOW.categories || !cats.length;   // ยังไม่มีหมวดในฐานข้อมูล = ซ่อนส่วนนี้
 }
 renderCatList();
 $('#catList').addEventListener('click', e => {
@@ -258,10 +259,11 @@ $('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSH
 /* ข้อมูลสินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ทุกส่วน */
 function onProducts(){ renderProducts(); featUI.build(); renderCatList(); renderStats(); }
 document.addEventListener('products:ready', onProducts);
+document.addEventListener('cats:ready', () => { renderCatList(); });
 if(window.productsLoaded) onProducts();
 
 /* apply show/hide flags */
-$('#cats').hidden = !SHOW.categories;
+$('#cats').hidden = !SHOW.categories || !cats.length;
 $('#products').hidden = !SHOW.products;
 $('#featSec').hidden = !SHOW.featured || !feat.length;
 

@@ -99,13 +99,35 @@ function loadProducts(){
     .finally(() => clearTimeout(to));
 }
 
-/* categories */
-const cats = [
-  {k:'fivem', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem', c:0},
-  {k:'cheat', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ', c:0},
-  {k:'random', t1:'EXSHOP', n:'EXSHOP', d:'ສຸ່ມໄອດີເກມ', c:0},
-  {k:'freefire', t1:'EXSHOP', n:'EXSHOP', d:'ໂປຣແກຣມຊ່ວຍຫຼິ້ນ Free Fire', c:0}
-];
+/* categories — ดึงจากฐานข้อมูล Supabase (ฟังก์ชัน shop_categories) ไม่มีหมวดตายตัวในไฟล์แล้ว
+   เพิ่ม/แก้/ลบหมวดที่หน้าแอดมิน (admin.html → ຈັດການໝວດໝູ່) — โหลดเสร็จแล้วยิงอีเวนต์ 'cats:ready' ให้ทุกหน้าวาดใหม่ */
+const cats = [];
+window.catsLoaded = false;
+const CCACHE = 'exCatsCache';
+function setCats(rows){
+  cats.length = 0;
+  (Array.isArray(rows) ? rows : []).forEach(r => cats.push({ id: r.id, k: String(r.k || ''), n: r.name || '', img: r.img || '', c: 0 }));
+  cats.forEach(c => { c.c = products.filter(p => p.cat === c.k).length; });
+  window.catsLoaded = true;
+  document.dispatchEvent(new Event('cats:ready'));
+}
+function loadCategories(){
+  if(window.EX_NO_FETCH) return Promise.resolve();
+  if(!window.EX_NO_CACHE){ try { const c = JSON.parse(localStorage.getItem(CCACHE) || 'null'); if(Array.isArray(c)) setCats(c); } catch(e){} }
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+  return fetch(EX_DB.url + '/rest/v1/rpc/shop_categories', {
+    method: 'POST', signal: ctl.signal,
+    headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
+    body: '{}'
+  }).then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
+    .then(rows => {
+      if(!Array.isArray(rows)) throw new Error('bad');
+      try { localStorage.setItem(CCACHE, JSON.stringify(rows)); } catch(e){}
+      setCats(rows);
+    })
+    .catch(() => { if(!window.catsLoaded){ window.catsLoaded = true; document.dispatchEvent(new Event('cats:ready')); } })
+    .finally(() => clearTimeout(to));
+}
 
 /* การ์ดสินค้า 1 ใบ (ใช้ร่วมกันทั้งหน้าแรกและหน้าหมวดหมู่)
    i = ลำดับในรายการที่แสดง (ใส่ใน data-buy), nameHTML = ชื่อสินค้าที่ไฮไลต์คำค้นแล้ว (ไม่ใส่ = ใช้ชื่อปกติ) */
@@ -130,3 +152,4 @@ function productCardHTML(p, i, nameHTML){
 }
 
 loadProducts();
+loadCategories();

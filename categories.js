@@ -23,8 +23,8 @@
   const readyToSell = p => !p.update && !p.soldout && +p.left > 0;
   const tokens = () => norm(state.q).split(/\s+/).filter(Boolean);
 
-  function productHay(p){ const c = catOf(p.cat) || {}; return norm([p.n, c.n, c.d].join(' ')); }
-  function catHay(c){ return norm([c.n, c.d, c.k, c.t1].join(' ')); }
+  function productHay(p){ const c = catOf(p.cat) || {}; return norm([p.n, c.n].join(' ')); }
+  function catHay(c){ return norm([c.n].join(' ')); }
   const matchAll = (hay, toks) => toks.every(t => hay.includes(t));
 
   /* สินค้าที่ผ่านคำค้น + สวิตช์พร้อมขาย (ยังไม่กรองหมวด — ใช้นับจำนวนบนชิป) */
@@ -127,7 +127,7 @@
     $('#catList').innerHTML = list.map(c => `
       <button class="cat${state.cat === c.k ? ' is-on' : ''}" data-cat="${esc(c.k)}" type="button">
         <div class="cb cb-img">${artCat(c.img)}</div>
-        <div class="cat-b"><div><h3>${hl(c.n)}</h3><p>${esc(c.d)}</p></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
+        <div class="cat-b"><div><h3>${hl(c.n)}</h3></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
       </button>`).join('');
     if(typeof addCatTabs === 'function') addCatTabs($('#catList'));
   }
@@ -291,4 +291,11 @@
   render();
   /* สินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ */
   document.addEventListener('products:ready', render);
+  /* หมวดหมู่มาจากฐานข้อมูล: โหลดเสร็จ → อ่านหมวดจากลิงก์ (?cat=...) แล้ววาดใหม่ */
+  document.addEventListener('cats:ready', () => {
+    const c = new URLSearchParams(location.search).get('cat');
+    if(state.cat === 'all' && c && catOf(c)) state.cat = c;
+    else if(state.cat !== 'all' && !catOf(state.cat)) state.cat = 'all';
+    render();
+  });
 })();
