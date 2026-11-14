@@ -6,6 +6,8 @@
 (function () {
   const ORDER = ['th', 'en', 'vi', 'hi', 'pt'];
   const D = {
+"ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ": ["ชื่อผู้ใช้นี้ถูกใช้แล้ว", "This username is already taken", "Tên người dùng này đã được sử dụng", "यह उपयोगकर्ता नाम पहले से लिया जा चुका है", "Este nome de usuário já está em uso"],
+"ລອງຜິດຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າ 10 ນາທີ ແລ້ວລອງໃໝ່": ["ลองผิดหลายครั้งเกินไป กรุณารอ 10 นาทีแล้วลองใหม่", "Too many failed attempts. Please wait 10 minutes and try again", "Thử sai quá nhiều lần. Vui lòng đợi 10 phút rồi thử lại", "बहुत अधिक गलत प्रयास। कृपया 10 मिनट प्रतीक्षा करें और फिर प्रयास करें", "Muitas tentativas incorretas. Aguarde 10 minutos e tente novamente"],
 "ຮ້ານບໍລິການຈຳໜ່າຍໂປຣແກຣມຊ່ວຍຫຼິ້ນ Fivem / ປົດແບນ Fivem ຈຳໜ່າຍໂປຣແກຣມຊ່ວຍຫຼິ້ນ Rov / Valorant / Pugb ແລະ ເກມອື່ນໆ Account Social / App Premium ອື່ນໆ ຕອບໂຈດທຸກການນຳໃຊ້": [
 "ร้านบริการจำหน่ายโปรแกรมช่วยเล่น Fivem / ปลดแบน Fivem จำหน่ายโปรแกรมช่วยเล่น Rov / Valorant / Pugb และเกมอื่นๆ Account Social / App Premium อื่นๆ ตอบโจทย์ทุกการใช้งาน",
 "Store for Fivem game helper software / Fivem unbans, helper software for Rov / Valorant / PUBG and other games, Social accounts / Premium apps and more, made for every need.",

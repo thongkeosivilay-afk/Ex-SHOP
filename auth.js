@@ -6,6 +6,10 @@
    turnstileSiteKey: Site Key ของ Cloudflare Turnstile (เว้นว่าง = ไม่แสดงช่องตรวจสอบ)
    *ต้องตรวจ token ฝั่งเซิร์ฟเวอร์ด้วย Secret Key เสมอ */
 const AUTH = {
+  /* เชื่อม Supabase: ระบบสมาชิกด้วย "ชื่อผู้ใช้" (ไม่บังคับอีเมล) ทำงานผ่านฟังก์ชัน member_* ในฐานข้อมูล
+     supabaseKey = publishable key (ใส่ในเว็บได้ ปลอดภัย) — ห้ามใส่ service_role / secret key ลงไฟล์นี้เด็ดขาด */
+  supabaseUrl: 'https://mjalctpfeizjukuprqti.supabase.co',
+  supabaseKey: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ',
   endpoints: { login: '', register: '' },
   turnstileSiteKey: '',
   googleUrl: '',           // URL เริ่ม Google OAuth ฝั่งเซิร์ฟเวอร์ เช่น '/auth/google' (เว้นว่าง = โหมดทดลอง)
@@ -177,7 +181,36 @@ const AUTH = {
   soon.addEventListener('click', e => { if (e.target.closest('[data-soon-close]')) closeSoon(); });
 
   /* ส่งข้อมูล */
+  const SKEY = 'exSession';
+  const getTok = () => { try { return localStorage.getItem(SKEY) || ''; } catch (e) { return ''; } };
+  const setTok = t => { try { t ? localStorage.setItem(SKEY, t) : localStorage.removeItem(SKEY); } catch (e) {} };
+  const useSb = () => !!(AUTH.supabaseUrl && AUTH.supabaseKey);
+  async function rpc(fn, body) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), AUTH.timeoutMs);
+    try {
+      const res = await fetch(AUTH.supabaseUrl + '/rest/v1/rpc/' + fn, {
+        method: 'POST', signal: ctl.signal,
+        headers: { 'Content-Type': 'application/json', apikey: AUTH.supabaseKey, Authorization: 'Bearer ' + AUTH.supabaseKey },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error('http ' + res.status);
+      return await res.json();
+    } finally { clearTimeout(t); }
+  }
+  const CODE = {
+    bad_credentials: 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ',
+    taken: 'ຊື່ຜູ້ໃຊ້ນີ້ມີຄົນໃຊ້ແລ້ວ',
+    locked: 'ລອງຜິດຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າ 10 ນາທີ ແລ້ວລອງໃໝ່',
+    bad_username: M.newId, bad_password: M.newPw, bad_email: M.mail
+  };
   async function send(kind, data) {
+    if (useSb()) {
+      const j = kind === 'login'
+        ? await rpc('member_login', { p_username: data.username, p_password: data.password })
+        : await rpc('member_register', { p_username: data.username, p_email: data.email || '', p_password: data.password });
+      if (j && j.ok && j.token) { setTok(j.token); return { ok: true, name: j.username }; }
+      return { ok: false, message: CODE[j && j.code] };
+    }
     const url = AUTH.endpoints[kind];
     if (!url) { await new Promise(r => setTimeout(r, 800)); return { demo: true }; }
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), AUTH.timeoutMs);
@@ -208,7 +241,7 @@ const AUTH = {
       } else if (r.ok) {
         say('success', kind === 'login' ? 'ເຂົ້າສູ່ລະບົບສຳເລັດ' : 'ສະໝັກສະມາຊິກສຳເລັດ');
         done = true;
-        if (window.setUser) setUser({ name: data.username });
+        if (window.setUser) setUser({ name: r.name || data.username });
         setTimeout(() => { AUTH.redirect ? (location.href = AUTH.redirect) : location.reload(); }, 900);
       } else {
         say('error', r.message || (kind === 'login' ? 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ' : 'ສະໝັກບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່'));
@@ -219,4 +252,23 @@ const AUTH = {
     if (done) return; /* คงสถานะโหลดไว้ระหว่างเปลี่ยนหน้า */
     busy = false; btn.classList.remove('busy'); btn.removeAttribute('aria-busy'); resetTs(kind);
   }));
+
+  /* ตรวจเซสชันตอนเปิดเว็บ: ถ้า token ยังใช้ได้ = ล็อกอินอยู่, ถ้าหมดอายุ/ไม่มี = ออกจากระบบ */
+  if (useSb()) {
+    const tok = getTok();
+    if (!tok) { if (window.setUser) setUser(null); }
+    else rpc('member_me', { p_token: tok }).then(j => {
+      if (j && j.ok) { if (window.setUser) setUser({ name: j.username }); }
+      else { setTok(''); if (window.setUser) setUser(null); }
+    }).catch(() => { /* ออฟไลน์/เซิร์ฟเวอร์ล่ม: คงสถานะเดิมไว้ก่อน */ });
+
+    /* แตะไอคอนบัญชีตอนล็อกอินอยู่ = ออกจากระบบ */
+    document.addEventListener('click', e => {
+      if (!e.target.closest('[data-route="profile"]') || !getTok()) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (!confirm('ຕ້ອງການອອກຈາກລະບົບບໍ?')) return;
+      const t = getTok(), fin = () => { setTok(''); if (window.setUser) setUser(null); location.reload(); };
+      rpc('member_logout', { p_token: t }).then(fin, fin);
+    }, true);
+  }
 })();
