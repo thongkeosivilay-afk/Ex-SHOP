@@ -161,7 +161,6 @@ renderProducts('fivem');
   const g = $('#grid'), w = $('#gridWrap'); if(!g || !w) return;
   const upd = () => {
     const max = g.scrollWidth - g.clientWidth;
-    w.classList.toggle('can-l', g.scrollLeft > 8);
     w.classList.toggle('can-r', g.scrollLeft < max - 8);
   };
   g.addEventListener('scroll', upd, {passive:true});

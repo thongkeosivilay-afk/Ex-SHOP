@@ -345,14 +345,13 @@ input,select,textarea{ font-size:16px !important; } /* กัน iOS ซูม�
 #products .grid .pc{flex:0 0 calc((100% - 13px) / 2);scroll-snap-align:start}
 #products .grid .empty{flex:1 0 100%;grid-column:auto}
 
-/* เงาดำจาง ๆ เบลอ ๆ ที่ขอบแถวสินค้า — บอกว่ายังเลื่อนต่อได้ (ขวา = ยังมีอีก, ซ้าย = เลื่อนมาแล้ว) หายเองเมื่อสุดทาง */
-.grid-wrap{position:relative;margin:22px -24px 0}
-.grid-wrap::before,.grid-wrap::after{content:"";position:absolute;top:0;bottom:0;width:72px;z-index:2;pointer-events:none;opacity:0;transition:opacity .3s ease;
-  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
-.grid-wrap::after{right:0;background:linear-gradient(to left,rgba(0,0,0,.88) 0%,rgba(0,0,0,.45) 45%,rgba(0,0,0,0) 100%);
+/* เงาดำจาง ๆ เบลอ ๆ ที่ขอบขวาของแถวสินค้า — บอกว่ายังเลื่อนต่อได้ หายเองเมื่อเลื่อนสุดทาง
+   แถวหยุดห่างขอบจอขวา 12px (ปรับที่ --edge) ไม่ชิดขอบ */
+.grid-wrap{--edge:12px;position:relative;margin:22px calc(-1 * var(--edge)) 0 -24px}
+#products .grid{padding-right:var(--edge)}
+.grid-wrap::after{content:"";position:absolute;top:0;bottom:0;right:0;width:80px;z-index:2;pointer-events:none;opacity:0;transition:opacity .3s ease;
+  background:linear-gradient(to left,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 50%,rgba(0,0,0,0) 100%);
+  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
   -webkit-mask-image:linear-gradient(to left,#000 35%,transparent);mask-image:linear-gradient(to left,#000 35%,transparent)}
-.grid-wrap::before{left:0;background:linear-gradient(to right,rgba(0,0,0,.88) 0%,rgba(0,0,0,.45) 45%,rgba(0,0,0,0) 100%);
-  -webkit-mask-image:linear-gradient(to right,#000 35%,transparent);mask-image:linear-gradient(to right,#000 35%,transparent)}
-.grid-wrap.can-r::after,.grid-wrap.can-l::before{opacity:1}
-:root:not([data-theme="dark"]) .grid-wrap::before{background:linear-gradient(to right,rgba(255,255,255,.9),rgba(255,255,255,0))}
-:root:not([data-theme="dark"]) .grid-wrap::after{background:linear-gradient(to left,rgba(255,255,255,.9),rgba(255,255,255,0))}
+.grid-wrap.can-r::after{opacity:1}
+:root:not([data-theme="dark"]) .grid-wrap::after{background:linear-gradient(to left,rgba(255,255,255,.85),rgba(255,255,255,0))}
