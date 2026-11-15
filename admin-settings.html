@@ -92,6 +92,23 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .save:disabled{pointer-events:none}
 .snack{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 170px);transform:translate(-50%,12px);z-index:60;background:#1a1a1c;border:1px solid #333;color:#fff;padding:11px 20px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.2s;max-width:90%;text-align:center}
 .snack.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== ການ໌ດສະຖິຕິ (ໜ້າຕາເໝືອນໜ້າຮ້ານ · ກົດທີ່ຕົວເລກເພື່ອພິມ) ===== */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{position:relative;height:72px;border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;display:flex;align-items:center;gap:11px;padding:0 8px 0 12px;background:linear-gradient(135deg,#111113 0%,#0a0a0b 100%);cursor:text}
+.stat:focus-within{border-color:#7a1c15;box-shadow:0 0 0 3px rgba(232,50,31,.12)}
+.stat .ic{position:relative;z-index:1;width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#3d0909,#1c0404);border:1px solid rgba(255,40,40,.3);color:#ff1d1d;display:flex;align-items:center;justify-content:center;flex:none}
+.stat .ic svg{width:18px;height:18px}
+.stat .tx{position:relative;z-index:1;min-width:0;line-height:1}
+.stat .lb{display:block;font-size:12px;line-height:1.2;color:#8e8e96;margin-bottom:5px;white-space:nowrap}
+.stat .nm{display:flex;align-items:baseline;white-space:nowrap}
+.stat .nm input{width:78px;min-width:0;height:26px;border:0;outline:0;background:transparent;padding:0;font-size:22px;font-weight:600;line-height:1;color:#fff;border-bottom:1px dashed transparent;font-variant-numeric:tabular-nums}
+.stat:focus-within .nm input{border-bottom-color:#7a1c15}
+.stat .nm input::placeholder{color:#55555c;opacity:1}
+.stat .nm small{font-size:11px;font-weight:400;color:#6c6c74;margin-left:4px}
+.stat .wm{position:absolute;right:-6px;bottom:-10px;width:58px;height:58px;color:rgba(255,0,0,.2);pointer-events:none}
+.panel[hidden]{display:none}
+.soon{text-align:center;color:#62605f;font-size:14.5px;padding:34px 0}
 </style>
 </head>
 <body>
@@ -118,16 +135,16 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   </div>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4.5h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2zm4.5 3.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM4.8 16.2c0-1.9 1.7-3.1 3.7-3.1s3.7 1.2 3.7 3.1zM14 9.2h5v1.5h-5zm0 3h5v1.5h-5z"/></svg>ຂໍ້ມູນພື້ນຖານ</button>
-    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.6 4h2.8l6.1 16h-2.9l-1.3-3.6H8.7L7.4 20H4.5zm-1 10h4.8L12 7.4z"/></svg>ຟອນເວັບໄຊ</button>
-    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.2a1 1 0 0 1 1.5.9v13.8a1 1 0 0 1-1.5.9L13 15H7a3 3 0 0 1-1-5.8V9h7zM6.2 14.5h2.6l1 5.3a1 1 0 0 1-1 1.2H8a1 1 0 0 1-1-.8z"/></svg>ຈັດການປະກາດ</button>
-    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>ແບນເນີ & ເນື້ອຫາ</button>
-    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 1 0 0 19c1.6 0 2.3-1 2.3-2 0-.6-.3-1.100-.6-1.500-.3-.4-.5-.8-.5-1.300 0-1 .8-1.700 1.800-1.700H17a4.700 4.700 0 0 0 4.500-4.700c0-3.800-4-7.800-9.500-7.800zM7 11.500a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm3-4a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm5 0a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800z"/></svg>ສີ & ທີມ</button>
-    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.600 3h3l1.400 4.300-2 1.500a11 11 0 0 0 6.200 6.200l1.500-2 4.300 1.400v3a2.600 2.600 0 0 1-2.800 2.600A16.600 16.600 0 0 1 3.900 5.800 2.600 2.600 0 0 1 6.600 3z"/></svg>ຊ່ອງທາງຕິດຕໍ່</button>
+    <button data-t="0" class="tab on" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4.5h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2zm4.5 3.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM4.8 16.2c0-1.9 1.7-3.1 3.7-3.1s3.7 1.2 3.7 3.1zM14 9.2h5v1.5h-5zm0 3h5v1.5h-5z"/></svg>ຂໍ້ມູນພື້ນຖານ</button>
+    <button data-t="1" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.6 4h2.8l6.1 16h-2.9l-1.3-3.6H8.7L7.4 20H4.5zm-1 10h4.8L12 7.4z"/></svg>ຟອນເວັບໄຊ</button>
+    <button data-t="2" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.2a1 1 0 0 1 1.5.9v13.8a1 1 0 0 1-1.5.9L13 15H7a3 3 0 0 1-1-5.8V9h7zM6.2 14.5h2.6l1 5.3a1 1 0 0 1-1 1.2H8a1 1 0 0 1-1-.8z"/></svg>ຈັດການປະກາດ</button>
+    <button data-t="3" class="tab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>ແບນເນີ & ເນື້ອຫາ</button>
+    <button data-t="4" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 1 0 0 19c1.6 0 2.3-1 2.3-2 0-.6-.3-1.100-.6-1.500-.3-.4-.5-.8-.5-1.300 0-1 .8-1.700 1.800-1.700H17a4.700 4.700 0 0 0 4.500-4.700c0-3.800-4-7.800-9.500-7.800zM7 11.500a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm3-4a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm5 0a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800z"/></svg>ສີ & ທີມ</button>
+    <button data-t="5" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.600 3h3l1.400 4.300-2 1.500a11 11 0 0 0 6.200 6.200l1.500-2 4.300 1.400v3a2.600 2.600 0 0 1-2.800 2.600A16.600 16.600 0 0 1 3.900 5.800 2.600 2.600 0 0 1 6.600 3z"/></svg>ຊ່ອງທາງຕິດຕໍ່</button>
   </nav>
 
   <!-- ການ໌ດຂໍ້ມູນພື້ນຖານ -->
-  <section class="panel">
+  <section class="panel" data-p="0">
     <div class="ph">
       <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4.5h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2zm4.5 3.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM4.8 16.2c0-1.9 1.7-3.1 3.7-3.1s3.7 1.2 3.7 3.1zM14 9.2h5v1.5h-5zm0 3h5v1.5h-5z"/></svg>
       <h4>ຂໍ້ມູນພື້ນຖານເວັບໄຊ</h4>
@@ -167,7 +184,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   </section>
 
   <!-- ປະກາດ -->
-  <section class="panel">
+  <section class="panel" data-p="2">
     <div class="ph">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.2a1 1 0 0 1 1.5.9v13.8a1 1 0 0 1-1.5.9L13 15H7a3 3 0 0 1-1-5.8V9h7zM6.2 14.5h2.6l1 5.3a1 1 0 0 1-1 1.2H8a1 1 0 0 1-1-.8z"/></svg>
       <h4>ຂໍ້ຄວາມປະກາດ</h4>
@@ -185,7 +202,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   </section>
 
   <!-- ເປັນຫຍັງຕ້ອງເລືອກເຮົາ -->
-  <section class="panel">
+  <section class="panel" data-p="3">
     <div class="ph">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.500 7.500-7.660 8.950a1 1 0 0 1-.670-.010C7.500 20.500 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.500-1.200 6.240-2.720a1.170 1.170 0 0 1 1.520 0C14.510 3.810 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
       <h4>ເປັນຫຍັງຕ້ອງເລືອກເຮົາ</h4>
@@ -211,30 +228,35 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   </section>
 
   <!-- ສະຖິຕິໜ້າຫຼັກ -->
-  <section class="panel">
+  <section class="panel" data-p="3">
     <div class="ph">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
       <h4>ສະຖິຕິໜ້າຫຼັກ (ຕົວເລກຈຳລອງ)</h4>
     </div>
     <div class="pb">
-      <p class="hint" style="margin:0 0 16px;text-align:left">ຖ້າເວັ້ນວ່າງ ໜ້າຮ້ານຈະສະແດງຕົວເລກຈິງຈາກຖານຂໍ້ມູນ · ຖ້າໃສ່ຕົວເລກ ຈະສະແດງຕົວເລກທີ່ໃສ່ແທນ</p>
-      <div class="fld">
-        <label for="s1">ຜູ້ໃຊ້ງານ (ຄົນ)</label>
-        <input class="inp" id="s1" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ"><p class="hint real" id="r1" style="text-align:left"></p>
+      <div class="stats">
+        <label class="stat" for="s1"><svg class="wm" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor" stroke="none"><circle cx="12" cy="7.6" r="3.6"/><path d="M5.2 21.5c0-4.1 2.9-7 6.8-7s6.8 2.9 6.8 7z"/><circle cx="4.6" cy="9.4" r="2.5"/><path d="M0 19.6c0-3.2 1.9-5.1 4.6-5.1.9 0 1.7.2 2.4.6-1.5 1.3-2.3 3-2.4 4.5z"/><circle cx="19.4" cy="9.4" r="2.5"/><path d="M24 19.6c0-3.2-1.9-5.1-4.6-5.1-.9 0-1.7.2-2.4.6 1.5 1.3 2.3 3 2.4 4.5z"/></g></svg><div class="ic"><svg viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="12" cy="7.6" r="3.6"/><path d="M5.2 21.5c0-4.1 2.9-7 6.8-7s6.8 2.9 6.8 7z"/><circle cx="4.6" cy="9.4" r="2.5"/><path d="M0 19.6c0-3.2 1.9-5.1 4.6-5.1.9 0 1.7.2 2.4.6-1.5 1.3-2.3 3-2.4 4.5z"/><circle cx="19.4" cy="9.4" r="2.5"/><path d="M24 19.6c0-3.2-1.9-5.1-4.6-5.1-.9 0-1.7.2-2.4.6 1.5 1.3 2.3 3 2.4 4.5z"/></g></svg></div><div class="tx"><span class="lb">ຜູ້ໃຊ້ງານ</span><span class="nm"><input id="s1" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="0"><small>ຄົນ</small></span></div></label>
+        <label class="stat" for="s2"><svg class="wm" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M5.6 7.4h12.8c.5 0 .9.4 1 .9l1 11.6c.1 1-.7 1.8-1.7 1.8H5.3c-1 0-1.8-.8-1.7-1.8l1-11.6c0-.5.5-.9 1-.9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8.6 9.6V6.8a3.4 3.4 0 0 1 6.8 0v2.8"/></svg><div class="ic"><svg viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M5.6 7.4h12.8c.5 0 .9.4 1 .9l1 11.6c.1 1-.7 1.8-1.7 1.8H5.3c-1 0-1.8-.8-1.7-1.8l1-11.6c0-.5.5-.9 1-.9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8.6 9.6V6.8a3.4 3.4 0 0 1 6.8 0v2.8"/></svg></div><div class="tx"><span class="lb">ສິນຄ້າ</span><span class="nm"><input id="s2" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="0"><small>ລາຍການ</small></span></div></label>
+        <label class="stat" for="s3"><svg class="wm" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor" stroke="none"><rect x="7.9" y="2" width="8.2" height="8.2" rx="1.4"/><rect x="1.5" y="12.4" width="9.2" height="9.2" rx="1.4"/><rect x="13.3" y="12.4" width="9.2" height="9.2" rx="1.4"/></g></svg><div class="ic"><svg viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><rect x="7.9" y="2" width="8.2" height="8.2" rx="1.4"/><rect x="1.5" y="12.4" width="9.2" height="9.2" rx="1.4"/><rect x="13.3" y="12.4" width="9.2" height="9.2" rx="1.4"/></g></svg></div><div class="tx"><span class="lb">ຄຳສັ່ງຊື້</span><span class="nm"><input id="s3" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="0"><small>ລາຍການ</small></span></div></label>
+        <label class="stat" for="s4"><svg class="wm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor" stroke="none"/><path d="m7.2 12.4 3.3 3.3 6.4-7" fill="none" stroke="#0b0b0c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="currentColor" stroke="none"/><path d="m7.2 12.4 3.3 3.3 6.4-7" fill="none" stroke="#0b0b0c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tx"><span class="lb">ຂາຍແລ້ວ</span><span class="nm"><input id="s4" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="0"><small>ຊິ້ນ</small></span></div></label>
       </div>
-      <div class="fld">
-        <label for="s2">ສິນຄ້າ (ລາຍການ)</label>
-        <input class="inp" id="s2" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ">
-      </div>
-      <div class="fld">
-        <label for="s3">ຄຳສັ່ງຊື້ (ລາຍການ)</label>
-        <input class="inp" id="s3" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ"><p class="hint real" id="r3" style="text-align:left"></p>
-      </div>
-      <div class="fld">
-        <label for="s4">ຂາຍແລ້ວ (ຊິ້ນ)</label>
-        <input class="inp" id="s4" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ">
-      </div>
+      <p class="hint" style="margin-top:16px;text-align:left;line-height:1.6">ກົດທີ່ຕົວເລກເພື່ອພິມຕົວເລກຈຳລອງ · ຕົວເລກສີຈາງ = ຕົວເລກຈິງ (ໃຊ້ຢູ່ຕອນນີ້) · ລຶບໃຫ້ວ່າງ = ກັບໄປໃຊ້ຕົວເລກຈິງ</p>
     </div>
+  </section>
+
+  <section class="panel empty" data-p="1" hidden>
+    <div class="ph"><h4>ຟອນເວັບໄຊ</h4></div>
+    <div class="pb"><p class="soon">ໝວດນີ້ຍັງບໍ່ມີການຕັ້ງຄ່າ · ຈະເພີ່ມໃນໄວໆນີ້</p></div>
+  </section>
+
+  <section class="panel empty" data-p="4" hidden>
+    <div class="ph"><h4>ສີ & ທີມ</h4></div>
+    <div class="pb"><p class="soon">ໝວດນີ້ຍັງບໍ່ມີການຕັ້ງຄ່າ · ຈະເພີ່ມໃນໄວໆນີ້</p></div>
+  </section>
+
+  <section class="panel empty" data-p="5" hidden>
+    <div class="ph"><h4>ຊ່ອງທາງຕິດຕໍ່</h4></div>
+    <div class="pb"><p class="soon">ໝວດນີ້ຍັງບໍ່ມີການຕັ້ງຄ່າ · ຈະເພີ່ມໃນໄວໆນີ້</p></div>
   </section>
 </div>
 
@@ -249,11 +271,19 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   exRpc('member_is_admin', { p_token: tok }).then(function(j){
     if(!(j && j.ok && j.admin)) location.replace('index.html');
   }).catch(function(){});
-  /* ເປີດ-ປິດແທັບ (ສະເພາະສີ) */
+  /* ແທັບ: ກົດແລ້ວສະແດງສະເພາະການ໌ດຂອງໝວດນັ້ນ (ປຸ່ມບັນທຶກດ້ານລຸ່ມບັນທຶກທຸກໝວດພ້ອມກັນ) */
+  function showTab(t){
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x.dataset.t === t); });
+    document.querySelectorAll('.panel[data-p]').forEach(function(p){ p.hidden = p.dataset.p !== t; });
+    try{ sessionStorage.setItem('exSetTab', t); }catch(e){}
+  }
   document.getElementById('tabs').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return;
-    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+    showTab(b.dataset.t);
+    b.scrollIntoView({ inline:'center', block:'nearest', behavior:'smooth' });
   });
+  var t0 = '0'; try{ t0 = sessionStorage.getItem('exSetTab') || '0'; }catch(e){}
+  showTab(document.querySelector('.tab[data-t="' + t0 + '"]') ? t0 : '0');
 
   /* ===== ຂໍ້ມູນພື້ນຖານເວັບໄຊ ↔ Supabase (shop_site / admin_site_save) ===== */
   var $ = function(id){ return document.getElementById(id); };
@@ -285,10 +315,11 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     j = j || {};
     st.logo = j.logo || ''; st.banner = j.banner || '';
     Object.keys(TXT).forEach(function(id){ var v = j[TXT[id]]; $(id).value = (v === null || v === undefined) ? '' : v; });
-    $('r1').textContent = 'ຕົວເລກຈິງດຽວນີ້: ' + (j.real_users || 0); $('r3').textContent = 'ຕົວເລກຈິງດຽວນີ້: ' + (j.real_orders || 0);
+    $('s1').placeholder = String(j.real_users || 0); $('s3').placeholder = String(j.real_orders || 0);
     saved = collect();
     paint(); dirty();
   }
+  exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
 
   async function upload(file, btn){
