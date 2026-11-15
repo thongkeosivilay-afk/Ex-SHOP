@@ -183,6 +183,32 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
       </div>
     </div>
   </section>
+
+  <!-- ເປັນຫຍັງຕ້ອງເລືອກເຮົາ -->
+  <section class="panel">
+    <div class="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.500 7.500-7.660 8.950a1 1 0 0 1-.670-.010C7.500 20.500 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.500-1.200 6.240-2.720a1.170 1.170 0 0 1 1.520 0C14.510 3.810 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+      <h4>ເປັນຫຍັງຕ້ອງເລືອກເຮົາ</h4>
+    </div>
+    <div class="pb">
+      <div class="fld">
+        <label for="w1t">ການ໌ດທີ 1 · ຫົວຂໍ້</label>
+        <input class="inp" id="w1t" type="text" maxlength="80" autocomplete="off">
+      </div>
+      <div class="fld">
+        <label for="w1d">ການ໌ດທີ 1 · ຂໍ້ຄວາມ</label>
+        <textarea class="inp" id="w1d" maxlength="500"></textarea>
+      </div>
+      <div class="fld">
+        <label for="w2t">ການ໌ດທີ 2 · ຫົວຂໍ້</label>
+        <input class="inp" id="w2t" type="text" maxlength="80" autocomplete="off">
+      </div>
+      <div class="fld">
+        <label for="w2d">ການ໌ດທີ 2 · ຂໍ້ຄວາມ</label>
+        <textarea class="inp" id="w2d" maxlength="500"></textarea>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="snack" id="snack"></div>
@@ -206,7 +232,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   var $ = function(id){ return document.getElementById(id); };
   var SB = window.EX_SB;
   var EXT = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'};
-  var st = { name:'', logo:'', banner:'', description:'', marquee:'', announce:'' }, saved = null, busy = false;
+  var TXT = { sn:'name', sd:'description', mq:'marquee', an:'announce', w1t:'why1_title', w1d:'why1_text', w2t:'why2_title', w2d:'why2_text' };
+  var st = { logo:'', banner:'' }, saved = null, busy = false;
   var sn = $('snack'), snT;
   function toast(t){ sn.textContent = t; sn.classList.add('show'); clearTimeout(snT); snT = setTimeout(function(){ sn.classList.remove('show'); }, 2600); }
 
@@ -218,18 +245,20 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     paintImg($('logoDrop'), $('logoImg'), $('logoRm'), st.logo);
     paintImg($('bnDrop'), $('bnImg'), $('bnRm'), st.banner);
   }
+  function collect(){
+    var o = { logo: st.logo, banner: st.banner };
+    Object.keys(TXT).forEach(function(id){ var v = $(id).value; o[TXT[id]] = TXT[id] === 'name' ? v.trim() : v; });
+    return o;
+  }
   function dirty(){
-    var d = !saved || saved.name !== $('sn').value.trim() || saved.description !== $('sd').value
-      || saved.marquee !== $('mq').value || saved.announce !== $('an').value
-      || saved.logo !== st.logo || saved.banner !== st.banner;
+    var cur = collect(), d = !saved || Object.keys(cur).some(function(k){ return cur[k] !== saved[k]; });
     var b = $('saveBtn'); b.disabled = !d || busy; b.classList.toggle('dirty', d && !busy);
   }
   function fill(j){
     j = j || {};
-    st.name = j.name || ''; st.logo = j.logo || ''; st.banner = j.banner || ''; st.description = j.description || '';
-    st.marquee = j.marquee || ''; st.announce = j.announce || '';
-    $('sn').value = st.name; $('sd').value = st.description; $('mq').value = st.marquee; $('an').value = st.announce;
-    saved = { name: st.name, logo: st.logo, banner: st.banner, description: st.description, marquee: st.marquee, announce: st.announce };
+    st.logo = j.logo || ''; st.banner = j.banner || '';
+    Object.keys(TXT).forEach(function(id){ $(id).value = j[TXT[id]] || ''; });
+    saved = collect();
     paint(); dirty();
   }
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
@@ -258,20 +287,17 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   }
   wire('logo', $('logoUp'), $('logoRm'), $('logoFile'), $('logoDrop'));
   wire('banner', $('bnUp'), $('bnRm'), $('bnFile'), $('bnDrop'));
-  $('sn').addEventListener('input', dirty);
-  $('sd').addEventListener('input', dirty);
-  $('mq').addEventListener('input', dirty);
-  $('an').addEventListener('input', dirty);
+  Object.keys(TXT).forEach(function(id){ $(id).addEventListener('input', dirty); });
 
   $('saveBtn').addEventListener('click', async function(){
     if(busy) return;
-    var name = $('sn').value.trim();
-    if(!name) return toast('ກະລຸນາໃສ່ຊື່ເວັບໄຊ');
+    var data = collect();
+    if(!data.name) return toast('ກະລຸນາໃສ່ຊື່ເວັບໄຊ');
     busy = true; dirty();
     try{
-      var j = await exRpc('admin_site_save', { p_token: exToken(), p_name: name, p_logo: st.logo, p_banner: st.banner, p_description: $('sd').value, p_marquee: $('mq').value, p_announce: $('an').value });
+      var j = await exRpc('admin_site_update', { p_token: exToken(), p_data: data });
       if(j && j.ok){
-        saved = { name: name, logo: st.logo, banner: st.banner, description: $('sd').value, marquee: $('mq').value, announce: $('an').value };
+        saved = data;
         try{ localStorage.removeItem('exSiteCache'); }catch(e){}
         toast('ບັນທຶກສຳເລັດ');
       } else toast(j && j.code === 'not_admin' ? 'ບໍ່ມີສິດແອດມິນ' : 'ບັນທຶກບໍ່ສຳເລັດ');

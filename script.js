@@ -41,6 +41,18 @@ function paintBanner(){
 paintBanner();
 document.addEventListener('site:ready', paintBanner);
 
+/* "ເປັນຫຍັງຕ້ອງເລືອກເຮົາ" — 2 การ์ด (หัวข้อ + ข้อความ) ตั้งค่าได้ที่หน้าแอดมิน ว่าง = ใช้ข้อความเดิมในหน้า */
+(function(){
+  const map = { t1:'#why1t', d1:'#why1d', t2:'#why2t', d2:'#why2d' }, el = {}, dflt = {};
+  Object.keys(map).forEach(k => { el[k] = $(map[k]); if(el[k]) dflt[k] = el[k].textContent; });
+  const paint = () => {
+    const w = (typeof SITE !== 'undefined' && SITE.why) || {};
+    Object.keys(el).forEach(k => { if(el[k]) el[k].textContent = (w[k] || '').trim() || dflt[k]; });
+  };
+  paint();
+  document.addEventListener('site:ready', paint);
+})();
+
 /* คำอธิบายร้าน (ย่อหน้าใต้ "ຍິນດີຕ້ອນຮັບສູ່") — ถ้าไม่ได้ตั้งค่าไว้ ใช้ข้อความเดิมในหน้า */
 (function(){
   const p = $('#heroDesc'); if(!p) return;
