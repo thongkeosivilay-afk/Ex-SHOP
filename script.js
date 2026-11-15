@@ -350,7 +350,7 @@ $('#featSec').hidden = !SHOW.featured || !feat.length;
 /* เมนูไอคอนบัญชี: กดแล้วเปิดแผงบัญชี (โปรไฟล์ + ยอดเงิน + รายการเมนู) ลอยใต้ปุ่ม ปิดเมื่อแตะข้างนอก/เลื่อน/กด Esc
    รายการเมนู: ลิงก์ปลายทางตั้งที่ CONFIG.routes (shop / topup / orders / topuphist / profile / howto) — ว่าง = ขึ้นข้อความ "ກຳລັງພັດທະນາ"
    ปุ่ม "จัดการแผงร้าน" ในเมนู: เปิดได้ด้วย UM_ADMIN_LINK = true (ปิดไว้ตามที่ขอ — เข้าหน้าแอดมินที่ admin.html ได้ตรงๆ) */
-const UM_ADMIN_LINK = false;
+const UM_ADMIN_LINK = true;
 (function(){
   const btn = $('#btnUser'); if(!btn) return;
   /* ไอคอนแบบทึบ (solid) ตามดีไซน์ตัวอย่าง — fsvg(viewBox, path) */
@@ -380,7 +380,7 @@ const UM_ADMIN_LINK = false;
       ${item('topuphist','card','ປະຫວັດເຕີມເງິນ','ປະຫວັດຝາກເງິນ')}
       ${item('profile','user','ໂປຣໄຟລ໌','ຂໍ້ມູນບັນຊີ')}
       ${item('howto','book','ວິທີການສັ່ງຊື້','ຄູ່ມືມືໃໝ່')}
-      ${UM_ADMIN_LINK ? `<button class="um-i" role="menuitem" type="button" id="umManage" style="display:none"><span class="um-ic">${IC.panel}</span><span class="um-tx"><b>ຈັດການແຜງຮ້ານ</b><small>ສຳລັບແອດມິນ</small></span><span class="um-ch">${IC.chev}</span></button>` : ''}
+      ${UM_ADMIN_LINK ? `<button class="um-i um-manage" role="menuitem" type="button" id="umManage" style="display:none"><span class="um-ic">${IC.panel}</span><span class="um-tx"><b>ຈັດການແຜງຮ້ານ</b><small>ສຳລັບແອດມິນ</small></span><span class="um-ch">${IC.chev}</span></button>` : ''}
     </div>
     <div class="um-sep"></div>
     <button class="um-i um-out" role="menuitem" type="button" id="umOut"><span class="um-ic">${IC.out}</span><span class="um-tx"><b>ອອກຈາກລະບົບ</b></span></button>`;
@@ -427,8 +427,7 @@ const UM_ADMIN_LINK = false;
   if(manageBtn) manageBtn.addEventListener('click', () => {
     set(false);
     if(!isAdmin) return;
-    if(CONFIG.routes.manage) location.href = CONFIG.routes.manage;   // ใส่ลิงก์หน้าจัดการแผงร้านที่ CONFIG.routes.manage
-    else snack('ກຳລັງພັດທະນາ');
+    location.href = CONFIG.routes.manage || 'admin.html';   // หน้าจัดการแผงร้าน (เปลี่ยนได้ที่ CONFIG.routes.manage)
   });
   um.addEventListener('click', e => {
     const it = e.target.closest('[data-um]'); if(!it) return;

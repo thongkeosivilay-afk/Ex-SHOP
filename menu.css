@@ -119,6 +119,7 @@ html.is-in .header .dr-f{display:none}
 .um-sep{height:1px;margin:8px 0;background:#18181a}
 .um-out .um-ic{background:#1d0c0d;border-color:rgba(234,51,35,.20);color:#ea6a5e}
 .um-out .um-tx b{color:#ee6b60}
+.um-manage .um-ic{background:#1d0c0d;border-color:rgba(234,51,35,.22);color:#ea3323}
 /* ===== แอนิเมชันตอนเปิดแผง: แต่ละแถวเลื่อนลงมาทีละอัน (ไล่ตาม --i) ลื่น ไม่กระตุก ===== */
 .um-prof,.um-bal,.um-i,.um-sep{opacity:0;translate:0 -14px;filter:blur(5px);
   transition:opacity .18s ease,translate .18s ease,filter .18s ease}
@@ -138,6 +139,19 @@ html.is-in .header .dr-f{display:none}
   .um,.um-prof,.um-bal,.um-i,.um-sep,.um-av{transition-duration:.01ms!important;transition-delay:0s!important}
   .um-prof,.um-bal,.um-i,.um-sep{opacity:1;translate:none;filter:none}
   .um-av{scale:1}.um.on .um-top{animation:none}}
+
+/* ปรับแต่งแผงบัญชี (ค่าที่ผู้ใช้เลือกจากแบบจำลอง) */
+.um{width:min(263px,calc(100vw - 20px));border-radius:19px}
+.um-av{width:34px;height:34px}
+.um-av b{font-size:11.6px}
+.um-t>b{font-size:17.5px}
+.um-bt b{font-size:14.5px}
+.um-top{height:39px;padding:0 11px;font-size:12px}
+.um-ic{width:35px;height:35px}
+.um-ic svg{width:14px;height:14px}
+.um-tx b{font-size:12.5px}
+.um-tx small{font-size:13px}
+.um-i{padding-top:6.75px;padding-bottom:6.75px}
 
 /* ปรับแต่งแผงบัญชี (ค่าที่ผู้ใช้เลือกจากแบบจำลอง) */
 .um{width:min(263px,calc(100vw - 20px));border-radius:19px}
