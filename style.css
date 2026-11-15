@@ -106,12 +106,13 @@ html.is-in .hb-reg,html.is-in .dr-f{display:none}
 .wcard p{font-size:13.5px;line-height:19.5px;color:var(--muted)}
 /* การ์ด "ทำไมต้องเลือกเรา": สไลด์ซ้อนกันในช่องเดียว (ความสูงการ์ดคงที่ = สไลด์ที่สูงสุด) แล้วสลับด้วยเบลอ+จาง ทุก 5 วินาที */
 .wrot{display:grid;overflow:hidden}
+/* --wb = เวลาเบลอ/จางของการ์ด (ตั้งที่หน้าแอดมิน → script.js) ค่าเริ่มต้น .9s */
 .wrot .wslide{grid-area:1/1;display:flex;gap:16px;min-width:0;
   opacity:0;visibility:hidden;filter:blur(12px);transform:translateY(6px) scale(.985);
-  transition:opacity .7s cubic-bezier(.4,0,.6,1),filter .7s cubic-bezier(.4,0,.6,1),transform .7s cubic-bezier(.4,0,.6,1),visibility 0s linear .7s;
+  transition:opacity calc(var(--wb,.9s)*.78) cubic-bezier(.4,0,.6,1),filter calc(var(--wb,.9s)*.78) cubic-bezier(.4,0,.6,1),transform calc(var(--wb,.9s)*.78) cubic-bezier(.4,0,.6,1),visibility 0s linear calc(var(--wb,.9s)*.78);
   will-change:opacity,filter,transform}
 .wrot .wslide.on{opacity:1;visibility:visible;filter:blur(0);transform:none;
-  transition:opacity .9s cubic-bezier(.2,.7,.2,1) .25s,filter .9s cubic-bezier(.2,.7,.2,1) .25s,transform .9s cubic-bezier(.2,.7,.2,1) .25s,visibility 0s}
+  transition:opacity var(--wb,.9s) cubic-bezier(.2,.7,.2,1) calc(var(--wb,.9s)*.28),filter var(--wb,.9s) cubic-bezier(.2,.7,.2,1) calc(var(--wb,.9s)*.28),transform var(--wb,.9s) cubic-bezier(.2,.7,.2,1) calc(var(--wb,.9s)*.28),visibility 0s}
 .wrot .wslide>div:last-child{min-width:0}
 @media (prefers-reduced-motion:reduce){.wrot .wslide,.wrot .wslide.on{filter:none;transform:none;transition:opacity .4s linear}}
 
