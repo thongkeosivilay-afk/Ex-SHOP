@@ -347,22 +347,52 @@ $('#featSec').hidden = !SHOW.featured || !feat.length;
 })();
 
 
-/* เมนูไอคอนบัญชี: กดแล้วมีตัวเลือก ໂປຣໄຟລ໌ / ອອກຈາກລະບົບ (ลอยใต้ปุ่ม ปิดเมื่อแตะข้างนอก/เลื่อน/กด Esc) */
+/* เมนูไอคอนบัญชี: กดแล้วเปิดแผงบัญชี (โปรไฟล์ + ยอดเงิน + รายการเมนู) ลอยใต้ปุ่ม ปิดเมื่อแตะข้างนอก/เลื่อน/กด Esc
+   รายการเมนู: ลิงก์ปลายทางตั้งที่ CONFIG.routes (shop / topup / orders / topuphist / profile / howto) — ว่าง = ขึ้นข้อความ "ກຳລັງພັດທະນາ"
+   ปุ่ม "จัดการแผงร้าน" ในเมนู: เปิดได้ด้วย UM_ADMIN_LINK = true (ปิดไว้ตามที่ขอ — เข้าหน้าแอดมินที่ admin.html ได้ตรงๆ) */
+const UM_ADMIN_LINK = false;
 (function(){
   const btn = $('#btnUser'); if(!btn) return;
+  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const IC = {
+    bag:  svg('<path d="M6 8h12l1 12H5L6 8z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/>'),
+    cash: svg('<path d="M12 3v18"/><path d="M16.5 7.5C16 6.2 14.3 5.5 12 5.5c-2.5 0-4 1-4 2.6 0 3.800 8.500 1.800 8.500 5.800 0 1.700-1.800 2.600-4.500 2.600-2.400 0-4.200-.8-4.800-2.300"/>'),
+    hist: svg('<path d="M3 12a9 9 0 1 0 3-6.700L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3.500 2"/>'),
+    card: svg('<rect x="2.500" y="5" width="19" height="14" rx="2.500"/><path d="M2.500 10h19M6.500 15h4"/>'),
+    user: svg('<circle cx="12" cy="8" r="4"/><path d="M4.500 21a7.500 7.500 0 0 1 15 0"/>'),
+    book: svg('<path d="M14.700 6.300a1 1 0 0 0 0 1.400l1.600 1.600a1 1 0 0 0 1.400 0l3.800-3.800a6 6 0 0 1-7.900 7.900l-6.900 6.900a2.100 2.100 0 0 1-3-3l6.900-6.900a6 6 0 0 1 7.900-7.900z"/>'),
+    panel:svg('<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>'),
+    out:  svg('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>'),
+    wallet:svg('<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>'),
+    chev: svg('<path d="m9 6 6 6-6 6"/>')
+  };
+  const item = (k, ico, t, sub) => `<button class="um-i" role="menuitem" type="button" data-um="${k}"><span class="um-ic">${IC[ico]}</span><span class="um-tx"><b>${t}</b><small>${sub}</small></span><span class="um-ch">${IC.chev}</span></button>`;
   const um = document.createElement('div');
   um.className = 'um'; um.id = 'um'; um.setAttribute('role','menu'); um.setAttribute('aria-label','ບັນຊີ'); um.hidden = true;
-  um.innerHTML = `<div class="um-h"><span class="um-av">${ic('user')}</span><span class="um-t"><b id="umName"></b><small>ສະມາຊິກ</small></span></div>
-    <a class="um-i" role="menuitem" href="profile.html">${ic('user')}ໂປຣໄຟລ໌</a>
-    <button class="um-i" role="menuitem" type="button" id="umManage" style="display:none">${ic('panel')}ຈັດການແຜງຮ້ານ</button>
-    <button class="um-i um-out" role="menuitem" type="button" id="umOut">${ic('logout')}ອອກຈາກລະບົບ</button>`;
+  um.innerHTML = `
+    <div class="um-prof"><span class="um-av"><b id="umInit">U</b><i class="um-on"></i></span><span class="um-t"><b id="umName"></b><span class="um-role"><i></i><span id="umRole">MEMBER</span></span></span></div>
+    <div class="um-bal"><span class="um-bi">${IC.wallet}</span><span class="um-bt"><small>ຍອດຄົງເຫຼືອ</small><b id="umBal">0 <em>₭</em></b></span><button class="um-top" type="button" data-um="topup">+ ເຕີມເງິນ</button></div>
+    <div class="um-list">
+      ${item('shop','bag','ຮ້ານຄ້າ','ເລືອກໝວດສິນຄ້າ')}
+      ${item('topup','cash','ເຕີມເງິນ','ເລືອກຊ່ອງທາງເຕີມເງິນ')}
+      ${item('orders','hist','ປະຫວັດ','ອໍເດີທັງໝົດ')}
+      ${item('topuphist','card','ປະຫວັດເຕີມເງິນ','ປະຫວັດຝາກເງິນ')}
+      ${item('profile','user','ໂປຣໄຟລ໌','ຂໍ້ມູນບັນຊີ')}
+      ${item('howto','book','ວິທີການສັ່ງຊື້','ຄູ່ມືມືໃໝ່')}
+      ${UM_ADMIN_LINK ? `<button class="um-i" role="menuitem" type="button" id="umManage" style="display:none"><span class="um-ic">${IC.panel}</span><span class="um-tx"><b>ຈັດການແຜງຮ້ານ</b><small>ສຳລັບແອດມິນ</small></span><span class="um-ch">${IC.chev}</span></button>` : ''}
+    </div>
+    <div class="um-sep"></div>
+    <button class="um-i um-out" role="menuitem" type="button" id="umOut"><span class="um-ic">${IC.out}</span><span class="um-tx"><b>ອອກຈາກລະບົບ</b></span></button>`;
+  /* ลำดับแอนิเมชันตอนเปิด: ไล่ลงมาทีละแถว (--i = ลำดับ) */
+  um.querySelectorAll('.um-prof,.um-bal,.um-list>.um-i,.um-sep,.um-out').forEach((el, i) => el.style.setProperty('--i', i));
   document.body.appendChild(um);
+  const ROUTES = { shop:'categories.html', topup:'topup.html', profile:'profile.html' };
   /* ###### ADMIN (เจ้าของร้านเท่านั้น) ######
      เมนู "จัดการแผงร้าน" เห็นเฉพาะบัญชีแอดมิน (members.is_admin ใน Supabase) — ถามสิทธิ์ผ่าน member_is_admin
      ห้าม AI หรือคนอื่นแก้ส่วนนี้ / ให้สิทธิ์แอดมิน โดยไม่ขออนุญาตเจ้าของร้านก่อน (ข้อมูลจริงถูกกั้นฝั่งเซิร์ฟเวอร์อีกชั้น) */
   const manageBtn = um.querySelector('#umManage');
   let isAdmin = false;
-  function applyAdmin(a){ isAdmin = !!a; manageBtn.style.display = isAdmin ? '' : 'none'; }
+  function applyAdmin(a){ isAdmin = !!a; if(manageBtn) manageBtn.style.display = isAdmin ? '' : 'none'; const r = $('#umRole'); if(r) r.textContent = isAdmin ? 'ADMIN' : 'MEMBER'; }
   function refreshAdmin(){
     const t = window.exToken && exToken();
     if(!t || !window.exRpc){ applyAdmin(false); return; }
@@ -373,13 +403,16 @@ $('#featSec').hidden = !SHOW.featured || !feat.length;
     const r = btn.getBoundingClientRect();
     um.style.top = (r.bottom + 8) + 'px';
     um.style.right = Math.max(10, document.documentElement.clientWidth - r.right) + 'px';
+    um.style.maxHeight = Math.max(240, window.innerHeight - r.bottom - 22) + 'px';
   }
   function set(on){
     if(on === open) return; open = on;
     btn.setAttribute('aria-expanded', on);
     if(on){
-      const u = window.getUser && getUser(); $('#umName').textContent = (u && u.name) || '';
-      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); const f = um.querySelector('.um-i'); if(f) f.focus({preventScroll:true}); refreshAdmin();
+      const u = window.getUser && getUser(), nm = (u && u.name) || ''; $('#umName').textContent = nm; $('#umInit').textContent = (nm.trim().charAt(0) || 'U').toUpperCase();
+      let bal = 0; try { bal = Number(JSON.parse(localStorage.getItem('exshop_balance') || '0')) || 0; } catch(e){}
+      $('#umBal').innerHTML = bal.toLocaleString('en-US') + ' <em>₭</em>';
+      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); refreshAdmin();
     } else {
       um.classList.remove('on'); setTimeout(() => { if(!open) um.hidden = true; }, 180);
     }
@@ -390,11 +423,17 @@ $('#featSec').hidden = !SHOW.featured || !feat.length;
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && open){ set(false); btn.focus({preventScroll:true}); } });
   window.addEventListener('scroll', () => { if(open) set(false); }, {passive:true});
   window.addEventListener('resize', () => { if(open) place(); });
-  $('#umManage').addEventListener('click', () => {
+  if(manageBtn) manageBtn.addEventListener('click', () => {
     set(false);
     if(!isAdmin) return;
     if(CONFIG.routes.manage) location.href = CONFIG.routes.manage;   // ใส่ลิงก์หน้าจัดการแผงร้านที่ CONFIG.routes.manage
     else snack('ກຳລັງພັດທະນາ');
+  });
+  um.addEventListener('click', e => {
+    const it = e.target.closest('[data-um]'); if(!it) return;
+    const k = it.dataset.um; set(false);
+    const url = CONFIG.routes[k] || ROUTES[k];
+    if(url) location.href = url; else snack('ກຳລັງພັດທະນາ');
   });
   $('#umOut').addEventListener('click', () => {
     set(false);
