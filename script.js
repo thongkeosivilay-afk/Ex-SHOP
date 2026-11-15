@@ -66,9 +66,11 @@ document.addEventListener('site:ready', paintBanner);
    วัดความกว้างจริงของข้อความ → ซ้ำให้เต็มจอ → เลื่อนไปเท่าความกว้างของ 1 ชุดพอดีแล้ววนใหม่
    คำนวณใหม่อัตโนมัติเมื่อขนาดจอ/ฟอนต์/ภาษา (i18n) เปลี่ยน ความเร็ว = MQ_SPEED px ต่อวินาที */
 (function(){
-  const MQ_SPEED = 55;
+  const MQ_DEF = 55;
   const mq = $('#mq'); if(!mq) return;
-  const txt = () => ((typeof SITE !== 'undefined' && SITE.marquee) || '').trim() || CONFIG.announce;
+  /* ความเร็ว: เก็บต่อท้ายข้อความเป็น \n#spd=ตัวเลข (px/วินาที) ตั้งที่หน้าแอดมิน */
+  const spd = () => { const m = /\n#spd=(\d+)\s*$/.exec((typeof SITE !== 'undefined' && SITE.marquee) || ''); return m ? Math.max(10, Math.min(120, +m[1])) : MQ_DEF; };
+  const txt = () => String((typeof SITE !== 'undefined' && SITE.marquee) || '').replace(/\n#spd=\d+\s*$/, '').trim() || CONFIG.announce;
   let item = `<span class="mq-item">${ic('bell')}${escH(txt())}</span>`;
   let copies = 0, lastW = 0, raf = 0;
 
@@ -90,7 +92,7 @@ document.addEventListener('site:ready', paintBanner);
     if(Math.abs(w - lastW) < 0.5) return;
     lastW = w;
     mq.style.setProperty('--mq-dn', -w + 'px');
-    mq.style.setProperty('--mq-t', (w / MQ_SPEED).toFixed(2) + 's');
+    mq.style.setProperty('--mq-t', (w / spd()).toFixed(2) + 's');
   }
   const schedule = () => { if(!raf) raf = requestAnimationFrame(measure); };
   let ro;
@@ -111,9 +113,10 @@ document.addEventListener('site:ready', paintBanner);
 
 /* แถบ "ประกาศ" ใต้แบนเนอร์ — ข้อความเลื่อนวน (หลักการเดียวกับแถบบนสุด: วัดความกว้างจริง ซ้ำให้เต็ม เลื่อนเท่า 1 ชุดแล้ววน) */
 (function(){
-  const SPEED = 40;   // px ต่อวินาที
+  const AN_DEF = 40;   // px ต่อวินาที (ปรับได้ที่หน้าแอดมิน เก็บเป็น \n#spd=ตัวเลข ต่อท้ายข้อความ)
   const vp = $('.announce .an-r'); if(!vp) return;
-  const txt = () => ((typeof SITE !== 'undefined' && SITE.announce) || '').trim() || CONFIG.announce;
+  const SPEED_NOW = () => { const m = /\n#spd=(\d+)\s*$/.exec((typeof SITE !== 'undefined' && SITE.announce) || ''); return m ? Math.max(10, Math.min(120, +m[1])) : AN_DEF; };
+  const txt = () => String((typeof SITE !== 'undefined' && SITE.announce) || '').replace(/\n#spd=\d+\s*$/, '').trim() || CONFIG.announce;
   let item = `<span class="an-item">${escH(txt())}</span>`;
   let copies = 0, lastW = 0, raf = 0, ro, track;
   function build(n){
@@ -135,7 +138,7 @@ document.addEventListener('site:ready', paintBanner);
     if(Math.abs(w - lastW) < 0.5) return;
     lastW = w;
     track.style.setProperty('--mq-dn', -w + 'px');
-    track.style.setProperty('--mq-t', (w / SPEED).toFixed(2) + 's');
+    track.style.setProperty('--mq-t', (w / SPEED_NOW()).toFixed(2) + 's');
   }
   const schedule = () => { if(!raf) raf = requestAnimationFrame(measure); };
   if(window.ResizeObserver) ro = new ResizeObserver(schedule);
@@ -212,14 +215,14 @@ function paintBrand(){
   if(n) n.textContent = nm;
   if(br) br.setAttribute('aria-label', nm);
   if(lg){
-    lg.textContent = '';
+    lg.textContent = ''; lg.classList.remove('has-img');
     /* ขนาดโลโก้: เก็บต่อท้าย URL เป็น #sz=ตัวเลข (ตั้งที่หน้าแอดมิน → ข้อมูลพื้นฐาน) */
     const mz = /#sz=(\d+)$/.exec(S.logo || ''), lz = mz ? Math.max(28, Math.min(50, +mz[1])) : 0;
     lg.style.width = lg.style.height = lz ? lz + 'px' : '';
     if(S.logo){
       const im = new Image(); im.alt = ''; im.draggable = false; im.src = String(S.logo).replace(/#sz=\d+$/, '');
-      im.onerror = () => { lg.textContent = nm.slice(0, 2); };
-      lg.appendChild(im);
+      im.onerror = () => { lg.classList.remove('has-img'); lg.textContent = nm.slice(0, 2); };
+      lg.classList.add('has-img'); lg.appendChild(im);
     } else { lg.textContent = nm.slice(0, 2); }
   }
 }

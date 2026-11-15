@@ -124,16 +124,17 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .lsz-h b{font-size:15.5px;font-weight:600;color:#d9d6d6}
 .lsz-r{display:flex;align-items:center;gap:14px;padding:6px 2px 2px}
 .lsz-v{min-width:44px;text-align:right;color:#ff1a1a;font-size:17px;font-weight:500;flex:none;font-variant-numeric:tabular-nums}
-#lszRange{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:24px;margin:0;padding:0;background:transparent;outline:none;--r:.36;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
-#lszRange::-webkit-slider-runnable-track{height:6px;border-radius:6px;border:.5px solid rgba(255,255,255,.9);box-sizing:border-box;background:linear-gradient(90deg,#fe0000 0,#fe0000 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 100%)}
-#lszRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:16px;margin-top:-5.5px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
-#lszRange::-moz-range-track{height:6px;border-radius:6px;background:#e4e4e6;border:.5px solid rgba(255,255,255,.9)}
-#lszRange::-moz-range-progress{height:6px;border-radius:6px;background:#fe0000}
-#lszRange::-moz-range-thumb{width:24px;height:16px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+.rng{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:24px;margin:0;padding:0;background:transparent;outline:none;--r:.36;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+.rng::-webkit-slider-runnable-track{height:6px;border-radius:6px;border:.5px solid rgba(255,255,255,.9);box-sizing:border-box;background:linear-gradient(90deg,#fe0000 0,#fe0000 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 100%)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:16px;margin-top:-5.5px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+.rng::-moz-range-track{height:6px;border-radius:6px;background:#e4e4e6;border:.5px solid rgba(255,255,255,.9)}
+.rng::-moz-range-progress{height:6px;border-radius:6px;background:#fe0000}
+.rng::-moz-range-thumb{width:24px;height:16px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
 .lsz.off{opacity:.45;pointer-events:none}
 .lsz-t{margin:16px 0 8px;font-size:13px;color:#8d8a8a}
 .pv{position:relative;height:52px;border-radius:26px;background:#0a0a0a;border:1px solid #2a2a2e;display:flex;align-items:center;gap:8px;padding:0 12px 0 10px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,0,0,.08)}
 .pv-logo{border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:linear-gradient(150deg,#ff4a3a,#d10000 70%);color:#fff;font-weight:800;font-size:14.5px;text-transform:uppercase;box-shadow:0 0 0 1px rgba(255,90,70,.55),0 3px 12px rgba(255,0,0,.35);transition:width .12s,height .12s}
+.pv-logo.has-img{background:none;box-shadow:none}
 .pv-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .pv-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16.5px;font-weight:700;color:#f2f2f2}
 .pv-dots{display:flex;gap:6px;flex:none}
@@ -253,10 +254,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
             <input type="range" class="rng" id="mqRange" min="10" max="120" step="1" value="55" aria-label="ຄວາມໄວການເລື່ອນ (ແຖບເທິງສຸດ)">
             <span class="lsz-v" id="mqVal">55px/s</span>
           </div>
-          <div class="lsz-m"><span>ຊ້າ 10</span><span>ໄວ 120</span></div>
           <div class="lsz-t">ຕົວຢ່າງການເລື່ອນ (ຄວາມໄວຈິງ)</div>
           <div class="mqp" id="mqPv"><div class="mqp-t"></div></div>
-          <div class="lsz-bt"><button type="button" class="lsz-b" id="mqMinus" aria-label="ຊ້າລົງ">−</button><button type="button" class="up rm" id="mqReset">ຄືນຄ່າເດີມ (55)</button><button type="button" class="lsz-b" id="mqPlus" aria-label="ໄວຂຶ້ນ">+</button></div>
         </div>
       </div>
       <div class="fld">
@@ -268,10 +267,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
             <input type="range" class="rng" id="anRange" min="10" max="120" step="1" value="40" aria-label="ຄວາມໄວການເລື່ອນ (ແຖບປະກາດ)">
             <span class="lsz-v" id="anVal">40px/s</span>
           </div>
-          <div class="lsz-m"><span>ຊ້າ 10</span><span>ໄວ 120</span></div>
           <div class="lsz-t">ຕົວຢ່າງການເລື່ອນ (ຄວາມໄວຈິງ)</div>
           <div class="mqp an" id="anPv"><div class="mqp-t"></div></div>
-          <div class="lsz-bt"><button type="button" class="lsz-b" id="anMinus" aria-label="ຊ້າລົງ">−</button><button type="button" class="up rm" id="anReset">ຄືນຄ່າເດີມ (40)</button><button type="button" class="lsz-b" id="anPlus" aria-label="ໄວຂຶ້ນ">+</button></div>
         </div>
       </div>
     </div>
@@ -440,8 +437,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     $('lszRange').value = sz;
     $('lszRange').style.setProperty('--r', (sz - LSZ_MIN) / (LSZ_MAX - LSZ_MIN));
     pv.style.width = pv.style.height = sz + 'px';
-    pv.textContent = '';
-    if(st.logo){ var im = new Image(); im.alt = ''; im.draggable = false; im.src = st.logo; im.onerror = function(){ pv.textContent = nm.slice(0, 2); }; pv.appendChild(im); }
+    pv.textContent = ''; pv.classList.remove('has-img');
+    if(st.logo){ var im = new Image(); im.alt = ''; im.draggable = false; im.src = st.logo; im.onerror = function(){ pv.classList.remove('has-img'); pv.textContent = nm.slice(0, 2); }; pv.classList.add('has-img'); pv.appendChild(im); }
     else { pv.textContent = nm.slice(0, 2); }
     $('pvName').textContent = nm;
     $('lszBox').classList.toggle('off', !st.logo);
@@ -497,9 +494,6 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   $('sn').addEventListener('input', paintLsz);
   ['mq','an'].forEach(function(k){
     $(k + 'Range').addEventListener('input', function(){ setSpd(k, this.value); });
-    $(k + 'Minus').addEventListener('click', function(){ setSpd(k, SPD[k].v - 1); });
-    $(k + 'Plus').addEventListener('click', function(){ setSpd(k, SPD[k].v + 1); });
-    $(k + 'Reset').addEventListener('click', function(){ setSpd(k, SPD[k].def); });
     var tm; $(k).addEventListener('input', function(){ clearTimeout(tm); tm = setTimeout(function(){ mqBuild(k); }, 250); });
   });
   window.addEventListener('resize', function(){ clearTimeout(window.__mqT); window.__mqT = setTimeout(mqRefresh, 200); });
