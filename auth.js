@@ -234,8 +234,15 @@ const AUTH = {
       return { ok: res.ok, message: body && body.message };
     } finally { clearTimeout(t); }
   }
+  /* เสียง "แปะๆ" ตอนเข้าสู่ระบบ/สมัครสำเร็จ — เตรียมเสียงตอนกดปุ่ม (มือถือบังคับให้เริ่มจากการกดของผู้ใช้) แล้วค่อยเล่นเมื่อสำเร็จ */
+  let okSnd = null;
+  function primeSnd(){ try { okSnd = okSnd || new Audio('ok.mp3'); okSnd.preload = 'auto'; okSnd.muted = true;
+    const p = okSnd.play(); const rs = () => { okSnd.pause(); okSnd.currentTime = 0; okSnd.muted = false; };
+    p && p.then ? p.then(rs, () => { okSnd.muted = false; }) : rs(); } catch (e) {} }
+  function playOk(){ try { if(!okSnd) okSnd = new Audio('ok.mp3'); okSnd.muted = false; okSnd.currentTime = 0; const p = okSnd.play(); p && p.catch && p.catch(() => {}); } catch (e) {} }
   $$('form', am).forEach(form => form.addEventListener('submit', async e => {
     e.preventDefault();
+    primeSnd();
     const kind = form.dataset.form, btn = $('.go', form);
     if (busy || btn.disabled) return;
     const inputs = $$('.inp input', form), bad = inputs.filter(i => !check(i));
@@ -253,6 +260,7 @@ const AUTH = {
       if (r.demo) {
         say('info', 'ໂໝດທົດລອງ: ຂໍ້ມູນຖືກຮູບແບບ ແຕ່ຍັງບໍ່ໄດ້ເຊື່ອມລະບົບຫຼັງບ້ານ ຈຶ່ງຍັງ' + (kind === 'login' ? 'ບໍ່ໄດ້ເຂົ້າສູ່ລະບົບ' : 'ບໍ່ໄດ້ສ້າງບັນຊີ'));
       } else if (r.ok) {
+        playOk();
         say('success', kind === 'login' ? 'ເຂົ້າສູ່ລະບົບສຳເລັດ' : 'ສະໝັກສະມາຊິກສຳເລັດ');
         done = true;
         if (kind === 'login') setRem(remember ? (r.name || data.username) : '');
