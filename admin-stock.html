@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ເຕີມສະຕັອກ</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--red-rgb:255,0,0;--bg:#000;--card:#000;--line:#2a2a2e;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--warn:#f5a524;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.kpi{border:1px solid var(--line);border-radius:14px;padding:11px 12px}
+.kpi small{display:block;color:var(--mut);font-size:12px;line-height:1.3;min-height:31px}
+.kpi b{font-size:22px;font-weight:800}
+.kpi.ok b{color:var(--ok)}.kpi.warn b{color:var(--warn)}.kpi.no b{color:var(--red)}
+.in{width:100%;height:44px;border-radius:12px;border:1px solid var(--line);background:#000;padding:0 12px;outline:none}
+.in:focus,.ta:focus{border-color:var(--red)}
+.ta{width:100%;min-height:190px;border-radius:12px;border:1px solid var(--line);background:#000;padding:10px 12px;outline:none;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;white-space:pre;overflow:auto}
+.pr{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px;transition:border-color .2s,transform .15s}
+.pr:active{transform:scale(.99);border-color:var(--red)}
+.pr .h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pr .n{font-weight:700;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr .c{color:var(--mut);font-size:12px;margin-top:2px}
+.badge{flex:none;font-weight:800;font-size:13px;padding:3px 10px;border-radius:999px;border:1px solid var(--ok);color:var(--ok)}
+.badge.warn{border-color:var(--warn);color:var(--warn)}.badge.no{border-color:var(--red);color:#ff8a87}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{font-size:12px;padding:3px 9px;border-radius:8px;border:1px solid var(--line);color:var(--mut)}
+.chip b{color:var(--txt);margin-left:4px}
+.chip.z b{color:#ff8a87}
+.box{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:16px}
+.box h2{font-size:15px;font-weight:700;margin-bottom:8px}
+.lg{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #151518;font-size:13px}
+.lg:first-of-type{border-top:0}
+.lg span{color:var(--mut);font-size:12px}
+.lg .p{color:var(--ok);font-weight:700}.lg .m{color:#ff8a87;font-weight:700}
+.empty{text-align:center;color:var(--mut);padding:30px 0;font-size:14px}
+/* bottom sheet */
+.bk{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.72);opacity:0;pointer-events:none;transition:opacity .25s}
+.bk.show{opacity:1;pointer-events:auto}
+.sh{position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:560px;margin:0 auto;max-height:92vh;overflow:auto;background:#09090b;border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.sh.show{transform:none}
+.sh .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sh .top h3{font-size:16px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.x{flex:none;width:36px;height:36px;border-radius:50%;background:#1a1a1d;font-size:16px}
+.lbl{font-size:12.5px;color:var(--mut);margin:12px 0 6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{padding:8px 14px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--mut)}
+.opt small{margin-left:6px;font-weight:700}
+.opt.on{border-color:var(--red);color:#fff;background:rgba(var(--red-rgb),.14)}
+.tabs{display:flex;gap:8px;margin:14px 0 4px}
+.tab{flex:1;height:38px;border-radius:10px;border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
+.tab.on{border-color:var(--red);color:#fff;background:rgba(var(--red-rgb),.12)}
+.cnt{display:flex;justify-content:space-between;align-items:center;margin:8px 0;font-size:13px;color:var(--mut);gap:8px;flex-wrap:wrap}
+.cnt b{color:#fff}.cnt .w{color:var(--warn)}
+.row{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;height:46px;border-radius:12px;background:var(--red);color:#fff;font-weight:800;white-space:nowrap;transition:opacity .2s}
+.btn:disabled{opacity:.45}
+.sec{height:46px;padding:0 14px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:14px;white-space:nowrap}
+.sec.d{color:#ff8a87;border-color:#d95b58}
+.fl{display:flex;gap:8px;margin:10px 0}
+.kr{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;margin-top:8px}
+.kr code{flex:1;min-width:0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;word-break:break-all}
+.kr small{color:var(--mut);font-size:11.5px;flex:none}
+.kr input{width:18px;height:18px;accent-color:#ff0000;flex:none}
+.kr.u code{color:var(--mut);text-decoration:line-through}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+<script>window.EX_THEME_ADMIN=1</script>
+<script src="theme.js"></script>
+<script src="admin-i18n.js"></script>
+<script src="i18n.js"></script>
+<script src="admin-lang.js"></script>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<h2 class="pg-title">ເຕີມສະຕັອກ</h2>
+<div class="wrap">
+  <div class="kpis">
+    <div class="kpi ok"><small>ພ້ອມຂາຍທັງໝົດ</small><b id="kAll">0</b></div>
+    <div class="kpi warn"><small>ໃກ້ໝົດ</small><b id="kLow">0</b></div>
+    <div class="kpi no"><small>ໝົດສະຕັອກ</small><b id="kOut">0</b></div>
+  </div>
+  <input class="in" id="q" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ" autocomplete="off">
+  <div id="plist"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+  <div class="box"><h2>ປະຫວັດການເຕີມ</h2><div id="hist"><div class="empty">ກຳລັງໂຫຼດ...</div></div></div>
+</div>
+
+<div class="bk" id="bk"></div>
+<div class="sh" id="sh" role="dialog" aria-modal="true">
+  <div class="top"><h3 id="shT"></h3><button class="x" id="shX" type="button" aria-label="close">✕</button></div>
+  <div id="optBox"><div class="lbl">ຕົວເລືອກ</div><div class="opts" id="opts"></div></div>
+  <div class="tabs"><button class="tab on" data-t="add" type="button">ເຕີມໂຄ້ດ</button><button class="tab" data-t="inv" type="button">ຄັງໂຄ້ດ</button></div>
+
+  <div id="vAdd">
+    <div class="lbl">ໃສ່ໂຄ້ດ (1 ແຖວ = 1 ໂຄ້ດ)</div>
+    <textarea class="ta" id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="CODE-0001&#10;CODE-0002&#10;user:password"></textarea>
+    <div class="cnt"><span>ໂຄ້ດທີ່ຈະເຕີມ <b id="cN">0</b></span><span class="w" id="cW"></span></div>
+    <div class="row">
+      <button class="sec" id="imp" type="button">ນຳເຂົ້າໄຟລ໌</button>
+      <button class="sec" id="clr" type="button">ລ້າງ</button>
+      <button class="btn" id="go" type="button" disabled>ເຕີມສະຕັອກ</button>
+    </div>
+    <input type="file" id="file" accept=".txt,.csv,text/plain" hidden>
+  </div>
+
+  <div id="vInv" hidden>
+    <div class="fl"><button class="tab on" data-f="available" type="button">ພ້ອມຂາຍ</button><button class="tab" data-f="used" type="button">ຂາຍແລ້ວ</button></div>
+    <div class="cnt"><span>ທັງໝົດ <b id="iN">0</b></span><button id="selAll" class="sec" style="height:34px;font-size:13px" type="button">ເລືອກທັງໝົດ</button></div>
+    <div id="keys"></div>
+    <div class="row"><button class="sec" id="cp" type="button">ຄັດລອກ</button><button class="sec d" id="del" type="button" disabled>ລຶບທີ່ເລືອກ</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var LOW = 3, MAXK = 2000, tt;
+  var products = [], stock = {}, cur = null, curDur = '', tab = 'add', kf = 'available', keys = [], sel = {}, busy = false;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function tok(){ return exToken(); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2800); }
+  var ERR = { not_admin:'ບໍ່ມີສິດເຂົ້າເຖິງ', nf:'ບໍ່ພົບສິນຄ້າ', dur_notfound:'ບໍ່ພົບຕົວເລືອກນີ້', empty:'ກະລຸນາໃສ່ໂຄ້ດ', too_many:'ໃສ່ໄດ້ສູງສຸດ 2000 ໂຄ້ດຕໍ່ຄັ້ງ' };
+  function errMsg(j){ return (j && ERR[j.code]) || 'ເຮັດບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່'; }
+  function call(fn, b){ b = b || {}; b.p_token = tok(); return exRpc(fn, b); }
+  function tot(p){ var s = stock[p.id]; return s ? s.total : 0; }
+  function durStock(p, l){ var s = stock[p.id]; return s && s.durs && s.durs[l] ? s.durs[l] : 0; }
+
+  /* ===== โหลดข้อมูล ===== */
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-stock.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin) loadAll(); else location.replace('index.html');
+    }).catch(function(){ $('#plist').innerHTML = '<div class="empty">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div>'; });
+  }
+  function loadAll(){
+    return Promise.all([call('adm_product_list'), call('adm_product_stock'), call('adm_restock_log', { p_limit: 30 })]).then(function(r){
+      if(!r[0] || !r[0].ok){ $('#plist').innerHTML = '<div class="empty">ບໍ່ມີສິດເຂົ້າເຖິງ</div>'; return; }
+      products = r[0].products || []; stock = (r[1] && r[1].stock) || {};
+      renderList(); renderHist(r[2] && r[2].rows || []);
+      if(cur){ cur = products.filter(function(p){ return p.id === cur.id; })[0] || null; if(cur) renderSheetOpts(); }
+    }).catch(function(){ $('#plist').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
+  }
+
+  /* ===== รายการสินค้า ===== */
+  function renderList(){
+    var q = $('#q').value.trim().toLowerCase(), all = 0, low = 0, out = 0;
+    products.forEach(function(p){ var t = tot(p); all += t; if(p.status !== 'inactive'){ if(t === 0) out++; else if(t <= LOW) low++; } });
+    $('#kAll').textContent = all.toLocaleString('en-US'); $('#kLow').textContent = low; $('#kOut').textContent = out;
+    var rows = products.filter(function(p){ return !q || String(p.name).toLowerCase().indexOf(q) > -1; });
+    if(!rows.length){ $('#plist').innerHTML = '<div class="empty">' + (products.length ? 'ບໍ່ພົບສິນຄ້າ' : 'ຍັງບໍ່ມີສິນຄ້າ — ເພີ່ມສິນຄ້າກ່ອນ') + '</div>'; return; }
+    $('#plist').innerHTML = rows.map(function(p){
+      var t = tot(p), cls = t === 0 ? 'no' : t <= LOW ? 'warn' : '';
+      var chips = (p.durs || []).map(function(d){ var n = durStock(p, d.label); return '<span class="chip' + (n ? '' : ' z') + '">' + esc(d.label) + '<b>' + n + '</b></span>'; }).join('');
+      return '<button class="pr" data-id="' + p.id + '" type="button"><div class="h"><div style="min-width:0"><div class="n">' + esc(p.name) + '</div><div class="c">' + esc(p.cat || '—') + '</div></div><span class="badge ' + cls + '">' + t + ' ຊິ້ນ</span></div>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</button>';
+    }).join('');
+  }
+  function renderHist(rows){
+    if(!rows.length){ $('#hist').innerHTML = '<div class="empty">ຍັງບໍ່ມີປະຫວັດ</div>'; return; }
+    $('#hist').innerHTML = rows.map(function(r){
+      var d = new Date(r.t).toLocaleString('en-GB', { hour12:false, day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+      var add = r.mode !== 'remove';
+      return '<div class="lg"><div>' + esc(r.name) + (r.dur ? ' · ' + esc(r.dur) : '') + '<br><span>' + esc(d) + ' · ຄົງເຫຼືອ ' + r.after + ' ຊິ້ນ</span></div><div class="' + (add ? 'p' : 'm') + '">' + (add ? '+' : '−') + r.qty + '</div></div>';
+    }).join('');
+  }
+  $('#q').addEventListener('input', renderList);
+  $('#plist').addEventListener('click', function(e){
+    var b = e.target.closest('.pr'); if(!b) return;
+    cur = products.filter(function(p){ return String(p.id) === b.dataset.id; })[0]; if(!cur) return;
+    curDur = cur.durs && cur.durs.length ? cur.durs[0].label : '';
+    openSheet();
+  });
+
+  /* ===== แผงเติมสต็อก ===== */
+  function openSheet(){
+    $('#shT').textContent = cur.name; $('#ta').value = ''; sel = {}; kf = 'available'; setTab('add'); renderSheetOpts(); count();
+    $('#bk').classList.add('show'); $('#sh').classList.add('show');
+  }
+  function closeSheet(){ $('#bk').classList.remove('show'); $('#sh').classList.remove('show'); cur = null; }
+  $('#shX').addEventListener('click', closeSheet); $('#bk').addEventListener('click', closeSheet);
+  function renderSheetOpts(){
+    var has = cur.durs && cur.durs.length;
+    $('#optBox').hidden = !has;
+    if(has){
+      if(!cur.durs.some(function(d){ return d.label === curDur; })) curDur = cur.durs[0].label;
+      $('#opts').innerHTML = cur.durs.map(function(d){ return '<button class="opt' + (d.label === curDur ? ' on' : '') + '" data-l="' + esc(d.label) + '" type="button">' + esc(d.label) + '<small>' + durStock(cur, d.label) + '</small></button>'; }).join('');
+    } else curDur = '';
+  }
+  $('#opts').addEventListener('click', function(e){
+    var b = e.target.closest('.opt'); if(!b) return;
+    curDur = b.dataset.l; renderSheetOpts(); if(tab === 'inv') loadKeys();
+  });
+  function setTab(t){
+    tab = t;
+    document.querySelectorAll('.sh > .tabs .tab').forEach(function(x){ x.classList.toggle('on', x.dataset.t === t); });
+    $('#vAdd').hidden = t !== 'add'; $('#vInv').hidden = t !== 'inv';
+    if(t === 'inv') loadKeys();
+  }
+  document.querySelector('.sh > .tabs').addEventListener('click', function(e){ var b = e.target.closest('.tab'); if(b) setTab(b.dataset.t); });
+
+  /* --- เติมโค้ด --- */
+  function parse(){
+    var lines = $('#ta').value.split(/\r?\n/).map(function(s){ return s.trim(); }).filter(Boolean), seen = {}, out = [];
+    lines.forEach(function(s){ if(!seen[s]){ seen[s] = 1; out.push(s); } });
+    return { list: out, dup: lines.length - out.length };
+  }
+  function count(){
+    var r = parse();
+    $('#cN').textContent = r.list.length;
+    $('#cW').textContent = r.dup ? 'ຊ້ຳ ' + r.dup + ' ແຖວ (ຈະຂ້າມ)' : (r.list.length > MAXK ? 'ເກີນ 2000' : '');
+    $('#go').disabled = busy || !r.list.length || r.list.length > MAXK;
+  }
+  $('#ta').addEventListener('input', count);
+  $('#clr').addEventListener('click', function(){ $('#ta').value = ''; count(); });
+  $('#imp').addEventListener('click', function(){ $('#file').click(); });
+  $('#file').addEventListener('change', function(){
+    var f = this.files[0]; this.value = ''; if(!f) return;
+    if(f.size > 2 * 1024 * 1024){ toast('ໄຟລ໌ໃຫຍ່ເກີນ 2MB'); return; }
+    var rd = new FileReader();
+    rd.onload = function(){ var cur0 = $('#ta').value; $('#ta').value = (cur0 && !/\n$/.test(cur0) ? cur0 + '\n' : cur0) + String(rd.result || ''); count(); };
+    rd.readAsText(f);
+  });
+  $('#go').addEventListener('click', function(){
+    var r = parse(); if(busy || !cur || !r.list.length) return;
+    busy = true; $('#go').disabled = true; $('#go').textContent = 'ກຳລັງເຕີມ...';
+    call('adm_keys_add', { p_product_id: cur.id, p_dur_label: curDur, p_keys: r.list }).then(function(j){
+      if(j && j.ok){
+        var skip = (j.dup || 0) + r.dup;
+        toast('ເຕີມສຳເລັດ +' + j.added + ' ຊິ້ນ' + (skip ? ' · ຂ້າມໂຄ້ດຊ້ຳ ' + skip : ''));
+        $('#ta').value = ''; loadAll();
+      } else toast(errMsg(j));
+    }).catch(function(){ toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); }).finally(function(){ busy = false; $('#go').textContent = 'ເຕີມສະຕັອກ'; count(); });
+  });
+
+  /* --- คลังโค้ด --- */
+  function loadKeys(){
+    if(!cur) return; sel = {}; $('#keys').innerHTML = '<div class="empty">ກຳລັງໂຫຼດ...</div>'; updDel();
+    call('adm_keys_list', { p_product_id: cur.id, p_status: kf, p_dur_label: curDur || null, p_limit: 200, p_offset: 0 }).then(function(j){
+      if(!j || !j.ok){ $('#keys').innerHTML = '<div class="empty">' + esc(errMsg(j)) + '</div>'; return; }
+      keys = j.rows || []; $('#iN').textContent = j.total; renderKeys(j.total);
+    }).catch(function(){ $('#keys').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
+  }
+  function renderKeys(total){
+    if(!keys.length){ $('#keys').innerHTML = '<div class="empty">ບໍ່ມີໂຄ້ດ</div>'; return; }
+    $('#keys').innerHTML = keys.map(function(k){
+      var u = k.status === 'used';
+      return '<label class="kr' + (u ? ' u' : '') + '">' + (u ? '' : '<input type="checkbox" data-id="' + k.id + '">') + '<code>' + esc(k.code) + '</code><small>' + esc(new Date(u ? k.used_at : k.at).toLocaleDateString('en-GB')) + '</small></label>';
+    }).join('') + (total > keys.length ? '<div class="empty">ສະແດງ ' + keys.length + ' ຈາກ ' + total + '</div>' : '');
+  }
+  function updDel(){ var n = Object.keys(sel).length; $('#del').disabled = !n; $('#del').textContent = n ? 'ລຶບທີ່ເລືອກ (' + n + ')' : 'ລຶບທີ່ເລືອກ'; }
+  $('#keys').addEventListener('change', function(e){ var c = e.target; if(c.dataset.id){ if(c.checked) sel[c.dataset.id] = 1; else delete sel[c.dataset.id]; updDel(); } });
+  $('#vInv .fl').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return; kf = b.dataset.f;
+    document.querySelectorAll('#vInv .fl .tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+    $('#selAll').hidden = kf === 'used'; loadKeys();
+  });
+  $('#selAll').addEventListener('click', function(){
+    var boxes = document.querySelectorAll('#keys input[data-id]'), all = boxes.length && Object.keys(sel).length === boxes.length;
+    sel = {}; boxes.forEach(function(c){ c.checked = !all; if(!all) sel[c.dataset.id] = 1; }); updDel();
+  });
+  $('#cp').addEventListener('click', function(){
+    var ids = Object.keys(sel), list = keys.filter(function(k){ return ids.length ? sel[k.id] : true; }).map(function(k){ return k.code; });
+    if(!list.length){ toast('ບໍ່ມີໂຄ້ດ'); return; }
+    var txt = list.join('\n');
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(function(){
+      var t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); }catch(e){} t.remove();
+    }).then(function(){ toast('ຄັດລອກແລ້ວ ' + list.length + ' ໂຄ້ດ'); });
+  });
+  $('#del').addEventListener('click', function(){
+    var ids = Object.keys(sel).map(Number); if(!ids.length || busy) return;
+    if(!confirm('ລຶບ ' + ids.length + ' ໂຄ້ດ?')) return;
+    busy = true;
+    call('adm_keys_delete', { p_ids: ids }).then(function(j){
+      if(j && j.ok){ toast('ລຶບແລ້ວ ' + j.deleted + ' ໂຄ້ດ'); loadAll(); loadKeys(); } else toast(errMsg(j));
+    }).catch(function(){ toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); }).finally(function(){ busy = false; });
+  });
+
+  gate();
+})();
+</script>
+</body>
+</html>
