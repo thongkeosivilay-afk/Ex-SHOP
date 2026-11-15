@@ -69,6 +69,29 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .savebar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 100px);z-index:20;pointer-events:none;display:flex;justify-content:center;padding:0 14px}
 .save{pointer-events:auto;width:100%;max-width:532px;height:49px;border-radius:15px;background:rgba(232,50,31,.5);color:rgba(255,255,255,.62);border:1px solid rgba(232,50,31,.2);font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(232,50,31,.25)}
 .save svg{width:21px;height:21px}
+
+/* ===== อัปโหลดรูป (โลโก้ / แบนเนอร์) ===== */
+.drop{position:relative;overflow:hidden}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.drop.has img{display:block}
+.drop.has .cl,.drop.has b,.drop.has span{display:none}
+.drop.logo{width:132px;height:132px;border-radius:50%;margin:0 auto}
+.drop.logo.has{border-style:solid}
+.drop.logo .cl{width:42px;height:42px}
+.drop.logo .cl svg{width:22px;height:22px}
+.drop.logo b{font-size:12.5px}
+.drop.logo span{display:none}
+.fld .hint{margin-top:10px;font-size:12.5px;color:#62605f;text-align:center}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
+.btns .up{margin-top:0}
+.logo-wrap .btns{justify-content:center}
+.up.rm{border-color:#2a2a2e;color:#b9b9bd;background:#0a0a0a}
+.up:disabled{opacity:.5}
+.up[hidden]{display:none}
+.save.dirty{background:var(--redbtn);color:#fff;border-color:var(--redbtn);box-shadow:0 8px 30px rgba(232,50,31,.45)}
+.save:disabled{pointer-events:none}
+.snack{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 170px);transform:translate(-50%,12px);z-index:60;background:#1a1a1c;border:1px solid #333;color:#fff;padding:11px 20px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.2s;max-width:90%;text-align:center}
+.snack.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
@@ -110,34 +133,46 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
       <h4>ຂໍ້ມູນພື້ນຖານເວັບໄຊ</h4>
     </div>
     <div class="pb">
+      <div class="fld logo-wrap">
+        <label>ໂລໂກ້ຮ້ານ</label>
+        <div class="drop logo" id="logoDrop"><img id="logoImg" alt=""><div class="cl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.500a6 6 0 0 1 5.700 4.200A4.700 4.700 0 0 1 17.300 17H15v-2.300h2.300a2.400 2.400 0 0 0 .1-4.800l-1-.1-.2-1A4 4 0 0 0 8.200 9.500l-.2 1.100-1.100.2A2.700 2.700 0 0 0 7.300 15H9.500V17H7.300A4.700 4.700 0 0 1 6 7.800V9z"/></svg></div><b>ໂລໂກ້</b></div>
+        <div class="btns">
+          <button class="up" id="logoUp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>ອັບໂຫຼດໂລໂກ້</button>
+          <button class="up rm" id="logoRm" type="button" hidden>ລຶບ</button>
+        </div>
+        <p class="hint">ແນະນຳຮູບສີ່ຫຼ່ຽມຈັດຕຸລັດ 256 × 256 px · JPG, PNG, WEBP · ບໍ່ໃສ່ = ໃຊ້ຕົວຫຍໍ້ຊື່ຮ້ານ</p>
+        <input type="file" id="logoFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+      </div>
+
       <div class="fld">
         <label for="sn">ຊື່ເວັບໄຊ (Site Name)</label>
-        <input class="inp" id="sn" type="text" value="EXSHOP" autocomplete="off">
+        <input class="inp" id="sn" type="text" value="" maxlength="60" autocomplete="off">
       </div>
 
       <div class="fld">
         <label>ແບນເນີໜ້າທຳອິດ</label>
-        <div class="drop">
-          <div class="cl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.500a6 6 0 0 1 5.700 4.200A4.700 4.700 0 0 1 17.300 17H15v-2.300h2.300a2.400 2.400 0 0 0 .1-4.800l-1-.1-.2-1A4 4 0 0 0 8.200 9.500l-.2 1.100-1.100.2A2.700 2.700 0 0 0 7.300 15H9.500V17H7.300A4.700 4.700 0 0 1 6 7.800 6 6 0 0 1 12 3.500zM13 12.300l2.600 2.800-1.500 1.400-1.100-1.200V20h-2v-4.700l-1.100 1.200-1.500-1.400 2.600-2.800a1.200 1.200 0 0 1 1.700 0z"/></svg></div>
-          <b>ຍັງບໍ່ໄດ້ອັບໂຫຼດແບນເນີ</b>
-          <span>ຂະໜາດແນະນຳ 1920 × 600 px · JPG, PNG, WEBP</span>
+        <div class="drop" id="bnDrop"><img id="bnImg" alt=""><div class="cl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.500a6 6 0 0 1 5.700 4.200A4.700 4.700 0 0 1 17.300 17H15v-2.300h2.300a2.400 2.400 0 0 0 .1-4.800l-1-.1-.2-1A4 4 0 0 0 8.200 9.500l-.2 1.100-1.100.2A2.700 2.700 0 0 0 7.300 15H9.500V17H7.300A4.700 4.700 0 0 1 6 7.800V9z"/></svg></div><b>ຍັງບໍ່ໄດ້ອັບໂຫຼດແບນເນີ</b><span>ຂະໜາດແນະນຳ 1500 × 512 px · JPG, PNG, WEBP</span></div>
+        <div class="btns">
+          <button class="up" id="bnUp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>ອັບໂຫຼດຈາກເຄື່ອງ</button>
+          <button class="up rm" id="bnRm" type="button" hidden>ລຶບ</button>
         </div>
-        <button class="up" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>ອັບໂຫຼດຈາກເຄື່ອງ</button>
+        <input type="file" id="bnFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
       </div>
 
       <div class="fld">
         <label for="sd">ຄຳອະທິບາຍເວັບໄຊ</label>
-        <textarea class="inp" id="sd" placeholder="ຂຽນຄຳອະທິບາຍສັ້ນໆກ່ຽວກັບຮ້ານຂອງທ່ານ..."></textarea>
+        <textarea class="inp" id="sd" maxlength="1000" placeholder="ຂຽນຄຳອະທິບາຍສັ້ນໆກ່ຽວກັບຮ້ານຂອງທ່ານ..."></textarea>
       </div>
     </div>
   </section>
 </div>
 
-<div class="savebar"><button class="save" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11.200a2 2 0 0 1 1.400.600l2.800 2.800a2 2 0 0 1 .600 1.400V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 1.800V8a1 1 0 0 0 1 1h6.200a1 1 0 0 0 1-1V4.800zM12 12.500a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>ບັນທຶກການຕັ້ງຄ່າ</button></div>
+<div class="snack" id="snack"></div>
+<div class="savebar"><button class="save" id="saveBtn" type="button" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11.200a2 2 0 0 1 1.400.600l2.800 2.800a2 2 0 0 1 .600 1.400V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 1.800V8a1 1 0 0 0 1 1h6.200a1 1 0 0 0 1-1V4.800zM12 12.500a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>ບັນທຶກການຕັ້ງຄ່າ</button></div>
 
 <script>
 (function(){
-  /* ກວດສິດແອດມິນ (ຝັ່ງ Supabase) — ໜ້ານີ້ເປັນສະເພາະໜ້າຕາ ຍັງບໍ່ໄດ້ເຊື່ອມຟັງຊັນບັນທຶກ */
+  /* ກວດສິດແອດມິນ (ຝັ່ງ Supabase) —  */
   var tok = window.exToken && exToken();
   if(!tok){ try{ sessionStorage.setItem('exNext','admin-settings.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
   exRpc('member_is_admin', { p_token: tok }).then(function(j){
@@ -147,6 +182,79 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   document.getElementById('tabs').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return;
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+  });
+
+  /* ===== ຂໍ້ມູນພື້ນຖານເວັບໄຊ ↔ Supabase (shop_site / admin_site_save) ===== */
+  var $ = function(id){ return document.getElementById(id); };
+  var SB = window.EX_SB;
+  var EXT = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'};
+  var st = { name:'', logo:'', banner:'', description:'' }, saved = null, busy = false;
+  var sn = $('snack'), snT;
+  function toast(t){ sn.textContent = t; sn.classList.add('show'); clearTimeout(snT); snT = setTimeout(function(){ sn.classList.remove('show'); }, 2600); }
+
+  function paintImg(box, img, rm, url){
+    if(url){ img.src = url; box.classList.add('has'); rm.hidden = false; }
+    else { img.removeAttribute('src'); box.classList.remove('has'); rm.hidden = true; }
+  }
+  function paint(){
+    paintImg($('logoDrop'), $('logoImg'), $('logoRm'), st.logo);
+    paintImg($('bnDrop'), $('bnImg'), $('bnRm'), st.banner);
+  }
+  function dirty(){
+    var d = !saved || saved.name !== $('sn').value.trim() || saved.description !== $('sd').value
+      || saved.logo !== st.logo || saved.banner !== st.banner;
+    var b = $('saveBtn'); b.disabled = !d || busy; b.classList.toggle('dirty', d && !busy);
+  }
+  function fill(j){
+    j = j || {};
+    st.name = j.name || ''; st.logo = j.logo || ''; st.banner = j.banner || ''; st.description = j.description || '';
+    $('sn').value = st.name; $('sd').value = st.description;
+    saved = { name: st.name, logo: st.logo, banner: st.banner, description: st.description };
+    paint(); dirty();
+  }
+  exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
+
+  async function upload(file, btn){
+    if(!EXT[file.type]) return toast('ຮອງຮັບສະເພາະ JPG / PNG / WEBP / GIF');
+    if(file.size > 5*1024*1024) return toast('ໄຟລ໌ໃຫຍ່ເກີນ 5MB');
+    var name = 'site-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8) + '.' + EXT[file.type];
+    btn.disabled = true; busy = true; dirty();
+    try{
+      var r = await fetch(SB.url + '/storage/v1/object/product-images/' + name, { method:'POST',
+        headers:{ apikey:SB.key, Authorization:'Bearer ' + SB.key, 'x-admin-token':exToken(), 'Content-Type':file.type, 'cache-control':'max-age=31536000' }, body:file });
+      if(!r.ok) throw new Error('http ' + r.status);
+      return SB.url + '/storage/v1/object/public/product-images/' + name;
+    }catch(e){ toast('ອັບໂຫຼດບໍ່ສຳເລັດ'); }
+    finally{ btn.disabled = false; busy = false; dirty(); }
+  }
+  function wire(key, upBtn, rmBtn, fileIn, box){
+    upBtn.addEventListener('click', function(){ fileIn.click(); });
+    box.addEventListener('click', function(){ fileIn.click(); });
+    rmBtn.addEventListener('click', function(){ st[key] = ''; paint(); dirty(); });
+    fileIn.addEventListener('change', async function(){
+      var f = fileIn.files[0]; fileIn.value = ''; if(!f) return;
+      var u = await upload(f, upBtn); if(u){ st[key] = u; paint(); dirty(); }
+    });
+  }
+  wire('logo', $('logoUp'), $('logoRm'), $('logoFile'), $('logoDrop'));
+  wire('banner', $('bnUp'), $('bnRm'), $('bnFile'), $('bnDrop'));
+  $('sn').addEventListener('input', dirty);
+  $('sd').addEventListener('input', dirty);
+
+  $('saveBtn').addEventListener('click', async function(){
+    if(busy) return;
+    var name = $('sn').value.trim();
+    if(!name) return toast('ກະລຸນາໃສ່ຊື່ເວັບໄຊ');
+    busy = true; dirty();
+    try{
+      var j = await exRpc('admin_site_save', { p_token: exToken(), p_name: name, p_logo: st.logo, p_banner: st.banner, p_description: $('sd').value });
+      if(j && j.ok){
+        saved = { name: name, logo: st.logo, banner: st.banner, description: $('sd').value };
+        try{ localStorage.removeItem('exSiteCache'); }catch(e){}
+        toast('ບັນທຶກສຳເລັດ');
+      } else toast(j && j.code === 'not_admin' ? 'ບໍ່ມີສິດແອດມິນ' : 'ບັນທຶກບໍ່ສຳເລັດ');
+    }catch(e){ toast('ບັນທຶກບໍ່ສຳເລັດ'); }
+    busy = false; dirty();
   });
 })();
 </script>

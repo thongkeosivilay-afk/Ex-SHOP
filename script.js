@@ -32,11 +32,22 @@ document.addEventListener('click', e => {
 
 
 /* แบนเนอร์: ใส่รูปที่ IMG.banner ใน data.js (1500 × 512 px) — ว่าง = โชว์ขนาดที่แนะนำ */
-(function(){
+function paintBanner(){
   const b = $('#bnArt'); if(!b) return;
   /* ถ้า data.js เป็นไฟล์เก่า (ยังไม่มี artBanner) ใช้ตัวสำรองนี้ — ห้ามให้สคริปต์ทั้งหน้าพัง */
   const fallback = '<div class="cph"><span class="cph-a">ຂະໜາດຮູບທີ່ແນະນຳ</span><span class="cph-n">1500 × 512<small>px</small></span><span class="cph-b">ສຳລັບຮູບແບນເນີ · ຮູບແນວນອນ · PNG ຫຼື JPG</span></div>';
   try { b.innerHTML = (typeof artBanner === 'function') ? artBanner() : fallback; } catch(e){ b.innerHTML = fallback; }
+}
+paintBanner();
+document.addEventListener('site:ready', paintBanner);
+
+/* คำอธิบายร้าน (ย่อหน้าใต้ "ຍິນດີຕ້ອນຮັບສູ່") — ถ้าไม่ได้ตั้งค่าไว้ ใช้ข้อความเดิมในหน้า */
+(function(){
+  const p = $('#heroDesc'); if(!p) return;
+  const dflt = p.textContent;
+  const paint = () => { const d = (typeof SITE !== 'undefined' && SITE.desc) || ''; p.textContent = d.trim() ? d : dflt; };
+  paint();
+  document.addEventListener('site:ready', paint);
 })();
 
 /* marquee — เลื่อนวนไม่มีสะดุด
@@ -178,7 +189,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ชื่อร้าน + โลโก้บนแถบหัว (ค่าอยู่ที่ SITE ใน data.js) */
-(function(){
+function paintBrand(){
   const S = (typeof SITE !== 'undefined' && SITE) || { name:'EXSHOP', logo:'' };
   const nm = String(S.name || 'EXSHOP');
   const n = $('#brName'), lg = $('#brLogo'), br = $('#brand');
@@ -192,7 +203,9 @@ document.addEventListener('click', e => {
       lg.appendChild(im);
     } else { lg.textContent = nm.slice(0, 2); }
   }
-})();
+}
+paintBrand();
+document.addEventListener('site:ready', paintBrand);
 
 /* drawer */
 const ov = $('#ov'), hdr = $('#hdr'), hMenu = $('#hMenu');
