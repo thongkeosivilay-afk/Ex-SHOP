@@ -213,8 +213,11 @@ function paintBrand(){
   if(br) br.setAttribute('aria-label', nm);
   if(lg){
     lg.textContent = '';
+    /* ขนาดโลโก้: เก็บต่อท้าย URL เป็น #sz=ตัวเลข (ตั้งที่หน้าแอดมิน → ข้อมูลพื้นฐาน) */
+    const mz = /#sz=(\d+)$/.exec(S.logo || ''), lz = mz ? Math.max(28, Math.min(50, +mz[1])) : 0;
+    lg.style.width = lg.style.height = lz ? lz + 'px' : '';
     if(S.logo){
-      const im = new Image(); im.alt = ''; im.draggable = false; im.src = S.logo;
+      const im = new Image(); im.alt = ''; im.draggable = false; im.src = String(S.logo).replace(/#sz=\d+$/, '');
       im.onerror = () => { lg.textContent = nm.slice(0, 2); };
       lg.appendChild(im);
     } else { lg.textContent = nm.slice(0, 2); }
