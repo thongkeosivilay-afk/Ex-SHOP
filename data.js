@@ -104,7 +104,8 @@ function mapProduct(r){
     p: fmtKip(from), price: from,
     left: String(Number(r.stock) || 0), sold: String(Number(r.sold) || 0),
     img: imgs[0] || '', imgs, desc: r.desc || '', notice: r.notice || '', durs,
-    update: r.status === 'update'
+    update: r.status === 'update',
+    soldout: (Number(r.stock) || 0) <= 0   // สต็อกเป็น 0 = ขึ้นป้ายหมดสีแดงอัตโนมัติ
   };
 }
 function setProducts(rows){
@@ -182,7 +183,7 @@ function productCardHTML(p, i, nameHTML){
           <span class="pk"><i>ຂາຍແລ້ວ</i><b class="g">${escH(p.sold)}</b></span>
         </div>
       </div>
-      ${p.update ? `<div class="pupd"><span class="pupd-a">UPDATE</span><span class="pupd-b">ກຳລັງອັບເດດ</span></div>` : p.soldout ? `<div class="pupd"><span class="pupd-a">SOLD OUT</span><span class="pupd-b">ສິນຄ້າໝົດສະຕັອກ</span></div>` : ''}
+      ${p.update ? `<div class="pupd"><span class="pupd-a">UPDATE</span><span class="pupd-b">ກຳລັງອັບເດດ</span></div>` : p.soldout ? `<div class="pupd"><span class="pupd-a">ໝົດ</span><span class="pupd-b">ສິນຄ້າໝົດສະຕັອກ</span></div>` : ''}
     </article>`;
 }
 

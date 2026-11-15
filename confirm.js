@@ -153,6 +153,7 @@
     qty = 1; applied = null; typed = null; q = ''; $('#cfCode').value = ''; $('#cfSearch').value = '';
     $('#cfBox').classList.remove('closed'); $('#cfPw').classList.remove('open'); $('#cfCp').classList.remove('open');
     root.classList.remove('done');
+    const cfForm = root.querySelector('.cf-form'); if(cfForm) cfForm.style.opacity = '';   // เลิกจางตอนข้อมูลมาแล้ว (เดิมค้างที่ .5)
     $('#cfName').textContent = p.n;
     const dh = cleanHTML(p.desc);
     $('#cfDesc').innerHTML = dh; $('#cfDesc').hidden = !dh.trim();
@@ -342,5 +343,5 @@
     else if(!started) start();
   });
   if(window.productsLoaded) start();
-  else root.querySelector('.cf-form').style.opacity = '.5';
+  else root.querySelector('.cf-form').style.opacity = '.5';   // ระหว่างรอข้อมูลเท่านั้น — open() จะล้างค่านี้ออก
 })();
