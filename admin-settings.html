@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ຕັ້ງຄ່າເວັບໄຊ</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--redbtn:#e8321f;--redtx:#e5301c;--line:#1f1f23;--mut:#76706f;--f:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:17px 17px calc(env(safe-area-inset-bottom,0px) + 130px)}
+
+/* ===== การ์ดสถານະເວັບໄຊ ===== */
+.status{position:relative;border:1px solid #3b100d;border-radius:24px;padding:17px 17px 16px;background:
+  radial-gradient(120% 90% at 0% 0%,rgba(150,20,10,.16),transparent 55%),#050505;
+  box-shadow:0 0 38px rgba(232,50,31,.10),inset 0 0 40px rgba(232,50,31,.04)}
+.st-row{display:flex;gap:16px;align-items:flex-start}
+.st-ico{width:60px;height:64px;margin-top:7px;border-radius:22px;background:linear-gradient(160deg,#1a0a08,#120706);display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 1px rgba(232,50,31,.06),0 0 30px rgba(232,50,31,.12)}
+.st-ico svg{width:27px;height:27px;color:var(--redtx)}
+.st-body{min-width:0}
+.pill{display:inline-flex;align-items:center;gap:9px;height:27px;padding:0 15px;border-radius:999px;border:1px solid #6e1913;background:#0d0504;color:var(--redtx);font-size:12.2px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--redtx);box-shadow:0 0 8px var(--redtx)}
+.st-body h3{margin-top:11px;font-size:21px;white-space:nowrap;font-weight:700;line-height:1.25;letter-spacing:-.005em}
+.st-body p{margin-top:8px;color:var(--mut);font-size:13.6px;line-height:1.5}
+.renew{width:100%;height:46px;margin-top:17px;border-radius:15px;background:var(--redbtn);color:#fff;font-weight:600;font-size:16.5px;display:flex;align-items:center;justify-content:center;gap:11px;box-shadow:0 8px 26px rgba(232,50,31,.35);transition:transform .15s}
+.renew:active{transform:scale(.985)}
+.renew svg{width:20px;height:20px}
+
+/* ===== หัวข้อ + แท็บ ===== */
+.hd{margin:27px 0 0}
+.hd h2{font-size:22px;font-weight:600;line-height:1.3}
+.hd h2 small{font-size:inherit;font-weight:600}
+.hd p{margin-top:9px;color:var(--mut);font-size:14.5px;line-height:1.5}
+.tabs{display:flex;gap:7px;margin:21px -17px 0;padding:0 17px 19px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #1a1a1c;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;height:39px;padding:0 17px 0 15px;border-radius:16px;border:1px solid #232326;background:#0a0a0a;color:#b9b9bd;font-size:15px;font-weight:500;display:flex;align-items:center;gap:9px;transition:.15s}
+.tab svg{width:19px;height:19px;color:#7d7d83}
+.tab.on{background:var(--redbtn);border-color:var(--redbtn);color:#fff;box-shadow:0 6px 22px rgba(232,50,31,.38)}
+.tab.on svg{color:#fff}
+
+/* ===== การ์ดข้อมูลพื้นฐาน ===== */
+.panel{margin-top:23px;border:1px solid #3a0e0b;border-radius:22px;background:#030303;overflow:hidden}
+.ph{display:flex;align-items:center;gap:14px;padding:19px 17px;border-bottom:1px solid #1d1d1f}
+.ph svg{width:26px;height:26px;color:#ee3b2d;flex:none}
+.ph h4{font-size:19px;font-weight:600}
+.pb{padding:18px 17px 20px}
+.fld+.fld{margin-top:18px;padding-top:18px;border-top:1px solid #19191b}
+.fld>label{display:block;margin-bottom:12px;font-size:16.5px;font-weight:500;color:#d9d6d6}
+.inp{width:100%;height:44px;border-radius:15px;border:1px solid #2a2a2e;background:#000;padding:0 17px;outline:none;font-size:16.5px;color:#f2f2f2}
+.inp::placeholder{color:#47474f}
+.inp:focus{border-color:#4d1511;box-shadow:0 0 0 3px rgba(232,50,31,.10)}
+textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-height:1.5}
+
+.drop{border:1.5px dashed #34211f;border-radius:18px;height:152px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#040404;text-align:center;padding:10px}
+.drop .cl{width:50px;height:50px;border-radius:50%;background:#2a0d0a;display:grid;place-items:center;box-shadow:0 0 24px rgba(232,50,31,.18)}
+.drop .cl svg{width:27px;height:27px;color:#f0392a}
+.drop b{font-size:15.5px;font-weight:600;color:#cfcaca}
+.drop span{font-size:13px;color:#62605f}
+.up{margin-top:13px;height:40px;padding:0 18px;border-radius:13px;border:1px solid #7a1c15;background:#0c0504;color:#f0422f;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.up svg{width:18px;height:18px}
+
+/* ===== ปุ่มบันทึกลอย (ສະຖານະ: ຍັງບໍ່ມີການປ່ຽນແປງ) ===== */
+.savebar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 100px);z-index:20;pointer-events:none;display:flex;justify-content:center;padding:0 14px}
+.save{pointer-events:auto;width:100%;max-width:532px;height:49px;border-radius:15px;background:rgba(232,50,31,.5);color:rgba(255,255,255,.62);border:1px solid rgba(232,50,31,.2);font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(232,50,31,.25)}
+.save svg{width:21px;height:21px}
+</style>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<div class="wrap">
+
+  <!-- ສະຖານະເວັບໄຊ -->
+  <section class="status">
+    <div class="st-row">
+      <div class="st-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 6.8V12l3.4 2.1"/></svg></div>
+      <div class="st-body">
+        <span class="pill"><i></i>Website Status: Active</span>
+        <h3>ເຫຼືອເວລາອີກ 29 ວັນ 6 ຊົ່ວໂມງ</h3>
+        <p>ແພັກເກັດຮ້ານ EXSHOP ໝົດອາຍຸ 14 ທັນວາ 2026 ເວລາ 13:28 ໂມງ · ຄົງເຫຼືອ 29 ວັນ 6 ຊົ່ວໂມງ ຈາກວັນເຊົ່າໃນ Portal</p>
+      </div>
+    </div>
+    <button class="renew" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 8.5A9 9 0 0 0 5.2 6.2L3 8.5M3 3.8v4.7h4.7M3.5 15.5a9 9 0 0 0 15.3 2.3L21 15.5M21 20.2v-4.7h-4.7"/></svg>ຕໍ່ອາຍຸເວັບໄຊ</button>
+  </section>
+
+  <!-- ຫົວຂໍ້ + ແທັບ -->
+  <div class="hd">
+    <h2>ການຕັ້ງຄ່າເວັບໄຊ (Website Customization)</h2>
+    <p>ຈັດການເນື້ອຫາຫຼັກ ແບນເນີ ສີ ທີມ ສະຖິຕິ ແລະ ຊ່ອງທາງຕິດຕໍ່ຂອງຮ້ານຄ້າ</p>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4.5h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2zm4.5 3.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM4.8 16.2c0-1.9 1.7-3.1 3.7-3.1s3.7 1.2 3.7 3.1zM14 9.2h5v1.5h-5zm0 3h5v1.5h-5z"/></svg>ຂໍ້ມູນພື້ນຖານ</button>
+    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.6 4h2.8l6.1 16h-2.9l-1.3-3.6H8.7L7.4 20H4.5zm-1 10h4.8L12 7.4z"/></svg>ຟອນເວັບໄຊ</button>
+    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.2a1 1 0 0 1 1.5.9v13.8a1 1 0 0 1-1.5.9L13 15H7a3 3 0 0 1-1-5.8V9h7zM6.2 14.5h2.6l1 5.3a1 1 0 0 1-1 1.2H8a1 1 0 0 1-1-.8z"/></svg>ຈັດການປະກາດ</button>
+    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>ແບນເນີ & ເນື້ອຫາ</button>
+    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 1 0 0 19c1.6 0 2.3-1 2.3-2 0-.6-.3-1.100-.6-1.500-.3-.4-.5-.8-.5-1.300 0-1 .8-1.700 1.800-1.700H17a4.700 4.700 0 0 0 4.500-4.700c0-3.800-4-7.800-9.500-7.800zM7 11.500a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm3-4a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm5 0a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800z"/></svg>ສີ & ທີມ</button>
+    <button class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.600 3h3l1.400 4.300-2 1.500a11 11 0 0 0 6.200 6.200l1.500-2 4.300 1.400v3a2.600 2.600 0 0 1-2.800 2.600A16.600 16.600 0 0 1 3.900 5.800 2.600 2.600 0 0 1 6.600 3z"/></svg>ຊ່ອງທາງຕິດຕໍ່</button>
+  </nav>
+
+  <!-- ການ໌ດຂໍ້ມູນພື້ນຖານ -->
+  <section class="panel">
+    <div class="ph">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4.5h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2zm4.5 3.2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM4.8 16.2c0-1.9 1.7-3.1 3.7-3.1s3.7 1.2 3.7 3.1zM14 9.2h5v1.5h-5zm0 3h5v1.5h-5z"/></svg>
+      <h4>ຂໍ້ມູນພື້ນຖານເວັບໄຊ</h4>
+    </div>
+    <div class="pb">
+      <div class="fld">
+        <label for="sn">ຊື່ເວັບໄຊ (Site Name)</label>
+        <input class="inp" id="sn" type="text" value="EXSHOP" autocomplete="off">
+      </div>
+
+      <div class="fld">
+        <label>ແບນເນີໜ້າທຳອິດ</label>
+        <div class="drop">
+          <div class="cl"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.500a6 6 0 0 1 5.700 4.200A4.700 4.700 0 0 1 17.300 17H15v-2.300h2.300a2.400 2.400 0 0 0 .1-4.800l-1-.1-.2-1A4 4 0 0 0 8.200 9.500l-.2 1.100-1.100.2A2.700 2.700 0 0 0 7.300 15H9.500V17H7.300A4.700 4.700 0 0 1 6 7.800 6 6 0 0 1 12 3.500zM13 12.300l2.600 2.800-1.500 1.400-1.100-1.200V20h-2v-4.700l-1.100 1.200-1.500-1.400 2.600-2.800a1.200 1.200 0 0 1 1.700 0z"/></svg></div>
+          <b>ຍັງບໍ່ໄດ້ອັບໂຫຼດແບນເນີ</b>
+          <span>ຂະໜາດແນະນຳ 1920 × 600 px · JPG, PNG, WEBP</span>
+        </div>
+        <button class="up" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>ອັບໂຫຼດຈາກເຄື່ອງ</button>
+      </div>
+
+      <div class="fld">
+        <label for="sd">ຄຳອະທິບາຍເວັບໄຊ</label>
+        <textarea class="inp" id="sd" placeholder="ຂຽນຄຳອະທິບາຍສັ້ນໆກ່ຽວກັບຮ້ານຂອງທ່ານ..."></textarea>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="savebar"><button class="save" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11.200a2 2 0 0 1 1.400.600l2.800 2.800a2 2 0 0 1 .600 1.400V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 1.800V8a1 1 0 0 0 1 1h6.200a1 1 0 0 0 1-1V4.800zM12 12.500a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>ບັນທຶກການຕັ້ງຄ່າ</button></div>
+
+<script>
+(function(){
+  /* ກວດສິດແອດມິນ (ຝັ່ງ Supabase) — ໜ້ານີ້ເປັນສະເພາະໜ້າຕາ ຍັງບໍ່ໄດ້ເຊື່ອມຟັງຊັນບັນທຶກ */
+  var tok = window.exToken && exToken();
+  if(!tok){ try{ sessionStorage.setItem('exNext','admin-settings.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+  exRpc('member_is_admin', { p_token: tok }).then(function(j){
+    if(!(j && j.ok && j.admin)) location.replace('index.html');
+  }).catch(function(){});
+  /* ເປີດ-ປິດແທັບ (ສະເພາະສີ) */
+  document.getElementById('tabs').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return;
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+  });
+})();
+</script>
+</body>
+</html>
