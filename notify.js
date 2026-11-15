@@ -25,6 +25,9 @@
   + '.exn:not(.in) .exn-ic .r,.exn:not(.in) .exn-ic .k{stroke-dashoffset:0}'
   + '@keyframes exnDraw{to{stroke-dashoffset:0}}'
   + '@keyframes exnPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}'
+  + '.exn.in[data-k=success] .exn-ic{position:relative}'
+  + '.exn.in[data-k=success] .exn-ic::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--exn-c);animation:exnRing .95s .22s ease-out both;pointer-events:none}'
+  + '@keyframes exnRing{from{transform:scale(1);opacity:.75}to{transform:scale(1.9);opacity:0}}'
   + '.exn-tx{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}'
   + '.exn-tx b{font-size:17px;font-weight:700;line-height:1.3;color:#16181d;word-break:break-word}'
   + '.exn-tx span{font-size:14px;line-height:1.35;color:var(--exn-c);font-weight:500;word-break:break-word}'
@@ -43,6 +46,19 @@
   };
 
   var el, icEl, bEl, sEl, hideT, endT, lastAt = 0;
+
+  /* เสียง "แปะๆ" (ok.mp3) — เล่นพร้อมป้ายสำเร็จ ✓ อัตโนมัติในหน้าแอดมิน (ทุกครั้งที่กดบันทึกแล้วสำเร็จ); หน้าอื่นเล่นเมื่อสั่ง exToast(..., {sound:true}) */
+  var AUTO_SND = /admin/i.test(location.pathname), snd = null, unlocked = false;
+  function getSnd(){ if(!snd){ try { snd = new Audio('ok.mp3'); snd.preload = 'auto'; } catch(e){} } return snd; }
+  function playSnd(){ var a = getSnd(); if(!a) return; try { a.muted = false; a.currentTime = 0; var p = a.play(); if(p && p.catch) p.catch(function(){}); } catch(e){} }
+  /* มือถือให้เล่นเสียงได้หลังผู้ใช้แตะหน้าจอครั้งแรกเท่านั้น → ปลดล็อกเงียบๆ ตอนแตะครั้งแรก */
+  function unlock(){
+    if(unlocked) return; unlocked = true;
+    var a = getSnd(); if(!a) return;
+    try { a.muted = true; var p = a.play(); var done = function(){ a.pause(); a.currentTime = 0; a.muted = false; };
+      p && p.then ? p.then(done, function(){ a.muted = false; }) : done(); } catch(e){}
+  }
+  ['pointerdown','touchstart','keydown'].forEach(function(ev){ document.addEventListener(ev, unlock, { once:true, passive:true, capture:true }); });
 
   function build(){
     if(el) return;
@@ -89,6 +105,7 @@
     if(!(running && now - lastAt < 500)){
       el.classList.remove('in','out'); void el.offsetWidth;
       el.classList.add('on','in'); lastAt = now;
+      if(kind === 'success' && (opt.sound === true || (AUTO_SND && opt.sound !== false))) playSnd();
     }
     hideT = setTimeout(hide, Math.min(6000, 2400 + (title.length + sub.length) * 35));
   }
