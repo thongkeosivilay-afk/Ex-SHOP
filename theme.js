@@ -49,8 +49,24 @@
     return { css: all, dark: dark, o: o, vars: vars };
   }
 
+  /* หน้าแอดมิน (window.EX_THEME_ADMIN) : ใช้เฉพาะ "สีหลัก" กับตัวแปรสีของห้องแอดมิน — พื้นหลังแอดมินคงดำสนิทเสมอ ไม่เปลี่ยนตามสีพื้นหลังของหน้าร้าน */
+  function buildAdmin(o){
+    o = clean(o);
+    var c = o.color, rg = rgb(c).join(',');
+    var css = 'html:root:root{--red:' + c + ';--red-d:' + c + ';--red-l:' + mix(c, '#ffffff', .3) + ';--red-rgb:' + rg + ';--ac:' + c + ';--crumb:' + c +
+      ';--redbtn:' + mix(c, '#000000', .1) + ';--redtx:' + mix(c, '#ffffff', .1) + ';--glow:rgba(' + rg + ',.12);--redline:rgba(' + rg + ',.32);--redsoft:rgba(' + rg + ',.10)}';
+    return { css: css, dark: true, o: o, vars: {} };
+  }
+
   var st, hide;
   function apply(o){
+    if(window.EX_THEME_ADMIN){
+      var ra = buildAdmin(o);
+      if(!st){ st = document.createElement('style'); st.id = 'exThemeStyle'; (document.head || document.documentElement).appendChild(st); }
+      st.textContent = ra.css;
+      window.EX_THEME_NOW = ra.o;
+      return ra.o;
+    }
     var r = build(o, apply.red2Same);
     if(!st){ st = document.createElement('style'); st.id = 'exThemeStyle'; (document.head || document.documentElement).appendChild(st); }
     st.textContent = r.css;

@@ -837,6 +837,7 @@
     th: 'family=Noto+Sans+Thai+Looped:wght@300;400;500;600;700',
     hi: 'family=Noto+Sans+Devanagari:wght@300;400;500;600;700'
   };
+  if (window.EX_I18N_EXTRA) Object.keys(window.EX_I18N_EXTRA).forEach(k => { if (!D[k]) D[k] = window.EX_I18N_EXTRA[k]; }); /* คำแปลเสริม (ห้องแอดมิน) */
   const LAO = /[\u0E80-\u0EFF]/, isLao = c => c >= '\u0E80' && c <= '\u0EFF';
   const KEYS = Object.keys(D).sort((a, b) => b.length - a.length);
   const ATTRS = ['placeholder', 'aria-label', 'title', 'alt'];
@@ -850,7 +851,7 @@
       while ((i = s.indexOf(k, from)) > -1) {
         const before = s[i - 1], after = s[i + k.length];
         if ((before && isLao(before)) || (after && isLao(after))) { from = i + 1; continue; }
-        const v = D[k][idx];
+        const v = D[k][idx] || D[k][1] || k; /* ไม่มีคำแปลภาษานั้น → ใช้อังกฤษ */
         s = s.slice(0, i) + v + s.slice(i + k.length);
         from = i + v.length;
       }

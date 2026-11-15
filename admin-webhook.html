@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="admin-nav.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ff0000;--redbtn:#e8321f;--ind:#5b5ce6;--ind2:#6d6ef0;--line:#1c1c2c;--mut:#6e6e7a;--f:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif}
+:root{--red:#ff0000;--red-rgb:255,0,0;--redbtn:#e8321f;--ind:#5b5ce6;--ind2:#6d6ef0;--line:#1c1c2c;--mut:#6e6e7a;--f:'IBM Plex Sans','Noto Sans Lao Looped',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
 button,input{font:inherit;color:inherit}
@@ -17,7 +17,7 @@ button{cursor:pointer;border:0;background:none}
 .wrap{max-width:560px;margin:0 auto;padding:22px 16px calc(env(safe-area-inset-bottom,0px) + 120px)}
 
 .ttl{display:flex;align-items:stretch;gap:12px}
-.ttl i{width:5px;border-radius:3px;background:var(--redbtn);box-shadow:0 0 12px rgba(255,40,20,.6);flex:none}
+.ttl i{width:5px;border-radius:3px;background:var(--redbtn);box-shadow:0 0 12px rgba(var(--red-rgb),.6);flex:none}
 .ttl h2{font-size:28px;font-weight:700;line-height:1.2}
 .sub{margin:10px 0 18px 17px;color:var(--mut);font-size:15px}
 
@@ -51,7 +51,7 @@ button{cursor:pointer;border:0;background:none}
 .all{height:50px;padding:0 22px;border-radius:19px;border:1px solid #26262c;background:#000;font-size:16px;font-weight:500;display:flex;align-items:center;gap:11px;color:#f2f2f4}
 .all svg{width:21px;height:21px}
 .all:disabled{opacity:.55}
-.fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);height:50px;padding:0 24px;border-radius:19px;background:var(--redbtn);color:#fff;font-weight:600;font-size:16.5px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 26px rgba(232,50,31,.45);z-index:20;transition:transform .15s,opacity .15s}
+.fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);height:50px;padding:0 24px;border-radius:19px;background:var(--redbtn);color:#fff;font-weight:600;font-size:16.5px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 26px rgba(var(--red-rgb),.45);z-index:20;transition:transform .15s,opacity .15s}
 .fab:active{transform:scale(.97)}
 .fab:disabled{opacity:.6}
 .fab svg{width:21px;height:21px}
@@ -59,6 +59,11 @@ button{cursor:pointer;border:0;background:none}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid #2a2a30;padding:11px 18px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.25s;z-index:70;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
+<script>window.EX_THEME_ADMIN=1</script>
+<script src="theme.js"></script>
+<script src="admin-i18n.js"></script>
+<script src="i18n.js"></script>
+<script src="admin-lang.js"></script>
 </head>
 <body>
 <script src="admin-nav.js"></script>
