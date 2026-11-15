@@ -7,7 +7,7 @@
 const IMG = { product:'', category:'', banner:'' };
 /* ชื่อร้าน + โลโก้ (แสดงมุมซ้ายของแถบหัวเว็บ) — logo: ใส่ path/URL รูป (แนะนำสี่เหลี่ยมจัตุรัส 256×256 px)
    ถ้าเว้นว่าง จะโชว์ตัวย่อ 2 ตัวแรกของชื่อร้านในวงกลมสีแดงแทน */
-const SITE = { name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{} };
+const SITE = { name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, stat:{}, real:{} };
 /* ตั้งค่าเว็บไซต์ (ชื่อ / โลโก้ / แบนเนอร์ / คำอธิบาย) — ดึงจาก Supabase (shop_site) แก้ได้ที่หน้าแอดมิน → ການຕັ້ງຄ່າເວັບໄຊ
    โหลดเสร็จแล้วยิงอีเวนต์ 'site:ready' ให้หน้าวาดส่วนหัว/แบนเนอร์/คำอธิบายใหม่ */
 const SCACHE = 'exSiteCache';
@@ -18,6 +18,8 @@ function setSite(j){
   SITE.desc = j.description || '';
   SITE.marquee = j.marquee || '';
   SITE.announce = j.announce || '';
+  SITE.stat = { users:j.stat_users, products:j.stat_products, orders:j.stat_orders, sold:j.stat_sold };
+  SITE.real = { users:j.real_users, orders:j.real_orders };
   SITE.why = { t1:j.why1_title||'', d1:j.why1_text||'', t2:j.why2_title||'', d2:j.why2_text||'' };
   IMG.banner = j.banner || '';
   document.dispatchEvent(new Event('site:ready'));

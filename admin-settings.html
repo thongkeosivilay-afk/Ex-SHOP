@@ -209,6 +209,33 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
       </div>
     </div>
   </section>
+
+  <!-- ສະຖິຕິໜ້າຫຼັກ -->
+  <section class="panel">
+    <div class="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      <h4>ສະຖິຕິໜ້າຫຼັກ (ຕົວເລກຈຳລອງ)</h4>
+    </div>
+    <div class="pb">
+      <p class="hint" style="margin:0 0 16px;text-align:left">ຖ້າເວັ້ນວ່າງ ໜ້າຮ້ານຈະສະແດງຕົວເລກຈິງຈາກຖານຂໍ້ມູນ · ຖ້າໃສ່ຕົວເລກ ຈະສະແດງຕົວເລກທີ່ໃສ່ແທນ</p>
+      <div class="fld">
+        <label for="s1">ຜູ້ໃຊ້ງານ (ຄົນ)</label>
+        <input class="inp" id="s1" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ"><p class="hint real" id="r1" style="text-align:left"></p>
+      </div>
+      <div class="fld">
+        <label for="s2">ສິນຄ້າ (ລາຍການ)</label>
+        <input class="inp" id="s2" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ">
+      </div>
+      <div class="fld">
+        <label for="s3">ຄຳສັ່ງຊື້ (ລາຍການ)</label>
+        <input class="inp" id="s3" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ"><p class="hint real" id="r3" style="text-align:left"></p>
+      </div>
+      <div class="fld">
+        <label for="s4">ຂາຍແລ້ວ (ຊິ້ນ)</label>
+        <input class="inp" id="s4" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="ວ່າງ = ໃຊ້ຕົວເລກຈິງ">
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="snack" id="snack"></div>
@@ -232,7 +259,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   var $ = function(id){ return document.getElementById(id); };
   var SB = window.EX_SB;
   var EXT = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'};
-  var TXT = { sn:'name', sd:'description', mq:'marquee', an:'announce', w1t:'why1_title', w1d:'why1_text', w2t:'why2_title', w2d:'why2_text' };
+  var TXT = { sn:'name', sd:'description', mq:'marquee', an:'announce', w1t:'why1_title', w1d:'why1_text', w2t:'why2_title', w2d:'why2_text', s1:'stat_users', s2:'stat_products', s3:'stat_orders', s4:'stat_sold' };
   var st = { logo:'', banner:'' }, saved = null, busy = false;
   var sn = $('snack'), snT;
   function toast(t){ sn.textContent = t; sn.classList.add('show'); clearTimeout(snT); snT = setTimeout(function(){ sn.classList.remove('show'); }, 2600); }
@@ -257,7 +284,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   function fill(j){
     j = j || {};
     st.logo = j.logo || ''; st.banner = j.banner || '';
-    Object.keys(TXT).forEach(function(id){ $(id).value = j[TXT[id]] || ''; });
+    Object.keys(TXT).forEach(function(id){ var v = j[TXT[id]]; $(id).value = (v === null || v === undefined) ? '' : v; });
+    $('r1').textContent = 'ຕົວເລກຈິງດຽວນີ້: ' + (j.real_users || 0); $('r3').textContent = 'ຕົວເລກຈິງດຽວນີ້: ' + (j.real_orders || 0);
     saved = collect();
     paint(); dirty();
   }
@@ -288,6 +316,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   wire('logo', $('logoUp'), $('logoRm'), $('logoFile'), $('logoDrop'));
   wire('banner', $('bnUp'), $('bnRm'), $('bnFile'), $('bnDrop'));
   Object.keys(TXT).forEach(function(id){ $(id).addEventListener('input', dirty); });
+  ['s1','s2','s3','s4'].forEach(function(id){ $(id).addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g, ''); dirty(); }); });
 
   $('saveBtn').addEventListener('click', async function(){
     if(busy) return;
