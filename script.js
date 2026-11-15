@@ -243,13 +243,18 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); })
 
 /* stats */
 function renderStats(){
-$('#stats').innerHTML = [
-  ['s-users','ຜູ້ໃຊ້ງານ','0','ຄົນ'],
-  ['s-bag','ສິນຄ້າ',String(products.length),'ລາຍການ'],
-  ['s-boxes','ຄຳສັ່ງຊື້','0','ລາຍການ'],
-  ['s-check','ຂາຍແລ້ວ',String(products.reduce((a,p) => a + (+p.sold||0), 0)),'ຊິ້ນ']
-].map(([i,l,n,u]) => `<div class="stat"><svg class="i wm" aria-hidden="true"><use href="#${i}"/></svg><div class="ic">${ic(i)}</div><div class="tx"><span class="lb">${l}</span><span class="nm">${n}<small>${u}</small></span></div></div>`).join('');
+  const st = (typeof SITE !== 'undefined' && SITE.stat) || {}, rl = (typeof SITE !== 'undefined' && SITE.real) || {};
+  /* ตัวเลขจำลองที่ตั้งในหน้าแอดมิน (st.*) มาก่อน — ว่าง/ไม่ตั้ง = ใช้ตัวเลขจริงจากฐานข้อมูล */
+  const pick = (fake, real) => (fake === null || fake === undefined || isNaN(+fake)) ? (+real || 0) : +fake;
+  const fmt = n => Number(n).toLocaleString('en-US');
+  $('#stats').innerHTML = [
+    ['s-users','ຜູ້ໃຊ້ງານ',fmt(pick(st.users, rl.users)),'ຄົນ'],
+    ['s-bag','ສິນຄ້າ',fmt(pick(st.products, products.length)),'ລາຍການ'],
+    ['s-boxes','ຄຳສັ່ງຊື້',fmt(pick(st.orders, rl.orders)),'ລາຍການ'],
+    ['s-check','ຂາຍແລ້ວ',fmt(pick(st.sold, products.reduce((a,p) => a + (+p.sold||0), 0))),'ຊິ້ນ']
+  ].map(([i,l,n,u]) => `<div class="stat"><svg class="i wm" aria-hidden="true"><use href="#${i}"/></svg><div class="ic">${ic(i)}</div><div class="tx"><span class="lb">${l}</span><span class="nm">${n}<small>${u}</small></span></div></div>`).join('');
 }
+document.addEventListener('site:ready', renderStats);
 renderStats();
 
 /* สินค้าแสดงจากฐานข้อมูล (products ใน data.js) — cat ว่าง = ทุกหมวด */
