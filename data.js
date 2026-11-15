@@ -5,6 +5,9 @@
    ถ้าเว้นว่างไว้ จะโชว์ข้อความแนะนำขนาดรูปแทน
    - สินค้า: 1000 × 960 px   - หมวดหมู่: 1500 × 512 px   - แบนเนอร์หน้าแรก: 1500 × 512 px */
 const IMG = { product:'', category:'', banner:'' };
+/* ชื่อร้าน + โลโก้ (แสดงมุมซ้ายของแถบหัวเว็บ) — logo: ใส่ path/URL รูป (แนะนำสี่เหลี่ยมจัตุรัส 256×256 px)
+   ถ้าเว้นว่าง จะโชว์ตัวย่อ 2 ตัวแรกของชื่อร้านในวงกลมสีแดงแทน */
+const SITE = { name:'EXSHOP', logo:'' };
 function artSq(key, src, mini){
   src = src || IMG.product;
   if(src) return `<img class="pimg-img" src="${escH(src)}" alt="" loading="lazy" draggable="false">`;

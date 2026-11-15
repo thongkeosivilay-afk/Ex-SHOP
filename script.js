@@ -177,6 +177,23 @@ document.addEventListener('click', e => {
   paint();
 })();
 
+/* ชื่อร้าน + โลโก้บนแถบหัว (ค่าอยู่ที่ SITE ใน data.js) */
+(function(){
+  const S = (typeof SITE !== 'undefined' && SITE) || { name:'EXSHOP', logo:'' };
+  const nm = String(S.name || 'EXSHOP');
+  const n = $('#brName'), lg = $('#brLogo'), br = $('#brand');
+  if(n) n.textContent = nm;
+  if(br) br.setAttribute('aria-label', nm);
+  if(lg){
+    lg.textContent = '';
+    if(S.logo){
+      const im = new Image(); im.alt = ''; im.draggable = false; im.src = S.logo;
+      im.onerror = () => { lg.textContent = nm.slice(0, 2); };
+      lg.appendChild(im);
+    } else { lg.textContent = nm.slice(0, 2); }
+  }
+})();
+
 /* drawer */
 const ov = $('#ov'), hdr = $('#hdr'), hMenu = $('#hMenu');
 /* เมนู: แถบบน (แคปซูล) ขยายลงมาเป็นรายการเมนู — เปิด/ปิดด้วยปุ่มเบอร์เกอร์, แตะพื้นหลัง หรือกด Esc */
