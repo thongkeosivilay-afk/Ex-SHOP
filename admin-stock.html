@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="admin-nav.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ff0000;--red-rgb:255,0,0;--bg:#000;--card:#000;--line:#2a2a2e;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--warn:#f5a524;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+:root{--red:#ff0000;--red-rgb:255,0,0;--bg:#000;--card:#0a0a0c;--line:#2a2a2e;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--warn:#f5a524;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
 button,input,textarea{font:inherit;color:inherit}
@@ -22,48 +22,83 @@ button{cursor:pointer;border:0;background:none}
 .kpi.ok b{color:var(--ok)}.kpi.warn b{color:var(--warn)}.kpi.no b{color:var(--red)}
 .in{width:100%;height:44px;border-radius:12px;border:1px solid var(--line);background:#000;padding:0 12px;outline:none}
 .in:focus,.ta:focus{border-color:var(--red)}
-.ta{width:100%;min-height:190px;border-radius:12px;border:1px solid var(--line);background:#000;padding:10px 12px;outline:none;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;white-space:pre;overflow:auto}
-.pr{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px;transition:border-color .2s,transform .15s}
-.pr:active{transform:scale(.99);border-color:var(--red)}
-.pr .h{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.pr .n{font-weight:700;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pr .c{color:var(--mut);font-size:12px;margin-top:2px}
-.badge{flex:none;font-weight:800;font-size:13px;padding:3px 10px;border-radius:999px;border:1px solid var(--ok);color:var(--ok)}
-.badge.warn{border-color:var(--warn);color:var(--warn)}.badge.no{border-color:var(--red);color:#ff8a87}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.chip{font-size:12px;padding:3px 9px;border-radius:8px;border:1px solid var(--line);color:var(--mut)}
-.chip b{color:var(--txt);margin-left:4px}
-.chip.z b{color:#ff8a87}
-.box{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:16px}
+/* การ์ดสินค้า — สไตล์เดียวกับการ์ดหน้าร้าน (style.css) */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:12px}
+.grid .pc{container-type:inline-size;display:flex;cursor:pointer;outline:none;transition:transform .18s ease;animation:rise .35s both}
+.grid .pc:active{transform:scale(.97)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.pci{--pcbg:#0e0e10;--r:3.6cqw;flex:1;min-width:0;background:var(--pcbg);border:1px solid #232327;border-radius:5.6cqw;overflow:hidden;padding:3.1cqw 3.1cqw 5.6cqw;color:#fff}
+.pci .pimg{position:relative;aspect-ratio:1000/960;border-radius:5cqw;overflow:hidden;background:#000}
+.pimg .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#2b2b31;background:radial-gradient(circle at 30% 20%,#1d1d22,#0b0b0d)}
+.pimg-img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}
+.ptab,.pnotch{position:absolute;z-index:2;display:flex;align-items:center;background:var(--pcbg)}
+.ptab::before,.ptab::after,.pnotch::before,.pnotch::after{content:"";position:absolute;width:var(--r);height:var(--r);pointer-events:none}
+.ptab{left:0;top:0;height:12cqw;gap:2.6cqw;padding:0 3.6cqw 0 2.6cqw;border-bottom-right-radius:var(--r)}
+.ptab::before{left:100%;top:0;background:radial-gradient(circle at 100% 100%,transparent calc(var(--r) - .5px),var(--pcbg) var(--r))}
+.ptab::after{left:0;top:100%;background:radial-gradient(circle at 100% 100%,transparent calc(var(--r) - .5px),var(--pcbg) var(--r))}
+.pti{width:max(13px,7.7cqw);height:max(13px,7.7cqw);border-radius:2.2cqw;background:linear-gradient(135deg,#34d399,#16a34a);display:flex;align-items:center;justify-content:center;flex:none}
+.pti.warn{background:linear-gradient(135deg,#fbbf24,#d97706)}.pti.no{background:linear-gradient(135deg,#f87171,#dc2626)}
+.pti svg{width:62%;height:62%}
+.ptt{font-size:max(11px,4.6cqw);font-weight:600;color:#fff;white-space:nowrap}
+.pnotch{right:0;bottom:0;height:11.5cqw;gap:1.8cqw;padding:0 5.2cqw 0 4.4cqw;border-top-left-radius:var(--r)}
+.pnotch::before{right:0;top:calc(var(--r) * -1);background:radial-gradient(circle at 0 0,transparent calc(var(--r) - .5px),var(--pcbg) var(--r))}
+.pnotch::after{left:calc(var(--r) * -1);bottom:0;background:radial-gradient(circle at 0 0,transparent calc(var(--r) - .5px),var(--pcbg) var(--r))}
+.pfrom{font-size:max(10px,4.2cqw);color:#9a9aa4;line-height:1;white-space:nowrap}
+.dot{width:max(8px,3.2cqw);height:max(8px,3.2cqw);border-radius:50%;background:var(--ok);flex:none;box-shadow:0 0 0 .6cqw rgba(255,255,255,.06)}
+.dot.warn{background:var(--warn)}.dot.no{background:#ef4444}
+.dmore{font-size:max(10px,4.2cqw);color:#9a9aa4;line-height:1}
+.pname{margin:6.4cqw 4.6cqw 0;font-size:max(13px,5.8cqw);line-height:1.35;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst{display:flex;align-items:center;gap:3cqw;margin:2.4cqw 4.6cqw 0}
+.pk{display:flex;align-items:baseline;gap:1.6cqw;white-space:nowrap;line-height:1.3}
+.pk i{font-style:normal;font-size:max(10.5px,4.3cqw);color:#8b8b94}
+.pk b{font-weight:400;font-size:max(11.5px,4.9cqw);color:#fff}
+.pk b.g{color:#4ade80}.pk b.warn{color:var(--warn)}.pk b.no{color:#ff6b68}
+.pdv{width:1px;height:6.4cqw;min-height:12px;background:#303036;flex:none}
+.box{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:18px}
 .box h2{font-size:15px;font-weight:700;margin-bottom:8px}
 .lg{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #151518;font-size:13px}
 .lg:first-of-type{border-top:0}
 .lg span{color:var(--mut);font-size:12px}
 .lg .p{color:var(--ok);font-weight:700}.lg .m{color:#ff8a87;font-weight:700}
-.empty{text-align:center;color:var(--mut);padding:30px 0;font-size:14px}
-/* bottom sheet */
-.bk{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.72);opacity:0;pointer-events:none;transition:opacity .25s}
+.empty{text-align:center;color:var(--mut);padding:30px 0;font-size:14px;grid-column:1/-1}
+/* ป๊อปอัปการ์ด */
+.bk{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .25s}
 .bk.show{opacity:1;pointer-events:auto}
-.sh{position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:560px;margin:0 auto;max-height:92vh;overflow:auto;background:#09090b;border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.sh.show{transform:none}
-.sh .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.sh .top h3{font-size:16px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.x{flex:none;width:36px;height:36px;border-radius:50%;background:#1a1a1d;font-size:16px}
-.lbl{font-size:12.5px;color:var(--mut);margin:12px 0 6px}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{padding:8px 14px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--mut)}
-.opt small{margin-left:6px;font-weight:700}
-.opt.on{border-color:var(--red);color:#fff;background:rgba(var(--red-rgb),.14)}
+.md{position:fixed;left:50%;top:50%;z-index:61;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:#0b0b0d;border:1px solid #34343a;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(var(--red-rgb),.12);opacity:0;pointer-events:none;transform:translate(-50%,-46%) scale(.9);transition:transform .32s cubic-bezier(.2,1.1,.3,1),opacity .2s}
+.md.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.hero{position:relative;height:170px;background:#111;overflow:hidden;border-radius:24px 24px 0 0}
+.hero img{position:relative;z-index:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#2b2b31;background:radial-gradient(circle at 30% 20%,#1d1d22,#0b0b0d)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#0b0b0d 4%,rgba(11,11,13,.2) 60%,rgba(0,0,0,.35))}
+.hero .t{position:absolute;left:16px;right:60px;bottom:12px;z-index:2}
+.hero .t h3{font-size:19px;font-weight:800;line-height:1.25}
+.hero .t p{font-size:12.5px;color:var(--mut);margin-top:2px}
+.x{position:absolute;right:12px;top:12px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);font-size:15px;border:1px solid #3a3a40}
+.mb{padding:4px 16px 18px}
+.sts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.sts div{border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.sts small{display:block;color:var(--mut);font-size:11.5px}
+.sts b{font-size:17px;font-weight:800}
+.lbl{font-size:12.5px;color:var(--mut);margin:14px 0 7px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.opt{text-align:left;padding:10px 12px;border-radius:14px;border:1px solid var(--line);transition:border-color .2s,background .2s}
+.opt .l{font-weight:700;font-size:14px;word-break:break-word}
+.opt .pr{font-size:12px;color:var(--mut);margin-top:1px}
+.opt .s{display:flex;justify-content:space-between;align-items:baseline;margin-top:7px;font-size:11.5px;color:var(--mut)}
+.opt .s b{font-size:15px;color:var(--ok)}.opt .s b.no{color:#ff6b68}.opt .s b.warn{color:var(--warn)}
+.opt.on{border-color:var(--red);background:rgba(var(--red-rgb),.12)}
 .tabs{display:flex;gap:8px;margin:14px 0 4px}
 .tab{flex:1;height:38px;border-radius:10px;border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
 .tab.on{border-color:var(--red);color:#fff;background:rgba(var(--red-rgb),.12)}
+.ta{width:100%;min-height:150px;border-radius:12px;border:1px solid var(--line);background:#000;padding:10px 12px;outline:none;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;white-space:pre;overflow:auto}
 .cnt{display:flex;justify-content:space-between;align-items:center;margin:8px 0;font-size:13px;color:var(--mut);gap:8px;flex-wrap:wrap}
 .cnt b{color:#fff}.cnt .w{color:var(--warn)}
 .row{display:flex;gap:8px;margin-top:10px}
 .btn{flex:1;height:46px;border-radius:12px;background:var(--red);color:#fff;font-weight:800;white-space:nowrap;transition:opacity .2s}
 .btn:disabled{opacity:.45}
-.sec{height:46px;padding:0 14px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:14px;white-space:nowrap}
+.sec{height:42px;padding:0 13px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:13.5px;white-space:nowrap}
 .sec.d{color:#ff8a87;border-color:#d95b58}
+.sec:disabled{opacity:.4}
 .fl{display:flex;gap:8px;margin:10px 0}
 .kr{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;margin-top:8px}
 .kr code{flex:1;min-width:0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;word-break:break-all}
@@ -89,33 +124,35 @@ button{cursor:pointer;border:0;background:none}
     <div class="kpi no"><small>ໝົດສະຕັອກ</small><b id="kOut">0</b></div>
   </div>
   <input class="in" id="q" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ" autocomplete="off">
-  <div id="plist"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+  <div class="fl" id="flt"><button class="tab on" data-f="all" type="button">ທັງໝົດ</button><button class="tab" data-f="low" type="button">ໃກ້ໝົດ</button><button class="tab" data-f="out" type="button">ໝົດສະຕັອກ</button></div>
+  <div class="grid" id="plist"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
   <div class="box"><h2>ປະຫວັດການເຕີມ</h2><div id="hist"><div class="empty">ກຳລັງໂຫຼດ...</div></div></div>
 </div>
 
 <div class="bk" id="bk"></div>
-<div class="sh" id="sh" role="dialog" aria-modal="true">
-  <div class="top"><h3 id="shT"></h3><button class="x" id="shX" type="button" aria-label="close">✕</button></div>
-  <div id="optBox"><div class="lbl">ຕົວເລືອກ</div><div class="opts" id="opts"></div></div>
-  <div class="tabs"><button class="tab on" data-t="add" type="button">ເຕີມໂຄ້ດ</button><button class="tab" data-t="inv" type="button">ຄັງໂຄ້ດ</button></div>
+<div class="md" id="sh" role="dialog" aria-modal="true">
+  <div class="hero"><div id="hImg"></div><button class="x" id="shX" type="button" aria-label="close">✕</button><div class="t"><h3 id="shT"></h3><p id="shC"></p></div></div>
+  <div class="mb">
+    <div class="sts"><div><small>ພ້ອມຂາຍ</small><b id="sA">0</b></div><div><small>ຕົວເລືອກ</small><b id="sO">0</b></div><div><small>ສະຖານະ</small><b id="sS">—</b></div></div>
+    <div id="optBox"><div class="lbl">ເລືອກຕົວເລືອກທີ່ຈະເຕີມ</div><div class="opts" id="opts"></div></div>
+    <div class="tabs" id="mt"><button class="tab on" data-t="add" type="button">ເຕີມໂຄ້ດ</button><button class="tab" data-t="inv" type="button">ຄັງໂຄ້ດ</button></div>
 
-  <div id="vAdd">
-    <div class="lbl">ໃສ່ໂຄ້ດ (1 ແຖວ = 1 ໂຄ້ດ)</div>
-    <textarea class="ta" id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="CODE-0001&#10;CODE-0002&#10;user:password"></textarea>
-    <div class="cnt"><span>ໂຄ້ດທີ່ຈະເຕີມ <b id="cN">0</b></span><span class="w" id="cW"></span></div>
-    <div class="row">
-      <button class="sec" id="imp" type="button">ນຳເຂົ້າໄຟລ໌</button>
-      <button class="sec" id="clr" type="button">ລ້າງ</button>
-      <button class="btn" id="go" type="button" disabled>ເຕີມສະຕັອກ</button>
+    <div id="vAdd">
+      <div class="lbl">ໃສ່ໂຄ້ດ (1 ແຖວ = 1 ໂຄ້ດ)</div>
+      <textarea class="ta" id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="CODE-0001&#10;CODE-0002&#10;user:password"></textarea>
+      <div class="cnt"><span>ໂຄ້ດທີ່ຈະເຕີມ <b id="cN">0</b></span><span class="w" id="cW"></span></div>
+      <div class="row"><button class="sec" id="pst" type="button">ວາງຈາກຄລິບບອດ</button><button class="sec" id="imp" type="button">ນຳເຂົ້າໄຟລ໌</button><button class="sec" id="clr" type="button">ລ້າງ</button></div>
+      <div class="row"><button class="btn" id="go" type="button" disabled>ເຕີມສະຕັອກ</button></div>
+      <input type="file" id="file" accept=".txt,.csv,text/plain" hidden>
     </div>
-    <input type="file" id="file" accept=".txt,.csv,text/plain" hidden>
-  </div>
 
-  <div id="vInv" hidden>
-    <div class="fl"><button class="tab on" data-f="available" type="button">ພ້ອມຂາຍ</button><button class="tab" data-f="used" type="button">ຂາຍແລ້ວ</button></div>
-    <div class="cnt"><span>ທັງໝົດ <b id="iN">0</b></span><button id="selAll" class="sec" style="height:34px;font-size:13px" type="button">ເລືອກທັງໝົດ</button></div>
-    <div id="keys"></div>
-    <div class="row"><button class="sec" id="cp" type="button">ຄັດລອກ</button><button class="sec d" id="del" type="button" disabled>ລຶບທີ່ເລືອກ</button></div>
+    <div id="vInv" hidden>
+      <div class="fl" id="kfl"><button class="tab on" data-f="available" type="button">ພ້ອມຂາຍ</button><button class="tab" data-f="used" type="button">ຂາຍແລ້ວ</button></div>
+      <input class="in" id="kq" type="search" placeholder="ຄົ້ນຫາໂຄ້ດ" autocomplete="off">
+      <div class="cnt"><span>ທັງໝົດ <b id="iN">0</b></span><button id="selAll" class="sec" style="height:34px" type="button">ເລືອກທັງໝົດ</button></div>
+      <div id="keys"></div>
+      <div class="row"><button class="sec" id="cp" type="button">ຄັດລອກ</button><button class="sec" id="dl" type="button">ດາວໂຫຼດ .txt</button><button class="sec d" id="del" type="button" disabled>ລຶບທີ່ເລືອກ</button></div>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -124,7 +161,7 @@ button{cursor:pointer;border:0;background:none}
 (function(){
   var $ = function(s){ return document.querySelector(s); };
   var LOW = 3, MAXK = 2000, tt;
-  var products = [], stock = {}, cur = null, curDur = '', tab = 'add', kf = 'available', keys = [], sel = {}, busy = false;
+  var flt = 'all', products = [], stock = {}, cur = null, curDur = '', tab = 'add', kf = 'available', keys = [], sel = {}, busy = false;
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
   function tok(){ return exToken(); }
   function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2800); }
@@ -151,16 +188,31 @@ button{cursor:pointer;border:0;background:none}
   }
 
   /* ===== รายการสินค้า ===== */
+  var IM = function(p){ var u = (p.imgs && p.imgs[0]) || ''; return u ? '<img src="' + esc(u) + '" alt="" loading="lazy" draggable="false">' : ''; };
+  var PH = function(p){ return '<div class="ph">' + esc(String(p.name || '?').trim().charAt(0).toUpperCase()) + '</div>'; };
+  var lvl = function(t){ return t === 0 ? 'no' : t <= LOW ? 'warn' : ''; };
+  var lvlT = function(t){ return t === 0 ? 'ໝົດສະຕັອກ' : t <= LOW ? 'ໃກ້ໝົດ' : 'ພ້ອມຂາຍ'; };
+  var kip = function(n){ return '₭' + (Number(n) || 0).toLocaleString('en-US'); };
+  document.addEventListener('error', function(e){ var t = e.target; if(t && t.tagName === 'IMG') t.style.display = 'none'; }, true);
   function renderList(){
     var q = $('#q').value.trim().toLowerCase(), all = 0, low = 0, out = 0;
     products.forEach(function(p){ var t = tot(p); all += t; if(p.status !== 'inactive'){ if(t === 0) out++; else if(t <= LOW) low++; } });
     $('#kAll').textContent = all.toLocaleString('en-US'); $('#kLow').textContent = low; $('#kOut').textContent = out;
-    var rows = products.filter(function(p){ return !q || String(p.name).toLowerCase().indexOf(q) > -1; });
+    var rows = products.filter(function(p){
+      var t = tot(p);
+      return (!q || String(p.name).toLowerCase().indexOf(q) > -1) && (flt === 'all' || (flt === 'out' ? t === 0 : (t > 0 && t <= LOW)));
+    });
     if(!rows.length){ $('#plist').innerHTML = '<div class="empty">' + (products.length ? 'ບໍ່ພົບສິນຄ້າ' : 'ຍັງບໍ່ມີສິນຄ້າ — ເພີ່ມສິນຄ້າກ່ອນ') + '</div>'; return; }
-    $('#plist').innerHTML = rows.map(function(p){
-      var t = tot(p), cls = t === 0 ? 'no' : t <= LOW ? 'warn' : '';
-      var chips = (p.durs || []).map(function(d){ var n = durStock(p, d.label); return '<span class="chip' + (n ? '' : ' z') + '">' + esc(d.label) + '<b>' + n + '</b></span>'; }).join('');
-      return '<button class="pr" data-id="' + p.id + '" type="button"><div class="h"><div style="min-width:0"><div class="n">' + esc(p.name) + '</div><div class="c">' + esc(p.cat || '—') + '</div></div><span class="badge ' + cls + '">' + t + ' ຊິ້ນ</span></div>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</button>';
+    var ICON = { '': '<polyline points="5 12.5 10 17.5 19 7"/>', warn: '<path d="M12 6v7"/><path d="M12 17.5v.01"/>', no: '<path d="M6 6l12 12M18 6L6 18"/>' };
+    $('#plist').innerHTML = rows.map(function(p, i){
+      var t = tot(p), c = lvl(t), ds = p.durs || [], sold = (stock[p.id] && stock[p.id].used) || 0;
+      var dots = (ds.length ? ds : [{ label: '' }]).slice(0, 6).map(function(d){ return '<span class="dot ' + (ds.length ? lvl(durStock(p, d.label)) : c) + '"></span>'; }).join('') + (ds.length > 6 ? '<span class="dmore">+' + (ds.length - 6) + '</span>' : '');
+      var img = (p.imgs && p.imgs[0]) ? '<img class="pimg-img" src="' + esc(p.imgs[0]) + '" alt="" loading="lazy" draggable="false">' : '';
+      return '<article class="pc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms" data-id="' + p.id + '" role="button" tabindex="0"><div class="pci"><div class="pimg">' + PH(p) + img
+        + '<div class="ptab"><span class="pti ' + c + '"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">' + ICON[c] + '</svg></span><span class="ptt">' + lvlT(t) + '</span></div>'
+        + '<div class="pnotch">' + dots + '</div></div>'
+        + '<h3 class="pname">' + esc(p.name) + '</h3>'
+        + '<div class="pst"><span class="pk"><i>ຄັງ</i><b class="' + c + '">' + t + '</b></span><span class="pdv"></span><span class="pk"><i>ຂາຍແລ້ວ</i><b class="g">' + sold + '</b></span></div></div></article>';
     }).join('');
   }
   function renderHist(rows){
@@ -172,8 +224,10 @@ button{cursor:pointer;border:0;background:none}
     }).join('');
   }
   $('#q').addEventListener('input', renderList);
+  $('#flt').addEventListener('click', function(e){ var b = e.target.closest('.tab'); if(!b) return; flt = b.dataset.f; document.querySelectorAll('#flt .tab').forEach(function(x){ x.classList.toggle('on', x === b); }); renderList(); });
+  $('#plist').addEventListener('keydown', function(e){ if((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('pc')){ e.preventDefault(); e.target.click(); } });
   $('#plist').addEventListener('click', function(e){
-    var b = e.target.closest('.pr'); if(!b) return;
+    var b = e.target.closest('.pc'); if(!b) return;
     cur = products.filter(function(p){ return String(p.id) === b.dataset.id; })[0]; if(!cur) return;
     curDur = cur.durs && cur.durs.length ? cur.durs[0].label : '';
     openSheet();
@@ -181,17 +235,24 @@ button{cursor:pointer;border:0;background:none}
 
   /* ===== แผงเติมสต็อก ===== */
   function openSheet(){
-    $('#shT').textContent = cur.name; $('#ta').value = ''; sel = {}; kf = 'available'; setTab('add'); renderSheetOpts(); count();
-    $('#bk').classList.add('show'); $('#sh').classList.add('show');
+    $('#shT').textContent = cur.name; $('#shC').textContent = cur.cat || ''; $('#hImg').innerHTML = PH(cur) + IM(cur);
+    $('#ta').value = ''; $('#kq').value = ''; sel = {}; kf = 'available';
+    document.querySelectorAll('#kfl .tab').forEach(function(x){ x.classList.toggle('on', x.dataset.f === 'available'); });
+    setTab('add'); renderSheetOpts(); count();
+    $('#bk').classList.add('show'); $('#sh').classList.add('show'); $('#sh').scrollTop = 0;
   }
   function closeSheet(){ $('#bk').classList.remove('show'); $('#sh').classList.remove('show'); cur = null; }
   $('#shX').addEventListener('click', closeSheet); $('#bk').addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && cur) closeSheet(); });
   function renderSheetOpts(){
-    var has = cur.durs && cur.durs.length;
+    var has = cur.durs && cur.durs.length, t = tot(cur);
+    $('#sA').textContent = t; $('#sA').style.color = t === 0 ? '#ff6b68' : t <= LOW ? 'var(--warn)' : 'var(--ok)';
+    $('#sO').textContent = has ? cur.durs.length : 1; $('#sS').textContent = lvlT(t); $('#sS').style.fontSize = '13px';
     $('#optBox').hidden = !has;
     if(has){
       if(!cur.durs.some(function(d){ return d.label === curDur; })) curDur = cur.durs[0].label;
-      $('#opts').innerHTML = cur.durs.map(function(d){ return '<button class="opt' + (d.label === curDur ? ' on' : '') + '" data-l="' + esc(d.label) + '" type="button">' + esc(d.label) + '<small>' + durStock(cur, d.label) + '</small></button>'; }).join('');
+      $('#opts').innerHTML = cur.durs.map(function(d){ var n = durStock(cur, d.label), c = lvl(n);
+        return '<button class="opt' + (d.label === curDur ? ' on' : '') + '" data-l="' + esc(d.label) + '" type="button"><div class="l">' + esc(d.label) + '</div><div class="pr">' + kip(d.price) + '</div><div class="s"><span>ເຫຼືອ</span><b class="' + c + '">' + n + ' ຊິ້ນ</b></div></button>'; }).join('');
     } else curDur = '';
   }
   $('#opts').addEventListener('click', function(e){
@@ -200,11 +261,11 @@ button{cursor:pointer;border:0;background:none}
   });
   function setTab(t){
     tab = t;
-    document.querySelectorAll('.sh > .tabs .tab').forEach(function(x){ x.classList.toggle('on', x.dataset.t === t); });
+    document.querySelectorAll('#mt .tab').forEach(function(x){ x.classList.toggle('on', x.dataset.t === t); });
     $('#vAdd').hidden = t !== 'add'; $('#vInv').hidden = t !== 'inv';
     if(t === 'inv') loadKeys();
   }
-  document.querySelector('.sh > .tabs').addEventListener('click', function(e){ var b = e.target.closest('.tab'); if(b) setTab(b.dataset.t); });
+  $('#mt').addEventListener('click', function(e){ var b = e.target.closest('.tab'); if(b) setTab(b.dataset.t); });
 
   /* --- เติมโค้ด --- */
   function parse(){
@@ -220,6 +281,10 @@ button{cursor:pointer;border:0;background:none}
   }
   $('#ta').addEventListener('input', count);
   $('#clr').addEventListener('click', function(){ $('#ta').value = ''; count(); });
+  $('#pst').addEventListener('click', function(){
+    if(!navigator.clipboard || !navigator.clipboard.readText){ toast('ເບຣາວເຊີນີ້ບໍ່ຮອງຮັບ — ກົດຄ້າງໃນຊ່ອງແລ້ວວາງ'); return; }
+    navigator.clipboard.readText().then(function(t){ var c0 = $('#ta').value; $('#ta').value = (c0 && !/\n$/.test(c0) ? c0 + '\n' : c0) + t; count(); }).catch(function(){ toast('ບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ອ່ານຄລິບບອດ'); });
+  });
   $('#imp').addEventListener('click', function(){ $('#file').click(); });
   $('#file').addEventListener('change', function(){
     var f = this.files[0]; this.value = ''; if(!f) return;
@@ -248,7 +313,15 @@ button{cursor:pointer;border:0;background:none}
       keys = j.rows || []; $('#iN').textContent = j.total; renderKeys(j.total);
     }).catch(function(){ $('#keys').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
   }
+  function shown(){ var q = $('#kq').value.trim().toLowerCase(); return q ? keys.filter(function(k){ return String(k.code).toLowerCase().indexOf(q) > -1; }) : keys; }
+  $('#kq').addEventListener('input', function(){ sel = {}; updDel(); renderKeys(Number($('#iN').textContent) || 0); });
+  $('#dl').addEventListener('click', function(){
+    var list = shown().map(function(k){ return k.code; }); if(!list.length){ toast('ບໍ່ມີໂຄ້ດ'); return; }
+    var a = document.createElement('a'), u = URL.createObjectURL(new Blob([list.join('\n')], {type:'text/plain;charset=utf-8'}));
+    a.href = u; a.download = String(cur.name).replace(/[^\w\-]+/g, '_') + '-' + kf + '.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 1500);
+  });
   function renderKeys(total){
+    var keys = shown();
     if(!keys.length){ $('#keys').innerHTML = '<div class="empty">ບໍ່ມີໂຄ້ດ</div>'; return; }
     $('#keys').innerHTML = keys.map(function(k){
       var u = k.status === 'used';
@@ -257,17 +330,17 @@ button{cursor:pointer;border:0;background:none}
   }
   function updDel(){ var n = Object.keys(sel).length; $('#del').disabled = !n; $('#del').textContent = n ? 'ລຶບທີ່ເລືອກ (' + n + ')' : 'ລຶບທີ່ເລືອກ'; }
   $('#keys').addEventListener('change', function(e){ var c = e.target; if(c.dataset.id){ if(c.checked) sel[c.dataset.id] = 1; else delete sel[c.dataset.id]; updDel(); } });
-  $('#vInv .fl').addEventListener('click', function(e){
+  $('#kfl').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return; kf = b.dataset.f;
-    document.querySelectorAll('#vInv .fl .tab').forEach(function(x){ x.classList.toggle('on', x === b); });
-    $('#selAll').hidden = kf === 'used'; loadKeys();
+    document.querySelectorAll('#kfl .tab').forEach(function(x){ x.classList.toggle('on', x === b); });
+    $('#selAll').hidden = kf === 'used'; $('#del').hidden = kf === 'used'; loadKeys();
   });
   $('#selAll').addEventListener('click', function(){
     var boxes = document.querySelectorAll('#keys input[data-id]'), all = boxes.length && Object.keys(sel).length === boxes.length;
     sel = {}; boxes.forEach(function(c){ c.checked = !all; if(!all) sel[c.dataset.id] = 1; }); updDel();
   });
   $('#cp').addEventListener('click', function(){
-    var ids = Object.keys(sel), list = keys.filter(function(k){ return ids.length ? sel[k.id] : true; }).map(function(k){ return k.code; });
+    var ids = Object.keys(sel), list = shown().filter(function(k){ return ids.length ? sel[k.id] : true; }).map(function(k){ return k.code; });
     if(!list.length){ toast('ບໍ່ມີໂຄ້ດ'); return; }
     var txt = list.join('\n');
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(function(){
