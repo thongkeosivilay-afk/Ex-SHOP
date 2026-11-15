@@ -56,7 +56,8 @@ document.addEventListener('site:ready', paintBanner);
 (function(){
   const MQ_SPEED = 55;
   const mq = $('#mq'); if(!mq) return;
-  const item = `<span class="mq-item">${ic('bell')}${CONFIG.announce}</span>`;
+  const txt = () => ((typeof SITE !== 'undefined' && SITE.marquee) || '').trim() || CONFIG.announce;
+  let item = `<span class="mq-item">${ic('bell')}${escH(txt())}</span>`;
   let copies = 0, lastW = 0, raf = 0;
 
   function build(n){
@@ -90,6 +91,7 @@ document.addEventListener('site:ready', paintBanner);
     schedule();
   }
   build(4);
+  document.addEventListener('site:ready', () => { item = `<span class="mq-item">${ic('bell')}${escH(txt())}</span>`; lastW = 0; build(copies || 4); });
   window.addEventListener('resize', schedule);
   window.addEventListener('orientationchange', schedule);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
@@ -99,7 +101,8 @@ document.addEventListener('site:ready', paintBanner);
 (function(){
   const SPEED = 40;   // px ต่อวินาที
   const vp = $('.announce .an-r'); if(!vp) return;
-  const item = `<span class="an-item">${CONFIG.announce}</span>`;
+  const txt = () => ((typeof SITE !== 'undefined' && SITE.announce) || '').trim() || CONFIG.announce;
+  let item = `<span class="an-item">${escH(txt())}</span>`;
   let copies = 0, lastW = 0, raf = 0, ro, track;
   function build(n){
     copies = n;
@@ -125,6 +128,7 @@ document.addEventListener('site:ready', paintBanner);
   const schedule = () => { if(!raf) raf = requestAnimationFrame(measure); };
   if(window.ResizeObserver) ro = new ResizeObserver(schedule);
   build(2);
+  document.addEventListener('site:ready', () => { item = `<span class="an-item">${escH(txt())}</span>`; lastW = 0; build(copies || 2); });
   window.addEventListener('resize', schedule);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
 })();
