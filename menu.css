@@ -70,51 +70,55 @@ html.is-in .header .dr-f{display:none}
   .header .dr-nav>a,.header .dr-nav>.dr-lang-btn,.header .dr-f button{translate:none}
 }
 
-/* ===== แผงบัญชี (กดไอคอนบัญชี): ดำสนิท + แดงสด ===== */
-.um{position:fixed;z-index:120;width:min(372px,calc(100vw - 20px));padding:16px 14px 12px;border-radius:26px;overflow-y:auto;overscroll-behavior:contain;color:#f4f4f5;
-  background:radial-gradient(120% 60% at 0% 0%,rgba(255,0,0,.10),transparent 60%),#0a0a0b;border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 22px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,0,0,.06),0 0 40px rgba(255,0,0,.08);
+/* ===== แผงบัญชี (กดไอคอนบัญชี): การ์ดดำ + แดงส้ม — ขนาด/ระยะทุกจุดวัดจากดีไซน์ตัวอย่าง (กว้าง 319px) ===== */
+.um{position:fixed;z-index:120;box-sizing:border-box;width:min(320px,calc(100vw - 20px));padding:13px 15px 8px;border-radius:24px;overflow-y:auto;overscroll-behavior:contain;color:#f4f4f5;
+  background:#0c0c0d;border:1px solid #1a1a1b;
+  box-shadow:0 22px 60px rgba(0,0,0,.6);
   transform-origin:top right;opacity:0;scale:.94;translate:0 -6px;scrollbar-width:none;
   transition:opacity .16s ease,scale .22s cubic-bezier(.22,1,.36,1),translate .22s cubic-bezier(.22,1,.36,1)}
+.um *{box-sizing:border-box}
 .um::-webkit-scrollbar{display:none}
 .um[hidden]{display:none}
 .um.on{opacity:1;scale:1;translate:0 0}
 .um button{color:inherit}
-.um-prof{display:flex;align-items:center;gap:16px;padding:4px 6px 16px}
-.um-av{position:relative;width:62px;height:62px;border-radius:50%;flex:none;display:grid;place-items:center;
-  background:radial-gradient(circle at 50% 35%,#1a0606,#0a0202 75%);border:2px solid #ff0000;
-  box-shadow:0 0 0 5px rgba(255,0,0,.10),0 0 22px rgba(255,0,0,.55),inset 0 0 14px rgba(255,0,0,.25)}
-.um-av b{font-size:26px;font-weight:700;color:#ff0000;line-height:1;text-shadow:0 0 12px rgba(255,0,0,.6)}
-.um-on{position:absolute;right:-1px;bottom:1px;width:13px;height:13px;border-radius:50%;background:#22d768;border:2px solid #0a0a0b;box-shadow:0 0 8px rgba(34,215,104,.7)}
-.um-t{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
-.um-t>b{font-size:24px;font-weight:700;line-height:1.1;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.01em}
-.um-role{display:inline-flex;align-items:center;gap:8px;height:27px;padding:0 14px 0 11px;border-radius:99px;background:#141416;border:1px solid #2a2a2e;
-  font-size:12.5px;font-weight:600;letter-spacing:.09em;color:#a4a4ad;text-transform:uppercase}
-.um-role i{width:8px;height:8px;border-radius:50%;background:#6b6b73}
-.um-bal{display:flex;align-items:center;gap:12px;padding:12px;border-radius:20px;background:#0f0f11;border:1px solid #1f1f23;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
-.um-bi{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;color:#ff0000;background:linear-gradient(145deg,#2c0707,#150303);border:1px solid rgba(255,0,0,.28)}
-.um-bi svg{width:22px;height:22px}
-.um-bt{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-.um-bt small{font-size:13px;color:#8e8e97;line-height:1.2}
-.um-bt b{font-size:24px;font-weight:700;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
-.um-bt em{font-style:normal;color:#ff0000}
-.um-top{flex:none;height:46px;padding:0 20px;border-radius:15px;font-size:16.5px;font-weight:700;color:#fff!important;white-space:nowrap;
-  background:linear-gradient(180deg,#ff1a1a,#e00000);box-shadow:0 8px 24px rgba(255,0,0,.45),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .15s}
+/* โปรไฟล์ */
+.um-prof{display:flex;align-items:center;gap:13px;padding:2px 5px 17.5px}
+.um-av{position:relative;width:50px;height:50px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:rgba(234,51,35,.07);border:2px solid rgba(234,51,35,.5);
+  box-shadow:0 0 0 4px #1b0b0c,0 0 0 5px rgba(234,51,35,.42),0 0 26px 8px rgba(234,51,35,.5);top:1.5px}
+.um-av b{font-size:17px;font-weight:700;color:#ea3323;line-height:1}
+.um-on{position:absolute;right:-4px;bottom:-5px;width:9px;height:9px;border-radius:50%;background:#6ad09d;border:2px solid #0c0c0d;box-sizing:content-box}
+.um-t{display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-width:0}
+.um-t>b{font-size:16.5px;font-weight:600;line-height:1.1;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
+.um-role{display:inline-flex;align-items:center;gap:7px;height:20px;padding:0 11px 0 8px;border-radius:99px;background:#141415;border:1px solid #232325;
+  font-size:9.5px;font-weight:600;letter-spacing:.12em;color:#8b8b90;text-transform:uppercase}
+.um-role i{width:6px;height:6px;border-radius:50%;background:#5c5c61}
+/* การ์ดยอดเงิน */
+.um-bal{display:flex;align-items:center;gap:10px;padding:11px 11px;border-radius:19px;background:linear-gradient(180deg,#101011,#0f0f10);border:1px solid #1c1c1d;box-shadow:0 0 0 1px rgba(255,255,255,.01),inset 0 1px 0 rgba(255,255,255,.02)}
+.um-bi{width:42px;height:42px;border-radius:14px;flex:none;display:grid;place-items:center;color:#ea3323;background:#1b0b0c;border:1px solid rgba(234,51,35,.22)}
+.um-bi svg{width:16px;height:16px}
+.um-bt{display:flex;flex-direction:column;gap:0;min-width:0;flex:1}
+.um-bt small{font-size:12px;color:#69696e;line-height:14px;font-weight:400}
+.um-bt b{font-size:16.5px;font-weight:700;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;color:#fff}
+.um-bt em{font-style:normal;color:#ea3323}
+.um-top{flex:none;height:38px;padding:0 11px;border-radius:13px;font-size:14px;font-weight:600;color:#fff!important;white-space:nowrap;
+  background:#ea3323;box-shadow:0 0 18px rgba(234,51,35,.45),0 4px 14px rgba(234,51,35,.25);transition:transform .15s}
 .um-top:active{transform:scale(.96)}
-.um-list{display:flex;flex-direction:column;margin-top:8px}
-.um-i{display:flex;align-items:center;gap:14px;width:100%;padding:11px 8px;border-radius:16px;text-align:left;transition:background .2s}
+/* รายการเมนู */
+.um-list{display:flex;flex-direction:column;margin-top:11.5px}
+.um-i{display:flex;align-items:center;gap:12.5px;width:100%;padding:10.75px 5px 10.75px 10px;border-radius:16px;text-align:left;transition:background .2s}
 .um-i:hover,.um-i:focus-visible{background:rgba(255,255,255,.04);outline:none}
 .um-i:active{transform:scale(.985)}
-.um-ic{width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#131315;border:1px solid #232327;color:#d4d4da}
-.um-ic svg{width:20px;height:20px}
-.um-tx{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-.um-tx b{font-size:17px;font-weight:600;line-height:1.2;color:#fff}
-.um-tx small{font-size:13.5px;color:#9a9aa3;line-height:1.2}
-.um-ch{flex:none;color:#4a4a52;display:grid;place-items:center}
-.um-ch svg{width:18px;height:18px}
-.um-sep{height:1px;margin:8px 6px 6px;background:#1c1c20}
-.um-out .um-ic{background:linear-gradient(145deg,#2c0707,#150303);border-color:rgba(255,0,0,.28);color:#ff0000}
-.um-out .um-tx b{color:#ff4d4d}
+.um-ic{width:38px;height:38px;border-radius:11px;flex:none;display:grid;place-items:center;background:#151516;border:1px solid #1f1f21;color:#adadae}
+.um-ic svg{width:14px;height:14px}
+.um-tx{display:flex;flex-direction:column;gap:1.5px;min-width:0;flex:1}
+.um-tx b{font-size:14.5px;font-weight:600;line-height:18.6px;color:#fff}
+.um-tx small{font-size:12px;color:#e6e6e8;line-height:15px;font-weight:400}
+.um-ch{flex:none;color:#3d3d41;display:grid;place-items:center}
+.um-ch svg{width:16px;height:16px;stroke-width:1.8}
+.um-sep{height:1px;margin:8px 0;background:#18181a}
+.um-out .um-ic{background:#1d0c0d;border-color:rgba(234,51,35,.20);color:#ea6a5e}
+.um-out .um-tx b{color:#ee6b60}
 /* ===== แอนิเมชันตอนเปิดแผง: แต่ละแถวเลื่อนลงมาทีละอัน (ไล่ตาม --i) ลื่น ไม่กระตุก ===== */
 .um-prof,.um-bal,.um-i,.um-sep{opacity:0;translate:0 -14px;filter:blur(5px);
   transition:opacity .18s ease,translate .18s ease,filter .18s ease}
@@ -127,10 +131,36 @@ html.is-in .header .dr-f{display:none}
 .um .um-av{scale:.6;transition:scale .2s ease}
 .um.on .um-av{scale:1;transition:scale .6s cubic-bezier(.3,1.5,.5,1) .16s}
 .um.on .um-top{animation:umGlow 1.1s ease .5s 1 both}
-@keyframes umGlow{0%{box-shadow:0 8px 24px rgba(255,0,0,.45),inset 0 1px 0 rgba(255,255,255,.28)}
-  45%{box-shadow:0 8px 34px rgba(255,0,0,.9),0 0 0 6px rgba(255,0,0,.18),inset 0 1px 0 rgba(255,255,255,.28)}
-  100%{box-shadow:0 8px 24px rgba(255,0,0,.45),inset 0 1px 0 rgba(255,255,255,.28)}}
+@keyframes umGlow{0%{box-shadow:0 0 18px rgba(234,51,35,.45),0 4px 14px rgba(234,51,35,.25)}
+  45%{box-shadow:0 0 28px rgba(234,51,35,.85),0 0 0 5px rgba(234,51,35,.16)}
+  100%{box-shadow:0 0 18px rgba(234,51,35,.45),0 4px 14px rgba(234,51,35,.25)}}
 @media (prefers-reduced-motion:reduce){
   .um,.um-prof,.um-bal,.um-i,.um-sep,.um-av{transition-duration:.01ms!important;transition-delay:0s!important}
   .um-prof,.um-bal,.um-i,.um-sep{opacity:1;translate:none;filter:none}
   .um-av{scale:1}.um.on .um-top{animation:none}}
+
+/* ปรับแต่งแผงบัญชี (ค่าที่ผู้ใช้เลือกจากแบบจำลอง) */
+.um{width:min(263px,calc(100vw - 20px));border-radius:19px}
+.um-av{width:34px;height:34px}
+.um-av b{font-size:11.6px}
+.um-t>b{font-size:17.5px}
+.um-bt b{font-size:14.5px}
+.um-top{height:39px;padding:0 11px;font-size:12px}
+.um-ic{width:35px;height:35px}
+.um-ic svg{width:14px;height:14px}
+.um-tx b{font-size:12.5px}
+.um-tx small{font-size:13px}
+.um-i{padding-top:6.75px;padding-bottom:6.75px}
+
+/* ปรับแต่งแผงบัญชี (ค่าที่ผู้ใช้ปรับเองจากหน้าแบบจำลอง) */
+.um{width:min(263px,calc(100vw - 20px));border-radius:19px}
+.um-av{width:34px;height:34px}
+.um-av b{font-size:11.6px}
+.um-t>b{font-size:17.5px}
+.um-bt b{font-size:14.5px}
+.um-top{height:39px;padding:0 11px;font-size:12px}
+.um-ic{width:35px;height:35px}
+.um-ic svg{width:14px;height:14px}
+.um-tx b{font-size:12.5px}
+.um-tx small{font-size:13px}
+.um-i{padding-top:6.75px;padding-bottom:6.75px}
