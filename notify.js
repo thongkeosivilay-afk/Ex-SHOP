@@ -1,4 +1,4 @@
-/* ===== notify.js — ป้ายแจ้งเตือนสีขาว เด้งเลื่อนขึ้นจากด้านล่าง (ใช้ทุกหน้า) =====
+/* ===== notify.js — ป้ายแจ้งเตือนเด้งเลื่อนขึ้นจากด้านล่าง (ใช้ทุกหน้า): ธีมสว่าง = ขาวมินิ, ธีมมืด/แอดมิน = ดำแดงสไตล์ร้าน =====
    - ดักป้ายเดิมของทุกหน้า (#snack / #toast / #atoast / #pfToast) ที่ถูกสั่ง .show แล้วแสดงป้ายใหม่แทน (ป้ายเดิมถูกซ่อน)
      → ไม่ต้องแก้ฟังก์ชัน toast/snack เดิมในแต่ละหน้า เพิ่มแค่ <script src="notify.js"> ท้ายหน้า
    - เรียกใช้เองได้: exToast('หัวข้อ', { sub:'ข้อความรอง', kind:'success|error|warn|info' })  หรือ  exToast('หัวข้อ\nข้อความรอง')
@@ -8,18 +8,18 @@
 
   var css = ''
   + '#snack,#toast,#atoast,#pfToast{display:none!important}'
-  + '.exn{box-sizing:border-box;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);width:min(calc(100% - 28px),460px);z-index:2147483000;'
-  +   'display:none;align-items:center;gap:14px;padding:14px 18px;border-radius:24px;background:#fff;color:#16181d;'
-  +   'box-shadow:0 18px 44px rgba(0,0,0,.38),0 3px 10px rgba(0,0,0,.18);cursor:pointer;-webkit-tap-highlight-color:transparent;'
+  + '.exn{box-sizing:border-box;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);width:min(calc(100% - 28px),var(--exn-w,460px));z-index:2147483000;'
+  +   'display:none;align-items:center;gap:var(--exn-gap);padding:var(--exn-py) var(--exn-px);border-radius:var(--exn-r);background:var(--exn-surf);color:var(--exn-tc);border:var(--exn-bd);'
+  +   'box-shadow:var(--exn-sh);cursor:pointer;-webkit-tap-highlight-color:transparent;'
   +   'transform:translate(-50%,0);will-change:transform,opacity}'
   + '.exn.on{display:flex}'
   + '.exn.in{animation:exnIn .65s cubic-bezier(.2,1.2,.35,1) both}'
   + '.exn.out{animation:exnOut .4s cubic-bezier(.55,0,.8,.4) both;pointer-events:none}'
   + '@keyframes exnIn{0%{opacity:0;transform:translate(-50%,170%) scale(.92)}45%{opacity:1}62%{transform:translate(-50%,-12px) scale(1.01)}82%{transform:translate(-50%,3px) scale(1)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}'
   + '@keyframes exnOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,150%) scale(.96)}}'
-  + '.exn-ic{flex:none;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--exn-bg);color:var(--exn-c);animation:exnPop .6s .08s cubic-bezier(.2,1.5,.4,1) both}'
-  + '.exn-ic svg{width:32px;height:32px;overflow:visible}'
-  + '.exn-ic .r,.exn-ic .k{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100}'
+  + '.exn-ic{flex:none;width:var(--exn-ic);height:var(--exn-ic);border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--exn-bg);color:var(--exn-c);animation:exnPop .6s .08s cubic-bezier(.2,1.5,.4,1) both}'
+  + '.exn-ic svg{width:var(--exn-gl);height:var(--exn-gl);overflow:visible}'
+  + '.exn-ic .r,.exn-ic .k{fill:none;stroke:currentColor;stroke-width:var(--exn-sw);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100}'
   + '.exn.in .exn-ic .r{animation:exnDraw .55s .12s ease forwards}'
   + '.exn.in .exn-ic .k{animation:exnDraw .4s .38s ease forwards}'
   + '.exn:not(.in) .exn-ic .r,.exn:not(.in) .exn-ic .k{stroke-dashoffset:0}'
@@ -29,13 +29,22 @@
   + '.exn.in[data-k=success] .exn-ic::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--exn-c);animation:exnRing .95s .22s ease-out both;pointer-events:none}'
   + '@keyframes exnRing{from{transform:scale(1);opacity:.75}to{transform:scale(1.9);opacity:0}}'
   + '.exn-tx{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}'
-  + '.exn-tx b{font-size:17px;font-weight:700;line-height:1.3;color:#16181d;word-break:break-word}'
-  + '.exn-tx span{font-size:14px;line-height:1.35;color:var(--exn-c);font-weight:500;word-break:break-word}'
+  + '.exn-tx b{font-size:var(--exn-ts);font-weight:700;line-height:1.3;color:var(--exn-tc);word-break:break-word}'
+  + '.exn-tx span{font-size:var(--exn-ss);line-height:1.35;color:var(--exn-sc,var(--exn-c));font-weight:500;word-break:break-word}'
   + '.exn-tx span:empty{display:none}'
   + '.exn[data-k=success]{--exn-c:#1f9d6a;--exn-bg:#e3f6ec}'
   + '.exn[data-k=error]{--exn-c:#e0342f;--exn-bg:#fde8e7}'
   + '.exn[data-k=warn]{--exn-c:#d98a00;--exn-bg:#fff2d6}'
   + '.exn[data-k=info]{--exn-c:#2f7de1;--exn-bg:#e4efff}'
+  /* ธีมสว่าง = ขาวมินิ · ธีมมืด (และหน้าแอดมิน) = ดำแดงสไตล์ร้าน */
+  + '.exn.lt{--exn-w:340px;--exn-gap:11px;--exn-py:10px;--exn-px:14px;--exn-r:16px;--exn-surf:#fff;--exn-tc:#16181d;--exn-sc:var(--exn-c);--exn-bd:0 solid transparent;'
+  +   '--exn-sh:0 7px 18px rgba(0,0,0,.15),0 1px 4px rgba(0,0,0,.07);--exn-ic:40px;--exn-gl:24px;--exn-sw:2.4;--exn-ts:15px;--exn-ss:12.5px}'
+  + '.exn.dk{--exn-w:460px;--exn-gap:14px;--exn-py:14px;--exn-px:18px;--exn-r:20px;--exn-surf:#121014;--exn-tc:#fff;--exn-sc:#b9b4c0;--exn-bd:1px solid #3a2226;'
+  +   '--exn-sh:0 13px 31px rgba(0,0,0,.5),0 0 28px rgba(255,77,77,.10);--exn-ic:54px;--exn-gl:32px;--exn-sw:2.4;--exn-ts:17px;--exn-ss:14px}'
+  + '.exn.dk[data-k=success]{--exn-c:#3ddc84;--exn-bg:rgba(61,220,132,.18)}'
+  + '.exn.dk[data-k=error]{--exn-c:#ff4d4d;--exn-bg:rgba(255,77,77,.18)}'
+  + '.exn.dk[data-k=warn]{--exn-c:#ffb62e;--exn-bg:rgba(255,182,46,.18)}'
+  + '.exn.dk[data-k=info]{--exn-c:#5aa2ff;--exn-bg:rgba(90,162,255,.18)}'
   + '@media (prefers-reduced-motion:reduce){.exn.in,.exn.out{animation-duration:.01ms!important}.exn-ic,.exn.in .exn-ic .r,.exn.in .exn-ic .k{animation-duration:.01ms!important;animation-delay:0s!important}}';
 
   var ICON = {
@@ -100,6 +109,8 @@
     var running = el.classList.contains('on') && !el.classList.contains('out');
     bEl.textContent = title; sEl.textContent = sub;
     el.dataset.k = kind; icEl.innerHTML = ICON[kind];
+    var light = document.documentElement.getAttribute('data-theme') === 'light';
+    el.classList.toggle('lt', light); el.classList.toggle('dk', !light);
     clearTimeout(endT); clearTimeout(hideT);
     /* ถ้าเพิ่งแสดงไม่ถึง .5 วิ (เช่นระบบแปลภาษาแก้ข้อความตามมา) แค่อัปเดตข้อความ ไม่เด้งซ้ำ */
     if(!(running && now - lastAt < 500)){
