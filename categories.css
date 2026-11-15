@@ -72,7 +72,6 @@ body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px
 .ct-sec-h span{font-size:13.5px;color:var(--muted)}
 .ct-sec .cat-list{margin-top:6px}
 .ct-sec .grid{margin-top:16px}
-.ct-sec .cat-list > .cat:first-child{margin-top:42px}
 
 /* การ์ดหมวดที่เลือกอยู่ */
 .cat.is-on .cb.cb-img{outline:2px solid var(--red);outline-offset:-2px}

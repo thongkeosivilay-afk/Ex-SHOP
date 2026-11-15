@@ -1,4 +1,4 @@
-/* ตัวเลขสถานะบนแท็บมุมขวาบนของการ์ดหมวดหมู่
+/* ตัวเลขสถานะอยู่ข้างชื่อหมวดในแท็บมุมซ้ายล่างของการ์ดหมวดหมู่
    แดง  = จำนวนสินค้าที่ไม่พร้อมขาย (คงเหลือ = 0)
    เขียว = จำนวนสินค้าที่พร้อมขาย (คงเหลือ > 0)
    นับจากรายการ products ใน data.js — อยากกำหนดเองใส่ no:10, ok:20 ในรายการ cats
@@ -14,7 +14,8 @@ function addCatTabs(root){
     var t = document.createElement('span');
     t.className = 'ctab';
     t.innerHTML = '<b class="n no">' + no + '</b><i class="dv"></i><b class="n ok">' + ok + '</b>';
-    b.appendChild(t);
+    var tab = b.querySelector('.cat-b') || b;
+    tab.appendChild(t);
   });
 }
 addCatTabs(document);

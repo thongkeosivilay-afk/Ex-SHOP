@@ -23,21 +23,13 @@
   background:radial-gradient(circle at 100% 100%,transparent calc(var(--tr) - .5px),var(--card) var(--tr));
 }
 
-/* ===== แท็บสถานะด้านบนขวา: จุดสี (เขียว = มีสินค้าและพร้อมขาย, แดง = ไม่พร้อมขาย) ===== */
-.cat{--topH:32px; --inset:24px}
-.cat-list > .cat:first-child{margin-top:var(--topH)}
+/* ===== ตัวเลขสถานะ: อยู่ในแท็บชื่อหมวด ต่อท้ายชื่อ (เขียว = พร้อมขาย, แดง = ไม่พร้อมขาย) ===== */
+.cat .cat-b{gap:12px}
 .cat .ctab{
-  position:absolute; right:var(--inset); bottom:100%;
-  display:flex; align-items:center; justify-content:center;
-  height:var(--topH); padding:0 22px;
-  background:var(--card); border-radius:var(--tr) var(--tr) 0 0;
+  display:flex; align-items:center; gap:9px; flex:none;
+  font-family:'Outfit','Noto Sans Lao Looped',sans-serif; line-height:1;
 }
-.cat .ctab::before,.cat .ctab::after{content:""; position:absolute; bottom:0; width:var(--tr); height:var(--tr); pointer-events:none}
-.cat .ctab::before{right:100%; background:radial-gradient(circle at 0 0,transparent calc(var(--tr) - .5px),var(--card) var(--tr))}
-.cat .ctab::after{left:100%; background:radial-gradient(circle at 100% 0,transparent calc(var(--tr) - .5px),var(--card) var(--tr))}
-.cat .ctab{gap:11px;font-family:'Outfit','Noto Sans Lao Looped',sans-serif;line-height:1}
 .ctab .n{font-size:16px;font-weight:600;letter-spacing:.2px}
 .ctab .n.no{color:#ff3b3b}   /* แดง = มีสินค้า แต่ไม่พร้อมขาย */
 .ctab .n.ok{color:#22d768}   /* เขียว = มีสินค้า และพร้อมขาย */
 .ctab .dv{width:1px;height:14px;background:var(--border);flex:none}
-
