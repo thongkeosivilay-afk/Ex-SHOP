@@ -56,16 +56,19 @@
 
   var el, icEl, bEl, sEl, hideT, endT, lastAt = 0;
 
-  /* เสียง "แปะๆ" (ok.mp3) — เล่นพร้อมป้ายสำเร็จ ✓ อัตโนมัติในหน้าแอดมิน (ทุกครั้งที่กดบันทึกแล้วสำเร็จ); หน้าอื่นเล่นเมื่อสั่ง exToast(..., {sound:true}) */
-  var AUTO_SND = /admin/i.test(location.pathname), snd = null, unlocked = false;
-  function getSnd(){ if(!snd){ try { snd = new Audio('ok.mp3'); snd.preload = 'auto'; } catch(e){} } return snd; }
-  function playSnd(){ var a = getSnd(); if(!a) return; try { a.muted = false; a.currentTime = 0; var p = a.play(); if(p && p.catch) p.catch(function(){}); } catch(e){} }
+  /* เสียง — เล่นพร้อมป้ายอัตโนมัติในหน้าแอดมิน; หน้าอื่นเล่นเมื่อสั่ง exToast(..., {sound:true}) */
+  /* ✓ สำเร็จ = ok.mp3 · ✕ ผิดพลาด / ! เตือน / i ทั่วไป = alert.mp3 */
+  var AUTO_SND = /admin/i.test(location.pathname), snds = {}, unlocked = false;
+  function getSnd(f){ if(!snds[f]){ try { snds[f] = new Audio(f); snds[f].preload = 'auto'; } catch(e){} } return snds[f]; }
+  function playSnd(f){ var a = getSnd(f); if(!a) return; try { a.muted = false; a.currentTime = 0; var p = a.play(); if(p && p.catch) p.catch(function(){}); } catch(e){} }
   /* มือถือให้เล่นเสียงได้หลังผู้ใช้แตะหน้าจอครั้งแรกเท่านั้น → ปลดล็อกเงียบๆ ตอนแตะครั้งแรก */
   function unlock(){
     if(unlocked) return; unlocked = true;
-    var a = getSnd(); if(!a) return;
-    try { a.muted = true; var p = a.play(); var done = function(){ a.pause(); a.currentTime = 0; a.muted = false; };
-      p && p.then ? p.then(done, function(){ a.muted = false; }) : done(); } catch(e){}
+    ['ok.mp3','alert.mp3'].forEach(function(f){
+      var a = getSnd(f); if(!a) return;
+      try { a.muted = true; var p = a.play(); var done = function(){ a.pause(); a.currentTime = 0; a.muted = false; };
+        p && p.then ? p.then(done, function(){ a.muted = false; }) : done(); } catch(e){}
+    });
   }
   ['pointerdown','touchstart','keydown'].forEach(function(ev){ document.addEventListener(ev, unlock, { once:true, passive:true, capture:true }); });
 
@@ -116,7 +119,7 @@
     if(!(running && now - lastAt < 500)){
       el.classList.remove('in','out'); void el.offsetWidth;
       el.classList.add('on','in'); lastAt = now;
-      if(kind === 'success' && (opt.sound === true || (AUTO_SND && opt.sound !== false))) playSnd();
+      if(opt.sound === true || (AUTO_SND && opt.sound !== false)) playSnd(kind === 'success' ? 'ok.mp3' : 'alert.mp3');
     }
     hideT = setTimeout(hide, Math.min(6000, 2400 + (title.length + sub.length) * 35));
   }
