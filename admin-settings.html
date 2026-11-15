@@ -122,20 +122,14 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .lsz{margin-top:20px;padding-top:18px;border-top:1px solid #19191b}
 .lsz-h{margin-bottom:10px}
 .lsz-h b{font-size:15.5px;font-weight:600;color:#d9d6d6}
-.lsz-r{display:flex;align-items:center;gap:14px;padding:4px 2px}
-.lsz-v{min-width:56px;text-align:left;color:#ff3b2a;font-size:23px;font-weight:600;letter-spacing:.01em;flex:none}
-#lszRange{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:34px;margin:0;background:transparent;outline:none;--r:.36;-webkit-tap-highlight-color:transparent}
-#lszRange::-webkit-slider-runnable-track{height:9px;border-radius:9px;background:linear-gradient(90deg,#e8321f 0,#e8321f calc(23px + (100% - 46px) * var(--r)),#e6e6e8 calc(23px + (100% - 46px) * var(--r)),#e6e6e8 100%)}
-#lszRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:46px;height:30px;margin-top:-10.5px;border-radius:15px;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.55)}
-#lszRange::-moz-range-track{height:9px;border-radius:9px;background:#e6e6e8}
-#lszRange::-moz-range-progress{height:9px;border-radius:9px;background:#e8321f}
-#lszRange::-moz-range-thumb{width:46px;height:30px;border-radius:15px;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.55)}
-.lsz-b{width:42px;height:38px;border-radius:12px;border:1px solid #7a1c15;background:#0c0504;color:#f0422f;font-size:22px;font-weight:700;line-height:1;flex:none;display:grid;place-items:center;margin-top:13px}
-.lsz-b:active{background:#2a0d0a}
-.lsz-m{display:flex;justify-content:space-between;margin:4px 74px 0 2px;font-size:12px;color:#62605f}
-.lsz-bt{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:13px}
-.lsz-bt .up{margin-top:13px}
-.lsz-bt .lsz-b{margin-top:13px}
+.lsz-r{display:flex;align-items:center;gap:14px;padding:6px 2px 2px}
+.lsz-v{min-width:44px;text-align:right;color:#ff1a1a;font-size:17px;font-weight:500;flex:none;font-variant-numeric:tabular-nums}
+#lszRange{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:24px;margin:0;padding:0;background:transparent;outline:none;--r:.36;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+#lszRange::-webkit-slider-runnable-track{height:6px;border-radius:6px;border:.5px solid rgba(255,255,255,.9);box-sizing:border-box;background:linear-gradient(90deg,#fe0000 0,#fe0000 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 calc(12px + (100% - 24px) * var(--r)),#e4e4e6 100%)}
+#lszRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:16px;margin-top:-5.5px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+#lszRange::-moz-range-track{height:6px;border-radius:6px;background:#e4e4e6;border:.5px solid rgba(255,255,255,.9)}
+#lszRange::-moz-range-progress{height:6px;border-radius:6px;background:#fe0000}
+#lszRange::-moz-range-thumb{width:24px;height:16px;border-radius:8px;background:#fefefe;border:0;box-shadow:0 1px 4px rgba(0,0,0,.45)}
 .lsz.off{opacity:.45;pointer-events:none}
 .lsz-t{margin:16px 0 8px;font-size:13px;color:#8d8a8a}
 .pv{position:relative;height:52px;border-radius:26px;background:#0a0a0a;border:1px solid #2a2a2e;display:flex;align-items:center;gap:8px;padding:0 12px 0 10px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,0,0,.08)}
@@ -146,6 +140,17 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .pv-dots i{width:30px;height:30px;border-radius:50%;border:1px solid #2a2a2e;background:#141416;display:block}
 .pv-dots i:first-child{border-color:rgba(255,0,0,.45);background:#2a0d0a}
 .pv-note{margin-top:8px;font-size:12px;color:#62605f;text-align:center}
+
+/* ===== ແຖບເລື່ອນຄວາມໄວຂໍ້ຄວາມເລື່ອນ + ຕົວຢ່າງ ===== */
+.mqp{position:relative;height:36px;border-radius:10px;border:1px solid #2a2a2e;background:#0a0a0a;overflow:hidden;display:flex;align-items:center}
+.mqp.an{background:#0d0d0e}
+.mqp-t{display:flex;flex:none;width:max-content;white-space:nowrap;animation:mqpv var(--t,10s) linear infinite;will-change:transform}
+.mqp-g{display:flex;flex:none}
+.mqp-i{flex:none;display:flex;align-items:center;gap:9px;margin-right:36px;font-size:14px;color:#b9b9bd}
+.mqp-i i{width:8px;height:8px;border-radius:50%;background:#f0392a;box-shadow:0 0 8px rgba(240,57,42,.7);flex:none}
+.mqp.an .mqp-i{margin-right:44px;font-size:13.5px;color:#f2f2f2}
+.mqp.an .mqp-i i{display:none}
+@keyframes mqpv{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--dn,-50%),0,0)}}
 </style>
 <script>window.EX_FONT_PREVIEW_ONLY=1</script>
 <script src="font.js"></script>
@@ -201,14 +206,12 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
         <div class="lsz off" id="lszBox">
           <div class="lsz-h"><b>ຂະໜາດໂລໂກ້ໃນໜ້າເວັບ</b></div>
           <div class="lsz-r">
-            <input type="range" id="lszRange" min="28" max="50" step="1" value="36" aria-label="ຂະໜາດໂລໂກ້">
+            <input type="range" class="rng" id="lszRange" min="28" max="50" step="1" value="36" aria-label="ຂະໜາດໂລໂກ້">
             <span class="lsz-v" id="lszVal">36px</span>
           </div>
-          <div class="lsz-m"><span>ນ້ອຍ 28</span><span>ໃຫຍ່ 50</span></div>
           <div class="lsz-t">ຕົວຢ່າງແຖບເທິງຂອງເວັບ (ຂະໜາດຈິງ)</div>
           <div class="pv"><span class="pv-logo" id="pvLogo"></span><span class="pv-name" id="pvName">EXSHOP</span><span class="pv-dots"><i></i><i></i></span></div>
           <p class="pv-note" id="lszNote">ອັບໂຫຼດໂລໂກ້ກ່ອນ ຈຶ່ງປັບຂະໜາດໄດ້ · ກົດ "ບັນທຶກ" ເພື່ອໃຊ້ຈິງ</p>
-          <div class="lsz-bt"><button type="button" class="lsz-b" id="lszMinus" aria-label="ນ້ອຍລົງ">−</button><button type="button" class="up rm" id="lszReset">ຄືນຄ່າເດີມ (36)</button><button type="button" class="lsz-b" id="lszPlus" aria-label="ໃຫຍ່ຂຶ້ນ">+</button></div>
         </div>
       </div>
 
@@ -244,10 +247,32 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
       <div class="fld">
         <label for="mq">ຂໍ້ຄວາມເລື່ອນດ້ານເທິງສຸດ</label>
         <textarea class="inp" id="mq" maxlength="300" placeholder="ຂໍ້ຄວາມທີ່ເລື່ອນວົນຢູ່ເທິງສຸດຂອງເວັບ..."></textarea>
+        <div class="lsz" id="mqBox">
+          <div class="lsz-h"><b>ຄວາມໄວການເລື່ອນ (ແຖບເທິງສຸດ)</b></div>
+          <div class="lsz-r">
+            <input type="range" class="rng" id="mqRange" min="10" max="120" step="1" value="55" aria-label="ຄວາມໄວການເລື່ອນ (ແຖບເທິງສຸດ)">
+            <span class="lsz-v" id="mqVal">55px/s</span>
+          </div>
+          <div class="lsz-m"><span>ຊ້າ 10</span><span>ໄວ 120</span></div>
+          <div class="lsz-t">ຕົວຢ່າງການເລື່ອນ (ຄວາມໄວຈິງ)</div>
+          <div class="mqp" id="mqPv"><div class="mqp-t"></div></div>
+          <div class="lsz-bt"><button type="button" class="lsz-b" id="mqMinus" aria-label="ຊ້າລົງ">−</button><button type="button" class="up rm" id="mqReset">ຄືນຄ່າເດີມ (55)</button><button type="button" class="lsz-b" id="mqPlus" aria-label="ໄວຂຶ້ນ">+</button></div>
+        </div>
       </div>
       <div class="fld">
         <label for="an">ຂໍ້ຄວາມປະກາດ (ແຖບໃຕ້ແບນເນີ)</label>
         <textarea class="inp" id="an" maxlength="300" placeholder="ຂໍ້ຄວາມໃນແຖບ ປະກາດ ໃຕ້ແບນເນີ..."></textarea>
+        <div class="lsz" id="anBox">
+          <div class="lsz-h"><b>ຄວາມໄວການເລື່ອນ (ແຖບປະກາດ)</b></div>
+          <div class="lsz-r">
+            <input type="range" class="rng" id="anRange" min="10" max="120" step="1" value="40" aria-label="ຄວາມໄວການເລື່ອນ (ແຖບປະກາດ)">
+            <span class="lsz-v" id="anVal">40px/s</span>
+          </div>
+          <div class="lsz-m"><span>ຊ້າ 10</span><span>ໄວ 120</span></div>
+          <div class="lsz-t">ຕົວຢ່າງການເລື່ອນ (ຄວາມໄວຈິງ)</div>
+          <div class="mqp an" id="anPv"><div class="mqp-t"></div></div>
+          <div class="lsz-bt"><button type="button" class="lsz-b" id="anMinus" aria-label="ຊ້າລົງ">−</button><button type="button" class="up rm" id="anReset">ຄືນຄ່າເດີມ (40)</button><button type="button" class="lsz-b" id="anPlus" aria-label="ໄວຂຶ້ນ">+</button></div>
+        </div>
       </div>
     </div>
   </section>
@@ -333,6 +358,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x.dataset.t === t); });
     document.querySelectorAll('.panel[data-p]').forEach(function(p){ p.hidden = p.dataset.p !== t; });
     try{ sessionStorage.setItem('exSetTab', t); }catch(e){}
+    if(window.__mqRefresh) setTimeout(window.__mqRefresh, 30);
   }
   document.getElementById('tabs').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return;
@@ -349,6 +375,37 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   var TXT = { sn:'name', sd:'description', mq:'marquee', an:'announce', w1t:'why1_title', w1d:'why1_text', w2t:'why2_title', w2d:'why2_text', s1:'stat_users', s2:'stat_products', s3:'stat_orders', s4:'stat_sold' };
   var st = { logo:'', banner:'', logoSz:36 }, saved = null, busy = false;
   var LSZ_DEF = 36, LSZ_MIN = 28, LSZ_MAX = 50;
+  var SPD = { mq:{ def:55, v:55 }, an:{ def:40, v:40 } }, SPD_MIN = 10, SPD_MAX = 120, mqW = { mq:0, an:0 };
+  function spdClamp(n, d){ n = Math.round(+n); if(!(n > 0)) n = d; return Math.max(SPD_MIN, Math.min(SPD_MAX, n)); }
+  function spdParse(t, d){ t = t || ''; var m = /\n#spd=(\d+)\s*$/.exec(t); return { text: t.replace(/\n#spd=\d+\s*$/, ''), v: m ? spdClamp(m[1], d) : d }; }
+  function escT(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* ຕົວຢ່າງແຖບເລື່ອນ: ວັດຄວາມກວ້າງຂໍ້ຄວາມ → ຊ້ຳໃຫ້ເຕັມ → ເລື່ອນເທົ່າ 1 ຊຸດແລ້ວວົນ (ຫຼັກການດຽວກັບໜ້າຮ້ານ) */
+  function mqBuild(k){
+    var box = document.getElementById(k + 'Pv'); if(!box) return;
+    var tr = box.firstElementChild, bw = box.clientWidth; if(!bw) return;
+    var txt = (document.getElementById(k).value || '').trim() || 'ຕົວຢ່າງຂໍ້ຄວາມເລື່ອນ...';
+    var gap = k === 'an' ? 44 : 36;
+    var item = '<span class="mqp-i"><i></i>' + escT(txt) + '</span>';
+    tr.innerHTML = '<div class="mqp-g">' + item + '</div>';
+    var iw = tr.querySelector('.mqp-i').getBoundingClientRect().width + gap;
+    var n = Math.max(2, Math.ceil((bw + 40) / Math.max(iw, 40)) + 1);
+    var g = '<div class="mqp-g">' + new Array(n + 1).join(item) + '</div>';
+    tr.innerHTML = g + g;
+    var w = tr.firstElementChild.getBoundingClientRect().width;
+    mqW[k] = w;
+    tr.style.setProperty('--dn', -w + 'px');
+    tr.style.setProperty('--t', (w / SPD[k].v).toFixed(2) + 's');
+  }
+  function paintSpd(k){
+    var v = SPD[k].v, r = document.getElementById(k + 'Range');
+    document.getElementById(k + 'Val').textContent = v + 'px/s';
+    r.value = v; r.style.setProperty('--r', (v - SPD_MIN) / (SPD_MAX - SPD_MIN));
+    var tr = document.getElementById(k + 'Pv').firstElementChild;
+    if(mqW[k]) tr.style.setProperty('--t', (mqW[k] / v).toFixed(2) + 's');
+  }
+  function setSpd(k, n){ SPD[k].v = spdClamp(n, SPD[k].def); paintSpd(k); dirty(); }
+  function mqRefresh(){ ['mq','an'].forEach(function(k){ paintSpd(k); mqBuild(k); }); }
+  window.__mqRefresh = function(){ try{ mqRefresh(); }catch(e){} };
   function lszClamp(n){ n = Math.round(+n); if(!(n > 0)) n = LSZ_DEF; return Math.max(LSZ_MIN, Math.min(LSZ_MAX, n)); }
   function lszParse(u){ u = u || ''; var m = /#sz=(\d+)$/.exec(u); return { url: u.replace(/#sz=\d+$/, ''), sz: m ? lszClamp(m[1]) : LSZ_DEF }; }
   /* ===== ຟອນເວັບໄຊ: ການ໌ດຕົວຢ່າງ 10 ຟອນ (ອ່ານ/ບັນທຶກຜ່ານ shop_font / admin_font_update — ເບິ່ງ font-setup.sql) ===== */
@@ -394,6 +451,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   function collect(){
     var o = { logo: st.logo ? st.logo + (st.logoSz !== LSZ_DEF ? '#sz=' + st.logoSz : '') : '', banner: st.banner };
     Object.keys(TXT).forEach(function(id){ var v = $(id).value; o[TXT[id]] = TXT[id] === 'name' ? v.trim() : v; });
+    ['mq','an'].forEach(function(k){ if(SPD[k].v !== SPD[k].def) o[TXT[k]] = String(o[TXT[k]]).replace(/\s+$/, '') + '\n#spd=' + SPD[k].v; });
     return o;
   }
   function dirty(){
@@ -404,9 +462,10 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     j = j || {};
     var lp = lszParse(j.logo); st.logo = lp.url; st.logoSz = lp.sz; st.banner = j.banner || '';
     Object.keys(TXT).forEach(function(id){ var v = j[TXT[id]]; $(id).value = (v === null || v === undefined) ? '' : v; });
+    ['mq','an'].forEach(function(k){ var p = spdParse($(k).value, SPD[k].def); $(k).value = p.text; SPD[k].v = p.v; });
     $('s1').placeholder = String(j.real_users || 0); $('s3').placeholder = String(j.real_orders || 0);
     saved = collect();
-    paint(); dirty();
+    paint(); mqRefresh(); dirty();
   }
   exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
@@ -435,10 +494,17 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   }
   wire('logo', $('logoUp'), $('logoRm'), $('logoFile'), $('logoDrop'));
   $('lszRange').addEventListener('input', function(){ setLsz(this.value); });
-  $('lszMinus').addEventListener('click', function(){ setLsz(st.logoSz - 1); });
-  $('lszPlus').addEventListener('click', function(){ setLsz(st.logoSz + 1); });
-  $('lszReset').addEventListener('click', function(){ setLsz(LSZ_DEF); });
   $('sn').addEventListener('input', paintLsz);
+  ['mq','an'].forEach(function(k){
+    $(k + 'Range').addEventListener('input', function(){ setSpd(k, this.value); });
+    $(k + 'Minus').addEventListener('click', function(){ setSpd(k, SPD[k].v - 1); });
+    $(k + 'Plus').addEventListener('click', function(){ setSpd(k, SPD[k].v + 1); });
+    $(k + 'Reset').addEventListener('click', function(){ setSpd(k, SPD[k].def); });
+    var tm; $(k).addEventListener('input', function(){ clearTimeout(tm); tm = setTimeout(function(){ mqBuild(k); }, 250); });
+  });
+  window.addEventListener('resize', function(){ clearTimeout(window.__mqT); window.__mqT = setTimeout(mqRefresh, 200); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(mqRefresh);
+  mqRefresh();
   wire('banner', $('bnUp'), $('bnRm'), $('bnFile'), $('bnDrop'));
   Object.keys(TXT).forEach(function(id){ $(id).addEventListener('input', dirty); });
   ['s1','s2','s3','s4'].forEach(function(id){ $(id).addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g, ''); dirty(); }); });
