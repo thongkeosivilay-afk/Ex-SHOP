@@ -1,0 +1,10 @@
+/* ===== หน้าประวัติเติมเงิน (ต่อจาก orders.css) ===== */
+.oh-si.bank{background:#fff;border:1px solid var(--border)}
+.oh-si.bank img{object-fit:contain;padding:5px}
+.oh-amt.plus{color:#22c55e}
+.tp-st{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;font-size:11.5px;font-weight:600;border:1px solid transparent}
+.tp-st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.tp-st.pending{color:#f59e0b;background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35)}
+.tp-st.approved{color:#22c55e;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.35)}
+.tp-st.rejected{color:var(--red);background:rgba(var(--red-rgb),.12);border-color:rgba(var(--red-rgb),.4)}
+.oh-kv .tp-st{margin-left:auto}

@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'orders.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
+    login:'', register:'', topup:'topup.html', orders:'orders.html', topuphist:'topups.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.id); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -15,7 +15,7 @@ const ic = (id, cls='') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
 let snackT;
 function snack(msg){ const s=$('#snack'); s.textContent=msg; s.classList.add('show'); clearTimeout(snackT); snackT=setTimeout(()=>s.classList.remove('show'),2400); }
 /* หน้าที่ต้องล็อกอินก่อน — คนที่ยังไม่ลงชื่อกดแล้วจะเด้งหน้าต่างเข้าสู่ระบบ (ดูได้อย่างเดียว: หน้าแรก/หมวดหมู่/สินค้า/ธีม/ภาษา) */
-const NEED_LOGIN = ['topup', 'orders', 'hwid', 'profile'];
+const NEED_LOGIN = ['topup', 'orders', 'topuphist', 'hwid', 'profile'];
 function go(route){
   const u = CONFIG.routes[route];
   if(NEED_LOGIN.includes(route) && window.exLoggedIn && !exLoggedIn() && window.openAuth){
