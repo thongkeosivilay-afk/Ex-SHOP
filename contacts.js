@@ -131,25 +131,36 @@
     if (!iconCss) {
       iconCss = true;
       const st = document.createElement('style');
-      st.textContent = `.ftc{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
-.ftc-h{font-size:12.5px;letter-spacing:.4px;color:var(--muted,#888)}
-.ftc-l{display:flex;flex-wrap:wrap;justify-content:center;gap:16px 10px;max-width:440px}
-.ftc-a{width:72px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted,#888);font-size:11.5px;text-decoration:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(10px) scale(.88);animation:ftcIn .55s cubic-bezier(.2,1.25,.4,1) forwards;animation-delay:calc(var(--i)*70ms)}
-.ftc-t{position:relative;width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--g);box-shadow:0 10px 22px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -12px 18px rgba(0,0,0,.2);transition:transform .2s cubic-bezier(.2,1.4,.4,1),box-shadow .2s}
-.ftc-t::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.32),rgba(255,255,255,0) 52%);pointer-events:none}
-.ftc-t svg{position:relative;width:28px;height:28px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
-.ftc-a:active .ftc-t{transform:scale(.88)}
-@media (hover:hover){.ftc-a:hover .ftc-t{transform:translateY(-3px) scale(1.06);box-shadow:0 14px 26px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.4)}}
-.ftc-n{max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      st.textContent = `.ftc{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:460px;margin:0 auto;padding:20px 14px 18px;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:0 18px 40px -22px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.ftc-h{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.5px;color:var(--text,#eee)}
+.ftc-h::before,.ftc-h::after{content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--red,#e11d2e))}
+.ftc-h::after{transform:scaleX(-1)}
+.ftc-l{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 8px;width:100%}
+.ftc-a{width:76px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted,#9a9a9a);font-size:11.5px;text-decoration:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(14px) scale(.8);animation:ftcIn .6s cubic-bezier(.2,1.3,.4,1) forwards;animation-delay:calc(var(--i)*80ms)}
+.ftc-t{position:relative;width:60px;height:60px;border-radius:20px;display:grid;place-items:center;overflow:hidden;background:var(--g);box-shadow:0 12px 24px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -14px 20px rgba(0,0,0,.22);transition:transform .22s cubic-bezier(.2,1.4,.4,1),box-shadow .22s;animation:ftcFloat 4.2s ease-in-out infinite;animation-delay:calc(var(--i)*-.6s)}
+.ftc-t::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,0) 52%);pointer-events:none}
+.ftc-t::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:ftcShine 5s ease-in-out infinite;animation-delay:calc(var(--i)*.45s);pointer-events:none}
+.ftc-t svg{position:relative;z-index:1;width:30px;height:30px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+.ftc-a:active .ftc-t{transform:scale(.86);animation-play-state:paused}
+@media (hover:hover){.ftc-a:hover{color:var(--text,#fff)}.ftc-a:hover .ftc-t{transform:translateY(-4px) scale(1.08);box-shadow:0 16px 28px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.45)}}
+.ftc-n{max-width:76px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.ftc-sk .ftc-a{animation:none;opacity:1;transform:none}
+.ftc-sk .ftc-t{background:rgba(255,255,255,.07);box-shadow:none;animation:ftcPulse 1.2s ease-in-out infinite}
+.ftc-sk .ftc-t::before,.ftc-sk .ftc-t::after{display:none}
 @keyframes ftcIn{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.ftc-a{animation:none;opacity:1;transform:none}.ftc-t{transition:none}}`;
+@keyframes ftcFloat{0%,100%{translate:0 0}50%{translate:0 -3px}}
+@keyframes ftcShine{0%,62%{left:-60%}100%{left:130%}}
+@keyframes ftcPulse{50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.ftc-a{animation:none;opacity:1;transform:none}.ftc-t,.ftc-t::after{animation:none;transition:none}}`;
       document.head.appendChild(st);
     }
+    el.innerHTML = `<div class="ftc ftc-sk"><div class="ftc-h">ຕິດຕໍ່ພວກເຮົາ</div><div class="ftc-l">${[0,1,2,3].map(i => `<span class="ftc-a"><span class="ftc-t"></span><span class="ftc-n">&nbsp;</span></span>`).join('')}</div></div>`;
+    el.hidden = false;
     load().then(list => {
-      if (!list.length) { el.hidden = true; return; }
+      if (!list.length) { el.hidden = true; el.innerHTML = ''; return; }
       el.innerHTML = `<div class="ftc"><div class="ftc-h">ຕິດຕໍ່ພວກເຮົາ</div><div class="ftc-l">${list.map(iconHTML).join('')}</div></div>`;
       el.hidden = false;
-    }).catch(() => { el.hidden = true; });
+    }).catch(() => { el.hidden = true; el.innerHTML = ''; });
   }
   const auto = () => mountIcons(document.getElementById('footCt'));
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', auto); else auto();
