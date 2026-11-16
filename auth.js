@@ -294,4 +294,9 @@ const AUTH = {
     history.replaceState(null, '', location.pathname);
     setTimeout(() => { openAuth('login'); say('info', 'ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານສ່ວນນີ້'); }, 300);
   }
+  /* ลิงก์จากหน้าวิธีการสั่งซื้อ → เปิดหน้าต่างสมัครสมาชิกให้เลย */
+  if (/[?&]auth=register/.test(location.search)) {
+    history.replaceState(null, '', location.pathname);
+    setTimeout(() => openAuth('register'), 300);
+  }
 })();

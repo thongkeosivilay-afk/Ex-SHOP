@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'orders.html', topuphist:'topups.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
+    login:'', register:'', topup:'topup.html', orders:'orders.html', topuphist:'topups.html', howto:'howto.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.id); } // เปิดหน้ายืนยันสั่งซื้อ
 };
