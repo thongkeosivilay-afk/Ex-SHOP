@@ -186,6 +186,33 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .thpv-p{margin-top:4px;color:var(--pc);font-size:18px;font-weight:700}
 .thpv-d{margin-top:3px;color:var(--pmu);font-size:12.5px}
 .thpv-b{margin-top:11px;width:100%;height:38px;border-radius:12px;background:var(--pc);color:#fff;font-weight:600;font-size:15px;pointer-events:none}
+
+/* ===== ຊ່ອງທາງຕິດຕໍ່ ===== */
+.ph .cn-count{margin-left:auto;font-size:13px;color:#8d8a8a;font-weight:500}
+.cn-note{font-size:13px;line-height:1.55;color:#76706f;margin-bottom:14px}
+.cn-list{display:flex;flex-direction:column;gap:12px}
+.cn-empty{padding:26px 10px;text-align:center;font-size:14px;color:#62605f;border:1px dashed #2a2a2e;border-radius:16px}
+.cn-row{padding:12px;border-radius:18px;border:1px solid #232327;background:#070707;display:flex;flex-direction:column;gap:10px}
+.cn-row.bad{border-color:rgba(var(--red-rgb),.55)}
+.cn-h{display:flex;align-items:center;gap:8px}
+.cn-d{width:40px;height:40px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;font:800 15px var(--f);color:#fff}
+.cn-h .selw{flex:1;min-width:0}
+.cn-b{width:40px;height:40px;flex:none;border-radius:12px;border:1px solid #2a2a2e;background:#0c0c0c;color:#b9b6b6;display:grid;place-items:center;cursor:pointer}
+.cn-b:disabled{opacity:.3}
+.cn-b:active{transform:scale(.93)}
+.cn-b.del{color:#f0422f;border-color:rgba(var(--red-rgb),.4);background:#0c0504}
+.cn-b svg{width:18px;height:18px}
+.cn-e{min-height:0;font-size:12.5px;line-height:1.4;color:#f0422f}
+.cn-e:empty{display:none}
+.cn-e.ok{color:#22c55e}
+.cn-addh{margin:18px 2px 10px;font-size:14px;font-weight:600;color:#d9d6d6}
+.cn-add{display:flex;flex-wrap:wrap;gap:9px}
+.cn-chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 8px;border-radius:999px;border:1px solid #2a2a2e;background:#0c0c0c;color:#e8e6e6;font-size:14.5px;font-weight:500;cursor:pointer}
+.cn-chip:active{transform:scale(.96)}
+.cn-chip i{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 12px var(--f);font-style:normal;color:#fff}
+.cn-chip i svg{width:13px;height:13px}
+.cn-chip b{font-weight:500;color:#76706f;margin-left:2px}
+.cn-d svg{width:19px;height:19px}
 </style>
 <script>window.EX_FONT_PREVIEW_ONLY=1</script>
 <script src="font.js"></script>
@@ -434,15 +461,21 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     </div>
   </section>
 
-  <section class="panel empty" data-p="5" hidden>
-    <div class="ph"><h4>ຊ່ອງທາງຕິດຕໍ່</h4></div>
-    <div class="pb"><p class="soon">ໝວດນີ້ຍັງບໍ່ມີການຕັ້ງຄ່າ · ຈະເພີ່ມໃນໄວໆນີ້</p></div>
+  <section class="panel" data-p="5" hidden>
+    <div class="ph"><h4>ຊ່ອງທາງຕິດຕໍ່</h4><span class="cn-count" id="cnCount"></span></div>
+    <div class="pb">
+      <p class="cn-note">ເພີ່ມຊ່ອງທາງທີ່ລູກຄ້າຕິດຕໍ່ຮ້ານໄດ້ ເພີ່ມໄດ້ຫຼາຍເທົ່າທີ່ຕ້ອງການ (ສູງສຸດ 50) · ຈະສະແດງໃນໜ້າເຕີມເງິນ ແລະເມນູ “ຕິດຕໍ່ແອດມິນ” · ກົດ “ບັນທຶກການຕັ້ງຄ່າ” ເພື່ອໃຊ້ຈິງ</p>
+      <div class="cn-list" id="cnList"></div>
+      <div class="cn-addh">ເພີ່ມຊ່ອງທາງ</div>
+      <div class="cn-add" id="cnAdd"></div>
+    </div>
   </section>
 </div>
 
 <div class="snack" id="snack"></div>
 <div class="savebar"><button class="save" id="saveBtn" type="button" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11.200a2 2 0 0 1 1.400.600l2.800 2.800a2 2 0 0 1 .600 1.400V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 1.800V8a1 1 0 0 0 1 1h6.200a1 1 0 0 0 1-1V4.800zM12 12.500a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>ບັນທຶກການຕັ້ງຄ່າ</button></div>
 
+<script src="contacts.js"></script>
 <script>
 (function(){
   /* ກວດສິດແອດມິນ (ຝັ່ງ Supabase) —  */
@@ -465,6 +498,84 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   });
   var t0 = '0'; try{ t0 = sessionStorage.getItem('exSetTab') || '0'; }catch(e){}
   showTab(document.querySelector('.tab[data-t="' + t0 + '"]') ? t0 : '0');
+
+  /* ===== ຊ່ອງທາງຕິດຕໍ່ ↔ Supabase (shop_contacts / admin_contacts_save) ===== */
+  var CN_MAX = 50, cn = [], cnSaved = '[]';
+  var CN_SVG = {
+    up:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>',
+    dn:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></svg>'
+  };
+  function cnId(id){ return document.getElementById(id); }
+  function cnEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function cnNorm(){ return JSON.stringify(cn.map(function(c){ return { kind:c.kind, label:c.label.trim(), value:c.value.trim() }; })); }
+  function cnChanged(){ return cnNorm() !== cnSaved; }
+  function cnHint(i){
+    var c = cn[i], v = c.value.trim(), el = cnId('cnList').children[i] && cnId('cnList').children[i].querySelector('.cn-e'), row = el && el.parentNode;
+    if(!el) return;
+    var bad = v && !exContactHref(c.kind, v);
+    el.className = 'cn-e' + (v && !bad ? ' ok' : '');
+    el.textContent = !v ? '' : bad ? 'ຮູບແບບບໍ່ຖືກຕ້ອງ — ກວດລິ້ງ ຫຼື ເບີທີ່ໃສ່' : '✓ ' + exContactHref(c.kind, v).replace(/^mailto:|^tel:/, '').replace(/^https?:\/\//, '');
+    row.classList.toggle('bad', !!bad);
+  }
+  function cnPaint(){
+    var K = exContactKinds, box = cnId('cnList');
+    cnId('cnCount').textContent = cn.length ? cn.length + ' / ' + CN_MAX : '';
+    box.innerHTML = cn.length ? cn.map(function(c, i){
+      var k = K[c.kind];
+      return '<div class="cn-row" data-i="' + i + '">' +
+        '<div class="cn-h"><span class="cn-d" style="background:' + k.c + '">' + k.s + '</span>' +
+        '<div class="selw"><select class="inp cn-k" aria-label="ປະເພດ">' + exContactOrder.map(function(id){ return '<option value="' + id + '"' + (id === c.kind ? ' selected' : '') + '>' + K[id].n + '</option>'; }).join('') + '</select></div>' +
+        '<button class="cn-b" type="button" data-a="up" aria-label="ຍ້າຍຂຶ້ນ"' + (i === 0 ? ' disabled' : '') + '>' + CN_SVG.up + '</button>' +
+        '<button class="cn-b" type="button" data-a="dn" aria-label="ຍ້າຍລົງ"' + (i === cn.length - 1 ? ' disabled' : '') + '>' + CN_SVG.dn + '</button>' +
+        '<button class="cn-b del" type="button" data-a="del" aria-label="ລຶບ">' + CN_SVG.del + '</button></div>' +
+        '<input class="inp cn-l" type="text" maxlength="40" autocomplete="off" placeholder="ຊື່ທີ່ສະແດງ (ບໍ່ບັງຄັບ) ເຊັ່ນ ແອດມິນ 1" value="' + cnEsc(c.label) + '">' +
+        '<input class="inp cn-v" type="text" maxlength="300" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + cnEsc(k.ph) + '" value="' + cnEsc(c.value) + '">' +
+        '<p class="cn-e"></p></div>';
+    }).join('') : '<div class="cn-empty">ຍັງບໍ່ມີຊ່ອງທາງຕິດຕໍ່ · ກົດປຸ່ມດ້ານລຸ່ມເພື່ອເພີ່ມ</div>';
+    cn.forEach(function(c, i){ cnHint(i); });
+    cnId('cnAdd').querySelectorAll('.cn-chip').forEach(function(b){ b.disabled = cn.length >= CN_MAX; });
+  }
+  cnId('cnAdd').innerHTML = exContactOrder.map(function(id){ var k = exContactKinds[id]; return '<button class="cn-chip" type="button" data-k="' + id + '"><i style="background:' + k.c + '">' + k.s + '</i>' + k.n + '<b>+</b></button>'; }).join('');
+  cnId('cnAdd').addEventListener('click', function(e){
+    var b = e.target.closest('.cn-chip'); if(!b || cn.length >= CN_MAX) return;
+    cn.push({ kind:b.dataset.k, label:'', value:'' }); cnPaint(); dirty();
+    var rows = cnId('cnList').children, last = rows[rows.length - 1];
+    if(last){ last.scrollIntoView({ block:'center', behavior:'smooth' }); var inp = last.querySelector('.cn-v'); if(inp) setTimeout(function(){ try{ inp.focus({ preventScroll:true }); }catch(x){ inp.focus(); } }, 280); }
+  });
+  cnId('cnList').addEventListener('input', function(e){
+    var row = e.target.closest('.cn-row'); if(!row) return; var i = +row.dataset.i;
+    if(e.target.classList.contains('cn-l')) cn[i].label = e.target.value;
+    else if(e.target.classList.contains('cn-v')){ cn[i].value = e.target.value; cnHint(i); }
+    dirty();
+  });
+  cnId('cnList').addEventListener('change', function(e){
+    if(!e.target.classList.contains('cn-k')) return;
+    var i = +e.target.closest('.cn-row').dataset.i; cn[i].kind = e.target.value; cnPaint(); dirty();
+  });
+  cnId('cnList').addEventListener('click', function(e){
+    var b = e.target.closest('.cn-b'); if(!b || b.disabled) return;
+    var i = +b.closest('.cn-row').dataset.i, a = b.dataset.a;
+    if(a === 'del') cn.splice(i, 1);
+    else { var j = a === 'up' ? i - 1 : i + 1; if(j < 0 || j >= cn.length) return; var t = cn[i]; cn[i] = cn[j]; cn[j] = t; }
+    cnPaint(); dirty();
+  });
+  function cnValidate(){
+    for(var i = 0; i < cn.length; i++){
+      var v = cn[i].value.trim();
+      if(!v) return 'ຊ່ອງທາງທີ ' + (i + 1) + ' (' + exContactKinds[cn[i].kind].n + ') ຍັງບໍ່ໄດ້ໃສ່ຂໍ້ມູນ';
+      if(!exContactHref(cn[i].kind, v)) return 'ຊ່ອງທາງທີ ' + (i + 1) + ' (' + exContactKinds[cn[i].kind].n + ') ຮູບແບບບໍ່ຖືກຕ້ອງ';
+    }
+    return '';
+  }
+  function cnLoad(){
+    exRpc('shop_contacts', {}).then(function(rows){
+      cn = (Array.isArray(rows) ? rows : []).filter(function(r){ return exContactKinds[r.kind]; }).map(function(r){ return { kind:r.kind, label:r.label || '', value:r.value || '' }; });
+      cnSaved = cnNorm(); cnPaint();
+    }).catch(function(){ cnPaint(); });
+  }
+  cnPaint(); cnLoad();
+
 
   /* ===== ຂໍ້ມູນພື້ນຖານເວັບໄຊ ↔ Supabase (shop_site / admin_site_save) ===== */
   var $ = function(id){ return document.getElementById(id); };
@@ -604,7 +715,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     return o;
   }
   function dirty(){
-    var cur = collect(), d = !saved || fontSel !== fontSaved || thChanged() || Object.keys(cur).some(function(k){ return cur[k] !== saved[k]; });
+    var cur = collect(), d = !saved || fontSel !== fontSaved || thChanged() || cnChanged() || Object.keys(cur).some(function(k){ return cur[k] !== saved[k]; });
     var b = $('saveBtn'); b.disabled = !d || busy; b.classList.toggle('dirty', d && !busy);
   }
   function fill(j){
@@ -664,6 +775,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     if(busy) return;
     var data = collect();
     if(!data.name) return toast('ກະລຸນາໃສ່ຊື່ເວັບໄຊ');
+    var cErr = cnValidate(); if(cErr){ showTab('5'); return toast(cErr); }
     busy = true; dirty();
     try{
       var j = await exRpc('admin_site_update', { p_token: exToken(), p_data: data });
@@ -683,10 +795,18 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
           else thMsg = 'ບັນທຶກສີບໍ່ສຳເລັດ';
         }catch(e){ thMsg = 'ບັນທຶກສີບໍ່ສຳເລັດ'; }
       }
+      var cnMsg = '';
+      if(j && j.ok && cnChanged()){
+        try{
+          var cj = await exRpc('admin_contacts_save', { p_token: exToken(), p_items: JSON.parse(cnNorm()) });
+          if(cj && cj.ok){ cnSaved = cnNorm(); }
+          else cnMsg = cj && cj.code === 'too_many' ? 'ຊ່ອງທາງຕິດຕໍ່ຫຼາຍເກີນ (ສູງສຸດ 50)' : 'ບັນທຶກຊ່ອງທາງຕິດຕໍ່ບໍ່ສຳເລັດ';
+        }catch(e){ cnMsg = 'ບັນທຶກຊ່ອງທາງຕິດຕໍ່ບໍ່ສຳເລັດ'; }
+      }
       if(j && j.ok){
         saved = data;
         try{ localStorage.removeItem('exSiteCache'); }catch(e){}
-        toast(fontMsg || thMsg || 'ບັນທຶກສຳເລັດ');
+        toast(fontMsg || thMsg || cnMsg || 'ບັນທຶກສຳເລັດ');
       } else toast(j && j.code === 'not_admin' ? 'ບໍ່ມີສິດແອດມິນ' : 'ບັນທຶກບໍ່ສຳເລັດ');
     }catch(e){ toast('ບັນທຶກບໍ່ສຳເລັດ'); }
     busy = false; dirty();

@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000">
 <title>ເຕີມເງິນ</title>
 <script src="guard.js"></script>
+<script src="contacts.js"></script>
 <script>if(!exLoggedIn())exNeedLogin('topup.html');</script>
 <script src="exlog.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -581,12 +582,17 @@ function waitTimeout(){
   $('#wClose').style.display='';
   openContact();
 }
-function openContact(){
-  const list = CONFIG.contacts.filter(c=>c.url);
-  $('#ctl').innerHTML = list.length
-    ? list.map(c=>`<a href="${c.url}" target="_blank" rel="noopener"><span class="d" style="background:${c.color}">${c.short}</span>${c.name}<em>${c.hint||''}</em></a>`).join('')
-    : '<p style="margin-top:0">ຍັງບໍ່ໄດ້ຕັ້ງລິ້ງຕິດຕໍ່ (CONFIG.contacts)</p>';
+async function openContact(){
+  $('#ctl').innerHTML = '<p style="margin-top:0">ກຳລັງໂຫຼດ...</p>';
   $('#ct').classList.add('show');
+  let list = [];
+  try { list = await exContactsLoad(); } catch(e) {}
+  if(!list.length){                                   // ยังไม่มีใน Supabase → ใช้ค่าเดิมใน CONFIG.contacts
+    list = CONFIG.contacts.filter(c=>c.url).map(c=>({ name:c.name, hint:c.hint||'', color:c.color, short:c.short, href:c.url }));
+  }
+  $('#ctl').innerHTML = list.length
+    ? list.map(exContactHTML).join('')
+    : '<p style="margin-top:0">ຍັງບໍ່ໄດ້ຕັ້ງຊ່ອງທາງຕິດຕໍ່ (ແອດມິນຕັ້ງໄດ້ທີ່ ການຕັ້ງຄ່າເວັບໄຊ → ຊ່ອງທາງຕິດຕໍ່)</p>';
 }
 $('#ctX').onclick = ()=>$('#ct').classList.remove('show');
 
