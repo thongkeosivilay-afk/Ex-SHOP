@@ -30,7 +30,7 @@
     const disc = Number(o.discount) || 0;
     return `<article class="oh-card${open === o.no ? ' open' : ''}" data-i="${i}">
       <button class="oh-sum" type="button" aria-expanded="${open === o.no}">
-        <span class="oh-si">${ic('o-history')}</span>
+        <span class="oh-si${o.img ? ' has-img' : ''}">${o.img ? `<img src="${esc(o.img)}" alt="" loading="lazy" decoding="async" onerror="this.parentNode.classList.remove('has-img');this.replaceWith(Object.assign(document.createElement('span'),{innerHTML:'${ic('o-bag').replace(/'/g,"\\'")}'}).firstChild)">` : ic('o-bag')}</span>
         <span class="oh-mid"><b>${esc(o.name || 'ສິນຄ້າ')}</b><small>${esc(opt)} · ${esc(stamp(o.at))}</small></span>
         <span class="oh-end"><span class="oh-amt">-${fmt(o.total)}</span>${ic('o-chev').replace('class="i"', 'class="i oh-chev"')}</span>
       </button>

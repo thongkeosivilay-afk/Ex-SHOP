@@ -35,7 +35,9 @@
 .oh-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .2s}
 .oh-card.open{border-color:rgba(var(--red-rgb),.45)}
 .oh-sum{display:flex;align-items:center;gap:12px;width:100%;padding:14px;text-align:left;color:inherit;background:none;border:0;cursor:pointer;font:inherit}
-.oh-si{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--pink);color:var(--red)}
+.oh-si{width:48px;height:48px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--pink);color:var(--red);overflow:hidden}
+.oh-si.has-img{background:var(--bg);border:1px solid var(--border)}
+.oh-si img{width:100%;height:100%;object-fit:cover;display:block}
 .oh-si svg{width:20px;height:20px}
 .oh-mid{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
 .oh-mid b{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
