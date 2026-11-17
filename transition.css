@@ -1,0 +1,16 @@
+/* เปลี่ยนหน้าแบบ Soft blur — ทำงานทุกครั้งที่เปลี่ยนหน้า (ลิงก์ / location.href / ปุ่มย้อนกลับ)
+   ใช้ได้กับ Chrome 126+ และ Safari 18.2+ · เบราว์เซอร์ที่ยังไม่รองรับจะใช้ transition.js แทน */
+@view-transition { navigation: auto; }
+
+::view-transition-group(root) { animation-duration: .6s; }
+::view-transition-image-pair(root) { isolation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode: normal; animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+::view-transition-old(root) { animation: exSoftOut .6s both; }
+::view-transition-new(root) { animation: exSoftIn .6s both; }
+
+@keyframes exSoftOut { to   { filter: blur(14px); transform: scale(1.04); } }
+@keyframes exSoftIn  { from { opacity: 0; filter: blur(14px); transform: scale(.97); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
