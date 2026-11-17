@@ -123,7 +123,7 @@
     email: sk('<rect x="2.500" y="4.500" width="19" height="15" rx="2.500"/><path d="m21.500 8-9.500 6L2.500 8"/>'),
     website: sk('<circle cx="12" cy="12" r="9.500"/><path d="M2.500 12h19"/><path d="M12 2.500a14.500 14.500 0 0 1 0 19 14.500 14.500 0 0 1 0-19z"/>')
   };
-  const iconHTML = (c, i) => `<a class="ftc-a" href="${esc(c.href)}"${/^https?:/.test(c.href) ? ' target="_blank"' : ''} rel="noopener noreferrer" aria-label="${esc(c.name)}" title="${esc(c.name)}" style="--i:${i};--c:${c.color};--g:${GRAD[c.kind] || c.color}"><span class="ftc-t">${GLYPH[c.kind] || c.short}</span><span class="ftc-n">${esc(c.name)}</span></a>`;
+  const iconHTML = (c, i) => `<a class="ftc-a" href="${esc(c.href)}"${/^https?:/.test(c.href) ? ' target="_blank"' : ''} rel="noopener noreferrer" aria-label="${esc(c.name)}" title="${esc(c.name)}" style="--i:${i};--c:#e11d2e;--g:linear-gradient(145deg,#ff4d5e,#c4101f)"><span class="ftc-t">${GLYPH[c.kind] || c.short}</span><span class="ftc-n">${esc(c.name)}</span></a>`;
 
   let iconCss = false;
   function mountIcons(el) {
@@ -136,14 +136,14 @@
 .ftc-h::before,.ftc-h::after{content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--red,#e11d2e))}
 .ftc-h::after{transform:scaleX(-1)}
 .ftc-l{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 8px;width:100%}
-.ftc-a{width:76px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted,#9a9a9a);font-size:11.5px;text-decoration:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(14px) scale(.8);animation:ftcIn .6s cubic-bezier(.2,1.3,.4,1) forwards;animation-delay:calc(var(--i)*80ms)}
-.ftc-t{position:relative;width:60px;height:60px;border-radius:20px;display:grid;place-items:center;overflow:hidden;background:var(--g);box-shadow:0 12px 24px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -14px 20px rgba(0,0,0,.22);transition:transform .22s cubic-bezier(.2,1.4,.4,1),box-shadow .22s;animation:ftcFloat 4.2s ease-in-out infinite;animation-delay:calc(var(--i)*-.6s)}
+.ftc-a{width:64px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted,#9a9a9a);font-size:11.5px;text-decoration:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(14px) scale(.8);animation:ftcIn .6s cubic-bezier(.2,1.3,.4,1) forwards;animation-delay:calc(var(--i)*80ms)}
+.ftc-t{position:relative;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;overflow:hidden;background:var(--g);box-shadow:0 12px 24px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -14px 20px rgba(0,0,0,.22);transition:transform .22s cubic-bezier(.2,1.4,.4,1),box-shadow .22s;animation:ftcFloat 4.2s ease-in-out infinite;animation-delay:calc(var(--i)*-.6s)}
 .ftc-t::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,0) 52%);pointer-events:none}
 .ftc-t::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:ftcShine 5s ease-in-out infinite;animation-delay:calc(var(--i)*.45s);pointer-events:none}
-.ftc-t svg{position:relative;z-index:1;width:30px;height:30px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+.ftc-t svg{position:relative;z-index:1;width:23px;height:23px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
 .ftc-a:active .ftc-t{transform:scale(.86);animation-play-state:paused}
 @media (hover:hover){.ftc-a:hover{color:var(--text,#fff)}.ftc-a:hover .ftc-t{transform:translateY(-4px) scale(1.08);box-shadow:0 16px 28px -8px var(--c),inset 0 1px 0 rgba(255,255,255,.45)}}
-.ftc-n{max-width:76px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.ftc-n{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
 .ftc-sk .ftc-a{animation:none;opacity:1;transform:none}
 .ftc-sk .ftc-t{background:rgba(255,255,255,.07);box-shadow:none;animation:ftcPulse 1.2s ease-in-out infinite}
 .ftc-sk .ftc-t::before,.ftc-sk .ftc-t::after{display:none}
