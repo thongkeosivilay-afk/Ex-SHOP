@@ -92,6 +92,33 @@ html.chk body{visibility:hidden}
 .tr-tip{position:absolute;z-index:2;padding:5px 9px;border-radius:9px;background:#140505;border:1px solid var(--redline);color:#fff;font:600 11px var(--nfont);white-space:nowrap;pointer-events:none;transform:translate(-50%,-130%);opacity:0;transition:opacity .15s}
 .tr-tip.on{opacity:1}
 
+/* ===== ຢືນຢັນເຕີມເງິນ (รายการรออนุมัติ กดยืนยันได้ทันที) ===== */
+.cf{margin-top:14px;border-radius:22px;padding:18px 17px 8px;background:#080808;border:1px solid #232323;font-family:var(--font)}
+.cf-h{display:flex;align-items:center;gap:15px}
+.cf-i{flex:none;width:39px;height:39px;border-radius:12px;background:#2a0909;display:grid;place-items:center;color:var(--red)}
+.cf-i svg{width:20px;height:20px}
+.cf-t{margin:0;font-size:19px;font-weight:600;line-height:1.3}
+.cf-s{margin:3px 0 0;font-size:13.5px;color:#6d6d72;line-height:1.35}
+.cf-n{margin-left:auto;flex:none;min-width:28px;height:28px;padding:0 9px;border-radius:999px;display:grid;place-items:center;background:var(--red);color:#fff;font:700 13px var(--nfont)}
+.cf-n.z{background:#161618;color:#6d6d72}
+.cf-l{margin-top:16px}
+.cf-it{border:1px solid #232323;border-radius:16px;background:#050505;padding:13px 14px;margin-bottom:12px}
+.cf-r{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.cf-u{font-weight:700;font-size:15px;word-break:break-all}
+.cf-a{font:800 18px var(--nfont);color:var(--red);white-space:nowrap}
+.cf-m{margin-top:4px;color:#6d6d72;font-size:12.5px}
+.cf-b{display:flex;gap:8px;margin-top:11px}
+.cf-b button{flex:1;height:40px;border-radius:12px;border:1px solid #2a2a2e;background:none;color:#c9c9c9;font:600 13.5px var(--font);cursor:pointer;transition:transform .15s,opacity .2s}
+.cf-b button:active{transform:scale(.97)}
+.cf-b button:disabled{opacity:.5}
+.cf-b .no{color:#ff8a87;border-color:#d95b58}
+.cf-b .ok{background:#2fbf71;border-color:#2fbf71;color:#000}
+.cf-e{text-align:center;color:#6d6d72;font-size:14px;padding:22px 0 26px}
+.cf-ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:18px}
+.cf-ov.show{display:flex}
+.cf-ov img{max-width:100%;max-height:82vh;border-radius:12px;border:1px solid #2a2a2e}
+.cf-ov b{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;width:40px;height:40px;border-radius:50%;background:#1a1a1d;display:grid;place-items:center;font-size:18px;font-weight:400}
+
 /* เมนูแถบหัว (กดแล้วเลื່ອນລົງ) — วัดจากรูปอ้างอิง */
 .menu-btn{position:relative}
 .menu-btn svg{position:absolute;inset:0;margin:auto;transition:opacity .18s,transform .22s}
@@ -358,6 +385,15 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
     </div>
     <div class="tr-chart" id="trChart"><div id="trSvg"></div><div class="tr-tip" id="trTip"></div></div>
   </section>
+  <section class="cf" id="cfCard">
+    <div class="cf-h">
+      <div class="cf-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.8 12.3l2.7 2.7 5.7-5.9"/></svg></div>
+      <div><h3 class="cf-t">ຢືນຢັນເຕີມເງິນ</h3><p class="cf-s">ລາຍການລໍຖ້າອະນຸມັດ ກົດຢືນຢັນໄດ້ທັນທີ</p></div>
+      <span class="cf-n z" id="cfN">0</span>
+    </div>
+    <div class="cf-l" id="cfList"><div class="cf-e">ກຳລັງໂຫຼດ...</div></div>
+  </section>
+  <div class="cf-ov" id="cfOv"><b>✕</b><img id="cfImg" alt="slip"></div>
   </div>
   <div class="view" id="vProd" hidden>
     <div class="tabs" id="tabs" role="tablist">
@@ -594,8 +630,89 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   });
   window.addEventListener('resize', render);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+  document.addEventListener('exrefresh', load);
   setInterval(load, 60000);
   render(); load();
+})();
+</script>
+<script>
+/* ===== ຢືນຢັນເຕີມເງິນ — ໃຊ້ຟັງຊັນເດີມຂອງໜ້າ admin-topup: adm_topup_list / adm_topup_slip / adm_topup_review (ກວດສິດແອດມິນຝັ່ງ Supabase) ===== */
+(function () {
+  var SB = { url: 'https://mjalctpfeizjukuprqti.supabase.co', key: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ' };
+  var TOKEN_KEY = 'exSession';
+  var list = document.getElementById('cfList'), cnt = document.getElementById('cfN'),
+      ov = document.getElementById('cfOv'), img = document.getElementById('cfImg');
+  if (!list) return;
+  var busy = false, tt, nf = new Intl.NumberFormat('en-US');
+  var fmt = function (n) { return '\u20ad' + nf.format(Number(n) || 0); };
+  var BANK = { bcel:'BCEL', ldb:'LDB', jdb:'JDB', apb:'APB', lvb:'LVB', stb:'STB', psvb:'PSVB', idcb:'IDCB', acleda:'ACLEDA', mjbl:'MJBL', bic:'BIC', vtb:'VietinBank', vcb:'Vietcombank', bfl:'BFL', icbc:'ICBC', boc:'BOC', pbl:'Public Bank', lcnb:'LCNB' };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function tok() {
+    try { if (window.exToken) return window.exToken(); return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || ''; }
+    catch (e) { return ''; }
+  }
+  function toast(m) {
+    var sn = document.getElementById('snack'); if (!sn) return;
+    sn.textContent = m; sn.classList.add('show'); clearTimeout(tt);
+    tt = setTimeout(function () { sn.classList.remove('show'); }, 2600);
+  }
+  function rpc(name, body) {
+    var ctl = new AbortController(), to = setTimeout(function () { ctl.abort(); }, 15000);
+    return fetch(SB.url + '/rest/v1/rpc/' + name, {
+      method: 'POST', signal: ctl.signal,
+      headers: { 'Content-Type': 'application/json', apikey: SB.key, Authorization: 'Bearer ' + SB.key },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json().catch(function () { return null; }); })
+      .finally(function () { clearTimeout(to); });
+  }
+  function render(rows) {
+    cnt.textContent = rows.length > 99 ? '99+' : String(rows.length);
+    cnt.classList.toggle('z', !rows.length);
+    if (!rows.length) { list.innerHTML = '<div class="cf-e">ບໍ່ມີລາຍການລໍຖ້າ</div>'; return; }
+    list.innerHTML = rows.map(function (r) {
+      var d = ''; try { d = new Date(r.at).toLocaleString('en-GB', { hour12: false, timeZone: 'Asia/Vientiane' }); } catch (e) {}
+      var bank = BANK[r.bank] || r.bank || '';
+      return '<div class="cf-it"><div class="cf-r"><span class="cf-u">' + esc(r.username || '\u2014') + '</span><span class="cf-a">' + fmt(r.amount) + '</span></div>'
+        + '<div class="cf-m">' + esc(bank) + ' \u2022 ' + esc(d) + '</div>'
+        + '<div class="cf-b"><button type="button" data-a="slip" data-id="' + r.id + '">ເບິ່ງສະລິບ</button>'
+        + '<button type="button" class="no" data-a="no" data-id="' + r.id + '">ປະຕິເສດ</button>'
+        + '<button type="button" class="ok" data-a="ok" data-id="' + r.id + '">ອະນຸມັດ</button></div></div>';
+    }).join('');
+  }
+  function load() {
+    var t = tok(); if (!t || busy) return;
+    rpc('adm_topup_list', { p_token: t, p_status: 'pending' }).then(function (j) {
+      if (!j || !j.ok) { if (!list.querySelector('.cf-it')) list.innerHTML = '<div class="cf-e">ບໍ່ມີສິດເຂົ້າເຖິງ ຫຼື ເຊດຊັນໝົດອາຍຸ</div>'; return; }
+      render(j.rows || []);
+    }).catch(function () { if (!list.querySelector('.cf-it')) list.innerHTML = '<div class="cf-e">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
+  }
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('button[data-a]'); if (!b || busy) return;
+    var id = Number(b.getAttribute('data-id')), a = b.getAttribute('data-a');
+    if (a === 'slip') {
+      rpc('adm_topup_slip', { p_token: tok(), p_id: id }).then(function (j) {
+        if (j && j.ok && j.slip) { img.src = j.slip; ov.classList.add('show'); } else toast('ບໍ່ພົບສະລິບ');
+      }).catch(function () { toast('ໂຫຼດສະລິບບໍ່ໄດ້'); });
+      return;
+    }
+    var ok = a === 'ok';
+    if (!confirm(ok ? 'ຢືນຢັນອະນຸມັດ ແລະເພີ່ມເງິນເຂົ້າບັນຊີສະມາຊິກ?' : 'ປະຕິເສດລາຍການນີ້?')) return;
+    busy = true;
+    Array.prototype.forEach.call(list.querySelectorAll('button'), function (x) { x.disabled = true; });
+    rpc('adm_topup_review', { p_token: tok(), p_id: id, p_approve: ok, p_note: '' }).then(function (j) {
+      busy = false;
+      if (j && j.ok) {
+        toast(ok ? 'ອະນຸມັດແລ້ວ \u2014 ຍອດໃໝ່ ' + fmt(j.balance) : 'ປະຕິເສດແລ້ວ');
+        var p = document.querySelector('.adm-pill'); if (p) p.click();
+        document.dispatchEvent(new Event('exrefresh'));
+      } else toast(j && j.code === 'nf' ? 'ລາຍການນີ້ຖືກດຳເນີນການແລ້ວ' : 'ເຮັດບໍ່ສຳເລັດ');
+      load();
+    }).catch(function () { busy = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); load(); });
+  });
+  ov.addEventListener('click', function () { ov.classList.remove('show'); img.removeAttribute('src'); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+  setInterval(load, 30000);
+  load();
 })();
 </script>
 <script>
