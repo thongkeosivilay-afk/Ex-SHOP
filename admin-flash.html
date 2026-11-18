@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ຈັດການ Flash Sale</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e8321f;--red-rgb:232,50,31;--line:#26262a;--mut:#8b8b94;--f:'IBM Plex Sans Thai Looped','Outfit',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.fs{max-width:720px;margin:0 auto;padding:22px 20px calc(env(safe-area-inset-bottom,0px) + 70px)}
+.hd{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.hd i{width:5px;height:38px;border-radius:3px;background:var(--red);box-shadow:0 0 14px rgba(var(--red-rgb),.55);flex:none}
+.hd h1{font-size:30px;font-weight:700;letter-spacing:.2px;line-height:1.15}
+.hd h1 em{font-style:normal;color:#555;font-weight:600;margin-left:6px}
+.sub{color:var(--mut);font-size:15px;line-height:1.6;margin:0 0 26px}
+.card{border:1px solid rgba(var(--red-rgb),.38);border-radius:24px;background:linear-gradient(180deg,#0a0505,#050303);padding:22px 20px 20px;margin-bottom:18px;box-shadow:0 0 30px rgba(var(--red-rgb),.07)}
+.card label{display:block;font-size:16px;margin:0 0 10px;color:#9a9aa3;font-weight:500}
+.card label.r{color:var(--red)}
+.in{display:block;width:100%;height:50px;border-radius:15px;border:1px solid #2a2a2e;background:#000;padding:0 20px;outline:none;font-size:18px;color:#fff;-webkit-appearance:none;appearance:none;min-width:0;max-width:100%}
+.in.pc{border-color:rgba(var(--red-rgb),.5)}
+.in:focus{border-color:var(--red)}
+input[type=datetime-local].in{color-scheme:dark;text-align:left;font-size:16px;padding:0 16px}
+.fld{margin-bottom:18px}
+.go{width:100%;height:50px;border-radius:15px;background:var(--red);color:#fff;font-weight:600;font-size:18px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 26px rgba(var(--red-rgb),.35);transition:transform .12s,opacity .2s}
+.go:active{transform:scale(.985)}
+.go:disabled{opacity:.55}
+.go svg{width:20px;height:20px}
+.note{color:#6f6f78;font-size:15px;margin-top:16px}
+.live{margin-top:10px;font-size:13.5px;color:#ff6a58}
+.sr{position:relative;margin-bottom:16px}
+.sr svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:#8b8b94;pointer-events:none}
+.sr .in{height:56px;border-radius:18px;padding-left:56px;font-size:17px;background:#050505}
+.sr .in::placeholder{color:#6f6f78}
+.tbc{border:1px solid var(--line);border-radius:24px;background:#050505;overflow:hidden}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:640px}
+thead tr{background:#0d0d0e}
+th{color:#8b8b94;font-weight:500;font-size:16px;text-align:left;padding:0 14px;height:64px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px;font-size:16px;border-bottom:1px solid #151517;vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.ex{background:rgba(var(--red-rgb),.04)}
+.ck{display:flex;align-items:center;gap:10px;color:#8b8b94;font-size:16px;white-space:nowrap;cursor:pointer;user-select:none}
+.ck input{display:none}
+.ck b{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;flex:none;transition:background .15s}
+.ck b svg{width:20px;height:20px;color:#fff;opacity:0;transform:scale(.5);transition:.15s}
+.ck input:checked+b{background:#ff0a0a}
+.ck input:checked+b svg{opacity:1;transform:none}
+.pr{display:flex;align-items:center;gap:18px;min-width:210px}
+.th{width:66px;height:66px;border-radius:16px;border:1px solid #232326;background:#0c0c0d center/cover no-repeat;display:grid;place-items:center;flex:none;color:#4a4a50}
+.th svg{width:26px;height:26px}
+.pn{font-weight:600;font-size:17px;word-break:break-word}
+.op{display:flex;flex-direction:column;gap:8px}
+.ol{display:flex;align-items:center;gap:8px;height:42px;white-space:nowrap}
+.ol small{color:#8b8b94;font-size:13px}
+.old{color:#c9c9d1}
+.ol .pi{width:130px;height:42px;border-radius:11px;font-size:15px;padding:0 12px;text-align:right}
+.ol .pi:disabled{opacity:.35}
+.ol .pi.bad{border-color:#ff3b2a}
+.ol .pi.ok{border-color:#2fbf71}
+.emp{text-align:center;color:var(--mut);padding:40px 0!important}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90%}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+<script>window.EX_THEME_ADMIN=1</script>
+<script src="theme.js"></script>
+<script src="admin-i18n.js"></script>
+<script src="i18n.js"></script>
+<script src="admin-lang.js"></script>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<div class="fs">
+  <div class="hd"><i></i><h1><span>ຈັດການ Flash Sale</span><em id="cnt">(0)</em></h1></div>
+  <p class="sub">ຕັ້ງລົດ % ທັງຮ້ານກ່ອນ ແລ້ວຄ່ອຍແກ້ລາຄາທີລະສິນຄ້າໄດ້ ຕິກຊ່ອງບໍ່ລົດຖ້າບໍ່ໃຫ້ຮ່ວມໂປຣ</p>
+
+  <div class="card">
+    <div class="fld"><label class="r">ລົດທັງຮ້ານ (%)</label><input class="in pc" id="pct" inputmode="numeric" value="10" maxlength="2" autocomplete="off"></div>
+    <div class="fld"><label>ເວລາສິ້ນສຸດ (ສິນຄ້າທີ່ຮ່ວມລົດ)</label><input class="in" id="ends" type="datetime-local"></div>
+    <button class="go" id="go" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.2"/><circle cx="17" cy="17" r="2.2"/></svg><span>ໃຊ້ລົດ % ທັງຮ້ານ</span></button>
+    <p class="note"><span>ຄິດຈາກລາຄາປົກກະຕິ</span> · <span id="exn"></span></p>
+    <p class="live" id="live" hidden></p>
+  </div>
+
+  <div class="sr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="in" id="q" placeholder="ຄົ້ນຫາສິນຄ້າ..." autocomplete="off"></div>
+
+  <div class="tbc"><div class="tw"><table>
+    <thead><tr><th style="width:150px"><label class="ck"><input type="checkbox" id="all"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></b><span>ບໍ່ລົດ</span></label></th><th>ສິນຄ້າ</th><th>ລາຄາປົກກະຕິ</th><th>ລາຄາ Flash</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="4" class="emp">ກຳລັງໂຫຼດ...</td></tr></tbody>
+  </table></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var tt, busy = false, PRODS = [], EXC = {}, APPLIED = false, LIVE = false;
+  var nf = new Intl.NumberFormat('en-US');
+  var T = function(s){ return typeof window.exTr === 'function' ? window.exTr(s) : s; };
+  var IMG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm1.5 14h11l-3.2-4.3-2.3 3-1.7-2.2zM8.5 7.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>';
+  var CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2800); }
+  function tok(){ return exToken(); }
+  function num(v){ return parseInt(String(v || '').replace(/[^\d]/g, ''), 10) || 0; }
+  function p2(n){ return n < 10 ? '0' + n : '' + n; }
+  function dt(s){ var d = new Date(s); return p2(d.getDate()) + '/' + p2(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
+  function iso(v){ if(!v) return null; var d = new Date(v); return isNaN(d) ? null : d.toISOString(); }
+  function loc(s){ var d = new Date(s); return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + 'T' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
+  var ERR = { bad_pct:'ເປີເຊັນຕ້ອງຢູ່ລະຫວ່າງ 0–99', bad_end:'ເວລາສິ້ນສຸດຕ້ອງຢູ່ໃນອະນາຄົດ', bad_price:'ລາຄາ Flash ຕ້ອງບໍ່ເກີນລາຄາປົກກະຕິ', not_admin:'ບໍ່ມີສິດແອດມິນ', notfound:'ບໍ່ພົບສິນຄ້າ' };
+  function fail(j){ toast(T((j && ERR[j.code]) || 'ເຮັດບໍ່ສຳເລັດ')); }
+  function img(p){
+    var m = p.imgs; if(typeof m === 'string'){ try{ m = JSON.parse(m); }catch(e){ m = [m]; } }
+    var u = Array.isArray(m) && m.length ? m[0] : '';
+    if(u && typeof u === 'object') u = u.url || u.src || '';
+    return u || '';
+  }
+  function excCount(){ return Object.keys(EXC).length; }
+  function drawNote(){ $('#exn').textContent = T('ຕິກແລ້ວ {n} ລາຍການບໍ່ລົດ').replace('{n}', excCount()); }
+
+  function opts(p){
+    if(p.durs && p.durs.length) return p.durs.map(function(d){ return { lbl: d.label, price: d.price, sale: d.sale }; });
+    return [{ lbl: '', price: p.price, sale: p.sale }];
+  }
+  function draw(){
+    var q = $('#q').value.trim().toLowerCase();
+    var rows = PRODS.filter(function(p){ return !q || String(p.name || '').toLowerCase().indexOf(q) > -1; });
+    $('#cnt').textContent = '(' + PRODS.length + ')';
+    $('#rows').innerHTML = rows.length ? rows.map(function(p){
+      var ex = !!EXC[p.id], u = img(p), os = opts(p), can = APPLIED && !ex;
+      return '<tr class="' + (ex ? 'ex' : '') + '" data-id="' + p.id + '">'
+        + '<td><label class="ck"><input type="checkbox" class="xc"' + (ex ? ' checked' : '') + '><b>' + CHK + '</b><span>ບໍ່ລົດ</span></label></td>'
+        + '<td><div class="pr"><div class="th"' + (u ? ' style="background-image:url(\'' + esc(u).replace(/'/g, '%27') + '\')"' : '') + '>' + (u ? '' : IMG) + '</div><div class="pn">' + esc(p.name) + '</div></div></td>'
+        + '<td><div class="op">' + os.map(function(o){ return '<div class="ol">' + (o.lbl ? '<small>' + esc(o.lbl) + '</small>' : '') + '<span class="old">₭' + nf.format(o.price) + '</span></div>'; }).join('') + '</div></td>'
+        + '<td><div class="op">' + os.map(function(o){
+            return '<div class="ol"><input class="in pi" inputmode="numeric" data-l="' + esc(o.lbl) + '" data-max="' + o.price + '" value="' + (can && o.sale != null ? o.sale : '') + '" placeholder="' + (ex ? '—' : '₭') + '"' + (can ? '' : ' disabled') + '></div>';
+          }).join('') + '</div></td></tr>';
+    }).join('') : '<tr><td colspan="4" class="emp">' + esc(T(PRODS.length ? 'ບໍ່ພົບສິນຄ້າ' : '— ຍັງບໍ່ມີສິນຄ້າ —')) + '</td></tr>';
+    $('#all').checked = rows.length > 0 && rows.every(function(p){ return EXC[p.id]; });
+    drawNote();
+  }
+
+  function load(keep){
+    return exRpc('adm_flash_get', { p_token: tok() }).then(function(j){
+      if(!(j && j.ok)){ fail(j); return; }
+      PRODS = j.products || []; APPLIED = !!j.applied; LIVE = !!j.live;
+      EXC = {};
+      if(APPLIED) PRODS.forEach(function(p){ if(!p.on) EXC[p.id] = 1; });
+      else if(keep) Object.keys(keep).forEach(function(k){ EXC[k] = 1; });
+      if(!keep){
+        if(j.active && j.pct > 0) $('#pct').value = j.pct;
+        $('#ends').value = (j.active && j.ends_at) ? loc(j.ends_at) : '';
+      }
+      var lv = $('#live');
+      if(LIVE){ lv.hidden = false; lv.textContent = T('Flash Sale ກຳລັງເປີດ') + ' · -' + j.pct + '%' + (j.ends_at ? ' · ' + T('ສິ້ນສຸດ') + ' ' + dt(j.ends_at) : ''); }
+      else lv.hidden = true;
+      draw();
+    }).catch(function(){ $('#rows').innerHTML = '<tr><td colspan="4" class="emp">' + esc(T('ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່')) + '</td></tr>'; });
+  }
+
+  $('#pct').addEventListener('input', function(e){ e.target.value = e.target.value.replace(/[^\d]/g, '').slice(0, 2); });
+  $('#pct').addEventListener('focus', function(e){ e.target.select(); });
+  $('#q').addEventListener('input', draw);
+
+  /* ติ๊ก "ไม่ลด" รายสินค้า */
+  function setEx(ids, on){
+    ids.forEach(function(id){ if(on) EXC[id] = 1; else delete EXC[id]; });
+    if(!APPLIED){ draw(); return Promise.resolve(); }
+    return Promise.all(ids.map(function(id){ return exRpc('adm_flash_exclude', { p_token: tok(), p_product_id: Number(id), p_excluded: on }); }))
+      .then(function(){ return load(); })
+      .catch(function(){ toast(T('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້')); load(); });
+  }
+  $('#rows').addEventListener('change', function(e){
+    if(!e.target.classList.contains('xc')) return;
+    var id = e.target.closest('tr').dataset.id;
+    setEx([id], e.target.checked);
+  });
+  $('#all').addEventListener('change', function(e){
+    var q = $('#q').value.trim().toLowerCase();
+    var ids = PRODS.filter(function(p){ return !q || String(p.name || '').toLowerCase().indexOf(q) > -1; }).map(function(p){ return String(p.id); });
+    setEx(ids, e.target.checked);
+  });
+
+  /* แก้ราคา Flash รายสินค้า */
+  $('#rows').addEventListener('input', function(e){
+    var i = e.target; if(!i.classList.contains('pi')) return;
+    i.value = i.value.replace(/[^\d]/g, ''); i.classList.remove('bad', 'ok');
+  });
+  $('#rows').addEventListener('change', function(e){
+    var i = e.target; if(!i.classList.contains('pi')) return;
+    var id = Number(i.closest('tr').dataset.id), v = i.value === '' ? null : num(i.value);
+    if(v == null) return;
+    if(v > Number(i.dataset.max)){ i.classList.add('bad'); toast(T(ERR.bad_price)); return; }
+    exRpc('adm_flash_set_price', { p_token: tok(), p_product_id: id, p_dur_label: i.dataset.l || '', p_price: v }).then(function(j){
+      if(j && j.ok){ i.classList.add('ok'); toast(T('ບັນທຶກລາຄາແລ້ວ')); } else { i.classList.add('bad'); fail(j); }
+    }).catch(function(){ toast(T('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້')); });
+  });
+  $('#rows').addEventListener('focusin', function(e){ if(e.target.classList.contains('pi')) e.target.select(); });
+
+  /* ใช้ลด % ทั้งร้าน */
+  $('#go').onclick = function(){
+    if(busy) return;
+    var pc = num($('#pct').value);
+    if(pc > 99){ toast(T(ERR.bad_pct)); return; }
+    if(pc === 0 && !confirm(T('ປິດ Flash Sale ທັງໝົດ ແລະລ້າງລາຄາ Flash ?'))) return;
+    var ends = iso($('#ends').value);
+    if($('#ends').value && !ends){ toast(T(ERR.bad_end)); return; }
+    busy = true; $('#go').disabled = true;
+    var keep = {}; Object.keys(EXC).forEach(function(k){ keep[k] = 1; });
+    exRpc('adm_flash_apply', { p_token: tok(), p_pct: pc, p_ends: pc ? ends : null, p_excluded: Object.keys(EXC).map(Number) }).then(function(j){
+      busy = false; $('#go').disabled = false;
+      if(j && j.ok){
+        toast(T(j.off ? 'ປິດ Flash Sale ແລ້ວ' : 'ເປີດ Flash Sale ລົດ {n}% ແລ້ວ').replace('{n}', pc));
+        if(j.off){ $('#ends').value = ''; }
+        return load(j.off ? null : true);
+      } else fail(j);
+    }).catch(function(){ busy = false; $('#go').disabled = false; toast(T('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້')); });
+  };
+
+  /* ตรวจสิทธิ์แอดมิน */
+  drawNote();
+  if(!tok()){ try{ sessionStorage.setItem('exNext','admin-flash.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+  exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+    if(j && j.ok && j.admin) load(); else location.replace('index.html');
+  }).catch(function(){ toast(T('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້')); });
+})();
+</script>
+</body>
+</html>
