@@ -68,6 +68,30 @@ html.chk body{visibility:hidden}
 .note{margin:0 0 14px;padding:10px 14px;border-radius:14px;background:var(--redsoft);border:1px solid var(--redline);color:var(--red);font-size:13px;line-height:1.5}
 .st-v.ld,.adm-pill.ld{opacity:.55}
 
+/* ===== ແນວໂນ້ມຍອດເຕີມເງິນ (กราฟแนวโน้ม) — วัดจากรูปอ้างอิง ===== */
+.tr{margin-top:14px;border-radius:22px;padding:18px 17px 17px;background:#080808;border:1px solid #232323;font-family:var(--font)}
+.tr-h{display:flex;align-items:center;gap:15px}
+.tr-i{flex:none;width:39px;height:39px;border-radius:12px;background:#2a0909;display:grid;place-items:center;color:var(--red)}
+.tr-i svg{width:20px;height:20px}
+.tr-t{margin:0;font-size:19px;font-weight:600;line-height:1.3}
+.tr-s{margin:3px 0 0;font-size:13.5px;color:#6d6d72;line-height:1.35}
+.tr-tabs{margin-top:17px;display:flex;gap:2px;padding:5px;border:1px solid #2a2a2e;border-radius:16px;background:#050505;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tr-tabs::-webkit-scrollbar{display:none}
+.tr-tab{flex:none;height:34px;padding:0 14px;border:0;border-radius:12px;background:none;color:#9a9aa3;font:500 15px var(--font);cursor:pointer;white-space:nowrap;transition:background .25s,color .25s,transform .15s}
+.tr-tab.on{background:var(--red);color:#fff;font-weight:600}
+.tr-tab:active{transform:scale(.97)}
+.tr-chart{position:relative;margin-top:14px;height:118px;transition:opacity .2s}
+.tr-chart.ld{opacity:.55}
+.tr-chart svg{display:block;width:100%;height:118px;overflow:visible}
+.tr-chart text{font-family:var(--nfont);font-size:6.5px;fill:#5a5a60}
+.tr-g{stroke:#161618;stroke-width:1}
+.tr-l{fill:none;stroke:var(--red);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:trDraw .9s ease forwards}
+@keyframes trDraw{to{stroke-dashoffset:0}}
+.tr-p{fill:#0a0a0a;stroke:var(--red);stroke-width:1.3}
+.tr-hit{fill:transparent;cursor:pointer}
+.tr-tip{position:absolute;z-index:2;padding:5px 9px;border-radius:9px;background:#140505;border:1px solid var(--redline);color:#fff;font:600 11px var(--nfont);white-space:nowrap;pointer-events:none;transform:translate(-50%,-130%);opacity:0;transition:opacity .15s}
+.tr-tip.on{opacity:1}
+
 /* เมนูแถบหัว (กดแล้วเลื່ອນລົງ) — วัดจากรูปอ้างอิง */
 .menu-btn{position:relative}
 .menu-btn svg{position:absolute;inset:0;margin:auto;transition:opacity .18s,transform .22s}
@@ -321,6 +345,19 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
       <div class="st-v" id="vTopup">₭0</div><div class="st-s">ບໍ່ນັບຍອດແອດມິນ</div>
     </div>
   </div>
+  <section class="tr" id="trCard">
+    <div class="tr-h">
+      <div class="tr-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+      <div><h3 class="tr-t">ແນວໂນ້ມຍອດເຕີມເງິນ</h3><p class="tr-s">ກຣາຟວິເຄາະປະລິມານທຸລະກຳຕາມຊ່ວງເວລາ</p></div>
+    </div>
+    <div class="tr-tabs" id="trTabs" role="tablist">
+      <button class="tr-tab on" type="button" role="tab" aria-selected="true" data-r="day">ມື້ນີ້</button>
+      <button class="tr-tab" type="button" role="tab" aria-selected="false" data-r="week">ອາທິດນີ້</button>
+      <button class="tr-tab" type="button" role="tab" aria-selected="false" data-r="month">ເດືອນນີ້</button>
+      <button class="tr-tab" type="button" role="tab" aria-selected="false" data-r="year">ປີນີ້</button>
+    </div>
+    <div class="tr-chart" id="trChart"><div id="trSvg"></div><div class="tr-tip" id="trTip"></div></div>
+  </section>
   </div>
   <div class="view" id="vProd" hidden>
     <div class="tabs" id="tabs" role="tablist">
@@ -442,6 +479,123 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
     .catch(function () { root.classList.remove('chk'); load(); });
   }
   gate();
+})();
+</script>
+<script>
+/* ===== ແນວໂນ້ມຍອດເຕີມເງິນ — ດຶງຈາກ Supabase ຟັງຊັນ st_topup_trend (ໃຊ້ token ແອດມິນ ຄືກັບ st_dashboard_stats) =====
+   ນັບຄຳຂໍເຕີມເງິນທີ່ອະນຸມັດແລ້ວ (topup_requests) ຕາມເວລາລາວ (Asia/Vientiane)
+   ມື້ນີ້ = ທຸກ 3 ຊົ່ວໂມງ · ອາທິດນີ້ = ລາຍວັນ · ເດືອນນີ້ = ລາຍວັນ · ປີນີ້ = ລາຍເດືອນ */
+(function () {
+  var SB = { url: 'https://mjalctpfeizjukuprqti.supabase.co', key: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ' };
+  var TOKEN_KEY = 'exSession';
+  var box = document.getElementById('trChart'), svgBox = document.getElementById('trSvg'),
+      tip = document.getElementById('trTip'), tabs = document.getElementById('trTabs');
+  if (!box || !tabs) return;
+  var rng = 'day', data = null, seq = 0;
+  var nf = new Intl.NumberFormat('en-US');
+  function tok() {
+    try { if (window.exToken) return window.exToken(); return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || ''; }
+    catch (e) { return ''; }
+  }
+  function p2(n) { return (n < 10 ? '0' : '') + n; }
+  function iso(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + 'T' + p2(d.getHours()) + ':00'; }
+  /* ກຣາຟເປົ່າ (ຍອດ 0) ສະແດງທັນທີ ກ່ອນຂໍ້ມູນຈິງມາ */
+  function blank(r) {
+    var now = new Date(), L = [], V = [], i, n, d;
+    if (r === 'week') {
+      var dow = (now.getDay() + 6) % 7; d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow);
+      for (i = 0; i < 7; i++) { L.push(iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + i))); V.push(0); }
+    } else if (r === 'month') {
+      n = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      for (i = 1; i <= n; i++) { L.push(iso(new Date(now.getFullYear(), now.getMonth(), i))); V.push(0); }
+    } else if (r === 'year') {
+      for (i = 0; i < 12; i++) { L.push(iso(new Date(now.getFullYear(), i, 1))); V.push(0); }
+    } else {
+      for (i = 0; i < 8; i++) { L.push(iso(new Date(now.getFullYear(), now.getMonth(), now.getDate(), i * 3))); V.push(0); }
+    }
+    return { range: r, labels: L, values: V };
+  }
+  function lab(r, s) {
+    if (r === 'day') return s.substr(11, 5);
+    if (r === 'week') return s.substr(8, 2) + '/' + s.substr(5, 2);
+    if (r === 'month') return String(parseInt(s.substr(8, 2), 10));
+    return s.substr(5, 2);
+  }
+  function short(n) {
+    if (n >= 1e9) return (Math.round(n / 1e8) / 10) + 'B';
+    if (n >= 1e6) return (Math.round(n / 1e5) / 10) + 'M';
+    if (n >= 1e3) return (Math.round(n / 1e2) / 10) + 'K';
+    return String(Math.round(n * 10) / 10);
+  }
+  function niceTop(max) {
+    if (!(max > 0)) return 10;
+    var raw = max / 5, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), nm = raw / mag;
+    var s = nm <= 1 ? 1 : nm <= 2 ? 2 : nm <= 2.5 ? 2.5 : nm <= 5 ? 5 : 10;
+    return s * mag * 5;
+  }
+  function render() {
+    var d = data || blank(rng), L = d.labels || [], V = (d.values || []).map(Number), n = L.length;
+    if (!n) return;
+    var W = box.clientWidth || 340, H = 118, PL = 26, PR = W - 5, PT = 8, PB = H - 16;
+    var top = niceTop(Math.max.apply(null, V.concat([0])));
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="trend">', i, y, x;
+    for (i = 0; i <= 5; i++) {
+      y = PT + (PB - PT) * i / 5;
+      s += '<line class="tr-g" x1="' + PL + '" x2="' + PR + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>';
+      s += '<text x="' + (PL - 5) + '" y="' + (y + 2.2).toFixed(1) + '" text-anchor="end">\u20ad' + short(top - top * i / 5) + '</text>';
+    }
+    var step = n > 12 ? Math.ceil(n / 8) : 1, pts = [], path = '';
+    for (i = 0; i < n; i++) {
+      x = n > 1 ? PL + (PR - PL) * i / (n - 1) : (PL + PR) / 2;
+      y = PB - (PB - PT) * Math.min(V[i] || 0, top) / top;
+      pts.push([x, y]);
+      path += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+      if (i % step === 0) s += '<text x="' + x.toFixed(1) + '" y="' + (H - 3) + '" text-anchor="middle">' + lab(d.range || rng, L[i]) + '</text>';
+    }
+    s += '<path class="tr-l" pathLength="1" d="' + path + '"/>';
+    var r = n > 12 ? 2 : 3;
+    for (i = 0; i < n; i++) {
+      s += '<circle class="tr-p" cx="' + pts[i][0].toFixed(1) + '" cy="' + pts[i][1].toFixed(1) + '" r="' + r + '"/>';
+      s += '<circle class="tr-hit" data-i="' + i + '" cx="' + pts[i][0].toFixed(1) + '" cy="' + pts[i][1].toFixed(1) + '" r="10"/>';
+    }
+    svgBox.innerHTML = s + '</svg>';
+    tip.classList.remove('on');
+    svgBox._pts = pts; svgBox._v = V; svgBox._l = L;
+  }
+  svgBox.addEventListener('click', function (e) {
+    var t = e.target; if (!t || !t.getAttribute || t.getAttribute('class') !== 'tr-hit') { tip.classList.remove('on'); return; }
+    var i = +t.getAttribute('data-i'), p = svgBox._pts[i];
+    tip.textContent = '\u20ad' + nf.format(svgBox._v[i] || 0) + ' \u00b7 ' + lab(data ? data.range : rng, svgBox._l[i]);
+    var w = box.clientWidth, x = Math.max(40, Math.min(w - 40, p[0]));
+    tip.style.left = x + 'px'; tip.style.top = p[1] + 'px'; tip.classList.add('on');
+  });
+  function load() {
+    var t = tok(); if (!t) return;
+    var my = ++seq, ask = rng;
+    box.classList.add('ld');
+    var ctl = new AbortController(), to = setTimeout(function () { ctl.abort(); }, 15000);
+    fetch(SB.url + '/rest/v1/rpc/st_topup_trend', {
+      method: 'POST', signal: ctl.signal,
+      headers: { 'Content-Type': 'application/json', apikey: SB.key, Authorization: 'Bearer ' + SB.key },
+      body: JSON.stringify({ p_token: t, p_range: ask })
+    })
+    .then(function (r) { return r.json().catch(function () { return null; }); })
+    .then(function (j) {
+      if (my !== seq || !j || !j.ok || !j.labels) return;
+      data = { range: j.range, labels: j.labels, values: j.values }; render();
+    })
+    .catch(function () {})
+    .finally(function () { clearTimeout(to); if (my === seq) box.classList.remove('ld'); });
+  }
+  tabs.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.tr-tab'); if (!b || b.dataset.r === rng) return;
+    Array.prototype.forEach.call(tabs.children, function (x) { var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    rng = b.dataset.r; data = null; render(); load();
+  });
+  window.addEventListener('resize', render);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+  setInterval(load, 60000);
+  render(); load();
 })();
 </script>
 <script>
