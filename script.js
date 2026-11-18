@@ -2,7 +2,7 @@
 const CONFIG = {
   announce: 'ຊື້ສິນຄ້າສຳເລັດແລ້ວເຂົ້າ Discord ຂອງທາງຮ້ານນຳເດີ້!',
   routes: { // ใส่ URL จริง ถ้าเว้นว่างจะขึ้นข้อความแจ้งเตือนแทน
-    login:'', register:'', topup:'topup.html', orders:'orders.html', topuphist:'topups.html', howto:'howto.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
+    login:'', register:'', topup:'topup.html', orders:'orders.html', topuphist:'topups.html', howto:'howto.html', agent:'agent.html', hwid:'', chat:'', profile:'profile.html', manage:'admin.html'
   },
   onBuy(p){ location.href = 'confirm.html?p=' + encodeURIComponent(p.id); } // เปิดหน้ายืนยันสั่งซื้อ
 };
@@ -375,6 +375,7 @@ const UM_ADMIN_LINK = true;
     out:  fsvg('0 0 512 512','<path d="M377.900 105.900L500.700 228.700c7.200 7.200 11.300 17.100 11.300 27.300s-4.100 20.100-11.300 27.300L377.900 406.100c-6.400 6.400-15 9.900-24 9.900-18.700 0-33.900-15.200-33.900-33.900V320H192c-17.700 0-32-14.300-32-32V224c0-17.700 14.300-32 32-32h128V129.900c0-18.700 15.200-33.900 33.900-33.900 9 0 17.600 3.600 24 9.900zM160 96H96c-17.700 0-32 14.300-32 32V384c0 17.700 14.300 32 32 32h64c17.700 0 32 14.300 32 32s-14.300 32-32 32H96c-53 0-96-43-96-96V128C0 75 43 32 96 32h64c17.700 0 32 14.300 32 32s-14.300 32-32 32z"/>'),
     wallet:fsvg('0 0 512 512','<path d="M64 32C28.700 32 0 60.700 0 96V416c0 35.300 28.700 64 64 64H448c35.300 0 64-28.700 64-64V192c0-35.300-28.700-64-64-64H80c-8.800 0-16-7.200-16-16s7.200-16 16-16H448c17.700 0 32-14.300 32-32s-14.300-32-32-32H64zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>'),
     chat: fsvg('0 0 24 24','<path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 9h10v2H7zm0-3h10v2H7zm0 6h7v2H7z"/>'),
+    key:  fsvg('0 0 24 24','<path d="M12.65 10A6 6 0 1 0 12.65 14H17v3h3v-3h2v-4zM7 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>'),
     chev: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>`
   };
   const item = (k, ico, t, sub) => `<button class="um-i" role="menuitem" type="button" data-um="${k}"><span class="um-ic">${IC[ico]}</span><span class="um-tx"><b>${t}</b><small>${sub}</small></span><span class="um-ch">${IC.chev}</span></button>`;
@@ -390,6 +391,7 @@ const UM_ADMIN_LINK = true;
       ${item('topuphist','card','ປະຫວັດເຕີມເງິນ','ປະຫວັດຝາກເງິນ')}
       ${item('profile','user','ໂປຣໄຟລ໌','ຂໍ້ມູນບັນຊີ')}
       ${item('howto','book','ວິທີການສັ່ງຊື້','ຄູ່ມືມືໃໝ່')}
+      ${item('agent','key','ສະໝັກຕົວແທນ','ລາຄາພິເສດສຳລັບຕົວແທນ')}
       ${item('contact','chat','ຕິດຕໍ່ແອດມິນ','ຊ່ອງທາງຕິດຕໍ່ຮ້ານ')}
       ${UM_ADMIN_LINK ? `<button class="um-i um-manage" role="menuitem" type="button" id="umManage" style="display:none"><span class="um-ic">${IC.panel}</span><span class="um-tx"><b>ຈັດການແຜງຮ້ານ</b><small>ສຳລັບແອດມິນ</small></span><span class="um-ch">${IC.chev}</span></button>` : ''}
     </div>

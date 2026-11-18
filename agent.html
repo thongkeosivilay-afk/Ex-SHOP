@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>
+<meta name="theme-color" content="#000000">
+<title>ສະໝັກຕົວແທນ</title>
+<script src="guard.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Lao+Looped:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="orders.css">
+<link rel="stylesheet" href="howto.css">
+<link rel="stylesheet" href="agent.css">
+<script src="theme.js"></script>
+<script src="font.js"></script>
+<link rel="stylesheet" href="transition.css">
+<script src="transition.js"></script>
+</head>
+<body class="oh-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="a-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="a-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="a-key" viewBox="0 0 24 24"><path d="m21 2-2 2m-7.6 7.6a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
+<symbol id="a-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="a-tag" viewBox="0 0 24 24"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r=".6"/></symbol>
+<symbol id="a-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></symbol>
+<symbol id="a-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.500 20.500 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.500-1.200 6.200-2.700a1.170 1.170 0 0 1 1.600 0C14.500 3.800 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="a-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="a-paste" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+<symbol id="a-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+<symbol id="a-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
+</defs>
+</svg>
+
+<header class="oh-top">
+  <a class="oh-back" id="agBack" href="index.html" aria-label="ກັບຄືນ"><svg class="i"><use href="#a-back"/></svg></a>
+  <h1>ສະໝັກຕົວແທນ</h1>
+</header>
+
+<main class="oh-sheet" id="agApp">
+
+  <section class="oh-head">
+    <div class="oh-ico" aria-hidden="true"><svg class="i"><use href="#a-key"/></svg></div>
+    <div class="oh-ht"><h2>ສະໝັກຕົວແທນ</h2><p>ຊື້ສິນຄ້າໃນລາຄາຕົວແທນ ສຳລັບຜູ້ທີ່ຊື້ເພື່ອຂາຍຕໍ່ ໃສ່ API Key ເພື່ອເປີດໃຊ້ໄດ້ທັນທີ</p></div>
+  </section>
+
+  <!-- ช่องกรอก Key (เปลี่ยนตามสถานะ: โหลด / ยังไม่ล็อกอิน / ยังไม่เป็นตัวแทน / เป็นตัวแทนแล้ว) -->
+  <section class="ag-card" id="agKeyCard" aria-live="polite">
+    <div class="ag-load"><span class="ag-sp"></span>ກຳລັງກວດສະຖານະ...</div>
+  </section>
+
+  <!-- ช่องทางติดต่อสมัคร -->
+  <section class="ag-card">
+    <div class="ag-h"><span class="ag-hi"><svg class="i"><use href="#a-chat"/></svg></span><div><b>ຍັງບໍ່ມີ API Key? ຕິດຕໍ່ສະໝັກ</b><small>ແຈ້ງແອດມິນວ່າຕ້ອງການເປັນຕົວແທນ ແລ້ວຈະໄດ້ຮັບ API Key ສົ່ງໃຫ້</small></div></div>
+    <div class="ag-ct" id="agContacts"><div class="ag-ce"><span class="ag-sp"></span>ກຳລັງໂຫຼດ...</div></div>
+    <p class="ag-tip">ບອກຊື່ຜູ້ໃຊ້ຂອງທ່ານໃນເວັບ ແລະຈຳນວນທີ່ຄາດວ່າຈະຊື້ຕໍ່ອາທິດ ເພື່ອໃຫ້ແອດມິນຈັດລາຄາໃຫ້ທ່ານໄດ້ໄວຂຶ້ນ</p>
+  </section>
+
+  <!-- สิทธิประโยชน์ -->
+  <h3 class="hw-h">ສິ່ງທີ່ຕົວແທນໄດ້ຮັບ</h3>
+  <div class="ag-perks">
+    <div class="ag-pk"><span><svg class="i"><use href="#a-tag"/></svg></span><b>ລາຄາຕົວແທນ</b><small>ຕັ້ງລາຄາແຍກຕາມສິນຄ້າ ຖືກກວ່າລາຄາປົກກະຕິ</small></div>
+    <div class="ag-pk"><span><svg class="i"><use href="#a-bolt"/></svg></span><b>ໃຊ້ໄດ້ທັນທີ</b><small>ໃສ່ Key ແລ້ວ ລາຄາຕົວແທນມີຜົນທຸກການຊື້</small></div>
+    <div class="ag-pk"><span><svg class="i"><use href="#a-shield"/></svg></span><b>ຮັບຄີອັດຕະໂນມັດ</b><small>ຊື້ແລ້ວໄດ້ຄີ / ໂຄ້ດທັນທີ ບໍ່ຕ້ອງລໍແອດມິນ</small></div>
+  </div>
+
+  <!-- ขั้นตอน -->
+  <h3 class="hw-h">ວິທີສະໝັກ (4 ຂັ້ນ)</h3>
+  <ol class="hw-steps">
+    <li class="hw-step"><span class="hw-n">1</span><div class="hw-b"><h3>ຕິດຕໍ່ແອດມິນ</h3><p>ເລືອກຊ່ອງທາງຕິດຕໍ່ດ້ານເທິງ ແລ້ວແຈ້ງວ່າ <b>ຢາກສະໝັກຕົວແທນ</b>.</p></div></li>
+    <li class="hw-step"><span class="hw-n">2</span><div class="hw-b"><h3>ຮັບ API Key</h3><p>ແອດມິນຈະສົ່ງ <b>API Key</b> ໃຫ້ ໜ້າຕາຄ້າຍ <b>EX-XXXXXXXX-XXXXXXXX</b> ເກັບຮັກສາໄວ້ເປັນຄວາມລັບ.</p></div></li>
+    <li class="hw-step"><span class="hw-n">3</span><div class="hw-b"><h3>ໃສ່ Key ໃນໜ້ານີ້</h3><p>ເຂົ້າສູ່ລະບົບ ແລ້ວວາງ Key ໃນຊ່ອງດ້ານເທິງ ກົດ <b>ເປີດໃຊ້ຕົວແທນ</b>.</p></div></li>
+    <li class="hw-step"><span class="hw-n">4</span><div class="hw-b"><h3>ຊື້ໃນລາຄາຕົວແທນ</h3><p>ໄປຊື້ສິນຄ້າຕາມປົກກະຕິ ລະບົບຈະໃຊ້ <b>ລາຄາຕົວແທນ</b> ໃຫ້ອັດຕະໂນມັດ.</p></div></li>
+  </ol>
+
+  <h3 class="hw-h">ຄຳຖາມທີ່ພົບບໍ່ຍາກ</h3>
+  <div class="hw-faq">
+    <details><summary><span>API Key ໃຊ້ໄດ້ຈັກບັນຊີ?</span><svg class="i"><use href="#a-down"/></svg></summary><p>1 Key ໃຊ້ໄດ້ກັບ <b>1 ບັນຊີ</b> ເທົ່ານັ້ນ ເມື່ອເປີດໃຊ້ແລ້ວຈະຜູກກັບບັນຊີນັ້ນ ແລະບໍ່ສາມາດຍ້າຍໄປບັນຊີອື່ນເອງໄດ້.</p></details>
+    <details><summary><span>ໃສ່ Key ແລ້ວຂຶ້ນວ່າ “ມີຄົນໃຊ້ແລ້ວ”?</span><svg class="i"><use href="#a-down"/></svg></summary><p>ແປວ່າ Key ນີ້ຖືກເປີດໃຊ້ກັບບັນຊີໃດບັນຊີໜຶ່ງແລ້ວ ກະລຸນາຕິດຕໍ່ແອດມິນເພື່ອຂໍ Key ໃໝ່ ຫຼື ກວດວ່າທ່ານກຳລັງເຂົ້າບັນຊີທີ່ຖືກຕ້ອງ.</p></details>
+    <details><summary><span>ລາຄາຕົວແທນເບິ່ງໄດ້ຢູ່ໃສ?</span><svg class="i"><use href="#a-down"/></svg></summary><p>ເມື່ອເປັນຕົວແທນແລ້ວ ລາຄາຂອງທ່ານຈະສະແດງຢູ່ໃນກ່ອງ <b>“ລາຄາຂອງຂ້ອຍ”</b> ດ້ານເທິງຂອງໜ້ານີ້ ແລະໃນໜ້າ <b>ຢືນຢັນການສັ່ງຊື້</b> ກ່ອນກົດຊື້.</p></details>
+    <details><summary><span>ສິນຄ້າທີ່ບໍ່ມີລາຄາຕົວແທນ?</span><svg class="i"><use href="#a-down"/></svg></summary><p>ສິນຄ້າທີ່ແອດມິນຍັງບໍ່ໄດ້ຕັ້ງລາຄາຕົວແທນ ຈະຊື້ໃນ <b>ລາຄາປົກກະຕິ</b>.</p></details>
+    <details><summary><span>Key ຖືກປິດ ຫຼື ໃຊ້ບໍ່ໄດ້?</span><svg class="i"><use href="#a-down"/></svg></summary><p>ເມື່ອແອດມິນປິດ Key ບັນຊີຂອງທ່ານຈະກັບໄປຊື້ໃນລາຄາປົກກະຕິ ກະລຸນາຕິດຕໍ່ແອດມິນເພື່ອສອບຖາມ.</p></details>
+  </div>
+  <a class="hw-go" href="categories.html"><svg class="i"><use href="#a-cart"/></svg>ໄປເລືອກຊື້ສິນຄ້າ</a>
+</main>
+
+<div class="ag-toast" id="agToast" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="contacts.js"></script>
+<script src="agent.js"></script>
+</body>
+</html>
