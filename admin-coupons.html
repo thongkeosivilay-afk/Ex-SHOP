@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>จัดการคูปอง &amp; โค้ดฟรี</title>
+<title>ຈັດການຄູປອງ &amp; ໂຄ້ດຟຣີ</title>
 <script src="guard.js"></script>
 <link rel="stylesheet" href="admin-nav.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -70,51 +70,51 @@ tr:last-child td{border-bottom:0}
 <body>
 <script src="admin-nav.js"></script>
 <div class="cp">
-  <h1>จัดการคูปอง &amp; โค้ดฟรี</h1>
-  <p class="sub">ตั้งค่าโค้ดส่วนลดสินค้า และโค้ดเครดิตฟรีสำหรับโปรโมทร้านค้า</p>
+  <h1>ຈັດການຄູປອງ &amp; ໂຄ້ດຟຣີ</h1>
+  <p class="sub">ຕັ້ງຄ່າໂຄ້ດສ່ວນຫຼຸດສິນຄ້າ ແລະໂຄ້ດເຄຣດິດຟຣີສຳລັບໂປຣໂມດຮ້ານຄ້າ</p>
 
   <div class="tabs" id="tabs">
-    <button class="tb on" data-t="c" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>คูปองส่วนลดซื้อสินค้า</button>
-    <button class="tb" data-t="f" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>โค้ดฟรีเติมเงิน</button>
+    <button class="tb on" data-t="c" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>ຄູປອງສ່ວນຫຼຸດຊື້ສິນຄ້າ</button>
+    <button class="tb" data-t="f" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>ໂຄ້ດຟຣີເຕີມເງິນ</button>
   </div>
 
   <!-- ===== แท็บ 1: คูปองส่วนลด ===== -->
   <div class="pane on" id="pc">
     <div class="card">
-      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>สร้างคูปองส่วนลดใหม่</div>
-      <div class="fld"><label>รหัสคูปอง (ตัวอักษร/ตัวเลข)</label><input class="in" id="c_code" placeholder="เช่น SAVE10" maxlength="30" autocapitalize="characters" autocomplete="off" spellcheck="false"></div>
-      <div class="fld"><label>ประเภทส่วนลด</label><select class="in" id="c_kind"><option value="pct">เปอร์เซ็นต์ (%)</option><option value="amt">จำนวนเงิน (฿)</option></select></div>
-      <div class="fld"><label>มูลค่าส่วนลด</label><input class="in" id="c_val" inputmode="numeric" value="0" autocomplete="off"></div>
-      <div class="fld"><label>จำกัดจำนวน (ครั้ง)</label><input class="in" id="c_max" inputmode="numeric" placeholder="ไม่มีจำกัด" autocomplete="off"></div>
-      <div class="fld"><label>จำกัดต่อ User (ครั้ง)</label><input class="in" id="c_per" inputmode="numeric" placeholder="ไม่มีจำกัด" autocomplete="off"></div>
-      <div class="fld" style="margin-bottom:8px"><label>ใช้ได้กับสินค้า</label><input class="in" id="c_q" placeholder="ค้นหาชื่อสินค้า / หมวด..." autocomplete="off">
-        <div class="pbox" id="c_prods"><div class="pe">กำลังโหลด...</div></div></div>
-      <p class="hint" style="margin-top:10px">ไม่เลือก = ใช้ได้ทุกสินค้า · เลือกแล้วใช้ได้เฉพาะรายการที่ติ๊ก</p>
-      <div class="fld"><label>ขั้นต่ำในการซื้อ (฿)</label><input class="in" id="c_min" inputmode="numeric" value="0" autocomplete="off"></div>
-      <div class="fld"><label>วันหมดอายุคูปอง</label><input class="in" id="c_exp" type="datetime-local"></div>
-      <p class="hint">จำนวนใช้งาน / จำกัดต่อ User — เว้นว่างหรือ 0 = ไม่จำกัด</p>
-      <button class="go" id="c_go" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>บันทึกและเปิดใช้งานคูปอง</button>
+      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>ສ້າງຄູປອງສ່ວນຫຼຸດໃໝ່</div>
+      <div class="fld"><label>ລະຫັດຄູປອງ (ຕົວອັກສອນ/ຕົວເລກ)</label><input class="in" id="c_code" placeholder="ເຊັ່ນ SAVE10" maxlength="30" autocapitalize="characters" autocomplete="off" spellcheck="false"></div>
+      <div class="fld"><label>ປະເພດສ່ວນຫຼຸດ</label><select class="in" id="c_kind"><option value="pct">ເປີເຊັນ (%)</option><option value="amt">ຈຳນວນເງິນ (₭)</option></select></div>
+      <div class="fld"><label>ມູນຄ່າສ່ວນຫຼຸດ</label><input class="in" id="c_val" inputmode="numeric" value="0" autocomplete="off"></div>
+      <div class="fld"><label>ຈຳກັດຈຳນວນ (ຄັ້ງ)</label><input class="in" id="c_max" inputmode="numeric" placeholder="ບໍ່ຈຳກັດ" autocomplete="off"></div>
+      <div class="fld"><label>ຈຳກັດຕໍ່ຜູ້ໃຊ້ (ຄັ້ງ)</label><input class="in" id="c_per" inputmode="numeric" placeholder="ບໍ່ຈຳກັດ" autocomplete="off"></div>
+      <div class="fld" style="margin-bottom:8px"><label>ໃຊ້ໄດ້ກັບສິນຄ້າ</label><input class="in" id="c_q" placeholder="ຄົ້ນຫາຊື່ສິນຄ້າ / ໝວດ..." autocomplete="off">
+        <div class="pbox" id="c_prods"><div class="pe">ກຳລັງໂຫຼດ...</div></div></div>
+      <p class="hint" style="margin-top:10px">ບໍ່ເລືອກ = ໃຊ້ໄດ້ທຸກສິນຄ້າ · ເລືອກແລ້ວໃຊ້ໄດ້ສະເພາະລາຍການທີ່ຕິກ</p>
+      <div class="fld"><label>ຍອດຊື້ຂັ້ນຕ່ຳ (₭)</label><input class="in" id="c_min" inputmode="numeric" value="0" autocomplete="off"></div>
+      <div class="fld"><label>ວັນໝົດອາຍຸຄູປອງ</label><input class="in" id="c_exp" type="datetime-local"></div>
+      <p class="hint">ຈຳນວນການໃຊ້ງານ / ຈຳກັດຕໍ່ຜູ້ໃຊ້ — ເວ້ນຫວ່າງ ຫຼື 0 = ບໍ່ຈຳກັດ</p>
+      <button class="go" id="c_go" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>ບັນທຶກ ແລະເປີດໃຊ້ງານຄູປອງ</button>
     </div>
     <div class="card list">
-      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>คูปองทั้งหมดในระบบ</div>
-      <div class="tw"><table><thead><tr><th>รหัสคูปอง</th><th>ส่วนลด</th><th>ขั้นต่ำ</th><th>การใช้งาน (รวม)</th><th>จำกัด/USER</th><th>หมดอายุ</th><th>จัดการ</th></tr></thead><tbody id="c_list"><tr><td colspan="7" class="emp">กำลังโหลด...</td></tr></tbody></table></div>
+      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>ຄູປອງທັງໝົດໃນລະບົບ</div>
+      <div class="tw"><table><thead><tr><th>ລະຫັດຄູປອງ</th><th>ສ່ວນຫຼຸດ</th><th>ຂັ້ນຕ່ຳ</th><th>ການໃຊ້ງານ (ລວມ)</th><th>ຈຳກັດ/ຜູ້ໃຊ້</th><th>ໝົດອາຍຸ</th><th>ຈັດການ</th></tr></thead><tbody id="c_list"><tr><td colspan="7" class="emp">ກຳລັງໂຫຼດ...</td></tr></tbody></table></div>
     </div>
   </div>
 
-  <!-- ===== แท็บ 2: โค้ดฟรีเติมเงิน ===== -->
+  <!-- ===== แท็บ 2: ໂຄ້ດຟຣີເຕີມເງິນ ===== -->
   <div class="pane" id="pf">
     <div class="card">
-      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>สร้างโค้ดฟรีเติมเงินใหม่</div>
-      <div class="fld"><label>รหัสโค้ด (ตัวอักษร/ตัวเลข)</label><input class="in" id="f_code" placeholder="เช่น FREE50" maxlength="30" autocapitalize="characters" autocomplete="off" spellcheck="false"></div>
-      <div class="fld"><label>จำนวนเครดิตที่ได้รับ (฿)</label><input class="in" id="f_amt" inputmode="numeric" value="0" autocomplete="off"></div>
-      <div class="fld"><label>จำกัดจำนวน (ครั้ง)</label><input class="in" id="f_max" inputmode="numeric" placeholder="ไม่มีจำกัด" autocomplete="off"></div>
-      <div class="fld"><label>วันหมดอายุโค้ด</label><input class="in" id="f_exp" type="datetime-local"></div>
-      <p class="hint">จำนวนใช้งาน — เว้นว่างหรือ 0 = ไม่จำกัด · สมาชิก 1 คนใช้โค้ดเดียวกันได้ครั้งเดียว</p>
-      <button class="go" id="f_go" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>บันทึกและเปิดใช้งานโค้ด</button>
+      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>ສ້າງໂຄ້ດຟຣີເຕີມເງິນໃໝ່</div>
+      <div class="fld"><label>ລະຫັດໂຄ້ດ (ຕົວອັກສອນ/ຕົວເລກ)</label><input class="in" id="f_code" placeholder="ເຊັ່ນ FREE50" maxlength="30" autocapitalize="characters" autocomplete="off" spellcheck="false"></div>
+      <div class="fld"><label>ຈຳນວນເຄຣດິດທີ່ໄດ້ຮັບ (₭)</label><input class="in" id="f_amt" inputmode="numeric" value="0" autocomplete="off"></div>
+      <div class="fld"><label>ຈຳກັດຈຳນວນ (ຄັ້ງ)</label><input class="in" id="f_max" inputmode="numeric" placeholder="ບໍ່ຈຳກັດ" autocomplete="off"></div>
+      <div class="fld"><label>ວັນໝົດອາຍຸໂຄ້ດ</label><input class="in" id="f_exp" type="datetime-local"></div>
+      <p class="hint">ຈຳນວນການໃຊ້ງານ — ເວ້ນຫວ່າງ ຫຼື 0 = ບໍ່ຈຳກັດ · ສະມາຊິກ 1 ຄົນໃຊ້ໂຄ້ດດຽວກັນໄດ້ເທື່ອດຽວ</p>
+      <button class="go" id="f_go" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>ບັນທຶກ ແລະເປີດໃຊ້ງານໂຄ້ດ</button>
     </div>
     <div class="card list">
-      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>โค้ดฟรีทั้งหมดในระบบ</div>
-      <div class="tw"><table><thead><tr><th>รหัสโค้ด</th><th>เครดิต</th><th>การใช้งาน (รวม)</th><th>หมดอายุ</th><th>จัดการ</th></tr></thead><tbody id="f_list"><tr><td colspan="5" class="emp">กำลังโหลด...</td></tr></tbody></table></div>
+      <div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>ໂຄ້ດຟຣີທັງໝົດໃນລະບົບ</div>
+      <div class="tw"><table><thead><tr><th>ລະຫັດໂຄ້ດ</th><th>ເຄຣດິດ</th><th>ການໃຊ້ງານ (ລວມ)</th><th>ໝົດອາຍຸ</th><th>ຈັດການ</th></tr></thead><tbody id="f_list"><tr><td colspan="5" class="emp">ກຳລັງໂຫຼດ...</td></tr></tbody></table></div>
     </div>
   </div>
 </div>
@@ -125,6 +125,7 @@ tr:last-child td{border-bottom:0}
   var $ = function(s){ return document.querySelector(s); };
   var tt, busy = false, PRODS = [], SEL = {};
   var nf = new Intl.NumberFormat('en-US');
+  var T = function(s){ return typeof window.exTr === 'function' ? window.exTr(s) : s; };
   var TRASH = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3h6l1 2h4v2H4V5h4zM6 9h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/></svg>';
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
@@ -132,10 +133,10 @@ tr:last-child td{border-bottom:0}
   function tok(){ return exToken(); }
   function num(v){ return parseInt(String(v || '').replace(/[^\d]/g, ''), 10) || 0; }
   function p2(n){ return n < 10 ? '0' + n : '' + n; }
-  function dt(s){ var d = new Date(s); return p2(d.getDate()) + '/' + p2(d.getMonth() + 1) + '/' + (d.getFullYear() + 543) + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
+  function dt(s){ var d = new Date(s); return p2(d.getDate()) + '/' + p2(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
   function iso(v){ if(!v) return null; var d = new Date(v); return isNaN(d) ? null : d.toISOString(); }
-  var ERR = { bad_code:'รหัสต้องเป็น A-Z, 0-9, _ หรือ - ยาว 3–30 ตัว', bad_kind:'ประเภทส่วนลดไม่ถูกต้อง', bad_value:'มูลค่าไม่ถูกต้อง (เปอร์เซ็นต์ต้อง 1–100)', exists:'มีรหัสนี้อยู่แล้ว', not_admin:'ไม่มีสิทธิ์แอดมิน', nf:'ไม่พบรหัสนี้' };
-  function fail(j){ toast((j && ERR[j.code]) || 'ทำรายการไม่สำเร็จ'); }
+  var ERR = { bad_code:'ລະຫັດຕ້ອງເປັນ A-Z, 0-9, _ ຫຼື - ຍາວ 3–30 ຕົວ', bad_kind:'ປະເພດສ່ວນຫຼຸດບໍ່ຖືກຕ້ອງ', bad_value:'ມູນຄ່າບໍ່ຖືກຕ້ອງ (ເປີເຊັນຕ້ອງ 1–100)', exists:'ມີລະຫັດນີ້ຢູ່ແລ້ວ', not_admin:'ບໍ່ມີສິດແອດມິນ', nf:'ບໍ່ພົບລະຫັດນີ້' };
+  function fail(j){ toast((j && ERR[j.code]) || 'ເຮັດບໍ່ສຳເລັດ'); }
 
   /* ---- แท็บ ---- */
   $('#tabs').addEventListener('click', function(e){
@@ -163,7 +164,7 @@ tr:last-child td{border-bottom:0}
     $('#c_prods').innerHTML = rows.length ? rows.map(function(p){
       var u = img(p);
       return '<button type="button" class="pi' + (SEL[p.id] ? ' on' : '') + '" data-id="' + p.id + '"><div class="tl"' + (u ? ' style="background-image:url(\'' + esc(u).replace(/'/g, '%27') + '\')"' : '') + '>' + CHECK + '</div><span>' + esc(p.name) + '</span></button>';
-    }).join('') : '<div class="pe">ไม่พบสินค้า</div>';
+    }).join('') : '<div class="pe">ບໍ່ພົບສິນຄ້າ</div>';
   }
   $('#c_q').addEventListener('input', drawProds);
   $('#c_prods').addEventListener('click', function(e){
@@ -174,90 +175,90 @@ tr:last-child td{border-bottom:0}
   function loadProds(){
     exRpc('shop_products', {}).then(function(r){
       PRODS = Array.isArray(r) ? r : (r && r.rows) || []; drawProds();
-    }).catch(function(){ $('#c_prods').innerHTML = '<div class="pe">โหลดสินค้าไม่ได้</div>'; });
+    }).catch(function(){ $('#c_prods').innerHTML = '<div class="pe">ໂຫຼດສິນຄ້າບໍ່ໄດ້</div>'; });
   }
 
   /* ---- รายการคูปอง ---- */
   function expCell(s){
-    if(!s) return '<span style="color:#8b8b94">ไม่หมดอายุ</span>';
-    return new Date(s) < new Date() ? '<span class="ex">' + dt(s) + '</span><span class="exn">(หมดอายุ)</span>' : dt(s);
+    if(!s) return '<span style="color:#8b8b94">ບໍ່ໝົດອາຍຸ</span>';
+    return new Date(s) < new Date() ? '<span class="ex">' + dt(s) + '</span><span class="exn">(ໝົດອາຍຸແລ້ວ)</span>' : dt(s);
   }
   function loadC(){
     exRpc('adm_coupon_list', { p_token: tok() }).then(function(j){
       var rows = (j && j.ok && j.rows) || [];
       $('#c_list').innerHTML = rows.length ? rows.map(function(r){
-        return '<tr><td class="code">' + esc(r.code) + '</td><td>' + (r.kind === 'pct' ? nf.format(r.value) + '%' : '฿' + nf.format(r.value)) + '</td><td>฿' + nf.format(r.min_purchase || 0) + '</td>'
+        return '<tr><td class="code">' + esc(r.code) + '</td><td>' + (r.kind === 'pct' ? nf.format(r.value) + '%' : '₭' + nf.format(r.value)) + '</td><td>₭' + nf.format(r.min_purchase || 0) + '</td>'
           + '<td>' + nf.format(r.used || 0) + ' / ' + (r.max_uses ? nf.format(r.max_uses) : '∞') + '</td>'
-          + '<td>' + (r.per_user_max ? '<span class="bd">' + r.per_user_max + ' ครั้ง/คน</span>' : '—') + '</td>'
+          + '<td>' + (r.per_user_max ? '<span class="bd">' + r.per_user_max + ' ຄັ້ງ/ຄົນ</span>' : '—') + '</td>'
           + '<td>' + expCell(r.expires_at) + '</td>'
-          + '<td><button class="del" type="button" data-k="c" data-c="' + esc(r.code) + '">' + TRASH + 'ลบ</button></td></tr>';
-      }).join('') : '<tr><td colspan="7" class="emp">— ยังไม่มีคูปองในระบบ —</td></tr>';
-    }).catch(function(){ $('#c_list').innerHTML = '<tr><td colspan="7" class="emp">โหลดไม่ได้ กรุณาลองใหม่</td></tr>'; });
+          + '<td><button class="del" type="button" data-k="c" data-c="' + esc(r.code) + '">' + TRASH + 'ລຶບ</button></td></tr>';
+      }).join('') : '<tr><td colspan="7" class="emp">— ຍັງບໍ່ມີຄູປອງໃນລະບົບ —</td></tr>';
+    }).catch(function(){ $('#c_list').innerHTML = '<tr><td colspan="7" class="emp">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</td></tr>'; });
   }
   function loadF(){
     exRpc('adm_free_code_list', { p_token: tok() }).then(function(j){
       var rows = (j && j.ok && j.rows) || [];
       $('#f_list').innerHTML = rows.length ? rows.map(function(r){
-        return '<tr><td class="code">' + esc(r.code) + '</td><td>฿' + nf.format(r.amount) + '</td>'
+        return '<tr><td class="code">' + esc(r.code) + '</td><td>₭' + nf.format(r.amount) + '</td>'
           + '<td>' + nf.format(r.used || 0) + ' / ' + (r.max_uses ? nf.format(r.max_uses) : '∞') + '</td>'
           + '<td>' + expCell(r.expires_at) + '</td>'
-          + '<td><button class="del" type="button" data-k="f" data-c="' + esc(r.code) + '">' + TRASH + 'ลบ</button></td></tr>';
-      }).join('') : '<tr><td colspan="5" class="emp">— ยังไม่มีโค้ดฟรีในระบบ —</td></tr>';
-    }).catch(function(){ $('#f_list').innerHTML = '<tr><td colspan="5" class="emp">โหลดไม่ได้ กรุณาลองใหม่</td></tr>'; });
+          + '<td><button class="del" type="button" data-k="f" data-c="' + esc(r.code) + '">' + TRASH + 'ລຶບ</button></td></tr>';
+      }).join('') : '<tr><td colspan="5" class="emp">— ຍັງບໍ່ມີໂຄ້ດຟຣີໃນລະບົບ —</td></tr>';
+    }).catch(function(){ $('#f_list').innerHTML = '<tr><td colspan="5" class="emp">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</td></tr>'; });
   }
 
   /* ---- ลบ ---- */
   document.addEventListener('click', function(e){
     var b = e.target.closest('.del'); if(!b || busy) return;
     var f = b.dataset.k === 'f', c = b.dataset.c;
-    if(!confirm('ลบ' + (f ? 'โค้ดฟรี ' : 'คูปอง ') + c + ' ?')) return;
+    if(!confirm(T(f ? 'ລຶບໂຄ້ດຟຣີ {c} ?' : 'ລຶບຄູປອງ {c} ?').replace('{c}', c))) return;
     busy = true;
     exRpc(f ? 'adm_free_code_delete' : 'adm_coupon_delete', { p_token: tok(), p_code: c }).then(function(j){
       busy = false;
-      if(j && j.ok){ toast('ลบแล้ว'); f ? loadF() : loadC(); } else fail(j);
-    }).catch(function(){ busy = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+      if(j && j.ok){ toast('ລຶບແລ້ວ'); f ? loadF() : loadC(); } else fail(j);
+    }).catch(function(){ busy = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
   });
 
   /* ---- บันทึกคูปอง ---- */
   $('#c_go').onclick = function(){
     if(busy) return;
     var code = $('#c_code').value.trim(), kind = $('#c_kind').value, val = num($('#c_val').value);
-    if(code.length < 3){ toast('กรุณาใส่รหัสคูปอง (อย่างน้อย 3 ตัว)'); return; }
-    if(val <= 0){ toast('กรุณาใส่มูลค่าส่วนลด'); return; }
-    if(kind === 'pct' && val > 100){ toast('เปอร์เซ็นต์ต้องไม่เกิน 100'); return; }
+    if(code.length < 3){ toast('ກະລຸນາໃສ່ລະຫັດຄູປອງ (ຢ່າງໜ້ອຍ 3 ຕົວ)'); return; }
+    if(val <= 0){ toast('ກະລຸນາໃສ່ມູນຄ່າສ່ວນຫຼຸດ'); return; }
+    if(kind === 'pct' && val > 100){ toast('ເປີເຊັນຕ້ອງບໍ່ເກີນ 100'); return; }
     var ids = Object.keys(SEL).map(Number);
     busy = true; $('#c_go').disabled = true;
     exRpc('adm_coupon_save', { p_token: tok(), p_code: code, p_kind: kind, p_value: val, p_max_uses: num($('#c_max').value) || null, p_per_user: num($('#c_per').value) || null, p_product_ids: ids, p_min: num($('#c_min').value), p_expires: iso($('#c_exp').value) }).then(function(j){
       busy = false; $('#c_go').disabled = false;
       if(j && j.ok){
-        toast('สร้างคูปอง ' + j.code + ' แล้ว');
+        toast(T('ສ້າງຄູປອງ {c} ແລ້ວ').replace('{c}', j.code));
         ['c_code','c_max','c_per','c_exp'].forEach(function(id){ $('#' + id).value = ''; });
         $('#c_val').value = '0'; $('#c_min').value = '0'; $('#c_kind').value = 'pct'; SEL = {}; drawProds(); loadC();
       } else fail(j);
-    }).catch(function(){ busy = false; $('#c_go').disabled = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+    }).catch(function(){ busy = false; $('#c_go').disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
   };
 
   /* ---- บันทึกโค้ดฟรี ---- */
   $('#f_go').onclick = function(){
     if(busy) return;
     var code = $('#f_code').value.trim(), amt = num($('#f_amt').value);
-    if(code.length < 3){ toast('กรุณาใส่รหัสโค้ด (อย่างน้อย 3 ตัว)'); return; }
-    if(amt <= 0){ toast('กรุณาใส่จำนวนเครดิต'); return; }
+    if(code.length < 3){ toast('ກະລຸນາໃສ່ລະຫັດໂຄ້ດ (ຢ່າງໜ້ອຍ 3 ຕົວ)'); return; }
+    if(amt <= 0){ toast('ກະລຸນາໃສ່ຈຳນວນເຄຣດິດ'); return; }
     busy = true; $('#f_go').disabled = true;
     exRpc('adm_free_code_save', { p_token: tok(), p_code: code, p_amount: amt, p_max_uses: num($('#f_max').value) || null, p_expires: iso($('#f_exp').value) }).then(function(j){
       busy = false; $('#f_go').disabled = false;
       if(j && j.ok){
-        toast('สร้างโค้ด ' + j.code + ' แล้ว');
+        toast(T('ສ້າງໂຄ້ດ {c} ແລ້ວ').replace('{c}', j.code));
         ['f_code','f_max','f_exp'].forEach(function(id){ $('#' + id).value = ''; }); $('#f_amt').value = '0'; loadF();
       } else fail(j);
-    }).catch(function(){ busy = false; $('#f_go').disabled = false; toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+    }).catch(function(){ busy = false; $('#f_go').disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
   };
 
   /* ---- ตรวจสิทธิ์แอดมิน ---- */
   if(!tok()){ try{ sessionStorage.setItem('exNext','admin-coupons.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
   exRpc('member_is_admin', { p_token: tok() }).then(function(j){
     if(j && j.ok && j.admin){ loadProds(); loadC(); loadF(); } else location.replace('index.html');
-  }).catch(function(){ toast('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้'); });
+  }).catch(function(){ toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
 })();
 </script>
 </body>

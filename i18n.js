@@ -931,6 +931,7 @@
     document.dispatchEvent(new CustomEvent('langchange', { detail: l }));
   }
   window.setLang = setLang;
+  window.exTr = s => (lang === 'lo' ? s : tr(String(s), idxOf())); /* แปลข้อความที่ใช้กับ confirm()/alert() ซึ่ง MutationObserver แปลให้ไม่ได้ */
 
   const lgBtn = document.getElementById('lgBtn'), lgPanel = document.getElementById('lgPanel');
   function toggleLang(open) {
