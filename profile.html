@@ -128,7 +128,7 @@
 (function(){
   var $=function(s){return document.querySelector(s)};
   var M={bad_session:'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່',already:'ບັນຊີນີ້ເປັນຕົວແທນແລ້ວ',notfound:'ບໍ່ພົບ API Key ນີ້',closed:'API Key ນີ້ຖືກປິດໃຊ້ງານແລ້ວ',used:'API Key ນີ້ມີຄົນໃຊ້ແລ້ວ'};
-  function show(on){ $('#agOn').hidden=!on; $('#agForm').hidden=on; }
+  function show(on){ $('#agOn').hidden=!on; $('#agForm').hidden=on; try{ if(on) localStorage.setItem('exIsAgent','1'); }catch(e){} }
   exRpc('member_agent_prices',{p_token:exToken()}).then(function(j){ if(j&&j.ok&&j.agent) show(true); }).catch(function(){});
   $('#agForm').addEventListener('submit',function(e){
     e.preventDefault();

@@ -54,39 +54,197 @@
     for (var i = 0; i < a.length; i++) if (String(a[i].id) === String(id)) return a[i];
     return null;
   }
-  var lastPrices = null;
+
+  /* =====================================================================
+     ພາບລວມຕົວແທນ (แดชบอร์ดตัวแทน) — แสดงแทนส่วนสมัครเมื่อเป็นตัวแทนแล้ว
+     ข้อมูลทั้งหมดคำนวณจาก RPC ที่มีอยู่แล้ว: member_agent_prices / member_order_list / member_me
+     (ไม่ต้องแก้ฐานข้อมูล)
+     ===================================================================== */
+  var FLAG = 'exIsAgent';                       // จำว่าเป็นตัวแทน → เมนู/หน้านี้เปลี่ยนชื่อทันทีไม่กะพริบ
+  function setFlag(on) { try { if (on) localStorage.setItem(FLAG, '1'); else localStorage.removeItem(FLAG); } catch (e) {} }
+  var join = $('#agJoin'), dash = $('#agDash'), built = false, started = false, ordersState = 'load', orders = [], srv = null, bal = null;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var stamp = function (t) { var d = new Date(t); return isNaN(d) ? '' : pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+  var WD = ['ອາ', 'ຈັນ', 'ອັງ', 'ພຸດ', 'ພຫ', 'ສຸກ', 'ເສົາ'];
+  var compact = function (n) { n = Number(n) || 0; if (n >= 1e6) return (Math.round(n / 1e5) / 10) + 'M'; if (n >= 1e3) return Math.round(n / 1e3) + 'K'; return String(Math.round(n)); };
+  var ic = function (id) { return '<svg class="i"><use href="#' + id + '"/></svg>'; };
+  var amt = function (n) { return (Math.round(Number(n) || 0)).toLocaleString('en-US') + '<em>₭</em>'; };
+
+  function setTitles(on) {
+    $('#agTitle').textContent = on ? 'ພາບລວມຕົວແທນ' : 'ສະໝັກຕົວແທນ';
+    $('#agH2').textContent = on ? 'ພາບລວມຕົວແທນ' : 'ສະໝັກຕົວແທນ';
+    $('#agSub').textContent = on ? 'ສະຫຼຸບຍອດຊື້ ແລະ ລາຄາຕົວແທນຂອງທ່ານ' : 'ຊື້ສິນຄ້າໃນລາຄາຕົວແທນ ສຳລັບຜູ້ທີ່ຊື້ເພື່ອຂາຍຕໍ່ ໃສ່ API Key ເພື່ອເປີດໃຊ້ໄດ້ທັນທີ';
+    document.title = on ? 'ພາບລວມຕົວແທນ' : 'ສະໝັກຕົວແທນ';
+  }
+  /* เป็นตัวแทนแล้ว: ส่วนสมัคร/ขั้นตอน/คำถาม จางเบลอหายไป แล้วแดชบอร์ดค่อยๆ ชัดขึ้นมาแทน */
+  function enterAgent() {
+    setFlag(true); setTitles(true); dash.hidden = false;
+    if (document.body.classList.contains('is-agent')) return;
+    if (reduce) { document.body.classList.add('is-agent'); dash.classList.add('ad-in'); return; }
+    join.classList.add('ag-fade');
+    setTimeout(function () { document.body.classList.add('is-agent'); join.classList.remove('ag-fade'); dash.classList.add('ad-in'); window.scrollTo(0, 0); }, 560);
+  }
+  function leaveAgent() {
+    setFlag(false); setTitles(false);
+    document.body.classList.remove('is-agent'); dash.hidden = true; dash.classList.remove('ad-in');
+  }
+
+  function buildShell() {
+    if (built) return; built = true;
+    dash.innerHTML =
+      '<div class="ag-ok">' + K.ok + '<div><b>ທ່ານເປັນຕົວແທນແລ້ວ</b><small>ລາຄາຕົວແທນມີຜົນທຸກການຊື້</small></div></div>' +
+      '<div class="ad-hd"><h3 class="hw-h">ສະຫຼຸບຍອດຊື້</h3><button class="ad-rf" id="adRf" type="button" aria-label="ອັບເດດ">' + ic('a-refresh') + '<span>ອັບເດດ</span></button></div>' +
+      '<div id="adStats"></div>' +
+      '<div class="ad-wal"><span class="ad-wi">' + ic('a-wallet') + '</span><div class="ad-wt"><small>ຍອດຄົງເຫຼືອ</small><b id="adBal">—</b></div><a class="ad-top" href="topup.html">+ ເຕີມເງິນ</a></div>' +
+      '<div class="ad-acts">' +
+        '<a href="categories.html">' + ic('a-cart') + '<span>ຊື້ສິນຄ້າ</span></a>' +
+        '<a href="orders.html">' + ic('a-clock') + '<span>ປະຫວັດ</span></a>' +
+        '<a href="topups.html">' + ic('a-wallet') + '<span>ເຕີມເງິນ</span></a>' +
+        '<button type="button" id="adCt">' + ic('a-chat') + '<span>ແອດມິນ</span></button>' +
+      '</div>' +
+      '<div id="adMore"></div>' +
+      '<details class="ad-card ad-pd" open><summary><span class="ad-sh">' + ic('a-tag') + 'ລາຄາຕົວແທນຂອງຂ້ອຍ <em id="adPc"></em></span>' + ic('a-down') + '</summary>' +
+        '<div class="ag-pl" id="agPl"><div class="ag-pe"><span class="ag-sp"></span></div></div></details>' +
+      '<div class="ad-tip">' + ic('a-alert') + '<span>ສິນຄ້າທີ່ບໍ່ມີລາຄາຕົວແທນ ຈະຊື້ໃນລາຄາປົກກະຕິ ຍອດຊື້ດ້ານເທິງນັບຈາກປະຫວັດການສັ່ງຊື້ຂອງບັນຊີນີ້</span></div>';
+    $('#adRf').onclick = function () { var b = this; b.classList.add('spin'); loadOrders(); loadBalance(); setTimeout(function () { b.classList.remove('spin'); }, 900); };
+    $('#adCt').onclick = function () { if (window.exOpenContacts) exOpenContacts(); else toast('ກຳລັງພັດທະນາ'); };
+    drawStats();
+    var cb = $('#adBal');
+    var lb = null; try { lb = JSON.parse(localStorage.getItem('exshop_balance') || 'null'); } catch (e) {}
+    if (lb != null) { bal = Number(lb) || 0; cb.innerHTML = amt(bal); }
+  }
+
+  function calc() {
+    var now = new Date(), Y = now.getFullYear(), M0 = now.getMonth(), D = now.getDate();
+    var S = { today: 0, todayN: 0, total: 0, n: orders.length, items: 0, month: 0, monthN: 0, saved: 0, days: [], top: [] };
+    for (var i = 6; i >= 0; i--) { var dt = new Date(Y, M0, D - i); S.days.push({ y: dt.getFullYear(), m: dt.getMonth(), d: dt.getDate(), w: WD[dt.getDay()], sum: 0, now: i === 0 }); }
+    var tp = {};
+    orders.forEach(function (o) {
+      var t = Number(o.total) || 0, q = Number(o.qty) || 0, at = new Date(o.at);
+      S.total += t; S.items += q; S.saved += Number(o.discount) || 0;
+      if (!isNaN(at)) {
+        var y = at.getFullYear(), m = at.getMonth(), d = at.getDate();
+        if (y === Y && m === M0) { S.month += t; S.monthN++; }
+        if (y === Y && m === M0 && d === D) { S.today += t; S.todayN++; }
+        for (var k = 0; k < 7; k++) if (S.days[k].y === y && S.days[k].m === m && S.days[k].d === d) { S.days[k].sum += t; break; }
+      }
+      var nm = o.name || 'ສິນຄ້າ';
+      (tp[nm] = tp[nm] || { name: nm, qty: 0, sum: 0, n: 0 }); tp[nm].qty += q; tp[nm].sum += t; tp[nm].n++;
+    });
+    S.top = Object.keys(tp).map(function (k) { return tp[k]; }).sort(function (a, b) { return b.sum - a.sum; }).slice(0, 5);
+    S.recent = orders.slice().sort(function (a, b) { return new Date(b.at) - new Date(a.at); }).slice(0, 5);
+    S.avg = S.n ? S.total / S.n : 0;
+    return S;
+  }
+
+  /* ยอดรวมจากเซิร์ฟเวอร์ (member_agent_stats) — นับทุกอ็อเดอร์ ไม่ติดลิมิต 200 */
+  function fromServer(j) {
+    var S = { today: +j.today || 0, todayN: +j.today_n || 0, total: +j.total || 0, n: +j.orders || 0, items: +j.items || 0, month: +j.month || 0, monthN: +j.month_n || 0, saved: +j.saved || 0, top: j.top || [], recent: j.recent || [] };
+    S.top = S.top.map(function (t) { return { name: t.name, qty: +t.qty || 0, sum: +t.sum || 0, n: +t.n || 0 }; });
+    var now = new Date();
+    S.days = (j.days || []).map(function (x, i, a) { var p = String(x.d).split('-'), dt = new Date(+p[0], +p[1] - 1, +p[2]); return { d: dt.getDate(), w: WD[dt.getDay()], sum: +x.sum || 0, now: i === a.length - 1 }; });
+    S.avg = S.n ? S.total / S.n : 0;
+    return S;
+  }
+  function tile(cls, icon, label, val, sub) {
+    return '<div class="ad-t ' + cls + '"><span class="ad-ti">' + ic(icon) + '</span><small>' + label + '</small><b>' + val + '</b><i>' + sub + '</i></div>';
+  }
+  function drawStats() {
+    var box = $('#adStats'), more = $('#adMore'); if (!box) return;
+    if (ordersState === 'load') {
+      box.innerHTML = '<div class="ad-grid">' + '<div class="ad-t ad-sk"></div>'.repeat(6) + '</div>'; more.innerHTML = ''; return;
+    }
+    if (ordersState === 'err') {
+      box.innerHTML = '<div class="ad-err"><span>ໂຫຼດຂໍ້ມູນຍອດຊື້ບໍ່ສຳເລັດ</span><button type="button" class="ad-rt" id="adRt">ລອງໃໝ່</button></div>'; more.innerHTML = '';
+      $('#adRt').onclick = function () { loadOrders(); };
+      return;
+    }
+    var S = srv ? fromServer(srv) : calc();
+    box.innerHTML = '<div class="ad-grid">' +
+      tile('ad-hot', 'a-sun', 'ຍອດຊື້ມື້ນີ້', amt(S.today), S.todayN + ' ອໍເດີ') +
+      tile('ad-hot2', 'a-bag', 'ຍອດຊື້ທັງໝົດ', amt(S.total), S.n + ' ອໍເດີ · ' + S.items + ' ຊິ້ນ') +
+      tile('', 'a-calendar', 'ຍອດຊື້ເດືອນນີ້', amt(S.month), S.monthN + ' ອໍເດີ') +
+      tile('', 'a-pkg', 'ສິນຄ້າທີ່ຊື້ທັງໝົດ', S.items.toLocaleString('en-US') + '<em>ຊິ້ນ</em>', S.n + ' ອໍເດີ') +
+      tile('', 'a-trend', 'ສະເລ່ຍຕໍ່ອໍເດີ', amt(S.avg), 'ຈາກທຸກອໍເດີ') +
+      tile('', 'a-tag', 'ສ່ວນຫຼຸດທີ່ໄດ້ຮັບ', amt(S.saved), 'ລວມທຸກອໍເດີ') +
+      '</div>';
+    if (!S.n) { more.innerHTML = '<div class="ad-card ad-empty">ຍັງບໍ່ມີປະຫວັດການຊື້<small>ເມື່ອຊື້ສິນຄ້າແລ້ວ ຍອດຕ່າງໆຈະສະແດງຢູ່ບ່ອນນີ້</small><a class="hw-go" href="categories.html">' + ic('a-cart') + 'ໄປເລືອກຊື້ສິນຄ້າ</a></div>'; return; }
+    var mx = Math.max.apply(null, S.days.map(function (d) { return d.sum; })) || 1, w7 = S.days.reduce(function (a, d) { return a + d.sum; }, 0);
+    var chart = '<div class="ad-card"><div class="ad-sh">' + ic('a-trend') + '7 ວັນຫຼ້າສຸດ<em>' + money(w7) + '</em></div><div class="ad-bars">' +
+      S.days.map(function (d) {
+        var h = d.sum ? Math.max(6, Math.round(d.sum / mx * 100)) : 3;
+        return '<div class="ad-bc' + (d.now ? ' now' : '') + '" title="' + esc(money(d.sum)) + '"><span class="ad-bv">' + (d.sum ? compact(d.sum) : '') + '</span><div class="ad-bw"><i style="height:' + h + '%"></i></div><span class="ad-bl">' + d.w + '<br>' + pad(d.d) + '</span></div>';
+      }).join('') + '</div></div>';
+    var tmx = S.top.length ? S.top[0].sum || 1 : 1;
+    var top = '<div class="ad-card"><div class="ad-sh">' + ic('a-bag') + 'ສິນຄ້າທີ່ຊື້ຫຼາຍສຸດ</div><div class="ad-tp">' +
+      S.top.map(function (t, i) {
+        return '<div class="ad-tr"><span class="ad-rk">' + (i + 1) + '</span><div class="ad-tn"><b>' + esc(t.name) + '</b><small>' + t.qty + ' ຊິ້ນ · ' + t.n + ' ອໍເດີ</small><span class="ad-tb"><i style="width:' + Math.max(4, Math.round(t.sum / tmx * 100)) + '%"></i></span></div><strong>' + money(t.sum) + '</strong></div>';
+      }).join('') + '</div></div>';
+    var rec = '<div class="ad-card"><div class="ad-sh">' + ic('a-clock') + 'ອໍເດີຫຼ້າສຸດ<a href="orders.html">ເບິ່ງທັງໝົດ</a></div><div class="ad-rc">' +
+      S.recent.map(function (o) {
+        return '<a class="ad-ro" href="orders.html"><div><b>' + esc(o.name || 'ສິນຄ້າ') + '</b><small>' + esc((o.opt ? o.opt + ' × ' : '× ') + o.qty) + ' · ' + esc(stamp(o.at)) + '</small></div><strong>-' + money(o.total) + '</strong></a>';
+      }).join('') + '</div></div>';
+    more.innerHTML = chart + top + rec;
+  }
+  function loadOrders() {
+    ordersState = 'load'; drawStats();
+    var bad = function () { if (window.exClearLocal) exClearLocal(); setFlag(false); if (window.exNeedLogin) exNeedLogin('agent.html'); };
+    var legacy = function () {   // ถ้ายังไม่ได้สร้างฟังก์ชัน member_agent_stats → ใช้วิธีเดิม (นับจาก 200 อ็อเดอร์ล่าสุด)
+      exRpc('member_order_list', { p_token: exToken(), p_limit: 200 }).then(function (j) {
+        if (j && j.ok) { orders = Array.isArray(j.orders) ? j.orders : []; srv = null; ordersState = 'ok'; }
+        else if (j && j.code === 'bad_session') { bad(); return; }
+        else ordersState = 'err';
+        drawStats();
+      }).catch(function () { ordersState = 'err'; drawStats(); });
+    };
+    exRpc('member_agent_stats', { p_token: exToken(), p_tz: -new Date().getTimezoneOffset() }).then(function (j) {
+      if (j && j.ok) { srv = j; ordersState = 'ok'; drawStats(); }
+      else if (j && j.code === 'bad_session') bad();
+      else legacy();
+    }).catch(legacy);
+  }
+  function loadBalance() {
+    exRpc('member_me', { p_token: exToken() }).then(function (j) {
+      if (j && j.ok) { bal = Number(j.balance) || 0; try { localStorage.setItem('exshop_balance', JSON.stringify(bal)); } catch (e) {} var c = $('#adBal'); if (c) c.innerHTML = amt(bal); }
+    }).catch(function () {});
+  }
+
+  var lastPrices = null, pricesBound = false;
   function renderPrices() {
     var box = $('#agPl'); if (!box || !lastPrices) return;
+    var pc = $('#adPc'); if (pc) pc.textContent = '(' + lastPrices.length + ')';
     var rows = lastPrices.map(function (x) {
       var p = nameOf(x.product_id);
       if (!p && window.productsLoaded) return '';
       var nm = p ? p.n : 'ສິນຄ້າ #' + x.product_id;
       var reg = null;
       if (p) { if (x.dur_label && p.durs) { var d = p.durs.filter(function (d) { return d.label === x.dur_label; })[0]; reg = d ? Number(d.price) : null; } else if (!x.dur_label) reg = Number(p.price); }
-      var ag = Number(x.price) || 0;
-      return '<div class="ag-pr"><span>' + esc(nm) + (x.dur_label ? ' <em>· ' + esc(x.dur_label) + '</em>' : '') + '</span>' + (reg && reg > ag ? '<s>' + money(reg) + '</s>' : '') + '<b>' + money(ag) + '</b></div>';
+      var ag = Number(x.price) || 0, off = reg && reg > ag ? Math.round((reg - ag) / reg * 100) : 0;
+      return '<div class="ag-pr"><span>' + esc(nm) + (x.dur_label ? ' <em>· ' + esc(x.dur_label) + '</em>' : '') + '</span>' + (off ? '<u class="ad-off">-' + off + '%</u>' : '') + (reg && reg > ag ? '<s>' + money(reg) + '</s>' : '') + '<b>' + money(ag) + '</b></div>';
     }).join('');
     box.innerHTML = rows || '<div class="ag-pe">ຍັງບໍ່ມີສິນຄ້າທີ່ຕັ້ງລາຄາຕົວແທນ ສິນຄ້າທັງໝົດຈະຊື້ໃນລາຄາປົກກະຕິ</div>';
   }
   function showAgent(j) {
     lastPrices = j.prices || [];
-    card.innerHTML = '<div class="ag-ok">' + K.ok + '<div><b>ທ່ານເປັນຕົວແທນແລ້ວ</b><small>ລາຄາຕົວແທນມີຜົນທຸກການຊື້</small></div></div>' +
-      '<div class="ag-ph">ລາຄາຂອງຂ້ອຍ (' + lastPrices.length + ')</div><div class="ag-pl" id="agPl"><div class="ag-pe"><span class="ag-sp"></span></div></div>';
-    renderPrices();
-    if (!window.productsLoaded) document.addEventListener('products:ready', renderPrices, { once: true });
-    else document.addEventListener('products:ready', renderPrices);
+    buildShell(); enterAgent(); renderPrices();
+    if (!started) { started = true; loadOrders(); loadBalance(); }
+    if (!pricesBound) { pricesBound = true; document.addEventListener('products:ready', renderPrices); }
   }
   function loadStatus() {
-    if (!(window.exLoggedIn && exLoggedIn())) { showLogin(); return; }
+    if (!(window.exLoggedIn && exLoggedIn())) { leaveAgent(); showLogin(); return; }
     exRpc('member_agent_prices', { p_token: exToken() }).then(function (j) {
       if (j && j.ok && j.agent) showAgent(j);
-      else if (j && j.ok === false && j.code === 'bad_session') showLogin();
-      else showForm();
+      else if (j && j.ok === false && j.code === 'bad_session') { leaveAgent(); showLogin(); }
+      else { leaveAgent(); showForm(); }
     }).catch(function () {
+      if (document.body.classList.contains('is-agent')) return;   // เคยเป็นตัวแทน: ใช้ข้อมูลที่โหลดไว้แสดงต่อ
       card.innerHTML = '<div class="ag-load">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div><button class="ag-go" type="button" id="agRe">ລອງໃໝ່</button>';
       $('#agRe').onclick = function () { card.innerHTML = '<div class="ag-load"><span class="ag-sp"></span></div>'; loadStatus(); };
     });
   }
+  /* เคยเป็นตัวแทน (จำไว้ในเครื่อง): แสดงแดชบอร์ดทันทีไม่ต้องรอเช็กสถานะ */
+  if (document.body.classList.contains('is-agent')) { setTitles(true); dash.hidden = false; dash.classList.add('ad-in'); buildShell(); started = true; loadOrders(); loadBalance(); }
   var back = $('#agBack');
   if (back) back.addEventListener('click', function (e) { if (history.length > 1) { e.preventDefault(); history.back(); } });
   loadStatus(); loadContacts();

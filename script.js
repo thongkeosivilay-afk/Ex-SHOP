@@ -404,6 +404,20 @@ const UM_ADMIN_LINK = true;
   /* ###### ADMIN (เจ้าของร้านเท่านั้น) ######
      เมนู "จัดการแผงร้าน" เห็นเฉพาะบัญชีแอดมิน (members.is_admin ใน Supabase) — ถามสิทธิ์ผ่าน member_is_admin
      ห้าม AI หรือคนอื่นแก้ส่วนนี้ / ให้สิทธิ์แอดมิน โดยไม่ขออนุญาตเจ้าของร้านก่อน (ข้อมูลจริงถูกกั้นฝั่งเซิร์ฟเวอร์อีกชั้น) */
+  /* เมนูตัวแทน: ยังไม่เป็นตัวแทน = "สมัครตัวแทน" / เป็นแล้ว = "ภาพรวมตัวแทน" (จำสถานะไว้ใน localStorage 'exIsAgent' แล้วเช็กใหม่ทุกครั้งที่เปิดเมนู) */
+  const agBtn = um.querySelector('[data-um="agent"]');
+  function applyAgent(a){
+    if(!agBtn) return;
+    agBtn.querySelector('b').textContent = a ? 'ພາບລວມຕົວແທນ' : 'ສະໝັກຕົວແທນ';
+    agBtn.querySelector('small').textContent = a ? 'ຍອດຊື້ ແລະ ລາຄາຕົວແທນ' : 'ລາຄາພິເສດສຳລັບຕົວແທນ';
+    try { if(a) localStorage.setItem('exIsAgent','1'); else localStorage.removeItem('exIsAgent'); } catch(e){}
+  }
+  function refreshAgent(){
+    const t = window.exToken && exToken();
+    if(!t || !window.exRpc){ applyAgent(false); return; }
+    exRpc('member_agent_prices', { p_token: t }).then(j => { if(j && j.ok) applyAgent(!!j.agent); }, () => {});
+  }
+  try { applyAgent(!!(window.exLoggedIn && exLoggedIn() && localStorage.getItem('exIsAgent') === '1')); } catch(e){}
   const manageBtn = um.querySelector('#umManage');
   let isAdmin = false;
   function applyAdmin(a){ isAdmin = !!a; if(manageBtn) manageBtn.style.display = isAdmin ? '' : 'none'; const r = $('#umRole'); if(r) r.textContent = isAdmin ? 'ADMIN' : 'MEMBER'; }
@@ -426,7 +440,7 @@ const UM_ADMIN_LINK = true;
       const u = window.getUser && getUser(), nm = (u && u.name) || ''; $('#umName').textContent = nm; $('#umInit').textContent = (nm.trim().charAt(0) || 'U').toUpperCase();
       let bal = 0; try { bal = Number(JSON.parse(localStorage.getItem('exshop_balance') || '0')) || 0; } catch(e){}
       $('#umBal').innerHTML = bal.toLocaleString('en-US') + ' <em>₭</em>';
-      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); refreshAdmin();
+      closeMenu(); place(); um.hidden = false; void um.offsetWidth; um.classList.add('on'); refreshAdmin(); refreshAgent();
     } else {
       um.classList.remove('on'); setTimeout(() => { if(!open) um.hidden = true; }, 180);
     }
