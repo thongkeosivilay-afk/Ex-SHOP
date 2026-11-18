@@ -85,6 +85,18 @@
   <h3 class="pf-h">ກິດຈະກຳຫຼ້າສຸດ</h3>
   <section class="pf-card pf-hist" id="pfHist" aria-live="polite"></section>
 
+  <!-- ตัวแทนจำหน่าย -->
+  <h3 class="pf-h">ຕົວແທນຈຳໜ່າຍ</h3>
+  <section class="pf-card" id="agCard">
+    <div class="pf-lh"><svg class="i"><use href="#p-user"/></svg>API Key ຕົວແທນ</div>
+    <p class="pf-hint" id="agOn" hidden>ບັນຊີນີ້ເປັນຕົວແທນແລ້ວ — ລາຄາຕົວແທນຈະໃຊ້ອັດຕະໂນມັດຕອນສັ່ງຊື້</p>
+    <form id="agForm" novalidate autocomplete="off">
+      <div class="pf-f"><label for="agKey">ໃສ່ API Key ຕົວແທນ</label>
+        <div class="pf-in"><svg class="i"><use href="#p-lock"/></svg><input id="agKey" type="text" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="EX-XXXXXXXX-XXXXXXXX"></div><p class="pf-e" id="agKeyE"></p></div>
+      <button class="pf-btn pf-btn-red pf-block" id="agGo" type="submit"><span class="lb">ເປີດໃຊ້ຕົວແທນ</span><span class="sp" aria-hidden="true"></span></button>
+    </form>
+  </section>
+
   <!-- เปลี่ยนรหัสผ่าน -->
   <h3 class="pf-h">ຄວາມປອດໄພ</h3>
   <section class="pf-card">
@@ -111,6 +123,28 @@
 
 <script src="exlog.js"></script>
 <script src="profile.js"></script>
+<script>
+/* เปิดใช้ API Key ตัวแทน (ผูกกับบัญชีที่ล็อกอินอยู่) */
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var M={bad_session:'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່',already:'ບັນຊີນີ້ເປັນຕົວແທນແລ້ວ',notfound:'ບໍ່ພົບ API Key ນີ້',closed:'API Key ນີ້ຖືກປິດໃຊ້ງານແລ້ວ',used:'API Key ນີ້ມີຄົນໃຊ້ແລ້ວ'};
+  function show(on){ $('#agOn').hidden=!on; $('#agForm').hidden=on; }
+  exRpc('member_agent_prices',{p_token:exToken()}).then(function(j){ if(j&&j.ok&&j.agent) show(true); }).catch(function(){});
+  $('#agForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=$('#agGo'),k=$('#agKey').value.trim(),er=$('#agKeyE'); er.textContent='';
+    if(b.disabled) return;
+    if(!k){ er.textContent='ກະລຸນາໃສ່ API Key'; return; }
+    b.disabled=true;
+    exRpc('member_agent_redeem',{p_token:exToken(),p_key:k}).then(function(j){
+      b.disabled=false;
+      if(j&&j.ok){ show(true); $('#agKey').value=''; var t=$('#pfToast'); t.dataset.k='ok'; t.querySelector('span').textContent='ເປີດໃຊ້ຕົວແທນສຳເລັດ'; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},3600); }
+      else er.textContent=M[j&&j.code]||'ເປີດໃຊ້ບໍ່ສຳເລັດ';
+    }).catch(function(){ b.disabled=false; er.textContent='ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'; });
+  });
+})();
+</script>
+
 <script src="notify.js"></script>
 </body>
 </html>

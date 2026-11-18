@@ -5,12 +5,16 @@
    - ยอดเงิน: member_me (ฝั่งเซิร์ฟเวอร์)    - ตรวจโค้ดส่วนลด: member_promo
    - ซื้อ: member_buy → ตัดเงินสมาชิก + ตัดโค้ดจากคลัง + บันทึกออเดอร์ ในธุรกรรมเดียว (หน้าเว็บทำได้แค่ขอซื้อ ตัดสินใจที่เซิร์ฟเวอร์) */
 (function(){
+  let ag = null;    // ราคาตัวแทน { 'รหัสสินค้า|ตัวเลือก': ราคา } (null = ไม่ใช่ตัวแทน)
   let bal = null;   // ยอดเงินสมาชิก (null = ยังไม่ล็อกอิน/ยังโหลดไม่เสร็จ)
   /* ตัวเลือกของสินค้า = ตัวเลือกราคาที่ตั้งในหน้าแอดมิน; สต็อกแยกตามตัวเลือก (จำนวนโค้ดที่เหลือ) ไม่มีตัวเลือก = ขายตามราคาสินค้า */
   function optionsOf(p){
     const tot = Number(p.left) || 0;
-    if(p.durs && p.durs.length) return p.durs.map(d => ({ l: d.label, k: d.label, o: d.price, p: d.price, s: d.stock == null ? tot : d.stock }));
-    return [{ l: p.n, k: '', o: p.price, p: p.price, s: tot }];
+    /* ราคาตัวแทน (ถ้าบัญชีนี้เป็นตัวแทน): ใช้ราคาที่ตั้งไว้แทนราคาปกติ — เซิร์ฟเวอร์คิดราคาเดียวกันตอนซื้อจริง */
+    const A = (k, v) => { const a = ag && ag[p.id + '|' + k]; return a == null ? v : a; };
+    if(p.durs && p.durs.length) return p.durs.map(d => { const v = A(d.label, d.price); return { l: d.label, k: d.label, o: v, p: v, s: d.stock == null ? tot : d.stock }; });
+    const v = A('', p.price);
+    return [{ l: p.n, k: '', o: v, p: v, s: tot }];
   }
 
   /* ยอดเงินบนแถบหัว/โปรไฟล์ อ่านจาก localStorage 'exshop_balance' → ซิงก์ค่าจริงจากเซิร์ฟเวอร์ลงไป */
@@ -23,6 +27,11 @@
       else { exClearLocal(); bal = null; }
       if(cur) render();
     }, () => { if(cur) render(); });
+    exRpc('member_agent_prices', { p_token: exToken() }).then(j => {
+      if(!(j && j.ok && j.agent)) return;
+      ag = {}; (j.prices || []).forEach(x => { ag[x.product_id + '|' + (x.dur_label || '')] = Number(x.price) || 0; });
+      if(cur){ const k = opts[sel] && opts[sel].k; opts = optionsOf(cur); const i = opts.findIndex(o => o.k === k); sel = i < 0 ? 0 : i; render(); }
+    }, () => {});
   }
   const $ = (s,r=document)=>r.querySelector(s);
   let toastT; function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>s.classList.remove('show'),2200); }

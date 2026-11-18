@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>ຕົວແທນຈຳໜ່າຍ</title>
+<script src="guard.js"></script>
+<link rel="stylesheet" href="admin-nav.css">
+<link rel="stylesheet" href="transition.css">
+<script src="transition.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff0000;--red-rgb:255,0,0;--redbtn:#e8321f;--bg:#000;--card:#070707;--line:#1c1c1f;--txt:#fff;--mut:#8b8b95;--ok:#5ecb7a;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:22px 17px calc(env(safe-area-inset-bottom,0px) + 56px)}
+
+/* หัวเรื่อง */
+.ttl{display:flex;align-items:stretch;gap:13px}
+.ttl i{width:6px;border-radius:3px;background:var(--redbtn);box-shadow:0 0 14px rgba(var(--red-rgb),.65);flex:none}
+.ttl h2{font-size:25px;font-weight:700;line-height:1.3}
+.sub{margin:6px 0 18px 19px;color:#74747e;font-size:14.5px;line-height:1.5}
+
+/* ปุ่มสร้าง */
+.add{width:100%;height:47px;border-radius:14px;background:var(--redbtn);color:#fff;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 28px rgba(var(--red-rgb),.34);transition:transform .15s,opacity .15s}
+.add:active{transform:scale(.985);opacity:.9}
+.add svg{width:19px;height:19px}
+.msg{min-height:0;margin:0 6px;font-size:15px;color:#52a874;line-height:1.5}
+.msg.on{margin:13px 6px 0}
+.msg.err{color:#ff7a7a}
+.stats{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.msg.on+.stats{margin-top:20px}
+
+/* การ์ดสถิติ */
+.st{display:flex;align-items:center;gap:14px;min-height:85px;padding:14px 12px 14px 19px;border:1px solid var(--line);border-radius:16px;background:var(--card);min-width:0}
+.st .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;border:1px solid transparent}
+.st .ic svg{width:22px;height:22px}
+.st .tx{min-width:0;flex:1}
+.st b{display:block;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+.st small{display:block;margin-top:3px;color:#74747e;font-size:14.5px;line-height:1.5}
+.st b.money{font-size:clamp(15px,4.1vw,22px);white-space:nowrap}
+.c-purple{background:#1a1228;color:#b585f0;border-color:#2d2046}
+.c-green{background:#0b1b10;color:var(--ok);border-color:#173a22}
+.c-blue{background:#0b1426;color:#6c9cf0;border-color:#1a2d52}
+
+/* การ์ดแท็บ */
+.lst{border:1px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden}
+.tabs{display:flex;align-items:stretch;gap:20px;padding:0 18px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:8px;height:65px;flex:none;color:#8a8a93;font-weight:700;font-size:15px;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s}
+.tab svg{width:21px;height:21px;flex:none}
+.tab.on{color:#ee3b2d;border-color:#e8321f}
+.bd{font-style:normal;display:grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:#1c1c20;color:#9a9aa4;font-size:12.5px;font-weight:700}
+.tab.on .bd{background:#2c0c0c;color:#ff4a3a}
+
+/* ตาราง */
+.tw{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tw::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;min-width:880px}
+th{padding:0 18px;height:49px;text-align:left;color:#6e6e78;font-size:13.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;border-bottom:1px solid var(--line)}
+td{padding:17px 18px;vertical-align:middle;border-bottom:1px solid #131316;font-size:15.5px}
+tr:last-child td{border-bottom:0}
+.c{text-align:center}
+td.k{width:168px;min-width:168px}
+.kc{cursor:pointer;display:inline;font:500 14px/2.15 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#e6e6ea;background:#151517;border:1px solid #222226;border-radius:9px;padding:3px 8px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.kc:active{background:#1d1d20}
+td.n{font-weight:500;color:#ececf0}
+td.q{font-weight:500;color:#cfcfd6}
+td.u{color:#c9c9d0;font-weight:500}
+td.d{color:#8d8d96;line-height:1.6;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 15px 0 12px;border-radius:999px;font-weight:700;font-size:14.5px;white-space:nowrap;border:1px solid}
+.pill svg{width:22px;height:22px;flex:none}
+.pill.ready{background:#0b2414;border-color:#1b5a30;color:#5ecb7a}
+.pill.active{background:#0c1a33;border-color:#1c3d73;color:#6ea3ff}
+.pill.closed{background:#241012;border-color:#5a1d22;color:#ff7b7f}
+td.a{white-space:nowrap}
+.ab{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:11px;border:1px solid;font-weight:600;font-size:14.5px;margin-right:7px;transition:transform .12s,opacity .12s}
+.ab:active{transform:scale(.96);opacity:.85}
+.ab svg{width:15px;height:15px}
+.ab.b{background:#0b1427;border-color:#1c3566;color:#6c9cf0}
+.ab.y{background:#231706;border-color:#664510;color:#e8a52a}
+.ab.r{background:#230b0f;border-color:#5a1b24;color:#ff7885;padding:0 11px;margin-right:0}
+.ab.g{background:#0b2012;border-color:#1b5a30;color:#5ecb7a}
+.empty{position:sticky;left:0;text-align:center;color:#74747e;font-size:15.5px;padding:34px 18px}
+.tdE{padding:0;border:0}
+.sbar{height:6px;margin:0 18px 12px;border-radius:3px;position:relative;visibility:hidden}
+.sbar.on{visibility:visible}
+.sbar i{position:absolute;top:0;bottom:0;left:0;border-radius:3px;background:#34343a}
+
+/* แท็บราคาเริ่มต้น */
+.pp{padding:16px 18px 18px}
+.pp .hint{color:#74747e;font-size:14px;line-height:1.55;margin-bottom:14px}
+.sf{position:relative;display:block;margin-bottom:12px}
+.sf svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:#6a6a74;pointer-events:none}
+.sf input{width:100%;height:46px;border-radius:12px;border:1px solid #1f1f23;background:#000;padding:0 14px 0 42px;outline:none;font-size:15.5px}
+.sf input:focus{border-color:#5a1f19}
+.sf input::placeholder{color:#62626c}
+.pl{display:grid;gap:0;border:1px solid #1a1a1e;border-radius:14px;overflow:hidden;background:#000}
+.pr{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #141417}
+.pr:last-child{border-bottom:0}
+.pr .t{flex:1;min-width:0}
+.pr .t b{display:block;font-size:15.5px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.pr .t b em{font-style:normal;color:#8f8f99;font-weight:500}
+.pr .t small{display:block;margin-top:2px;color:#6e6e78;font-size:13px;line-height:1.5}
+.pr .t small s{text-decoration:none;color:#9a9aa4}
+.pin{position:relative;flex:none;width:132px}
+.pin span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#6e6e78;font-size:15px;pointer-events:none}
+.pin input{width:100%;height:42px;border-radius:11px;border:1px solid #232327;background:#0a0a0b;padding:0 12px 0 28px;outline:none;font-size:15.5px;font-weight:600;color:#fff;text-align:right}
+.pin input:focus{border-color:#7a2820}
+.pin input.chg{border-color:#7a2820;color:#ff6a5a}
+.pin input::placeholder{color:#4e4e57;font-weight:400}
+.go{width:100%;height:47px;border-radius:14px;background:var(--redbtn);color:#fff;font-weight:700;font-size:16px;margin-top:14px;box-shadow:0 8px 26px rgba(var(--red-rgb),.3);transition:transform .15s,opacity .15s}
+.go.pure{background:var(--red)}
+.go:active{transform:scale(.985)}
+.go:disabled{opacity:.5}
+.go.ghost{background:#17171a;box-shadow:none;color:#d6d6dc;font-weight:600}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.row2 .go{margin-top:0}
+.nope{padding:30px 10px;text-align:center;color:#74747e;font-size:15px}
+
+/* หน้าต่าง (กลางจอ) */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.76);display:none;align-items:center;justify-content:center;padding:17px}
+.ov.show{display:flex}
+.mdl{width:100%;max-width:520px;max-height:calc(100% - 20px);overflow-y:auto;background:#141414;border:1px solid #2a2a2e;border-radius:18px;padding:23px 22px 22px;animation:pop .22s ease;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+@keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.mdl h3{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:21px;font-weight:700;line-height:1.3;margin-bottom:20px}
+.mdl h3 button{width:34px;height:34px;flex:none;border-radius:50%;background:#1f1f22;border:1px solid #333338;display:grid;place-items:center;color:#d0d0d6}
+.mdl h3 button svg{width:15px;height:15px}
+.mdl .ms{margin:-12px 0 16px;color:#8b8b95;font-size:14.5px;line-height:1.55;overflow-wrap:anywhere}
+.fld{margin-bottom:15px}
+.fld label{display:block;margin-bottom:9px;color:#dcdce0;font-size:14.5px;font-weight:600;line-height:1.45}
+.fld input{width:100%;height:48px;border-radius:12px;border:1px solid #1f1f23;background:#000;padding:0 16px;outline:none;font-size:16px}
+.fld input:focus{border-color:#5a1f19}
+.fld input::placeholder{color:#5f5f69}
+.mdl .pl{max-height:min(46vh,380px);overflow-y:auto;overscroll-behavior:contain}
+.mdl .hint{color:#74747e;font-size:13px;line-height:1.55;margin-top:12px}
+.snack2{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid #2a2a30;padding:11px 18px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.25s;z-index:120;max-width:90%;text-align:center}
+.snack2.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:380px){.pin{width:112px}.ttl h2{font-size:23px}.st b{font-size:23px}}
+</style>
+<script>window.EX_THEME_ADMIN=1</script>
+<script src="theme.js"></script>
+<script src="admin-i18n.js"></script>
+<script src="i18n.js"></script>
+<script src="admin-lang.js"></script>
+</head>
+<body>
+<script src="admin-nav.js"></script>
+<div class="wrap">
+  <div class="ttl"><i></i><h2>ຕົວແທນຈຳໜ່າຍ</h2></div>
+  <p class="sub">ຈັດການ API Key ແລະລາຄາສິນຄ້າຂອງຕົວແທນແຕ່ລະຄົນ</p>
+
+  <button class="add" id="addBtn" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 2a6.5 6.5 0 0 0-6.2 8.4L2.3 16.4V21h4.6v-2.1H9V17h2.1l1.5-1.5A6.5 6.5 0 1 0 14.5 2zm2.2 4.4a1.7 1.7 0 1 1 0 3.4 1.7 1.7 0 0 1 0-3.4z"/></svg>ສ້າງ API Key ໃໝ່</button>
+  <div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+  <div class="stats">
+    <div class="st"><div class="ic c-purple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 2a6.5 6.5 0 0 0-6.2 8.4L2.3 16.4V21h4.6v-2.1H9V17h2.1l1.5-1.5A6.5 6.5 0 1 0 14.5 2zm2.2 4.4a1.7 1.7 0 1 1 0 3.4 1.7 1.7 0 0 1 0-3.4z"/></svg></div><div class="tx"><b id="sKeys">0</b><small>Key ທັງໝົດ</small></div></div>
+    <div class="st"><div class="ic c-green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 4.5 5.4v5.7c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4z"/></svg></div><div class="tx"><b id="sAg">0</b><small>ຕົວແທນທີ່ໃຊ້ງານ</small></div></div>
+    <div class="st"><div class="ic c-blue"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3h6.4c.4 0 .8.2 1.1.4l8.1 8.1a1.5 1.5 0 0 1 0 2.1l-6.4 6.4a1.5 1.5 0 0 1-2.1 0L3.4 12A1.5 1.5 0 0 1 3 10.9zM7.5 6.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div class="tx"><b id="sPr">0</b><small>ສິນຄ້າທີ່ຕັ້ງລາຄາແລ້ວ</small></div></div>
+    <div class="st"><div class="ic c-green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg></div><div class="tx"><b class="money" id="sSl">₭0</b><small>ຍອດຂາຍຜ່ານຕົວແທນ</small></div></div>
+  </div>
+
+  <div class="lst">
+    <div class="tabs" role="tablist">
+      <button class="tab on" type="button" role="tab" data-tab="keys" aria-selected="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 2a6.5 6.5 0 0 0-6.2 8.4L2.3 16.4V21h4.6v-2.1H9V17h2.1l1.5-1.5A6.5 6.5 0 1 0 14.5 2zm2.2 4.4a1.7 1.7 0 1 1 0 3.4 1.7 1.7 0 0 1 0-3.4z"/></svg><span>API Keys</span><i class="bd" id="bdK">0</i></button>
+      <button class="tab" type="button" role="tab" data-tab="prices" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5A1.5 1.5 0 0 1 4.5 4h15A1.5 1.5 0 0 1 21 5.5V8H3zM4 9.5h16v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5zM9.5 12.2a.9.9 0 0 0 0 1.8h5a.9.9 0 0 0 0-1.8z"/></svg><span>ລາຄາສິນຄ້າຕົວແທນ</span><i class="bd" id="bdP">0/0</i></button>
+    </div>
+
+    <div id="pKeys">
+      <div class="tw" id="tw">
+        <table>
+          <thead><tr>
+            <th>API KEY</th><th class="c">ຊື່/ໝາຍເຫດ</th><th class="c">ໂຄວຕ້າ/ອາທິດ</th><th>ສະຖານະ</th><th>ຕົວແທນ (ຜູ້ໃຊ້)</th><th>ວັນທີສ້າງ</th><th>ຈັດການ</th>
+          </tr></thead>
+          <tbody id="rows"><tr><td class="tdE" colspan="7"><div class="empty">ກຳລັງໂຫຼດ...</div></td></tr></tbody>
+        </table>
+      </div>
+      <div class="sbar" id="sbar"><i id="sthumb"></i></div>
+    </div>
+
+    <div id="pPrices" class="pp" hidden>
+      <p class="hint">ລາຄານີ້ໃຊ້ກັບຕົວແທນທຸກຄົນທີ່ຍັງບໍ່ໄດ້ຕັ້ງລາຄາສິນຄ້ານັ້ນເອງ</p>
+      <label class="sf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="dq" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ..." autocomplete="off"></label>
+      <div class="pl" id="dList"><div class="nope">ກຳລັງໂຫຼດ...</div></div>
+      <button class="go" id="dSave" type="button">ບັນທຶກລາຄາເລີ່ມຕົ້ນ</button>
+    </div>
+  </div>
+</div>
+
+<!-- สร้าง API Key -->
+<div class="ov" id="ovNew">
+  <form class="mdl" id="fNew" autocomplete="off">
+    <h3>ສ້າງ API Key ໃໝ່ <button type="button" data-close aria-label="ປິດ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></h3>
+    <div class="fld"><label for="nNote">ຊື່/ໝາຍເຫດ (Note)</label><input id="nNote" maxlength="80" placeholder="ເຊັ່ນ ສາຍເຕີມ A, ກຸ່ມລັບ"></div>
+    <div class="fld"><label for="nCnt">ຈຳນວນ Key ທີ່ຈະສ້າງ</label><input id="nCnt" type="number" inputmode="numeric" min="1" max="50" value="1"></div>
+    <div class="fld"><label for="nQuota">ໂຄວຕາລາຍອາທິດ (ຍອດຊື້ຂັ້ນຕ່ຳ/ກີບ)</label><input id="nQuota" type="number" inputmode="numeric" min="0" value="0"></div>
+    <button class="go pure" id="nGo" type="submit">+ ຢືນຢັນການສ້າງ API Key</button>
+  </form>
+</div>
+
+<!-- ราคาของตัวแทนคนนี้ -->
+<div class="ov" id="ovPrice">
+  <div class="mdl">
+    <h3>ລາຄາຂອງຄົນນີ້ <button type="button" data-close aria-label="ປິດ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></h3>
+    <div class="ms" id="pSub"></div>
+    <label class="sf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ..." autocomplete="off"></label>
+    <div class="pl" id="pList"><div class="nope">ກຳລັງໂຫຼດ...</div></div>
+    <div class="hint">ເວັ້ນວ່າງ = ໃຊ້ລາຄາເລີ່ມຕົ້ນຂອງຕົວແທນ ຫຼື ລາຄາປົກກະຕິ</div>
+    <button class="go" id="pSave" type="button">ບັນທຶກລາຄາ</button>
+  </div>
+</div>
+
+<!-- ยืนยันลบ -->
+<div class="ov" id="ovDel">
+  <div class="mdl">
+    <h3>ລຶບ API Key ນີ້ບໍ? <button type="button" data-close aria-label="ປິດ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></h3>
+    <div class="ms" id="dSub"></div>
+    <div class="row2"><button class="go ghost" type="button" data-close>ຍົກເລີກ</button><button class="go" id="dGo" type="button">ລຶບ</button></div>
+  </div>
+</div>
+<div class="snack2" id="toast"></div>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var nf = new Intl.NumberFormat('en-US');
+  var rows = [], defItems = [], curId = null, priceItems = [], tt, delId = null;
+  var fmt = function(n){ return '₭' + nf.format(Number(n) || 0); };
+  var fmtC = function(n){ n = Number(n) || 0; return n >= 1e7 ? '₭' + (Math.round(n / 1e5) / 10).toLocaleString('en-US') + 'M' : fmt(n); };
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2400); }
+  function say(m, bad){ var e = $('#msg'); e.textContent = m || ''; e.className = 'msg' + (m ? ' on' : '') + (bad ? ' err' : ''); }
+  function tok(){ return exToken(); }
+  var MSG = {
+    not_admin: 'ບໍ່ມີສິດດຳເນີນການ', notfound: 'ບໍ່ພົບຂໍ້ມູນ', bad_count: 'ຈຳນວນ Key ຕ້ອງເປັນ 1–50', bad_quota: 'ໂຄວຕາບໍ່ຖືກຕ້ອງ',
+    bad_price: 'ລາຄາຕ້ອງເປັນຕົວເລກເທົ່ານັ້ນ', bad_items: 'ຂໍ້ມູນບໍ່ຖືກຕ້ອງ', bad_status: 'ສະຖານະບໍ່ຖືກຕ້ອງ'
+  };
+  var NET = 'ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້';
+
+  var I_CHECK = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.6 12.3 3 3 5.8-6.2" fill="none" stroke="#06140b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var I_USER = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="12" cy="9.4" r="2.7" fill="#06101f"/><path d="M6.8 17.2c.6-2.4 2.6-3.6 5.2-3.6s4.6 1.2 5.2 3.6a8.2 8.2 0 0 1-10.4 0z" fill="#06101f"/></svg>';
+  var I_X = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8.6 8.6 6.8 6.8M15.4 8.6l-6.8 6.8" fill="none" stroke="#1c0709" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  var I_TRASH = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3h6a1 1 0 0 1 1 1v1.5h4a.9.9 0 0 1 0 1.8h-1l-.8 11.4A2.5 2.5 0 0 1 15.7 21H8.3a2.5 2.5 0 0 1-2.5-2.3L5 7.3H4a.9.9 0 0 1 0-1.8h4V4a1 1 0 0 1 1-1zm.8 1.8v.7h4.4v-.7zM9.6 10a.8.8 0 0 0-.8.9l.4 6a.8.8 0 0 0 1.6-.1l-.4-6A.8.8 0 0 0 9.6 10zm4.8 0a.8.8 0 0 0-.8.8l-.4 6a.8.8 0 0 0 1.6.1l.4-6a.8.8 0 0 0-.8-.9z"/></svg>';
+  var I_X2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  var I_REF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4.5h-4.5"/></svg>';
+
+  /* ตรวจสิทธิ์แอดมิน (ตรวจซ้ำที่ฝั่ง Supabase ทุกครั้งที่เรียกข้อมูล) */
+  function gate(){
+    if(!tok()){ try{ sessionStorage.setItem('exNext','admin-agents.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
+    exRpc('member_is_admin', { p_token: tok() }).then(function(j){
+      if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
+    }).catch(function(){ $('#rows').innerHTML = '<tr><td class="tdE" colspan="7"><div class="empty">' + NET + '</div></td></tr>'; });
+  }
+
+  function load(){
+    return exRpc('adm_agent_list', { p_token: tok() }).then(function(j){
+      if(!j || !j.ok){ $('#rows').innerHTML = '<tr><td class="tdE" colspan="7"><div class="empty">ບໍ່ມີສິດເຂົ້າເຖິງ</div></td></tr>'; return; }
+      rows = j.rows || [];
+      var s = j.stats || {}, d = j.defaults || {};
+      $('#sKeys').textContent = nf.format(s.keys || 0);
+      $('#sAg').textContent = nf.format(s.agents || 0);
+      $('#sPr').textContent = nf.format(s.priced || 0);
+      $('#sSl').textContent = fmtC(s.sales);
+      $('#bdK').textContent = nf.format(rows.length);
+      $('#bdP').textContent = nf.format(d.set || 0) + '/' + nf.format(d.total || 0);
+      render(); thumb();
+    }).catch(function(){ $('#rows').innerHTML = '<tr><td class="tdE" colspan="7"><div class="empty">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div></td></tr>'; });
+  }
+
+  function dt(s){
+    if(!s) return '-';
+    var d = new Date(s), p = function(n){ return String(n).padStart(2, '0'); };
+    return '<span>' + p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + '</span><br><span>' + p(d.getHours()) + ':' + p(d.getMinutes()) + '</span>';
+  }
+  function pill(st){
+    if(st === 'active') return '<span class="pill active">' + I_USER + 'ໃຊ້ງານຢູ່</span>';
+    if(st === 'closed') return '<span class="pill closed">' + I_X + 'ປິດແລ້ວ</span>';
+    return '<span class="pill ready">' + I_CHECK + 'ພ້ອມໃຊ້</span>';
+  }
+
+  function render(){
+    if(!rows.length){ $('#rows').innerHTML = '<tr><td class="tdE" colspan="7"><div class="empty">ຍັງບໍ່ມີ API Key — ກົດສ້າງໃໝ່ໄດ້ເລີຍ</div></td></tr>'; return; }
+    $('#rows').innerHTML = rows.map(function(r){
+      var closed = r.status === 'closed';
+      return '<tr data-id="' + esc(r.id) + '">'
+        + '<td class="k"><code class="kc" data-copy="' + esc(r.key) + '" title="ຄັດລອກ">' + esc(r.key) + '</code></td>'
+        + '<td class="c n">' + (r.note ? esc(r.note) : '-') + '</td>'
+        + '<td class="c q">' + fmt(r.weekly_quota) + '</td>'
+        + '<td>' + pill(r.status) + '</td>'
+        + '<td class="u">' + (r.username ? esc(r.username) : '-') + '</td>'
+        + '<td class="d">' + dt(r.created_at) + '</td>'
+        + '<td class="a"><button class="ab b" type="button" data-act="price">ຈັດການລາຄາ</button>'
+        + (closed ? '<button class="ab g" type="button" data-act="open">' + I_REF + 'ເປີດ</button>' : '<button class="ab y" type="button" data-act="close">' + I_X2 + 'ປິດ</button>')
+        + '<button class="ab r" type="button" data-act="del" aria-label="ລຶບ">' + I_TRASH + '</button></td></tr>';
+    }).join('');
+  }
+
+  /* แถบเลื่อนแนวนอน (ขีดเล็กๆ ใต้ตาราง) */
+  var tw = $('#tw'), sbar = $('#sbar'), th = $('#sthumb');
+  function thumb(){
+    var over = tw.scrollWidth - tw.clientWidth;
+    sbar.classList.toggle('on', over > 2);
+    if(over <= 2) return;
+    var w = Math.max(40, sbar.clientWidth * tw.clientWidth / tw.scrollWidth);
+    th.style.width = w + 'px';
+    th.style.transform = 'translateX(' + ((sbar.clientWidth - w) * tw.scrollLeft / over) + 'px)';
+  }
+  tw.addEventListener('scroll', thumb, { passive: true });
+  window.addEventListener('resize', thumb);
+
+  /* แท็บ */
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.tab;
+      document.querySelectorAll('.tab').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+      $('#pKeys').hidden = k !== 'keys'; $('#pPrices').hidden = k !== 'prices';
+      if(k === 'keys') thumb(); else loadDefaults();
+    });
+  });
+
+  /* ===== รายการราคา (ใช้ร่วม: ตัวแทนรายคน / ราคาเริ่มต้น) ===== */
+  function itemRows(items, q, mode){
+    q = (q || '').trim().toLowerCase();
+    var list = items.filter(function(it){ return !q || String(it.name).toLowerCase().indexOf(q) > -1 || String(it.dur_label).toLowerCase().indexOf(q) > -1; });
+    if(!list.length) return '<div class="nope">' + (items.length ? 'ບໍ່ພົບສິນຄ້າທີ່ຄົ້ນຫາ' : 'ຍັງບໍ່ມີສິນຄ້າ') + '</div>';
+    return list.map(function(it){
+      var i = items.indexOf(it), hint = '';
+      if(mode === 'agent' && it.def != null) hint = '<small><span>ລາຄາເລີ່ມຕົ້ນ</span> <s>' + fmt(it.def) + '</s></small>';
+      return '<div class="pr"><div class="t"><b>' + esc(it.name) + (it.dur_label ? ' <em>· ' + esc(it.dur_label) + '</em>' : '') + '</b>'
+        + '<small><span>ລາຄາປົກກະຕິ</span> <s>' + fmt(it.base) + '</s></small>' + hint + '</div>'
+        + '<div class="pin"><span>₭</span><input type="text" inputmode="numeric" autocomplete="off" data-i="' + i + '" value="' + (it.price == null ? '' : esc(it.price)) + '" placeholder="' + esc(it.price == null ? (mode === 'agent' && it.def != null ? it.def : it.base) : '') + '"></div></div>';
+    }).join('');
+  }
+  function bindInputs(box, items){
+    box.oninput = function(e){
+      var inp = e.target; if(!inp.matches || !inp.matches('.pin input')) return;
+      var v = inp.value.replace(/[^\d]/g, ''); if(v !== inp.value) inp.value = v;
+      var it = items[Number(inp.dataset.i)]; if(!it) return;
+      it.edit = v === '' ? null : v;
+      inp.classList.toggle('chg', String(it.edit == null ? '' : it.edit) !== String(it.price == null ? '' : it.price));
+    };
+  }
+  function collect(items){
+    return items.map(function(it){
+      var v = it.hasOwnProperty('edit') ? it.edit : (it.price == null ? null : it.price);
+      return { product_id: it.product_id, dur_label: it.dur_label || '', price: v == null ? null : String(v) };
+    });
+  }
+
+  /* ===== ราคาของตัวแทนคนนี้ ===== */
+  function openPrice(id){
+    var r = rows.filter(function(x){ return String(x.id) === String(id); })[0]; if(!r) return;
+    curId = r.id; priceItems = [];
+    $('#pSub').textContent = (r.note || '-') + ' · ' + (r.username || r.key);
+    $('#pq').value = ''; $('#pList').innerHTML = '<div class="nope">ກຳລັງໂຫຼດ...</div>';
+    $('#ovPrice').classList.add('show');
+    exRpc('adm_agent_prices_get', { p_token: tok(), p_id: r.id }).then(function(j){
+      if(!j || !j.ok){ $('#pList').innerHTML = '<div class="nope">' + (MSG[j && j.code] || 'ໂຫຼດຂໍ້ມູນບໍ່ໄດ້') + '</div>'; return; }
+      priceItems = j.items || [];
+      $('#pList').innerHTML = itemRows(priceItems, '', 'agent'); bindInputs($('#pList'), priceItems);
+    }).catch(function(){ $('#pList').innerHTML = '<div class="nope">' + NET + '</div>'; });
+  }
+  $('#pq').addEventListener('input', function(){ $('#pList').innerHTML = itemRows(priceItems, this.value, 'agent'); });
+  $('#pSave').onclick = function(){
+    var b = this; if(b.disabled || !priceItems.length) return; b.disabled = true;
+    exRpc('adm_agent_prices_save', { p_token: tok(), p_id: curId, p_items: collect(priceItems) }).then(function(j){
+      b.disabled = false;
+      if(j && j.ok){ closeAll(); toast('ບັນທຶກລາຄາແລ້ວ'); load(); }
+      else toast(MSG[j && j.code] || 'ບັນທຶກບໍ່ສຳເລັດ');
+    }).catch(function(){ b.disabled = false; toast(NET); });
+  };
+
+  /* ===== ราคาเริ่มต้น (แท็บ 2) ===== */
+  function loadDefaults(){
+    $('#dList').innerHTML = '<div class="nope">ກຳລັງໂຫຼດ...</div>';
+    exRpc('adm_agent_default_get', { p_token: tok() }).then(function(j){
+      if(!j || !j.ok){ $('#dList').innerHTML = '<div class="nope">' + (MSG[j && j.code] || 'ໂຫຼດຂໍ້ມູນບໍ່ໄດ້') + '</div>'; return; }
+      defItems = j.items || [];
+      $('#dList').innerHTML = itemRows(defItems, $('#dq').value, 'def'); bindInputs($('#dList'), defItems);
+    }).catch(function(){ $('#dList').innerHTML = '<div class="nope">' + NET + '</div>'; });
+  }
+  $('#dq').addEventListener('input', function(){ $('#dList').innerHTML = itemRows(defItems, this.value, 'def'); });
+  $('#dSave').onclick = function(){
+    var b = this; if(b.disabled || !defItems.length) return; b.disabled = true;
+    exRpc('adm_agent_default_save', { p_token: tok(), p_items: collect(defItems) }).then(function(j){
+      b.disabled = false;
+      if(j && j.ok){ toast('ບັນທຶກລາຄາແລ້ວ'); load(); loadDefaults(); }
+      else toast(MSG[j && j.code] || 'ບັນທຶກບໍ່ສຳເລັດ');
+    }).catch(function(){ b.disabled = false; toast(NET); });
+  };
+
+  /* ===== แถวตาราง: คัดลอก / จัดการราคา / ปิด-เปิด / ลบ ===== */
+  $('#rows').addEventListener('click', function(e){
+    var cp = e.target.closest('[data-copy]');
+    if(cp){
+      var v = cp.dataset.copy;
+      (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ toast('ຄັດລອກ Key ແລ້ວ'); }, function(){
+        var rg = document.createRange(); rg.selectNodeContents(cp); var s = getSelection(); s.removeAllRanges(); s.addRange(rg); toast('ເລືອກ Key ແລ້ວ ກົດຄັດລອກໄດ້ເລີຍ');
+      });
+      return;
+    }
+    var b = e.target.closest('[data-act]'); if(!b) return;
+    var tr = b.closest('tr'), id = tr.dataset.id, a = b.dataset.act;
+    if(a === 'price') return openPrice(id);
+    if(a === 'del'){
+      var r = rows.filter(function(x){ return String(x.id) === String(id); })[0]; if(!r) return;
+      delId = r.id; $('#dSub').textContent = r.key + (r.note ? ' · ' + r.note : '');
+      $('#ovDel').classList.add('show'); return;
+    }
+    if(b.disabled) return; b.disabled = true;
+    exRpc('adm_agent_set_status', { p_token: tok(), p_id: Number(id), p_status: a === 'close' ? 'closed' : 'open' }).then(function(j){
+      if(j && j.ok){ say(a === 'close' ? 'ປິດ API Key ແລ້ວ' : 'ເປີດ API Key ແລ້ວ'); load(); }
+      else { b.disabled = false; say(MSG[j && j.code] || 'ດຳເນີນການບໍ່ສຳເລັດ', true); }
+    }).catch(function(){ b.disabled = false; say(NET, true); });
+  });
+  $('#dGo').onclick = function(){
+    var b = this; if(b.disabled || delId == null) return; b.disabled = true;
+    exRpc('adm_agent_delete', { p_token: tok(), p_id: delId }).then(function(j){
+      b.disabled = false; closeAll();
+      if(j && j.ok){ say('ລຶບ API Key ແລ້ວ'); load(); } else say(MSG[j && j.code] || 'ລຶບບໍ່ສຳເລັດ', true);
+    }).catch(function(){ b.disabled = false; closeAll(); say(NET, true); });
+  };
+
+  /* ===== สร้าง API Key ===== */
+  $('#addBtn').onclick = function(){ $('#fNew').reset(); $('#nCnt').value = 1; $('#nQuota').value = 0; $('#ovNew').classList.add('show'); setTimeout(function(){ $('#nNote').focus(); }, 80); };
+  $('#fNew').addEventListener('submit', function(e){
+    e.preventDefault();
+    var b = $('#nGo'); if(b.disabled) return;
+    var cnt = parseInt($('#nCnt').value, 10), q = parseInt($('#nQuota').value || '0', 10);
+    if(!(cnt >= 1 && cnt <= 50)){ toast(MSG.bad_count); return; }
+    if(!(q >= 0)){ toast(MSG.bad_quota); return; }
+    b.disabled = true;
+    exRpc('adm_agent_create', { p_token: tok(), p_note: $('#nNote').value.trim(), p_count: cnt, p_quota: q }).then(function(j){
+      b.disabled = false;
+      if(j && j.ok){ closeAll(); say('ສ້າງ API Key ສຳເລັດ'); load(); }
+      else toast(MSG[j && j.code] || 'ສ້າງບໍ່ສຳເລັດ');
+    }).catch(function(){ b.disabled = false; toast(NET); });
+  });
+
+  /* เปิด/ปิดหน้าต่าง */
+  function closeAll(){ document.querySelectorAll('.ov').forEach(function(o){ o.classList.remove('show'); }); }
+  document.querySelectorAll('.ov').forEach(function(o){
+    o.addEventListener('click', function(e){ if(e.target === o || e.target.closest('[data-close]')) closeAll(); });
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && !document.querySelector('.ov.show')) load(); });
+  gate();
+})();
+</script>
+<script src="notify.js"></script>
+</body>
+</html>
