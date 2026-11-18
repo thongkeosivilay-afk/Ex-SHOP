@@ -12,9 +12,9 @@
     const tot = Number(p.left) || 0;
     /* ราคาตัวแทน (ถ้าบัญชีนี้เป็นตัวแทน): ใช้ราคาที่ตั้งไว้แทนราคาปกติ — เซิร์ฟเวอร์คิดราคาเดียวกันตอนซื้อจริง */
     const A = (k, v) => { const a = ag && ag[p.id + '|' + k]; return a == null ? v : a; };
-    if(p.durs && p.durs.length) return p.durs.map(d => { const v = A(d.label, d.price); return { l: d.label, k: d.label, o: v, p: v, s: d.stock == null ? tot : d.stock }; });
+    if(p.durs && p.durs.length) return p.durs.map(d => { const v = A(d.label, d.price); return { l: d.label, k: d.label, o: d.price, p: v, s: d.stock == null ? tot : d.stock }; });
     const v = A('', p.price);
-    return [{ l: p.n, k: '', o: v, p: v, s: tot }];
+    return [{ l: p.n, k: '', o: p.price, p: v, s: tot }];
   }
 
   /* ยอดเงินบนแถบหัว/โปรไฟล์ อ่านจาก localStorage 'exshop_balance' → ซิงก์ค่าจริงจากเซิร์ฟเวอร์ลงไป */
@@ -42,6 +42,7 @@
   const OKI = '<svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
   const LIST = '<svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r=".6"/><circle cx="3.5" cy="12" r=".6"/><circle cx="3.5" cy="18" r=".6"/></svg>';
   const TICKET = '<svg class="i" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>';
+  const AGI = '<svg class="i" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m15 9-6 6"/><path d="M9 9h.01M15 15h.01"/></svg>';
   const CHEV = '<svg class="i" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg>';
 
   const root = document.getElementById('cfApp');
@@ -119,7 +120,7 @@
     $('#cfOpts').innerHTML = rows.length ? rows.map(({o,i})=>`
       <button class="cf-or${i===sel?' on':''}${o.s?'':' off'}" data-i="${i}" ${o.s?'':'disabled'}>
         <span class="cf-oi">${artSq('', cur.img)}</span>
-        <span class="cf-ot"><b>${escH(o.l)}</b><span class="cf-op">${o.o > o.p ? `<s>${m2(o.o)}</s>` : ''}<em>${m2(o.p)}</em></span></span>
+        <span class="cf-ot"><b>${escH(o.l)}</b><span class="cf-op">${o.o > o.p ? `<s>${m2(o.o)}</s>` : ''}<em>${m2(o.p)}</em>${o.o > o.p ? `<i class="cf-ag">${AGI}ຕົວແທນ</i>` : ''}</span></span>
         <span class="cf-ob ${o.s?'ok':'no'}">${o.s ? o.s+' ຊິ້ນ' : 'ສິນຄ້າໝົດ'}</span>
       </button>`).join('') : '<div class="cf-none">ບໍ່ພົບຕົວເລືອກ</div>';
   }
@@ -131,7 +132,9 @@
     renderList();
     const ps=opts.map(x=>x.p), mx=Math.max(...opts.map(x=>x.o ? (1-x.p/x.o)*100 : 0));
     const lo=Math.min(...ps), hi=Math.max(...ps);
-    $('#cfRange').textContent = lo===hi ? m2(lo) : m2(lo)+' – '+m2(hi);
+    const rg = (a,b) => a===b ? m2(a) : m2(a)+' – '+m2(b);
+    const os=opts.map(x=>x.o), olo=Math.min(...os), ohi=Math.max(...os);
+    $('#cfRange').innerHTML = (olo>lo || ohi>hi ? `<s>${rg(olo,ohi)}</s>` : '') + `<span>${rg(lo,hi)}</span>`;
     $('#cfPct').textContent = mx.toFixed(2)+' %';
     document.querySelector('.cf-info .b').style.display = mx>0 ? '' : 'none';
     $('#cfQty').textContent = qty;

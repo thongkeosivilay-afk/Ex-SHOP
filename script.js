@@ -329,6 +329,7 @@ $('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSH
 /* ข้อมูลสินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ทุกส่วน */
 function onProducts(){ renderProducts(); featUI.build(); renderCatList(); renderStats(); }
 document.addEventListener('products:ready', onProducts);
+document.addEventListener('agent:ready', onProducts);
 document.addEventListener('cats:ready', () => { renderCatList(); });
 if(window.productsLoaded) onProducts();
 

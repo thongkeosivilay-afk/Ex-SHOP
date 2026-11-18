@@ -397,3 +397,11 @@ html.is-in .hb-bal{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) 
 .foot-heart{width:17px;height:17px;fill:none;stroke:var(--red);stroke-width:1.8;stroke-linejoin:round}
 .foot-by{opacity:.6}
 @media (prefers-reduced-motion:reduce){.foot-dot{animation:none}}
+
+/* ===== การ์ดสินค้าของตัวแทน: ป้าย "ລາຄາຕົວແທນ" + ราคาเดิมขีดทับ (อยู่ใต้รูปมุมขวา) ===== */
+.pti.ag{background:linear-gradient(135deg,#ff5a5a,#d90f0f);box-shadow:0 0 10px rgba(255,40,40,.45)}
+.pti.ag svg{width:68%;height:68%}
+.pc.is-ag .ptt{background:linear-gradient(90deg,#ffd978,#f7c84a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.pold{height:0;display:flex;justify-content:flex-end;padding-right:5.2cqw;position:relative;z-index:1;pointer-events:none}
+.pold s{margin-top:2.4cqw;font-size:max(11px,4.4cqw);line-height:1.2;color:#9a9aa4;white-space:nowrap;text-decoration-line:line-through;text-decoration-color:#ff4d4d;text-decoration-thickness:1.5px}
+.pc.is-ag .pname{margin-top:8.6cqw}

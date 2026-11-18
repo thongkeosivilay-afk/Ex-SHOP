@@ -291,6 +291,7 @@
   render();
   /* สินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ */
   document.addEventListener('products:ready', render);
+  document.addEventListener('agent:ready', render);
   /* หมวดหมู่มาจากฐานข้อมูล: โหลดเสร็จ → อ่านหมวดจากลิงก์ (?cat=...) แล้ววาดใหม่ */
   document.addEventListener('cats:ready', () => {
     const c = new URLSearchParams(location.search).get('cat');

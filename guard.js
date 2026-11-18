@@ -41,7 +41,7 @@
   window.exClearLocal = function () {
     try {
       ['exSession', 'exSessionAt'].forEach(function (k) { localStorage.removeItem(k); sessionStorage.removeItem(k); });
-      localStorage.removeItem('exUser'); localStorage.removeItem('exIsAgent');
+      localStorage.removeItem('exUser'); localStorage.removeItem('exIsAgent'); localStorage.removeItem('exAgentCache');
     } catch (e) {}
   };
   window.exLogout = function () {

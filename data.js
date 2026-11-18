@@ -165,17 +165,63 @@ function loadCategories(){
     .finally(() => clearTimeout(to));
 }
 
+/* ราคาตัวแทน (บัญชีที่เปิดใช้ API Key ตัวแทนแล้ว): ดึงจาก member_agent_prices → window.exAgentMap = { 'รหัสสินค้า|ตัวเลือก': ราคา }
+   null = ไม่ใช่ตัวแทน/ยังไม่ล็อกอิน · โหลดเสร็จ (หรือเปลี่ยน) แล้วยิงอีเวนต์ 'agent:ready' ให้หน้าวาดการ์ดใหม่
+   จำผลไว้ใน localStorage 'exAgentCache' (ผูกกับ token) เพื่อให้การ์ดขึ้นราคาตัวแทนทันทีไม่กะพริบ */
+const AGCACHE = 'exAgentCache';
+window.exAgentMap = null;
+function agTok(){ try { return localStorage.getItem('exSession') || sessionStorage.getItem('exSession') || ''; } catch(e){ return ''; } }
+function agSet(prices){
+  if(!Array.isArray(prices)){ window.exAgentMap = null; return; }
+  const m = {}; prices.forEach(x => { m[x.product_id + '|' + (x.dur_label || '')] = Number(x.price) || 0; });
+  window.exAgentMap = m;
+}
+function loadAgentPrices(){
+  if(window.EX_NO_FETCH) return;
+  const t = agTok(), key = t.slice(0, 16);
+  if(!t){ try { localStorage.removeItem(AGCACHE); } catch(e){} agSet(null); return; }
+  try {
+    const c = JSON.parse(localStorage.getItem(AGCACHE) || 'null');
+    if(c && c.t === key && Array.isArray(c.p)){ agSet(c.p); document.dispatchEvent(new Event('agent:ready')); }
+    else if(c){ localStorage.removeItem(AGCACHE); }
+  } catch(e){}
+  fetch(EX_DB.url + '/rest/v1/rpc/member_agent_prices', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
+    body: JSON.stringify({ p_token: t })
+  }).then(r => r.json()).then(j => {
+    const had = !!window.exAgentMap;
+    if(j && j.ok && j.agent){
+      try { localStorage.setItem(AGCACHE, JSON.stringify({ t: key, p: j.prices || [] })); } catch(e){}
+      agSet(j.prices || []); document.dispatchEvent(new Event('agent:ready'));
+    } else if(j && (j.ok === false || j.agent === false)){
+      try { localStorage.removeItem(AGCACHE); } catch(e){}
+      agSet(null); if(had) document.dispatchEvent(new Event('agent:ready'));
+    }
+  }).catch(() => {});
+}
+/* ราคาเริ่มต้นสำหรับการ์ด: คืน { now: ราคาตัวแทนที่ถูกสุด, old: ราคาปกติของตัวเลือกเดียวกัน } เมื่อถูกกว่าราคาปกติ ไม่งั้น null */
+function exAgentFrom(p){
+  const m = window.exAgentMap; if(!m) return null;
+  const opts = p.durs && p.durs.length ? p.durs.map(d => ({ k: d.label, v: d.price })) : [{ k: '', v: p.price }];
+  let best = null;
+  opts.forEach(o => { const a = m[p.id + '|' + o.k], now = a == null ? o.v : a; if(!best || now < best.now) best = { now, old: o.v }; });
+  return best && best.now < best.old ? best : null;
+}
+
 /* การ์ดสินค้า 1 ใบ (ใช้ร่วมกันทั้งหน้าแรกและหน้าหมวดหมู่)
    i = ลำดับในรายการที่แสดง (ใส่ใน data-buy), nameHTML = ชื่อสินค้าที่ไฮไลต์คำค้นแล้ว (ไม่ใส่ = ใช้ชื่อปกติ) */
 function productCardHTML(p, i, nameHTML){
+  const ag = exAgentFrom(p);
+  const AGI = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m15 9-6 6"/><path d="M9 9h.01M15 15h.01"/></svg>';
   return `
-    <article class="pc${(p.update || p.soldout) ? ' is-upd' : ''}${(p.soldout && !p.update) ? ' is-out' : ''}" data-buy="${i}" role="button" tabindex="0"${(p.update || p.soldout) ? ' aria-disabled="true"' : ''}>
+    <article class="pc${(p.update || p.soldout) ? ' is-upd' : ''}${ag ? ' is-ag' : ''}${(p.soldout && !p.update) ? ' is-out' : ''}" data-buy="${i}" role="button" tabindex="0"${(p.update || p.soldout) ? ' aria-disabled="true"' : ''}>
       <div class="pci">
         <div class="pimg">
           ${artSq('', p.img)}
-          ${p.hot === false ? '' : `<div class="ptab"><span class="pti"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></span><span class="ptt">ຍອດນິຍົມ</span></div>`}
-          <div class="pnotch"><span class="pfrom">ເລີ່ມ</span><span class="pnow">${escH(p.p)}</span></div>
+          ${ag ? `<div class="ptab"><span class="pti ag">${AGI}</span><span class="ptt">ລາຄາຕົວແທນ</span></div>` : ''}${(ag || p.hot === false) ? '' : `<div class="ptab"><span class="pti"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></span><span class="ptt">ຍອດນິຍົມ</span></div>`}
+          <div class="pnotch"><span class="pfrom">ເລີ່ມ</span><span class="pnow">${escH(ag ? fmtKip(ag.now) : p.p)}</span></div>
         </div>
+        ${ag ? `<div class="pold"><s>${escH(fmtKip(ag.old))}</s></div>` : ''}
         <h3 class="pname">${nameHTML || escH(p.n)}</h3>
         <div class="pst">
           <span class="pk"><i>ຄັງ</i><b>${escH(p.left)}</b></span>
@@ -189,4 +235,5 @@ function productCardHTML(p, i, nameHTML){
 
 loadProducts();
 loadCategories();
+loadAgentPrices();
 loadSite();
