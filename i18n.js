@@ -6,6 +6,7 @@
 (function () {
   const ORDER = ['th', 'en', 'vi', 'hi', 'pt'];
   const D = {
+"ບໍ່ສະແດງອີກເປັນເວລາ 1 ຊົ່ວໂມງ": ["ไม่แสดงอีกเป็นเวลา 1 ชั่วโมง", "Don't show again for 1 hour", "Không hiển thị lại trong 1 giờ", "1 घंटे तक दोबारा न दिखाएँ", "Não mostrar novamente por 1 hora"],
 "ອອນລາຍ": ["ออนไลน์", "Online", "Trực tuyến", "ऑनलाइन", "Online"],
 "ຈື່ບັນຊີນີ້": ["จดจำบัญชีนี้", "Remember this account", "Ghi nhớ tài khoản này", "इस खाते को याद रखें", "Lembrar desta conta"],
 "ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານສ່ວນນີ້": ["กรุณาเข้าสู่ระบบก่อนใช้งานส่วนนี้", "Please sign in to use this feature", "Vui lòng đăng nhập để sử dụng tính năng này", "इस सुविधा का उपयोग करने के लिए कृपया साइन इन करें", "Faça login para usar este recurso"],

@@ -1,0 +1,28 @@
+/* ===== ຮູບໂປຣໂມຊັນ (ป๊อปอัปรูปโปรโมทตอนเข้าเว็บ) ===== */
+.pp{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s .55s}
+.pp.on{opacity:1;visibility:visible;transition:opacity .5s ease}
+.pp-bg{position:absolute;inset:0;background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(14px) saturate(1.1);backdrop-filter:blur(14px) saturate(1.1)}
+.pp-st{position:relative;display:flex;flex-direction:column;gap:14px;max-width:100%}
+.pp-card{position:relative;display:flex;justify-content:center;align-items:center;overflow:hidden;line-height:0;border-radius:22px;opacity:0;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 60px rgba(var(--red-rgb),.18),0 26px 70px rgba(0,0,0,.6)}
+.pp-card.in{animation:ppIn .75s cubic-bezier(.2,1.25,.35,1) both}
+.pp-card.out{animation:ppOut .3s cubic-bezier(.5,0,.75,0) both}
+.pp-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.22) 50%,transparent 62%);transform:translateX(-120%)}
+.pp-card.in::after{animation:ppShine 1.2s .45s ease-out both}
+.pp-img{display:block;max-width:100%;max-height:100%;-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+.pp-ctl{display:flex;align-items:stretch;gap:12px;opacity:0}
+.pp.on .pp-ctl{animation:ppUp .55s .4s cubic-bezier(.2,.9,.3,1) both}
+.pp-chk,.pp-x{min-height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:#050505;color:#fff;font:500 14px/1.25 var(--font);transition:transform .15s,border-color .25s,background .25s}
+:root:not([data-theme="dark"]) .pp-chk,:root:not([data-theme="dark"]) .pp-x{background:#fff;color:#1b1b1d;border-color:rgba(0,0,0,.12)}
+.pp-chk:active,.pp-x:active{transform:scale(.97)}
+.pp-chk{flex:1;min-width:0;display:flex;align-items:center;gap:11px;padding:6px 12px;text-align:left}
+.pp-x{flex:none;min-width:78px;padding:0 20px;font-weight:600}
+.pp-box{flex:none;width:21px;height:21px;border-radius:6px;border:2px solid currentColor;opacity:.9;display:grid;place-items:center;transition:background .2s,border-color .2s,opacity .2s}
+.pp-box svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .28s ease .05s}
+.pp-chk[aria-checked="true"] .pp-box{background:var(--red);border-color:var(--red);opacity:1}
+.pp-chk[aria-checked="true"] .pp-box svg{stroke-dashoffset:0}
+@keyframes ppIn{0%{opacity:0;transform:translateY(40px) scale(.86) rotate(-1.2deg);filter:blur(8px)}55%{filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@keyframes ppOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-24px) scale(.93);filter:blur(4px)}}
+@keyframes ppShine{to{transform:translateX(120%)}}
+@keyframes ppUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pp,.pp.on{transition:opacity .2s}.pp-card.in,.pp-card.out,.pp.on .pp-ctl{animation:none;opacity:1}.pp-card.out{opacity:0}.pp-card.in::after{animation:none}}

@@ -213,6 +213,20 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .cn-chip i svg{width:13px;height:13px}
 .cn-chip b{font-weight:500;color:#76706f;margin-left:2px}
 .cn-d svg{width:19px;height:19px}
+
+/* ===== ຮູບໂປຣໂມຊັນ ===== */
+.pr-list{display:flex;flex-direction:column;gap:10px}
+.pr-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #1f1f23;border-radius:16px;background:#050505}
+.pr-n{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#161618;color:#8d8a8a;font:600 12px var(--f)}
+.pr-th{flex:none;width:64px;height:64px;border-radius:12px;object-fit:cover;background:#111;border:1px solid #232323}
+.pr-sp{flex:1;min-width:0}
+.pr-b{flex:none;width:36px;height:36px;border-radius:11px;border:1px solid #2a2a2e;background:#0a0a0a;color:#b9b9bd;display:grid;place-items:center}
+.pr-b svg{width:16px;height:16px}
+.pr-b:disabled{opacity:.35}
+.pr-b.del{color:#ff8a87;border-color:#5a1f1c}
+.pr-empty{padding:22px 10px;text-align:center;font-size:13.5px;color:#62605f;border:1.5px dashed #34211f;border-radius:18px;background:#040404}
+.pr-add{width:100%;justify-content:center;margin-top:14px}
+.pr-add:disabled{opacity:.45}
 </style>
 <script>window.EX_FONT_PREVIEW_ONLY=1</script>
 <script src="font.js"></script>
@@ -252,6 +266,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     <button data-t="3" class="tab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>ແບນເນີ & ເນື້ອຫາ</button>
     <button data-t="4" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 1 0 0 19c1.6 0 2.3-1 2.3-2 0-.6-.3-1.100-.6-1.500-.3-.4-.5-.8-.5-1.300 0-1 .8-1.700 1.800-1.700H17a4.700 4.700 0 0 0 4.500-4.700c0-3.800-4-7.800-9.500-7.800zM7 11.500a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm3-4a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800zm5 0a1.400 1.400 0 1 1 0-2.800 1.400 1.400 0 0 1 0 2.800z"/></svg>ສີ & ທີມ</button>
     <button data-t="5" class="tab" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.600 3h3l1.400 4.300-2 1.500a11 11 0 0 0 6.200 6.200l1.500-2 4.300 1.400v3a2.600 2.600 0 0 1-2.800 2.600A16.600 16.600 0 0 1 3.900 5.800 2.600 2.600 0 0 1 6.600 3z"/></svg>ຊ່ອງທາງຕິດຕໍ່</button>
+    <button data-t="6" class="tab" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="3"/><circle cx="9" cy="9.5" r="1.8"/><path d="M21 16l-5-5-8 8.5"/></svg>ຮູບໂປຣໂມຊັນ</button>
   </nav>
 
   <!-- ການ໌ດຂໍ້ມູນພື້ນຖານ -->
@@ -470,6 +485,17 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
       <div class="cn-add" id="cnAdd"></div>
     </div>
   </section>
+
+  <section class="panel" data-p="6" hidden>
+    <div class="ph"><h4>ຮູບໂປຣໂມຊັນ (ປ໊ອບອັບຕອນເຂົ້າເວັບ)</h4><span class="cn-count" id="prCount"></span></div>
+    <div class="pb">
+      <p class="cn-note">ຮູບທີ່ຈະເດັ້ງຂຶ້ນມາຕອນລູກຄ້າເຂົ້າເວັບ ໃສ່ໄດ້ສູງສຸດ 10 ຮູບ · ສະແດງເທື່ອລະຮູບ ລູກຄ້າກົດ “ປິດ” ແລ້ວຮູບຖັດໄປຈະເດັ້ງຂຶ້ນຕໍ່ · ລະບົບປັບຂະໜາດໃຫ້ພໍດີຈໍອັດຕະໂນມັດ ບໍ່ເກີນຂອບຈໍ · ກົດ “ບັນທຶກການຕັ້ງຄ່າ” ເພື່ອໃຊ້ຈິງ</p>
+      <div class="pr-list" id="prList"></div>
+      <button class="up pr-add" id="prAdd" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 15v3.500A1.500 1.500 0 0 0 5.500 20h13a1.500 1.500 0 0 0 1.500-1.500V15"/></svg>ເພີ່ມຮູບໂປຣໂມຊັນ</button>
+      <input type="file" id="prFile" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+      <p class="hint">ຮູບຈະຖືກແສດງເຕັມຮູບ ບໍ່ຕັດ · ແນະນຳຮູບສີ່ຫຼ່ຽມຈັດຕຸລັດ ເຊັ່ນ 1080 × 1080 px · JPG, PNG, WEBP · ບໍ່ເກີນ 5MB ຕໍ່ຮູບ</p>
+    </div>
+  </section>
 </div>
 
 <div class="snack" id="snack"></div>
@@ -501,6 +527,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 
   /* ===== ຊ່ອງທາງຕິດຕໍ່ ↔ Supabase (shop_contacts / admin_contacts_save) ===== */
   var CN_MAX = 50, cn = [], cnSaved = '[]';
+  var pm = [], pmSaved = '[]';
+  function pmChanged(){ return JSON.stringify(pm || []) !== pmSaved; }
   var CN_SVG = {
     up:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>',
     dn:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
@@ -715,7 +743,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     return o;
   }
   function dirty(){
-    var cur = collect(), d = !saved || fontSel !== fontSaved || thChanged() || cnChanged() || Object.keys(cur).some(function(k){ return cur[k] !== saved[k]; });
+    var cur = collect(), d = !saved || fontSel !== fontSaved || thChanged() || cnChanged() || pmChanged() || Object.keys(cur).some(function(k){ return cur[k] !== saved[k]; });
     var b = $('saveBtn'); b.disabled = !d || busy; b.classList.toggle('dirty', d && !busy);
   }
   function fill(j){
@@ -730,6 +758,50 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   }
   exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
+
+
+  /* ===== ຮູບໂປຣໂມຊັນ ↔ Supabase (shop_promos / admin_promos_save) — ສູງສຸດ 10 ຮູບ ===== */
+  var PR_MAX = 10;
+  pm = []; pmSaved = '[]';
+  var PR_SVG = {
+    up:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>',
+    dn:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></svg>'
+  };
+  function prEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function prPaint(){
+    var box = $('prList');
+    $('prCount').textContent = pm.length ? pm.length + ' / ' + PR_MAX : '';
+    box.innerHTML = pm.length ? pm.map(function(u, i){
+      return '<div class="pr-row" data-i="' + i + '"><span class="pr-n">' + (i + 1) + '</span><img class="pr-th" alt="" src="' + prEsc(u) + '"><span class="pr-sp"></span>' +
+        '<button class="pr-b" type="button" data-a="up" aria-label="ຍ້າຍຂຶ້ນ"' + (i === 0 ? ' disabled' : '') + '>' + PR_SVG.up + '</button>' +
+        '<button class="pr-b" type="button" data-a="dn" aria-label="ຍ້າຍລົງ"' + (i === pm.length - 1 ? ' disabled' : '') + '>' + PR_SVG.dn + '</button>' +
+        '<button class="pr-b del" type="button" data-a="del" aria-label="ລຶບ">' + PR_SVG.del + '</button></div>';
+    }).join('') : '<div class="pr-empty">ຍັງບໍ່ມີຮູບໂປຣໂມຊັນ · ກົດປຸ່ມດ້ານລຸ່ມເພື່ອເພີ່ມ</div>';
+    $('prAdd').disabled = pm.length >= PR_MAX || busy;
+  }
+  $('prList').addEventListener('click', function(e){
+    var b = e.target.closest('.pr-b'); if(!b || b.disabled) return;
+    var i = +b.closest('.pr-row').dataset.i, a = b.dataset.a;
+    if(a === 'del') pm.splice(i, 1);
+    else { var j = a === 'up' ? i - 1 : i + 1; if(j < 0 || j >= pm.length) return; var t = pm[i]; pm[i] = pm[j]; pm[j] = t; }
+    prPaint(); dirty();
+  });
+  $('prAdd').addEventListener('click', function(){ if(pm.length < PR_MAX) $('prFile').click(); });
+  $('prFile').addEventListener('change', async function(){
+    var fs = Array.prototype.slice.call(this.files || []); this.value = '';
+    if(!fs.length) return;
+    if(pm.length + fs.length > PR_MAX) toast('ໃສ່ໄດ້ສູງສຸດ ' + PR_MAX + ' ຮູບ — ຈະເອົາສະເພາະ ' + (PR_MAX - pm.length) + ' ຮູບທຳອິດ');
+    for(var n = 0; n < fs.length && pm.length < PR_MAX; n++){
+      var u = await upload(fs[n], $('prAdd'));
+      if(u){ pm.push(u); prPaint(); dirty(); }
+    }
+    prPaint();
+  });
+  exRpc('shop_promos', {}).then(function(rows){
+    pm = (Array.isArray(rows) ? rows : []).map(function(r){ return r && r.url; }).filter(Boolean).slice(0, PR_MAX);
+    pmSaved = JSON.stringify(pm); prPaint(); dirty();
+  }).catch(function(){ prPaint(); });
 
   async function upload(file, btn){
     if(!EXT[file.type]) return toast('ຮອງຮັບສະເພາະ JPG / PNG / WEBP / GIF');
@@ -803,10 +875,18 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
           else cnMsg = cj && cj.code === 'too_many' ? 'ຊ່ອງທາງຕິດຕໍ່ຫຼາຍເກີນ (ສູງສຸດ 50)' : 'ບັນທຶກຊ່ອງທາງຕິດຕໍ່ບໍ່ສຳເລັດ';
         }catch(e){ cnMsg = 'ບັນທຶກຊ່ອງທາງຕິດຕໍ່ບໍ່ສຳເລັດ'; }
       }
+      var pmMsg = '';
+      if(j && j.ok && pmChanged()){
+        try{
+          var pj = await exRpc('admin_promos_save', { p_token: exToken(), p_items: pm.map(function(u){ return { url:u }; }) });
+          if(pj && pj.ok){ pmSaved = JSON.stringify(pm); }
+          else pmMsg = pj && pj.code === 'too_many' ? 'ຮູບໂປຣໂມຊັນຫຼາຍເກີນ (ສູງສຸດ 10)' : 'ບັນທຶກຮູບໂປຣໂມຊັນບໍ່ສຳເລັດ';
+        }catch(e){ pmMsg = 'ບັນທຶກຮູບໂປຣໂມຊັນບໍ່ສຳເລັດ'; }
+      }
       if(j && j.ok){
         saved = data;
         try{ localStorage.removeItem('exSiteCache'); }catch(e){}
-        toast(fontMsg || thMsg || cnMsg || 'ບັນທຶກສຳເລັດ');
+        toast(fontMsg || thMsg || cnMsg || pmMsg || 'ບັນທຶກສຳເລັດ');
       } else toast(j && j.code === 'not_admin' ? 'ບໍ່ມີສິດແອດມິນ' : 'ບັນທຶກບໍ່ສຳເລັດ');
     }catch(e){ toast('ບັນທຶກບໍ່ສຳເລັດ'); }
     busy = false; dirty();
