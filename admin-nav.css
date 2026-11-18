@@ -49,3 +49,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 .alg{height:36px;border-radius:11px;border:1px solid #232323;background:#000;color:#a0a0a0;font:600 12.5px var(--nfont);letter-spacing:.04em;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .alg:active{opacity:.75}
 .alg.on{background:rgba(var(--red-rgb),.16);border-color:rgba(var(--red-rgb),.55);color:#fff}
+
+/* เลขลำดับหน้าในกลุ่มเมนู "ຄູ່ມືສອນໃຊ້ງານ" */
+.si .gn{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:#161616;border:1px solid #262626;color:#8d8d8d;font:600 12px var(--nfont);transition:background .2s,color .2s,border-color .2s}
+.si.on .gn{background:rgba(var(--red-rgb),.2);border-color:rgba(var(--red-rgb),.5);color:var(--red)}
