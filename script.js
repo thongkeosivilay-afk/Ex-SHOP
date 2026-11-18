@@ -263,34 +263,49 @@ function renderStats(){
 document.addEventListener('site:ready', renderStats);
 renderStats();
 
-/* สินค้าแสดงจากฐานข้อมูล (products ใน data.js) — cat ว่าง = ทุกหมวด */
-let curCat = '';
-function renderProducts(cat){
-  if(cat !== undefined) curCat = cat || '';
-  const list = products.filter(p => !curCat || p.cat === curCat);
-  const msg = !window.productsLoaded ? 'ກຳລັງໂຫຼດສິນຄ້າ...' : window.productsFailed && !products.length ? 'ໂຫຼດສິນຄ້າບໍ່ໄດ້ ກະລຸນາລອງໃໝ່' : 'ຍັງບໍ່ມີສິນຄ້າໃນໝວດນີ້';
-  $('#grid').innerHTML = list.length ? list.map((p,i) => productCardHTML(p, i)).join('') : `<div class="empty">${msg}</div>`;
-  $('#grid').querySelectorAll('[data-buy]').forEach(b => {
-    const go = () => { const p = list[+b.dataset.buy]; if(!p) return; if(p.update || p.soldout){ snack(p.update ? 'ກຳລັງອັບເດດ' : 'ສິນຄ້າໝົດສະຕັອກ'); return; } CONFIG.onBuy(p); };
-    b.addEventListener('click', go);
-    b.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
+/* สินค้าแสดงจากฐานข้อมูล (products ใน data.js) — แยกเป็นส่วน ๆ ตามหมวดหมู่
+   แต่ละหมวดมีหัวข้อ "ໝວດໝູ່ : ชื่อหมวด" + แถวสินค้าเลื่อนซ้าย-ขวาของตัวเอง (ลำดับตามหมวดในฐานข้อมูล)
+   สินค้าที่ไม่มีหมวด/หมวดถูกลบไปแล้ว รวมไว้ท้ายสุดในส่วน "EXSHOP" */
+function prodGroups(){
+  const groups = [], used = new Set();
+  cats.forEach(c => {
+    const list = products.filter(p => p.cat === c.k);
+    list.forEach(p => used.add(p));
+    if(list.length) groups.push({ k: c.k, n: c.n || c.k, list });
   });
-  const g = $('#grid'), w = $('#gridWrap'); if(g && w) w.classList.toggle('can-r', g.scrollLeft < g.scrollWidth - g.clientWidth - 8);
+  const rest = products.filter(p => !used.has(p));
+  if(rest.length) groups.push({ k: '', n: 'EXSHOP', list: rest });
+  return groups;
 }
-renderProducts('');
-
-/* เงาขอบแถวสินค้า: เปิด/ปิดตามตำแหน่งที่เลื่อน */
-(function(){
-  const g = $('#grid'), w = $('#gridWrap'); if(!g || !w) return;
-  const upd = () => {
-    const max = g.scrollWidth - g.clientWidth;
-    w.classList.toggle('can-r', g.scrollLeft < max - 8);
-  };
-  g.addEventListener('scroll', upd, {passive:true});
-  window.addEventListener('resize', upd);
-  if(window.ResizeObserver) new ResizeObserver(upd).observe(g);
-  upd();
-})();
+function renderProducts(){
+  const box = $('#prodSecs'); if(!box) return;
+  const groups = prodGroups();
+  if(!groups.length){
+    const msg = !window.productsLoaded ? 'ກຳລັງໂຫຼດສິນຄ້າ...' : window.productsFailed && !products.length ? 'ໂຫຼດສິນຄ້າບໍ່ໄດ້ ກະລຸນາລອງໃໝ່' : 'ຍັງບໍ່ມີສິນຄ້າ';
+    box.innerHTML = `<div class="prod-sec"><div class="p-top"><h2><span>ໝວດໝູ່ :</span><em>EXSHOP</em></h2></div><div class="grid-wrap"><div class="grid"><div class="empty">${msg}</div></div></div></div>`;
+    return;
+  }
+  box.innerHTML = groups.map((g, gi) => `
+    <div class="prod-sec" data-g="${gi}">
+      <div class="p-top"><h2><span>ໝວດໝູ່ :</span><em>${escH(g.n)}</em></h2><a class="all" href="${g.k ? 'categories.html?cat=' + encodeURIComponent(g.k) : 'categories.html'}">ເບິ່ງທັງໝົດ <svg class="i"><use href="#arrow"/></svg></a></div>
+      <div class="grid-wrap"><div class="grid">${g.list.map((p, i) => productCardHTML(p, i)).join('')}</div></div>
+    </div>`).join('');
+  box.querySelectorAll('.prod-sec').forEach(sec => {
+    const list = groups[+sec.dataset.g].list, g = sec.querySelector('.grid'), w = sec.querySelector('.grid-wrap');
+    g.querySelectorAll('[data-buy]').forEach(b => {
+      const go = () => { const p = list[+b.dataset.buy]; if(!p) return; if(p.update || p.soldout){ snack(p.update ? 'ກຳລັງອັບເດດ' : 'ສິນຄ້າໝົດສະຕັອກ'); return; } CONFIG.onBuy(p); };
+      b.addEventListener('click', go);
+      b.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
+    });
+    /* เงาขอบขวาของแต่ละแถว: เปิด/ปิดตามตำแหน่งที่เลื่อน */
+    const upd = () => w.classList.toggle('can-r', g.scrollLeft < g.scrollWidth - g.clientWidth - 8);
+    g.addEventListener('scroll', upd, {passive:true});
+    if(window.ResizeObserver) new ResizeObserver(upd).observe(g);
+    upd();
+  });
+}
+renderProducts();
+window.addEventListener('resize', () => document.querySelectorAll('#prodSecs .grid').forEach(g => g.dispatchEvent(new Event('scroll'))));
 
 /* featured carousel — ใช้สินค้าจริงจากฐานข้อมูล (สูงสุด 6 อันแรก) ไม่มีสินค้า = ซ่อนส่วนนี้ */
 const feat = [];
@@ -324,13 +339,12 @@ $('#catList').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if(!b) return;
   location.href = 'categories.html?cat=' + encodeURIComponent(b.dataset.cat);   // กดการ์ดหมวด → ไปหน้าหมวดหมู่ (เลือกหมวดนั้นให้)
 });
-$('#allBtn').addEventListener('click', () => { $('#catName').textContent = 'EXSHOP'; renderProducts(''); });
 
 /* ข้อมูลสินค้ามาจากฐานข้อมูล: โหลดเสร็จ/อัปเดต → วาดใหม่ทุกส่วน */
 function onProducts(){ renderProducts(); featUI.build(); renderCatList(); renderStats(); }
 document.addEventListener('products:ready', onProducts);
 document.addEventListener('agent:ready', onProducts);
-document.addEventListener('cats:ready', () => { renderCatList(); });
+document.addEventListener('cats:ready', () => { renderCatList(); renderProducts(); });
 if(window.productsLoaded) onProducts();
 
 /* apply show/hide flags */

@@ -179,7 +179,11 @@ html.is-in .hb-reg,html.is-in .dr-f{display:none}
 
 /* product grid */
 .prods{margin:62px 24px 0}
-.p-top{display:flex;justify-content:space-between;align-items:center}
+.p-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.prod-sec + .prod-sec{margin-top:44px}
+.p-top h2{min-width:0}
+.p-top h2 em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-top .all{flex:none}
 .p-top h2{font-size:23px;font-weight:300;display:flex;gap:7px}
 .p-top h2 em{font-style:normal;color:var(--red);font-weight:400}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 13px;margin-top:22px}
