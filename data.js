@@ -108,9 +108,22 @@ function mapProduct(r){
     soldout: (Number(r.stock) || 0) <= 0   // สต็อกเป็น 0 = ขึ้นป้ายหมดสีแดงอัตโนมัติ
   };
 }
+/* ป้าย "ຍອດນິຍົມ" — ขึ้นเฉพาะสินค้าที่ขายดีของแต่ละหมวดหมู่ (p.hot = true)
+   นับจากจำนวน "ຂາຍແລ້ວ" ในหมวดเดียวกัน เอาอันดับต้น ๆ: ประมาณ 1 ใน 3 ของสินค้าในหมวด อย่างน้อย 1 อัน มากสุด HOT_MAX อัน
+   สินค้าที่ยังขายไม่ได้ (0) ไม่ได้ป้าย — ปรับจำนวนสูงสุดที่ HOT_MAX */
+const HOT_MAX = 3;
+function markHot(){
+  const by = {};
+  products.forEach(p => { p.hot = false; (by[p.cat || ''] = by[p.cat || ''] || []).push(p); });
+  Object.keys(by).forEach(k => {
+    const list = by[k], n = Math.min(HOT_MAX, Math.max(1, Math.ceil(list.length / 3)));
+    list.slice().sort((a, b) => (+b.sold || 0) - (+a.sold || 0)).slice(0, n).forEach(p => { if((+p.sold || 0) > 0) p.hot = true; });
+  });
+}
 function setProducts(rows){
   products.length = 0;
   (Array.isArray(rows) ? rows : []).forEach(r => products.push(mapProduct(r)));
+  markHot();
   if(typeof cats !== 'undefined') cats.forEach(c => { c.c = products.filter(p => p.cat === c.k).length; });
   window.productsLoaded = true;
   document.dispatchEvent(new Event('products:ready'));
