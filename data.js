@@ -7,9 +7,44 @@
 const IMG = { product:'', category:'', banner:'' };
 /* ชื่อร้าน + โลโก้ (แสดงมุมซ้ายของแถบหัวเว็บ) — logo: ใส่ path/URL รูป (แนะนำสี่เหลี่ยมจัตุรัส 256×256 px)
    ถ้าเว้นว่าง จะโชว์ตัวย่อ 2 ตัวแรกของชื่อร้านในวงกลมสีแดงแทน */
-const SITE = { recSpeed:40, name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9 }, stat:{}, real:{} };
+const SITE = { fit:{ p:false, c:false }, recSpeed:40, name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9 }, stat:{}, real:{} };
 /* ตั้งค่าเว็บไซต์ (ชื่อ / โลโก้ / แบนเนอร์ / คำอธิบาย) — ดึงจาก Supabase (shop_site) แก้ได้ที่หน้าแอดมิน → ການຕັ້ງຄ່າເວັບໄຊ
    โหลดเสร็จแล้วยิงอีเวนต์ 'site:ready' ให้หน้าวาดส่วนหัว/แบนเนอร์/คำอธิบายใหม่ */
+/* ===== ปรับภาพพอดีอัตโนมัติ (เปิด/ปิดที่ แอดมิน → ตั้งค่าเว็บ → ปรับภาพพอดีอัตโนมัติ) =====
+   เปิดแล้ว: ความ "ยาว" ของการ์ดสินค้า / การ์ดหมวดหมู่ จะปรับตามสัดส่วนรูปจริง (ความกว้างการ์ดคงเดิม) · ปิด = ใช้สัดส่วนเดิมของการ์ด
+   ทำงานด้วย class บน <html>: fit-p (สินค้า) · fit-c (หมวดหมู่) + ตัวแปร --ar บนกล่องรูปแต่ละใบ (ดู style.css / catcard.css) */
+const FIT_LIM = [0.4, 3.2];   // ช่วงสัดส่วน กว้าง/สูง ที่ยอมให้ปรับ (กันรูปแปลก ๆ ทำให้การ์ดสูง/เตี้ยเกินไป)
+function exFitBox(img){
+  if(!(img instanceof HTMLImageElement)) return null;
+  const pb = img.closest('.pci .pimg'); if(pb) return { box: pb, on: SITE.fit.p };
+  const cb = img.closest('.cat .cb-img'); if(cb) return { box: cb, on: SITE.fit.c };
+  return null;
+}
+function exFitImg(img){
+  const t = exFitBox(img); if(!t) return;
+  if(!t.on){ t.box.style.removeProperty('--ar'); return; }
+  if(img.loading === 'lazy') img.loading = 'eager';   // ต้องรู้ขนาดรูปก่อน จึงไม่รอโหลดแบบ lazy
+  if(img.complete && img.naturalWidth > 0 && img.naturalHeight > 0){
+    const r = Math.max(FIT_LIM[0], Math.min(FIT_LIM[1], img.naturalWidth / img.naturalHeight));
+    t.box.style.setProperty('--ar', r.toFixed(4));
+  }
+}
+function exFitScan(root){ (root || document).querySelectorAll('.pci .pimg img, .cat .cb-img img').forEach(exFitImg); }
+function exFitApply(){
+  const h = document.documentElement;
+  h.classList.toggle('fit-p', !!SITE.fit.p);
+  h.classList.toggle('fit-c', !!SITE.fit.c);
+  exFitScan();
+}
+document.addEventListener('load', e => { if(e.target && e.target.tagName === 'IMG') exFitImg(e.target); }, true);   // load ไม่ bubble → ดักตอน capture
+new MutationObserver(ms => {
+  if(!SITE.fit.p && !SITE.fit.c) return;
+  ms.forEach(m => m.addedNodes.forEach(n => {
+    if(n.nodeType !== 1) return;
+    if(n.tagName === 'IMG') exFitImg(n); else exFitScan(n);
+  }));
+}).observe(document.documentElement, { childList: true, subtree: true });
+
 const SCACHE = 'exSiteCache';
 function setSite(j){
   if(!j || typeof j !== 'object') return;
@@ -24,9 +59,16 @@ function setSite(j){
   const wm = /\n#why=(\d+),(\d+)\s*$/.exec(String(j.why1_text || ''));
   SITE.whyCfg = { s: wm ? Math.max(2, Math.min(20, +wm[1])) : 5, b: wm ? Math.max(2, Math.min(20, +wm[2])) : 9 };
   /* ความเร็วแถบ "ซื้อล่าสุด" (px/วินาที): เก็บต่อท้ายข้อความการ์ด 2 เป็น \n#rec=ตัวเลข */
-  const rm = /\n#rec=(\d+)\s*$/.exec(String(j.why2_text || ''));
+  /* ปรับภาพพอดีอัตโนมัติ (ปรับเฉพาะ "ความยาว" การ์ดตามสัดส่วนรูป): เก็บต่อท้ายสุดของข้อความการ์ด 2 เป็น \n#fit=สินค้า,หมวดหมู่ (1 = เปิด · 0 = ปิด)
+     ลำดับท้ายข้อความ: ...\n#rec=ตัวเลข\n#fit=P,C  (อ่าน #fit ออกก่อน แล้วค่อยอ่าน #rec) */
+  const w2raw = String(j.why2_text || '');
+  const fm = /\n#fit=([01]),([01])\s*$/.exec(w2raw);
+  SITE.fit = { p: !!(fm && fm[1] === '1'), c: !!(fm && fm[2] === '1') };
+  const w2 = w2raw.replace(/\n#fit=[01],[01]\s*$/, '');
+  const rm = /\n#rec=(\d+)\s*$/.exec(w2);
   SITE.recSpeed = rm ? Math.max(10, Math.min(120, +rm[1])) : 40;
-  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+\s*$/, ''), t2:j.why2_title||'', d2:String(j.why2_text||'').replace(/\n#rec=\d+\s*$/, '') };
+  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+\s*$/, ''), t2:j.why2_title||'', d2:w2.replace(/\n#rec=\d+\s*$/, '') };
+  exFitApply();
   IMG.banner = j.banner || '';
   document.dispatchEvent(new Event('site:ready'));
 }

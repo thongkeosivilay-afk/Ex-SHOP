@@ -178,6 +178,20 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
 .selw::after{content:"";position:absolute;right:18px;top:50%;width:9px;height:9px;margin-top:-7px;border-right:2px solid #8d8a8a;border-bottom:2px solid #8d8a8a;transform:rotate(45deg);pointer-events:none}
 .selw select.inp option{background:#0a0a0a;color:#f2f2f2}
 .thh{margin-top:10px;font-size:12.5px;line-height:1.6;color:#62605f}
+/* ===== ສະວິດ ເປີດ/ປິດ (ປັບຮູບພໍດີອັດຕະໂນມັດ) ===== */
+.fit-row{display:flex;align-items:center;gap:14px;padding:14px 0}
+.fit-row+.fit-row{border-top:1px solid #19191b}
+.fit-tx{flex:1;min-width:0}
+.fit-tx b{display:block;font-size:15.5px;font-weight:600;color:#d9d6d6}
+.fit-tx span{display:block;margin-top:4px;font-size:12.5px;line-height:1.55;color:#62605f}
+.fit-sw{position:relative;flex:none;width:50px;height:30px;border-radius:15px;border:1px solid #2a2a2e;background:#1a1a1d;cursor:pointer;padding:0;transition:background .2s,border-color .2s;-webkit-tap-highlight-color:transparent}
+.fit-sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fefefe;box-shadow:0 1px 4px rgba(0,0,0,.45);transition:transform .2s}
+.fit-sw[aria-checked="true"]{background:var(--red);border-color:var(--red)}
+.fit-sw[aria-checked="true"]::after{transform:translateX(20px)}
+.fit-sw:focus-visible{outline:2px solid rgba(var(--red-rgb),.6);outline-offset:2px}
+.fit-sub{margin:2px 0 0 14px;padding-left:14px;border-left:2px solid #19191b;transition:opacity .2s}
+.fit-sub.off{opacity:.4;pointer-events:none}
+
 .thpv{--pc:#ff0000;--pcard:#121212;--pbd:#262626;--ppk:rgba(255,0,0,.2);--ptx:#f3f3f4;--pmu:#9a9aa3;position:relative;overflow:hidden;border-radius:16px;border:1px solid #2a2a2e;padding:14px;transition:background-color .2s}
 .thpv-bar{display:flex;align-items:center;justify-content:space-between;color:var(--ptx);font-weight:700;font-size:15px;margin-bottom:12px}
 .thpv-chip{height:24px;padding:0 11px;border-radius:12px;background:var(--ppk);color:var(--pc);font-size:12px;font-weight:600;display:inline-flex;align-items:center}
@@ -496,6 +510,31 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     </div>
   </section>
 
+  <!-- ປັບຮູບພໍດີອັດຕະໂນມັດ (ສິນຄ້າ + ໝວດໝູ່ ຢູ່ບ່ອນດຽວກັນ) -->
+  <section class="panel" data-p="4" hidden>
+    <div class="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/><rect x="8" y="8" width="8" height="8" rx="1.500"/></svg>
+      <h4>ປັບຮູບພໍດີອັດຕະໂນມັດ</h4>
+    </div>
+    <div class="pb">
+      <div class="fit-row">
+        <div class="fit-tx"><b>ເປີດໃຊ້ງານ</b><span>ປັບ “ຄວາມຍາວ” ຂອງການ໌ດໃຫ້ພໍດີກັບຮູບອັດຕະໂນມັດ ບໍ່ຕັດຮູບ · ຄວາມກວ້າງຂອງການ໌ດຄືເກົ່າ</span></div>
+        <button class="fit-sw" id="fitOn" type="button" role="switch" aria-checked="false" aria-label="ເປີດ/ປິດ ປັບຮູບພໍດີອັດຕະໂນມັດ"></button>
+      </div>
+      <div class="fit-sub off" id="fitSub">
+        <div class="fit-row">
+          <div class="fit-tx"><b>ສິນຄ້າ</b><span>ການ໌ດສິນຄ້າ ຍາວຕາມສັດສ່ວນຮູບສິນຄ້າ</span></div>
+          <button class="fit-sw" id="fitP" type="button" role="switch" aria-checked="true" aria-label="ປັບຮູບພໍດີ: ສິນຄ້າ"></button>
+        </div>
+        <div class="fit-row">
+          <div class="fit-tx"><b>ໝວດໝູ່</b><span>ການ໌ດໝວດໝູ່ ຍາວຕາມສັດສ່ວນຮູບໝວດໝູ່</span></div>
+          <button class="fit-sw" id="fitC" type="button" role="switch" aria-checked="true" aria-label="ປັບຮູບພໍດີ: ໝວດໝູ່"></button>
+        </div>
+      </div>
+      <p class="thh">ປິດ = ໃຊ້ສັດສ່ວນການ໌ດແບບເດີມ (ຮູບທີ່ບໍ່ເຂົ້າສັດສ່ວນຈະຖືກຕັດຂອບ) · ກົດ “ບັນທຶກ” ດ້ານລຸ່ມເພື່ອໃຊ້ງານ</p>
+    </div>
+  </section>
+
   <section class="panel" data-p="5" hidden>
     <div class="ph"><h4>ຊ່ອງທາງຕິດຕໍ່</h4><span class="cn-count" id="cnCount"></span></div>
     <div class="pb">
@@ -665,6 +704,15 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   window.__mqRefresh = function(){ try{ mqRefresh(); rcPaint(); rcBuild(); }catch(e){} };
   /* ===== ແຖບ "ຊື້ລ່າສຸດ" ໜ້າຫຼັກ: ຄວາມໄວການເລື່ອນ (px/ວິນາທີ) ເກັບຕໍ່ທ້າຍຂໍ້ຄວາມການ໌ດ 2 ເປັນ \n#rec=ຕົວເລກ ===== */
   var RC = { def:40, v:40 }, rcW = 0;
+  /* ===== ປັບຮູບພໍດີອັດຕະໂນມັດ: ເກັບຕໍ່ທ້າຍສຸດຂອງຂໍ້ຄວາມການ໌ດ 2 ເປັນ \n#fit=ສິນຄ້າ,ໝວດໝູ່ (1 = ເປີດ) · ປິດທັງໝົດ = ບໍ່ເກັບ ===== */
+  var FIT = { on:false, p:true, c:true };
+  function fitParse(t){ t = t || ''; var m = /\n#fit=([01]),([01])\s*$/.exec(t); return { text: t.replace(/\n#fit=[01],[01]\s*$/, ''), p: !!m && m[1] === '1', c: !!m && m[2] === '1' }; }
+  function fitPaint(){
+    $('fitOn').setAttribute('aria-checked', FIT.on ? 'true' : 'false');
+    $('fitP').setAttribute('aria-checked', FIT.p ? 'true' : 'false');
+    $('fitC').setAttribute('aria-checked', FIT.c ? 'true' : 'false');
+    $('fitSub').classList.toggle('off', !FIT.on);
+  }
   function rcParse(t){ t = t || ''; var m = /\n#rec=(\d+)\s*$/.exec(t); return { text: t.replace(/\n#rec=\d+\s*$/, ''), v: m ? spdClamp(m[1], 40) : 40 }; }
   function rcBuild(){
     var box = document.getElementById('rcPv'); if(!box) return;
@@ -784,6 +832,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     Object.keys(TXT).forEach(function(id){ var v = $(id).value; o[TXT[id]] = TXT[id] === 'name' ? v.trim() : v; });
     ['mq','an'].forEach(function(k){ if(SPD[k].v !== SPD[k].def) o[TXT[k]] = String(o[TXT[k]]).replace(/\s+$/, '') + '\n#spd=' + SPD[k].v; });
     if(RC.v !== RC.def) o.why2_text = String(o.why2_text).replace(/\s+$/, '') + '\n#rec=' + RC.v;
+    if(FIT.on && (FIT.p || FIT.c)) o.why2_text = String(o.why2_text).replace(/\s+$/, '') + '\n#fit=' + (FIT.p ? 1 : 0) + ',' + (FIT.c ? 1 : 0);
     if(WH.s.v !== WH.s.def || WH.b.v !== WH.b.def) o.why1_text = String(o.why1_text).replace(/\s+$/, '') + '\n#why=' + WH.s.v + ',' + WH.b.v;
     return o;
   }
@@ -796,11 +845,13 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     var lp = lszParse(j.logo); st.logo = lp.url; st.logoSz = lp.sz; st.banner = j.banner || '';
     Object.keys(TXT).forEach(function(id){ var v = j[TXT[id]]; $(id).value = (v === null || v === undefined) ? '' : v; });
     ['mq','an'].forEach(function(k){ var p = spdParse($(k).value, SPD[k].def); $(k).value = p.text; SPD[k].v = p.v; });
+    var fp = fitParse($('w2d').value); $('w2d').value = fp.text;
+    FIT.on = fp.p || fp.c; if(FIT.on){ FIT.p = fp.p; FIT.c = fp.c; } else { FIT.p = true; FIT.c = true; }
     var rp = rcParse($('w2d').value); $('w2d').value = rp.text; RC.v = rp.v;
     var wp = whParse($('w1d').value); $('w1d').value = wp.text; WH.s.v = wp.s; WH.b.v = wp.b;
     $('s1').placeholder = String(j.real_users || 0); $('s3').placeholder = String(j.real_orders || 0);
     saved = collect();
-    paint(); mqRefresh(); rcPaint(); rcBuild(); whPaint(true); dirty();
+    paint(); mqRefresh(); rcPaint(); rcBuild(); whPaint(true); fitPaint(); dirty();
   }
   exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
@@ -879,6 +930,9 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     var tm; $(k).addEventListener('input', function(){ clearTimeout(tm); tm = setTimeout(function(){ mqBuild(k); }, 250); });
   });
   $('rcRange').addEventListener('input', function(){ setRc(this.value); });
+  [['fitOn','on'], ['fitP','p'], ['fitC','c']].forEach(function(x){
+    $(x[0]).addEventListener('click', function(){ FIT[x[1]] = !FIT[x[1]]; fitPaint(); dirty(); });
+  });
   $('whS').addEventListener('input', function(){ setWh('s', this.value); });
   $('whB').addEventListener('input', function(){ setWh('b', this.value); });
   ['w1t','w1d','w2t','w2d'].forEach(function(id){ $(id).addEventListener('input', function(){ whPaint(false); }); });
