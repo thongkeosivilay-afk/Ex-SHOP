@@ -307,22 +307,71 @@ function renderProducts(){
 renderProducts();
 window.addEventListener('resize', () => document.querySelectorAll('#prodSecs .grid').forEach(g => g.dispatchEvent(new Event('scroll'))));
 
-/* featured carousel — ใช้สินค้าจริงจากฐานข้อมูล (สูงสุด 6 อันแรก) ไม่มีสินค้า = ซ่อนส่วนนี้ */
-const feat = [];
+/* สินค้าที่ซื้อล่าสุด — ดึงจากฐานข้อมูล (ฟังก์ชัน shop_recent_orders) แสดงเป็นแถบเลื่อนวนไม่มีสะดุด
+   ชื่อผู้ซื้อถูกปิดบางส่วนที่ฝั่งฐานข้อมูล (เช่น ab****) · ไม่มีคนซื้อ = ซ่อนแถบ
+   ความเร็ว = SITE.recSpeed px ต่อวินาที (ตั้งที่หน้าแอดมิน → ตั้งค่าเว็บ) · รีเฟรชข้อมูลทุก 60 วินาที */
 const featUI = (function(){
-  const tr = $('#featTrack'), dots = $('#featDots');
-  let i = 0, timer;
-  const set = n => { if(!feat.length) return; i = (n + feat.length) % feat.length; tr.style.transform = `translateX(-${i*100}%)`; [...dots.children].forEach((d,k) => d.classList.toggle('on', k===i)); };
-  const start = () => { clearInterval(timer); if(feat.length > 1) timer = setInterval(() => set(i+1), 3500); };
-  function build(){
-    feat.length = 0; products.slice(0, 6).forEach(p => feat.push(p));
-    tr.innerHTML = feat.map(f => `<a class="fcard" href="#products"><div class="fi">${artSq('', f.img, true)}</div><div class="fn">${escH(f.n)}</div><div class="fp">${escH(f.p)}</div></a>`).join('');
-    dots.innerHTML = feat.map((_,k) => `<button aria-label="ສະໄລດ໌ ${k+1}"></button>`).join('');
-    [...dots.children].forEach((d,k) => d.addEventListener('click', () => { set(k); start(); }));
-    $('#featSec').hidden = !SHOW.featured || !feat.length;
-    set(0); start();
+  const sec = $('#featSec'), vp = $('#rbVp');
+  let rows = [], copies = 0, lastW = 0, raf = 0, ro, track;
+  const sp = () => Math.max(10, Math.min(120, +((typeof SITE !== 'undefined' && SITE.recSpeed) || 40)));
+  function ago(t){
+    const s = Math.max(0, (Date.now() - new Date(t).getTime()) / 1000);
+    if(!isFinite(s)) return '';
+    if(s < 60) return 'ຕອນນີ້';
+    if(s < 3600) return Math.floor(s / 60) + ' ນາທີກ່ອນ';
+    if(s < 86400) return Math.floor(s / 3600) + ' ຊົ່ວໂມງກ່ອນ';
+    return Math.floor(s / 86400) + ' ມື້ກ່ອນ';
   }
-  return { build };
+  const itemsHTML = () => rows.map(r => {
+    const nm = String(r.p || '') + (r.d ? ' · ' + r.d : '') + ((+r.q || 1) > 1 ? ' ×' + r.q : '');
+    return `<span class="rb-i"><span class="rb-im">${r.img ? `<img src="${escH(r.img)}" alt="" loading="lazy" draggable="false">` : ic('s-bag')}</span><span class="rb-tx"><b>${escH(r.u)}</b> ຊື້ <em>${escH(nm)}</em></span><span class="rb-tm">${escH(ago(r.t))}</span></span>`;
+  }).join('');
+  function build(n){
+    copies = n; lastW = 0;
+    const g = `<div class="rb-g">${itemsHTML().repeat(n)}</div>`;
+    vp.innerHTML = `<div class="rb-track">${g}${g.replace('class="rb-g"', 'class="rb-g" aria-hidden="true"')}</div>`;
+    track = vp.firstChild;
+    if(ro){ ro.disconnect(); ro.observe(vp); const f = vp.querySelector('.rb-g'); if(f) ro.observe(f); }
+    schedule();
+  }
+  function measure(){
+    raf = 0;
+    const g1 = vp.querySelector('.rb-g'); if(!g1 || !rows.length) return;
+    const one = g1.getBoundingClientRect().width / Math.max(1, copies);
+    if(one < 40) return;                                   // ยังโหลดฟอนต์/เลย์เอาต์ไม่เสร็จ
+    const need = Math.max(2, Math.ceil((vp.clientWidth + 40) / one) + 1);
+    if(need !== copies){ build(need); return; }
+    const w = g1.getBoundingClientRect().width;
+    if(Math.abs(w - lastW) < 0.5 && track.style.getPropertyValue('--rb-t')) { track.style.setProperty('--rb-t', (w / sp()).toFixed(2) + 's'); return; }
+    lastW = w;
+    track.style.setProperty('--rb-dn', -w + 'px');
+    track.style.setProperty('--rb-t', (w / sp()).toFixed(2) + 's');
+  }
+  function schedule(){ if(!raf) raf = requestAnimationFrame(measure); }
+  function paint(){
+    sec.hidden = !rows.length || (typeof SHOW !== 'undefined' && SHOW.featured === false);
+    if(sec.hidden){ vp.innerHTML = ''; copies = 0; return; }
+    build(Math.max(2, copies || 3));
+  }
+  function load(){
+    if(window.EX_NO_FETCH || typeof EX_DB === 'undefined') return;
+    fetch(EX_DB.url + '/rest/v1/rpc/shop_recent_orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
+      body: JSON.stringify({ p_limit: 12 })
+    }).then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(j => { rows = Array.isArray(j) ? j : []; paint(); })
+      .catch(() => {});
+  }
+  if(window.ResizeObserver) ro = new ResizeObserver(schedule);
+  window.addEventListener('resize', schedule);
+  window.addEventListener('orientationchange', schedule);
+  document.addEventListener('site:ready', schedule);       // ความเร็วเปลี่ยนจากหน้าแอดมิน → คำนวณใหม่
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) load(); });
+  setInterval(load, 60000);
+  load();
+  return { build: schedule };
 })();
 
 function renderCatList(){
@@ -350,7 +399,6 @@ if(window.productsLoaded) onProducts();
 /* apply show/hide flags */
 $('#cats').hidden = !SHOW.categories || !cats.length;
 $('#products').hidden = !SHOW.products;
-$('#featSec').hidden = !SHOW.featured || !feat.length;
 
 /* การ์ด "ทำไมต้องเลือกเรา": สลับข้อความ+ไอคอนวนทุก 5 วินาที (เปลี่ยนด้วยเบลอ/จางที่ CSS .wrot) */
 (function(){

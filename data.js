@@ -7,7 +7,7 @@
 const IMG = { product:'', category:'', banner:'' };
 /* ชื่อร้าน + โลโก้ (แสดงมุมซ้ายของแถบหัวเว็บ) — logo: ใส่ path/URL รูป (แนะนำสี่เหลี่ยมจัตุรัส 256×256 px)
    ถ้าเว้นว่าง จะโชว์ตัวย่อ 2 ตัวแรกของชื่อร้านในวงกลมสีแดงแทน */
-const SITE = { name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9 }, stat:{}, real:{} };
+const SITE = { recSpeed:40, name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9 }, stat:{}, real:{} };
 /* ตั้งค่าเว็บไซต์ (ชื่อ / โลโก้ / แบนเนอร์ / คำอธิบาย) — ดึงจาก Supabase (shop_site) แก้ได้ที่หน้าแอดมิน → ການຕັ້ງຄ່າເວັບໄຊ
    โหลดเสร็จแล้วยิงอีเวนต์ 'site:ready' ให้หน้าวาดส่วนหัว/แบนเนอร์/คำอธิบายใหม่ */
 const SCACHE = 'exSiteCache';
@@ -23,7 +23,10 @@ function setSite(j){
   /* ตั้งค่าการสลับการ์ด "ทำไมต้องเลือกเรา": เก็บต่อท้ายข้อความการ์ด 1 เป็น \n#why=วินาทีที่คั้ง,เวลาเบลอ(หน่วย 0.1 วินาที) */
   const wm = /\n#why=(\d+),(\d+)\s*$/.exec(String(j.why1_text || ''));
   SITE.whyCfg = { s: wm ? Math.max(2, Math.min(20, +wm[1])) : 5, b: wm ? Math.max(2, Math.min(20, +wm[2])) : 9 };
-  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+\s*$/, ''), t2:j.why2_title||'', d2:j.why2_text||'' };
+  /* ความเร็วแถบ "ซื้อล่าสุด" (px/วินาที): เก็บต่อท้ายข้อความการ์ด 2 เป็น \n#rec=ตัวเลข */
+  const rm = /\n#rec=(\d+)\s*$/.exec(String(j.why2_text || ''));
+  SITE.recSpeed = rm ? Math.max(10, Math.min(120, +rm[1])) : 40;
+  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+\s*$/, ''), t2:j.why2_title||'', d2:String(j.why2_text||'').replace(/\n#rec=\d+\s*$/, '') };
   IMG.banner = j.banner || '';
   document.dispatchEvent(new Event('site:ready'));
 }

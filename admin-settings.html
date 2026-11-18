@@ -400,6 +400,26 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     </div>
   </section>
 
+  <!-- ສິນຄ້າທີ່ຊື້ລ່າສຸດ (ແຖບເລື່ອນໜ້າຫຼັກ) -->
+  <section class="panel" data-p="3">
+    <div class="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <h4>ສິນຄ້າທີ່ຊື້ລ່າສຸດ (ແຖບເລື່ອນໜ້າຫຼັກ)</h4>
+    </div>
+    <div class="pb">
+      <div class="lsz" id="rcBox" style="margin-top:0;padding-top:0;border-top:0">
+        <div class="lsz-h"><b>ຄວາມໄວການເລື່ອນ (ຊື້ລ່າສຸດ)</b></div>
+        <div class="lsz-r">
+          <input type="range" class="rng" id="rcRange" min="10" max="120" step="1" value="40" aria-label="ຄວາມໄວການເລື່ອນ (ຊື້ລ່າສຸດ)">
+          <span class="lsz-v" id="rcVal">40px/s</span>
+        </div>
+        <div class="lsz-t">ຕົວຢ່າງການເລື່ອນ (ຄວາມໄວຈິງ)</div>
+        <div class="mqp an" id="rcPv"><div class="mqp-t"></div></div>
+        <p class="hint" style="margin-top:14px;text-align:left;line-height:1.6">ໜ້າຫຼັກຈະສະແດງຄົນທີ່ຊື້ສິນຄ້າລ່າສຸດແບບເລື່ອນວົນ (ຊື່ຜູ້ໃຊ້ຖືກປິດບາງສ່ວນ) · ຖ້າຍັງບໍ່ມີໃຜຊື້ ຈະບໍ່ສະແດງແຖບນີ້</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ສະຖິຕິໜ້າຫຼັກ -->
   <section class="panel" data-p="3">
     <div class="ph">
@@ -642,7 +662,31 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   }
   function setSpd(k, n){ SPD[k].v = spdClamp(n, SPD[k].def); paintSpd(k); dirty(); }
   function mqRefresh(){ ['mq','an'].forEach(function(k){ paintSpd(k); mqBuild(k); }); }
-  window.__mqRefresh = function(){ try{ mqRefresh(); }catch(e){} };
+  window.__mqRefresh = function(){ try{ mqRefresh(); rcPaint(); rcBuild(); }catch(e){} };
+  /* ===== ແຖບ "ຊື້ລ່າສຸດ" ໜ້າຫຼັກ: ຄວາມໄວການເລື່ອນ (px/ວິນາທີ) ເກັບຕໍ່ທ້າຍຂໍ້ຄວາມການ໌ດ 2 ເປັນ \n#rec=ຕົວເລກ ===== */
+  var RC = { def:40, v:40 }, rcW = 0;
+  function rcParse(t){ t = t || ''; var m = /\n#rec=(\d+)\s*$/.exec(t); return { text: t.replace(/\n#rec=\d+\s*$/, ''), v: m ? spdClamp(m[1], 40) : 40 }; }
+  function rcBuild(){
+    var box = document.getElementById('rcPv'); if(!box) return;
+    var tr = box.firstElementChild, bw = box.clientWidth; if(!bw) return;
+    var item = '<span class="mqp-i">ab**** ຊື້ ສິນຄ້າຕົວຢ່າງ · 5 ນາທີກ່ອນ</span>';
+    tr.innerHTML = '<div class="mqp-g">' + item + '</div>';
+    var iw = tr.querySelector('.mqp-i').getBoundingClientRect().width + 44;
+    var n = Math.max(2, Math.ceil((bw + 40) / Math.max(iw, 40)) + 1);
+    var g = '<div class="mqp-g">' + new Array(n + 1).join(item) + '</div>';
+    tr.innerHTML = g + g;
+    rcW = tr.firstElementChild.getBoundingClientRect().width;
+    tr.style.setProperty('--dn', -rcW + 'px');
+    tr.style.setProperty('--t', (rcW / RC.v).toFixed(2) + 's');
+  }
+  function rcPaint(){
+    var r = document.getElementById('rcRange');
+    document.getElementById('rcVal').textContent = RC.v + 'px/s';
+    r.value = RC.v; r.style.setProperty('--r', (RC.v - SPD_MIN) / (SPD_MAX - SPD_MIN));
+    var tr = document.getElementById('rcPv').firstElementChild;
+    if(rcW) tr.style.setProperty('--t', (rcW / RC.v).toFixed(2) + 's');
+  }
+  function setRc(n){ RC.v = spdClamp(n, RC.def); rcPaint(); dirty(); }
   /* ===== ການ໌ດ "ເປັນຫຍັງຕ້ອງເລືອກເຮົາ": ຄວາມໄວປ່ຽນຂໍ້ຄວາມ (ວິນາທີ) + ຄວາມໄວເບລີ (ໜ່ວຍ 0.1 ວິນາທີ) ເກັບຕໍ່ທ້າຍຂໍ້ຄວາມການ໌ດ 1 ເປັນ \n#why=ວິນາທີ,ເບລີ ===== */
   var WH = { s:{ def:5, v:5 }, b:{ def:9, v:9 } }, whI = 0, whT;
   function whClamp(n, d){ n = Math.round(+n); if(!(n > 0)) n = d; return Math.max(2, Math.min(20, n)); }
@@ -739,6 +783,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     var o = { logo: st.logo ? st.logo + (st.logoSz !== LSZ_DEF ? '#sz=' + st.logoSz : '') : '', banner: st.banner };
     Object.keys(TXT).forEach(function(id){ var v = $(id).value; o[TXT[id]] = TXT[id] === 'name' ? v.trim() : v; });
     ['mq','an'].forEach(function(k){ if(SPD[k].v !== SPD[k].def) o[TXT[k]] = String(o[TXT[k]]).replace(/\s+$/, '') + '\n#spd=' + SPD[k].v; });
+    if(RC.v !== RC.def) o.why2_text = String(o.why2_text).replace(/\s+$/, '') + '\n#rec=' + RC.v;
     if(WH.s.v !== WH.s.def || WH.b.v !== WH.b.def) o.why1_text = String(o.why1_text).replace(/\s+$/, '') + '\n#why=' + WH.s.v + ',' + WH.b.v;
     return o;
   }
@@ -751,10 +796,11 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     var lp = lszParse(j.logo); st.logo = lp.url; st.logoSz = lp.sz; st.banner = j.banner || '';
     Object.keys(TXT).forEach(function(id){ var v = j[TXT[id]]; $(id).value = (v === null || v === undefined) ? '' : v; });
     ['mq','an'].forEach(function(k){ var p = spdParse($(k).value, SPD[k].def); $(k).value = p.text; SPD[k].v = p.v; });
+    var rp = rcParse($('w2d').value); $('w2d').value = rp.text; RC.v = rp.v;
     var wp = whParse($('w1d').value); $('w1d').value = wp.text; WH.s.v = wp.s; WH.b.v = wp.b;
     $('s1').placeholder = String(j.real_users || 0); $('s3').placeholder = String(j.real_orders || 0);
     saved = collect();
-    paint(); mqRefresh(); whPaint(true); dirty();
+    paint(); mqRefresh(); rcPaint(); rcBuild(); whPaint(true); dirty();
   }
   exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
   exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
@@ -832,6 +878,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     $(k + 'Range').addEventListener('input', function(){ setSpd(k, this.value); });
     var tm; $(k).addEventListener('input', function(){ clearTimeout(tm); tm = setTimeout(function(){ mqBuild(k); }, 250); });
   });
+  $('rcRange').addEventListener('input', function(){ setRc(this.value); });
   $('whS').addEventListener('input', function(){ setWh('s', this.value); });
   $('whB').addEventListener('input', function(){ setWh('b', this.value); });
   ['w1t','w1d','w2t','w2d'].forEach(function(id){ $(id).addEventListener('input', function(){ whPaint(false); }); });
