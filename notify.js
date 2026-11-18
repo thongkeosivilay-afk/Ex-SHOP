@@ -58,19 +58,90 @@
 
   /* เสียง — เล่นพร้อมป้ายอัตโนมัติในหน้าแอดมิน; หน้าอื่นเล่นเมื่อสั่ง exToast(..., {sound:true}) */
   /* ✓ สำเร็จ = ok.mp3 · ✕ ผิดพลาด / ! เตือน / i ทั่วไป = alert.mp3 */
-  var AUTO_SND = /admin/i.test(location.pathname), snds = {}, unlocked = false;
-  function getSnd(f){ if(!snds[f]){ try { snds[f] = new Audio(f); snds[f].preload = 'auto'; } catch(e){} } return snds[f]; }
-  function playSnd(f){ var a = getSnd(f); if(!a) return; try { a.muted = false; a.currentTime = 0; var p = a.play(); if(p && p.catch) p.catch(function(){}); } catch(e){} }
-  /* มือถือให้เล่นเสียงได้หลังผู้ใช้แตะหน้าจอครั้งแรกเท่านั้น → ปลดล็อกเงียบๆ ตอนแตะครั้งแรก */
-  function unlock(){
-    if(unlocked) return; unlocked = true;
-    ['ok.mp3','alert.mp3'].forEach(function(f){
-      var a = getSnd(f); if(!a) return;
-      try { a.muted = true; var p = a.play(); var done = function(){ a.pause(); a.currentTime = 0; a.muted = false; };
-        p && p.then ? p.then(done, function(){ a.muted = false; }) : done(); } catch(e){}
-    });
+  /* ระบบเสียงแบบกันพลาด:
+     1) Web Audio (ถอดรหัสไฟล์ไว้ในหน่วยความจำ เล่นทันที ซ้อนกันได้ ไม่หน่วง) เป็นตัวหลัก
+     2) ตัวสำรอง <audio> ที่ปลดล็อกไว้ล่วงหน้า — ใช้เมื่อ Web Audio ใช้ไม่ได้
+     3) ปลดล็อก/ปลุกเสียง "ทุกครั้งที่แตะ" (ไม่ใช่แค่ครั้งแรก) และเมื่อกลับมาที่แท็บ/หน้า
+        เพราะมือถือ (โดยเฉพาะ iOS) จะสั่งพักเสียงเองได้ทุกเมื่อ และ touchstart ตอนเลื่อนหน้าไม่นับเป็นการแตะจริง */
+  var AUTO_SND = /admin/i.test(location.pathname) || !!window.EX_THEME_ADMIN;
+  var FILES = ['ok.mp3','alert.mp3'];
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null, bufs = {}, loading = {}, tags = {}, tagOk = {};
+  try { if(navigator.audioSession) navigator.audioSession.type = 'playback'; } catch(e){} /* iOS: ให้ดังแม้เปิดสวิตช์เงียบ */
+
+  function getCtx(){
+    if(!ctx && AC){
+      try { ctx = new AC({ latencyHint:'interactive' }); } catch(e){ try { ctx = new AC(); } catch(e2){ ctx = null; } }
+    }
+    return ctx;
   }
-  ['pointerdown','touchstart','keydown'].forEach(function(ev){ document.addEventListener(ev, unlock, { once:true, passive:true, capture:true }); });
+  function loadBuf(f){
+    var c = getCtx(); if(!c || bufs[f] || loading[f] || !window.fetch) return;
+    loading[f] = 1;
+    fetch(f).then(function(r){ if(!r.ok) throw new Error('snd'); return r.arrayBuffer(); })
+      .then(function(ab){ return new Promise(function(ok,no){ var p = c.decodeAudioData(ab, ok, no); if(p && p.then) p.then(ok,no); }); })
+      .then(function(b){ bufs[f] = b; })
+      .catch(function(){ loading[f] = 0; });   /* พลาด → ลองโหลดใหม่ในครั้งถัดไป */
+  }
+  function startBuf(c, b){
+    var s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0);
+  }
+
+  /* ---- ตัวสำรอง <audio> ---- */
+  function getTag(f){ if(!tags[f]){ try { tags[f] = new Audio(f); tags[f].preload = 'auto'; } catch(e){} } return tags[f]; }
+  function unlockTag(f){
+    if(tagOk[f]) return; var a = getTag(f); if(!a || a._u) return;
+    try {
+      a._u = 1; a.muted = true;
+      var p = a.play();
+      var ok = function(){ try{ a.pause(); a.currentTime = 0; }catch(e){} a.muted = false; a._u = 0; tagOk[f] = 1; };
+      var no = function(){ a.muted = false; a._u = 0; };
+      if(p && p.then) p.then(ok, no); else ok();
+    } catch(e){ a._u = 0; }
+  }
+  function playTag(f){
+    var a = getTag(f); if(!a) return;
+    try {
+      if(a._u || !a.paused){ a = new Audio(f); }   /* กำลังปลดล็อก/เล่นอยู่ → ใช้ตัวใหม่ ไม่ให้ตัดกัน */
+      else { a.muted = false; try{ a.currentTime = 0; }catch(e){} }
+      var p = a.play(); if(p && p.catch) p.catch(function(){});
+    } catch(e){}
+  }
+
+  /* ---- ปลุกระบบเสียง (เรียกซ้ำได้ ถูกมาก ถ้าเสียงพร้อมอยู่แล้วจะไม่ทำอะไร) ---- */
+  function wake(){
+    var c = getCtx();
+    if(c && c.state !== 'running'){
+      try { var p = c.resume(); if(p && p.catch) p.catch(function(){}); } catch(e){}
+      try { var s = c.createBufferSource(); s.buffer = c.createBuffer(1, 1, 22050); s.connect(c.destination); s.start(0); } catch(e){}  /* ปลดล็อก iOS */
+    }
+    FILES.forEach(loadBuf);
+    if(!c || c.state !== 'running') FILES.forEach(unlockTag);
+  }
+
+  /* ---- เล่นเสียง ---- */
+  function playSnd(f){
+    var c = getCtx(), b = bufs[f];
+    if(!c || !b){ loadBuf(f); playTag(f); return; }
+    if(c.state === 'running'){ try { startBuf(c, b); return; } catch(e){} playTag(f); return; }
+    var done = false;
+    var go = function(){
+      if(done) return; done = true;
+      if(c.state === 'running'){ try { startBuf(c, b); return; } catch(e){} }
+      playTag(f);
+    };
+    try { var p = c.resume(); if(p && p.then) p.then(go, go); else go(); } catch(e){ go(); }
+    setTimeout(go, 250);   /* resume ค้าง → ใช้ตัวสำรอง ไม่ให้เงียบ */
+  }
+  window.exSound = playSnd; window.exSoundWake = wake;
+
+  ['pointerdown','touchstart','touchend','mousedown','click','keydown'].forEach(function(ev){
+    document.addEventListener(ev, wake, { passive:true, capture:true });
+  });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) wake(); });
+  window.addEventListener('pageshow', wake);
+  window.addEventListener('focus', wake);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ getCtx(); FILES.forEach(loadBuf); });
+  else { getCtx(); FILES.forEach(loadBuf); }
 
   function build(){
     if(el) return;

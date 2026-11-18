@@ -236,10 +236,12 @@ const AUTH = {
   }
   /* เสียง "แปะๆ" ตอนเข้าสู่ระบบ/สมัครสำเร็จ — เตรียมเสียงตอนกดปุ่ม (มือถือบังคับให้เริ่มจากการกดของผู้ใช้) แล้วค่อยเล่นเมื่อสำเร็จ */
   let okSnd = null;
-  function primeSnd(){ try { okSnd = okSnd || new Audio('ok.mp3'); okSnd.preload = 'auto'; okSnd.muted = true;
+  function primeSnd(){ try { if(window.exSoundWake) { window.exSoundWake(); return; } } catch (e) {}
+    try { okSnd = okSnd || new Audio('ok.mp3'); okSnd.preload = 'auto'; okSnd.muted = true;
     const p = okSnd.play(); const rs = () => { okSnd.pause(); okSnd.currentTime = 0; okSnd.muted = false; };
     p && p.then ? p.then(rs, () => { okSnd.muted = false; }) : rs(); } catch (e) {} }
-  function playOk(){ try { if(!okSnd) okSnd = new Audio('ok.mp3'); okSnd.muted = false; okSnd.currentTime = 0; const p = okSnd.play(); p && p.catch && p.catch(() => {}); } catch (e) {} }
+  function playOk(){ try { if(window.exSound) { window.exSound('ok.mp3'); return; } } catch (e) {}
+    try { if(!okSnd) okSnd = new Audio('ok.mp3'); okSnd.muted = false; okSnd.currentTime = 0; const p = okSnd.play(); p && p.catch && p.catch(() => {}); } catch (e) {} }
   $$('form', am).forEach(form => form.addEventListener('submit', async e => {
     e.preventDefault();
     primeSnd();
