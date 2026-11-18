@@ -375,11 +375,7 @@ const featUI = (function(){
 })();
 
 function renderCatList(){
-  $('#catList').innerHTML = cats.map(c => `
-  <button class="cat" data-cat="${escH(c.k)}">
-    <div class="cb cb-img">${artCat(c.img)}</div>
-    <div class="cat-b"><div><h3>${escH(c.n)}</h3></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
-  </button>`).join('');
+  $('#catList').innerHTML = cats.map(c => catCardHTML(c)).join('');
   if(typeof addCatTabs === 'function') addCatTabs($('#catList'));
   $('#cats').hidden = !SHOW.categories || !cats.length;   // ยังไม่มีหมวดในฐานข้อมูล = ซ่อนส่วนนี้
 }

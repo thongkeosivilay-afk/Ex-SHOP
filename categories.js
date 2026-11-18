@@ -124,11 +124,7 @@
     sec.hidden = !showCats || !list.length;
     if(sec.hidden) return;
     $('#catCount').textContent = list.length;
-    $('#catList').innerHTML = list.map(c => `
-      <button class="cat${state.cat === c.k ? ' is-on' : ''}" data-cat="${esc(c.k)}" type="button">
-        <div class="cb cb-img">${artCat(c.img)}</div>
-        <div class="cat-b"><div><h3>${hl(c.n)}</h3></div><span class="cnt">${products.filter(p => p.cat === c.k).length} ສິນຄ້າ</span></div>
-      </button>`).join('');
+    $('#catList').innerHTML = list.map(c => catCardHTML(c, hl(c.n), state.cat === c.k)).join('');
     if(typeof addCatTabs === 'function') addCatTabs($('#catList'));
   }
 

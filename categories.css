@@ -64,7 +64,7 @@ body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px
 .ct-status:empty{display:none}
 .ct-status button{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-size:13px}
 .ct-status button svg{width:14px;height:14px}
-.ct-status mark,.pname mark,.cat-b mark{background:rgba(var(--red-rgb),.22);color:inherit;border-radius:3px;padding:0 1px}
+.ct-status mark,.pname mark,.cat-b mark,.cat-nm mark{background:rgba(var(--red-rgb),.22);color:inherit;border-radius:3px;padding:0 1px}
 .ct-sec{margin-top:18px}
 .ct-sec[hidden]{display:none}
 .ct-sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
@@ -74,9 +74,8 @@ body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px
 .ct-sec .grid{margin-top:16px}
 
 /* การ์ดหมวดที่เลือกอยู่ */
-.cat.is-on .cb.cb-img{outline:2px solid var(--red);outline-offset:-2px}
+/* หมวดที่เลือกอยู่ / โฟกัส: เส้นขอบการ์ด + รอยบาก + ขีดหน้าชื่อเป็นสีแดง (กำหนดใน catcard.css) */
 .cat:focus-visible{outline:none}
-.cat:focus-visible .cb.cb-img{outline:2px solid var(--red);outline-offset:-2px}
 
 /* ผลลัพธ์ว่าง */
 .ct-empty{grid-column:1/-1;text-align:center;padding:46px 10px 20px;color:var(--muted)}
@@ -97,5 +96,5 @@ body.ct-page{min-height:100vh;padding-bottom:calc(env(safe-area-inset-bottom,0px
 .ct-chip:active{transform:scale(.94)}
 .ct-chip.on{transform:scale(1.03)}
 .ct-chip b{transition:background .3s ease,color .3s ease}
-.cat.is-on .cb.cb-img{transition:outline-color .3s}
+
 @media (prefers-reduced-motion:reduce){.ct-chip,.ct-chip b{transition:none}.ct-chip.on{transform:none}}

@@ -60,6 +60,25 @@ function artCat(src){
   return `<div class="cph"><span class="cph-a">ຂະໜາດຮູບທີ່ແນະນຳ</span><span class="cph-n">1500 × 512<small>px</small></span><span class="cph-b">ສຳລັບຮູບໝວດໝູ່ · ຮູບແນວນອນ · PNG ຫຼື JPG</span></div>`;
 }
 
+/* การ์ดหมวดหมู่ (ใช้ร่วมกันทั้งหน้าแรกและหน้าหมวดหมู่) — ดีไซน์ตามรูปอ้างอิง
+   ชื่อหมวด (มีขีดแดงนำหน้า) อยู่เหนือการ์ด · การ์ดเป็นรูปแบนเนอร์ + รอยบากมุมซ้ายบนมีไอคอนกล่องสีแดง + "จำนวนสินค้า"
+   ยังไม่ใส่รูป = พื้นเทาเข้มมีไอคอนกล่องจาง ๆ กลางการ์ด · รูปที่แนะนำ: แนวนอน อัตราส่วน ~3.3:1 (เช่น 1500 × 455 px)
+   nameHTML = ชื่อที่ไฮไลต์คำค้นแล้ว (ไม่ใส่ = ใช้ชื่อปกติ) · on = หมวดที่เลือกอยู่ (หน้าหมวดหมู่)
+   class "ctab" บนรอยบาก = บอก addCatTabs (cat-trial.js) ว่าการ์ดนี้มีตัวเลขแล้ว ไม่ต้องเติมซ้ำ */
+function catCardHTML(c, nameHTML, on){
+  const n = products.filter(p => p.cat === c.k).length;
+  const CUBE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>';
+  const PKG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>';
+  const art = c.img ? `<img src="${escH(c.img)}" alt="" loading="lazy" draggable="false">` : `<div class="cat-ph">${CUBE}</div>`;
+  return `<button class="cat${on ? ' is-on' : ''}" data-cat="${escH(c.k)}" type="button">
+    <h3 class="cat-nm"><i aria-hidden="true"></i><span>${nameHTML || escH(c.n)}</span></h3>
+    <div class="cat-cd">
+      <div class="cb cb-img">${art}</div>
+      <span class="cat-tg ctab"><span class="cat-tg-bg" aria-hidden="true"></span><span class="cat-tg-in"><span class="cat-ti">${PKG}</span><b>${n}</b><em>ສິນຄ້າ</em></span></span>
+    </div>
+  </button>`;
+}
+
 /* products — ดึงจากฐานข้อมูล Supabase (ฟังก์ชัน shop_products) ไม่มีสินค้าตายตัวในไฟล์แล้ว
    เพิ่ม/แก้/ลบสินค้าที่หน้าแอดมิน (admin.html → ຈັດການສິນຄ້າ & ໝວດໝູ່)
    - products เป็น array เดียวที่ถูกเติมข้อมูลหลังโหลดเสร็จ → ทุกหน้าฟังอีเวนต์ 'products:ready' แล้ววาดใหม่
