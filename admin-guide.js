@@ -393,7 +393,9 @@
 
   /* ---------- ตัวอย่างจำลองปุ่ม/ช่อง ---------- */
   var CUR = '<svg class="gx-cur" viewBox="0 0 24 24" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"><path d="M5 3l14 7-6 2-2 6z"/></svg>';
-  function demo(s) {
+  function demo(s, pid, j) {
+    /* มีฉากจำลองเล่นเอง (guide-sim.js) → ใช้ฉากนั้น · ไม่มีก็ใช้ตัวอย่างปุ่ม/ช่องแบบเดิม */
+    if (window.GXSIM && GXSIM.has(pid, j)) return GXSIM.html(pid, j);
     var lab = esc(x(s.ui)), h;
     if (s.k === 'in') h = '<span class="gx-fi"><span>' + lab + '</span><i class="gx-caret"></i></span>';
     else if (s.k === 'sel') h = '<span class="gx-fi sel"><span>' + lab + '</span>' + svg('chev') + '</span>';
@@ -449,13 +451,14 @@
     h += '<div class="gx-box gx-rv"><h4>' + svg('list') + u('prep') + '</h4><ul>' + p.need.map(function (a) { return '<li>' + x(a) + '</li>'; }).join('') + '</ul></div>';
     h += '<div class="gx-tl">' + p.steps.map(function (s, j) {
       var ok = d.indexOf(j) > -1, nt = s.n ? '<div class="gx-n ' + s.n[0] + '">' + svg(s.n[0], '') + '<span>' + s.n[L() + 1] + '</span></div>' : '';
-      return '<div class="gx-st gx-rv' + (ok ? ' ok' : '') + (j === cur ? ' cur' : '') + '" id="gxS' + j + '" style="--d:' + (j % 3 * 70) + 'ms"><div class="gx-num">' + (ok ? '✓' : j + 1) + '</div><div class="gx-sb"><h3>' + x(s.t) + '</h3><p>' + x(s.p) + '</p>' + demo(s) + nt + '<button class="gx-chk" type="button" data-j="' + j + '">' + (ok ? u('marked') : u('mark')) + '</button></div></div>';
+      return '<div class="gx-st gx-rv' + (ok ? ' ok' : '') + (j === cur ? ' cur' : '') + '" id="gxS' + j + '" style="--d:' + (j % 3 * 70) + 'ms"><div class="gx-num">' + (ok ? '✓' : j + 1) + '</div><div class="gx-sb"><h3>' + x(s.t) + '</h3><p>' + x(s.p) + '</p>' + demo(s, p.id, j) + nt + '<button class="gx-chk" type="button" data-j="' + j + '">' + (ok ? u('marked') : u('mark')) + '</button></div></div>';
     }).join('') + '</div>';
     if (p.fix && p.fix.length) h += '<h3 class="gx-sec">' + u('fix') + '</h3><div class="gx-fix">' + p.fix.map(function (f) { return '<details><summary>' + svg('help', 'width="17" height="17"') + '<span>' + x(f[0]) + '</span></summary><div>' + x(f[1]) + '</div></details>'; }).join('') + '</div>';
     var pv = PAGES[k - 1], nx = PAGES[k + 1];
     h += '<div class="gx-pn"><button id="gxPv" type="button"' + (pv ? '' : ' disabled') + '>‹ ' + (pv ? x(pv.t) : '') + '</button><button id="gxNx" class="pri" type="button">' + (nx ? x(nx.t) + ' ›' : u('finish')) + '</button></div></div>';
     root.innerHTML = h;
     anim(pc);
+    if (window.GXSIM) GXSIM.mount(root, L());
     $('#gxBk').addEventListener('click', toHub);
     $('#gxPv').addEventListener('click', function () { if (pv) location.hash = pv.id; });
     $('#gxNx').addEventListener('click', function () { if (nx) location.hash = nx.id; else toHub(); });
@@ -485,6 +488,7 @@
 
   /* ---------- เราท์ตามแฮช ---------- */
   function render() {
+    if (window.GXSIM) GXSIM.stopAll();
     var id = decodeURIComponent((location.hash || '').replace('#', '')), k = PAGES.findIndex(function (p) { return p.id === id; });
     if (k < 0) renderHub(); else renderPage(k);
   }
