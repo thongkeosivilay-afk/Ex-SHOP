@@ -182,11 +182,11 @@ function cleanHTML(html){
 /* แถวจากฐานข้อมูล → รูปแบบที่การ์ดสินค้าใช้ */
 function mapProduct(r){
   const imgs = Array.isArray(r.imgs) ? r.imgs.filter(Boolean) : [];
-  const durs = (Array.isArray(r.durs) ? r.durs : []).map(d => ({ label: String(d.label || ''), price: Number(d.price) || 0, stock: d.stock == null ? null : Number(d.stock) || 0 }));
+  const durs = (Array.isArray(r.durs) ? r.durs : []).map(d => ({ label: String(d.label || ''), price: Number(d.price) || 0, orig: Number(d.old_price != null ? d.old_price : d.price) || 0, stock: d.stock == null ? null : Number(d.stock) || 0 }));
   const from = durs.length ? Math.min(...durs.map(d => d.price)) : (Number(r.price) || 0);
   return {
     id: r.id, n: r.name || '', cat: r.cat || '',
-    p: fmtKip(from), price: from,
+    p: fmtKip(from), price: from, orig: durs.length ? Math.min(...durs.map(d => d.orig)) : (Number(r.old_price != null ? r.old_price : r.price) || 0),
     left: String(Number(r.stock) || 0), sold: String(Number(r.sold) || 0),
     img: imgs[0] || '', imgs, desc: r.desc || '', notice: r.notice || '', durs,
     update: r.status === 'update',
@@ -300,7 +300,7 @@ function loadAgentPrices(){
 /* ราคาเริ่มต้นสำหรับการ์ด: คืน { now: ราคาตัวแทนที่ถูกสุด, old: ราคาปกติของตัวเลือกเดียวกัน } เมื่อถูกกว่าราคาปกติ ไม่งั้น null */
 function exAgentFrom(p){
   const m = window.exAgentMap; if(!m) return null;
-  const opts = p.durs && p.durs.length ? p.durs.map(d => ({ k: d.label, v: d.price })) : [{ k: '', v: p.price }];
+  const opts = p.durs && p.durs.length ? p.durs.map(d => ({ k: d.label, v: d.orig != null ? d.orig : d.price })) : [{ k: '', v: p.orig != null ? p.orig : p.price }];
   let best = null;
   opts.forEach(o => { const a = m[p.id + '|' + o.k], now = a == null ? o.v : a; if(!best || now < best.now) best = { now, old: o.v }; });
   return best && best.now < best.old ? best : null;
@@ -317,7 +317,7 @@ function productCardHTML(p, i, nameHTML){
         <div class="pimg">
           ${artSq('', p.img)}
           ${ag ? `<div class="ptab"><span class="pti ag">${AGI}</span><span class="ptt">ລາຄາຕົວແທນ</span></div>` : ''}${(ag || p.hot === false) ? '' : `<div class="ptab"><span class="pti"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></span><span class="ptt">ຍອດນິຍົມ</span></div>`}
-          <div class="pnotch"><span class="pfrom">ເລີ່ມ</span><span class="pnow">${escH(ag ? fmtKip(ag.now) : p.p)}</span></div>
+          <div class="pnotch"><span class="pfrom">ເລີ່ມ</span><span class="pnow">${escH(ag ? fmtKip(ag.now) : (window.exAgentMap && p.orig != null ? fmtKip(p.orig) : p.p))}</span></div>
         </div>
         ${ag ? `<div class="pold"><s>${escH(fmtKip(ag.old))}</s></div>` : ''}
         <h3 class="pname">${nameHTML || escH(p.n)}</h3>

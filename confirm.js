@@ -12,9 +12,11 @@
     const tot = Number(p.left) || 0;
     /* ราคาตัวแทน (ถ้าบัญชีนี้เป็นตัวแทน): ใช้ราคาที่ตั้งไว้แทนราคาปกติ — เซิร์ฟเวอร์คิดราคาเดียวกันตอนซื้อจริง */
     const A = (k, v) => { const a = ag && ag[p.id + '|' + k]; return a == null ? v : a; };
-    if(p.durs && p.durs.length) return p.durs.map(d => { const v = A(d.label, d.price); return { l: d.label, k: d.label, o: d.price, p: v, s: d.stock == null ? tot : d.stock }; });
-    const v = A('', p.price);
-    return [{ l: p.n, k: '', o: p.price, p: v, s: tot }];
+    /* ตัวแทนไม่ได้ราคา Flash Sale → ใช้ราคาปกติเป็นฐาน */
+    const B = (x, o) => ag && o != null ? o : x;
+    if(p.durs && p.durs.length) return p.durs.map(d => { const b = B(d.price, d.orig), v = A(d.label, b); return { l: d.label, k: d.label, o: b, p: v, s: d.stock == null ? tot : d.stock }; });
+    const b0 = B(p.price, p.orig), v = A('', b0);
+    return [{ l: p.n, k: '', o: b0, p: v, s: tot }];
   }
 
   /* ยอดเงินบนแถบหัว/โปรไฟล์ อ่านจาก localStorage 'exshop_balance' → ซิงก์ค่าจริงจากเซิร์ฟเวอร์ลงไป */
@@ -106,7 +108,7 @@
     clearTimeout(pt); typed = null; applied = null;
     const c = $('#cfCode').value.trim();
     render();
-    if(!c || !loggedIn()) return;
+    if(!c || !loggedIn() || ag) return;
     const my = ++pseq;
     pt = setTimeout(() => exRpc('member_promo', { p_token: exToken(), p_code: c }).then(j => {
       if(my !== pseq) return;
@@ -138,6 +140,8 @@
     $('#cfPct').textContent = mx.toFixed(2)+' %';
     document.querySelector('.cf-info .b').style.display = mx>0 ? '' : 'none';
     $('#cfQty').textContent = qty;
+    /* ตัวแทนใช้โค้ดส่วนลดไม่ได้ → ซ่อนปุ่มคูปอง */
+    $('#cfCp').style.display = ag ? 'none' : ''; $('#cfPw').style.display = ag ? 'none' : '';
     $('#cfMinus').disabled = qty<=1; $('#cfPlus').disabled = qty>=stock;
     const sub = unit*qty, d = disc(sub, applied), tot = sub-d, rem = bal == null ? null : bal-tot;
     $('#cfTot').textContent = fmt(tot);
@@ -151,7 +155,8 @@
     if(applied){ h.classList.add('ok'); h.textContent = '✓ ໃຊ້ໂຄ້ດແລ້ວ · ' + applied.t + ' (-' + fmt(d) + ')'; }
     else if(typed){ h.classList.add('ok'); h.textContent = 'ຈະໄດ້ຮັບສ່ວນຫຼຸດ -' + fmt(disc(sub,typed)) + ' · ກົດ "ໃຊ້" ເພື່ອຢືນຢັນ'; }
     else if($('#cfCode').value.trim()){
-      if(!loggedIn()){ h.textContent = 'ເຂົ້າສູ່ລະບົບເພື່ອໃຊ້ໂຄ້ດສ່ວນຫຼຸດ'; }
+      if(ag){ h.classList.add('bad'); h.textContent = 'ຕົວແທນບໍ່ສາມາດໃຊ້ໂຄ້ດສ່ວນຫຼຸດໄດ້'; }
+      else if(!loggedIn()){ h.textContent = 'ເຂົ້າສູ່ລະບົບເພື່ອໃຊ້ໂຄ້ດສ່ວນຫຼຸດ'; }
       else if(typed === false){ h.classList.add('bad'); h.textContent = 'ໂຄ້ດບໍ່ຖືກຕ້ອງ ຫຼື ໝົດສິດແລ້ວ'; }
     }
     $('#cfApply').disabled = !typed || !!applied;
@@ -231,13 +236,14 @@
     notfound: ['ຊື້ບໍ່ໄດ້', 'ບໍ່ພົບສິນຄ້ານີ້ ຫຼື ປິດຂາຍແລ້ວ'],
     dur_notfound: ['ຊື້ບໍ່ໄດ້', 'ຕົວເລືອກນີ້ຖືກປ່ຽນແປງແລ້ວ ກະລຸນາເລືອກໃໝ່'],
     bad_promo: ['ຊື້ບໍ່ໄດ້', 'ໂຄ້ດສ່ວນຫຼຸດບໍ່ຖືກຕ້ອງ ຫຼື ໝົດສິດແລ້ວ'],
+    agent_no_promo: ['ຊື້ບໍ່ໄດ້', 'ຕົວແທນບໍ່ສາມາດໃຊ້ໂຄ້ດສ່ວນຫຼຸດໄດ້'],
     bad_qty: ['ຊື້ບໍ່ໄດ້', 'ຈຳນວນບໍ່ຖືກຕ້ອງ'],
     net: ['ເຊື່ອມຕໍ່ບໍ່ໄດ້', 'ກະລຸນາກວດຍອດເງິນກ່ອນລອງຊື້ໃໝ່ ຖ້າເງິນຖືກຕັດແລ້ວ ຕິດຕໍ່ແອດມິນພ້ອມຊື່ບັນຊີ']
   };
   function doPurchase(){
     if(busy || needLogin()) return;
     const o = opts[sel]; if(!o.s) return;
-    const code = applied ? applied.code : null;
+    const code = (applied && !ag) ? applied.code : null;
     busy = true; showLoading();
     /* ส่งคำขอซื้อไปเซิร์ฟเวอร์ทันที — ไอคอนหมุนอย่างน้อย 2 รอบระหว่างรอผล */
     const req = exRpc('member_buy', { p_token: exToken(), p_product_id: Number(cur.id), p_dur_label: o.k, p_qty: qty, p_promo: code })
