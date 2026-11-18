@@ -140,6 +140,16 @@ td.a{white-space:nowrap}
 .snack2{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid #2a2a30;padding:11px 18px;border-radius:14px;font-size:14.5px;opacity:0;pointer-events:none;transition:.25s;z-index:120;max-width:90%;text-align:center}
 .snack2.show{opacity:1;transform:translate(-50%,0)}
 @media (max-width:380px){.pin{width:112px}.ttl h2{font-size:23px}.st b{font-size:23px}}
+.swr{display:flex;align-items:center;gap:14px;padding:13px 14px;margin:0 0 14px;border:1px solid #2a2a2e;border-radius:14px;background:#0b0b0d;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.swr .swt{flex:1;min-width:0;display:grid;gap:3px}
+.swr .swt b{font-size:15px;font-weight:700;color:#fff;line-height:1.35}
+.swr .swt small{font-size:12.5px;line-height:1.5;color:#74747e}
+.swr .swi{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+.swr .sw{position:relative;flex:none;width:52px;height:30px;border-radius:30px;background:#2a2a2e;border:1px solid #3a3a40;transition:background .2s,border-color .2s}
+.swr .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#9a9aa3;transition:transform .2s,background .2s}
+.swr .swi:checked~.sw{background:#143a1f;border-color:#1f5a30}
+.swr .swi:checked~.sw::after{transform:translateX(22px);background:var(--ok)}
+.noff{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:8px;background:#2a1708;color:#f0a24a;font-size:11.5px;font-weight:700;white-space:nowrap}
 </style>
 <script>window.EX_THEME_ADMIN=1</script>
 <script src="theme.js"></script>
@@ -182,7 +192,7 @@ td.a{white-space:nowrap}
     </div>
 
     <div id="pPrices" class="pp" hidden>
-      <p class="hint">ລາຄານີ້ໃຊ້ກັບຕົວແທນທຸກຄົນທີ່ຍັງບໍ່ໄດ້ຕັ້ງລາຄາສິນຄ້ານັ້ນເອງ</p>
+      <p class="hint">ລາຄານີ້ໃຊ້ກັບຕົວແທນທຸກຄົນທີ່ເປີດສວິດ “ໃຊ້ລາຄາກາງ” ແລະຍັງບໍ່ໄດ້ຕັ້ງລາຄາສິນຄ້ານັ້ນເອງ (ລາຄາທີ່ຕັ້ງສະເພາະຄົນຈະມາກ່ອນສະເໝີ)</p>
       <label class="sf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="dq" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ..." autocomplete="off"></label>
       <div class="pl" id="dList"><div class="nope">ກຳລັງໂຫຼດ...</div></div>
       <button class="go" id="dSave" type="button">ບັນທຶກລາຄາເລີ່ມຕົ້ນ</button>
@@ -206,6 +216,7 @@ td.a{white-space:nowrap}
   <div class="mdl">
     <h3>ລາຄາຂອງຄົນນີ້ <button type="button" data-close aria-label="ປິດ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></h3>
     <div class="ms" id="pSub"></div>
+    <label class="swr" id="swRow"><span class="swt"><b>ໃຊ້ລາຄາກາງ (ລາຄາສິນຄ້າຕົວແທນ)</b><small id="swHint"></small></span><input type="checkbox" id="swDef" class="swi"><i class="sw"></i></label>
     <label class="sf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ..." autocomplete="off"></label>
     <div class="pl" id="pList"><div class="nope">ກຳລັງໂຫຼດ...</div></div>
     <div class="hint">ເວັ້ນວ່າງ = ໃຊ້ລາຄາເລີ່ມຕົ້ນຂອງຕົວແທນ ຫຼື ລາຄາປົກກະຕິ</div>
@@ -227,7 +238,7 @@ td.a{white-space:nowrap}
 (function(){
   var $ = function(s){ return document.querySelector(s); };
   var nf = new Intl.NumberFormat('en-US');
-  var rows = [], defItems = [], curId = null, priceItems = [], tt, delId = null;
+  var rows = [], defItems = [], curId = null, priceItems = [], tt, delId = null, useDef = true, useDef0 = true;
   var fmt = function(n){ return '₭' + nf.format(Number(n) || 0); };
   var fmtC = function(n){ n = Number(n) || 0; return n >= 1e7 ? '₭' + (Math.round(n / 1e5) / 10).toLocaleString('en-US') + 'M' : fmt(n); };
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
@@ -287,7 +298,7 @@ td.a{white-space:nowrap}
       var closed = r.status === 'closed';
       return '<tr data-id="' + esc(r.id) + '">'
         + '<td class="k"><code class="kc" data-copy="' + esc(r.key) + '" title="ຄັດລອກ">' + esc(r.key) + '</code></td>'
-        + '<td class="c n">' + (r.note ? esc(r.note) : '-') + '</td>'
+        + '<td class="c n">' + (r.note ? esc(r.note) : '-') + (r.use_default === false ? '<br><span class="noff">ປິດລາຄາກາງ</span>' : '') + '</td>'
         + '<td class="c q">' + fmt(r.weekly_quota) + '</td>'
         + '<td>' + pill(r.status) + '</td>'
         + '<td class="u">' + (r.username ? esc(r.username) : '-') + '</td>'
@@ -328,10 +339,10 @@ td.a{white-space:nowrap}
     if(!list.length) return '<div class="nope">' + (items.length ? 'ບໍ່ພົບສິນຄ້າທີ່ຄົ້ນຫາ' : 'ຍັງບໍ່ມີສິນຄ້າ') + '</div>';
     return list.map(function(it){
       var i = items.indexOf(it), hint = '';
-      if(mode === 'agent' && it.def != null) hint = '<small><span>ລາຄາເລີ່ມຕົ້ນ</span> <s>' + fmt(it.def) + '</s></small>';
+      if(mode === 'agent' && useDef && it.def != null) hint = '<small><span>ລາຄາເລີ່ມຕົ້ນ</span> <s>' + fmt(it.def) + '</s></small>';
       return '<div class="pr"><div class="t"><b>' + esc(it.name) + (it.dur_label ? ' <em>· ' + esc(it.dur_label) + '</em>' : '') + '</b>'
         + '<small><span>ລາຄາປົກກະຕິ</span> <s>' + fmt(it.base) + '</s></small>' + hint + '</div>'
-        + '<div class="pin"><span>₭</span><input type="text" inputmode="numeric" autocomplete="off" data-i="' + i + '" value="' + (it.price == null ? '' : esc(it.price)) + '" placeholder="' + esc(it.price == null ? (mode === 'agent' && it.def != null ? it.def : it.base) : '') + '"></div></div>';
+        + '<div class="pin"><span>₭</span><input type="text" inputmode="numeric" autocomplete="off" data-i="' + i + '" value="' + (it.price == null ? '' : esc(it.price)) + '" placeholder="' + esc(it.price == null ? (mode === 'agent' && useDef && it.def != null ? it.def : it.base) : '') + '"></div></div>';
     }).join('');
   }
   function bindInputs(box, items){
@@ -351,15 +362,24 @@ td.a{white-space:nowrap}
   }
 
   /* ===== ราคาของตัวแทนคนนี้ ===== */
+  function syncSw(){
+    $('#swDef').checked = useDef;
+    $('#swHint').textContent = useDef ? 'ເປີດ: ສິນຄ້າທີ່ບໍ່ໄດ້ຕັ້ງລາຄາສະເພາະຄົນນີ້ ຈະໃຊ້ລາຄາກາງ' : 'ປິດ: ຄົນນີ້ບໍ່ໃຊ້ລາຄາກາງ ໃຊ້ສະເພາະລາຄາທີ່ຕັ້ງໃຫ້ຄົນນີ້ ຫຼື ລາຄາປົກກະຕິ';
+  }
+  $('#swDef').addEventListener('change', function(){
+    useDef = this.checked; syncSw();
+    $('#pList').innerHTML = itemRows(priceItems, $('#pq').value, 'agent');
+  });
   function openPrice(id){
     var r = rows.filter(function(x){ return String(x.id) === String(id); })[0]; if(!r) return;
-    curId = r.id; priceItems = [];
+    curId = r.id; priceItems = []; useDef = r.use_default !== false; useDef0 = useDef; syncSw();
     $('#pSub').textContent = (r.note || '-') + ' · ' + (r.username || r.key);
     $('#pq').value = ''; $('#pList').innerHTML = '<div class="nope">ກຳລັງໂຫຼດ...</div>';
     $('#ovPrice').classList.add('show');
     exRpc('adm_agent_prices_get', { p_token: tok(), p_id: r.id }).then(function(j){
       if(!j || !j.ok){ $('#pList').innerHTML = '<div class="nope">' + (MSG[j && j.code] || 'ໂຫຼດຂໍ້ມູນບໍ່ໄດ້') + '</div>'; return; }
       priceItems = j.items || [];
+      useDef = j.use_default !== false; useDef0 = useDef; syncSw();
       $('#pList').innerHTML = itemRows(priceItems, '', 'agent'); bindInputs($('#pList'), priceItems);
     }).catch(function(){ $('#pList').innerHTML = '<div class="nope">' + NET + '</div>'; });
   }
@@ -367,6 +387,11 @@ td.a{white-space:nowrap}
   $('#pSave').onclick = function(){
     var b = this; if(b.disabled || !priceItems.length) return; b.disabled = true;
     exRpc('adm_agent_prices_save', { p_token: tok(), p_id: curId, p_items: collect(priceItems) }).then(function(j){
+      if(!(j && j.ok)){ b.disabled = false; toast(MSG[j && j.code] || 'ບັນທຶກບໍ່ສຳເລັດ'); return; }
+      if(useDef === useDef0) return j;
+      return exRpc('adm_agent_set_use_default', { p_token: tok(), p_id: curId, p_on: useDef });
+    }).then(function(j){
+      if(j === undefined) return;
       b.disabled = false;
       if(j && j.ok){ closeAll(); toast('ບັນທຶກລາຄາແລ້ວ'); load(); }
       else toast(MSG[j && j.code] || 'ບັນທຶກບໍ່ສຳເລັດ');
