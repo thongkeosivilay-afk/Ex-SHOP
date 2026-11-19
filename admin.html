@@ -349,7 +349,35 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   <div class="pinsw-t"><b>ລະຫັດ PIN ເຂົ້າແຜງ</b><span id="pinSwTxt">ໃສ່ທຸກຄັ້ງທີ່ເຂົ້າ</span></div>
   <button type="button" class="pinsw-b" id="pinSwBtn" role="switch" aria-checked="true" aria-label="ໃສ່ PIN ທຸກຄັ້ງທີ່ເຂົ້າ"><i></i></button>
 </div>
+<div class="pinsw">
+  <div class="pinsw-t"><b>ປ່ຽນລະຫັດ PIN</b><span>ຕ້ອງໃສ່ PIN ເກົ່າ ແລ້ວຕັ້ງ PIN ໃໝ່ 6 ຫຼັກ</span></div>
+  <button type="button" class="pc-open" id="pcOpen">ປ່ຽນ</button>
+</div>
+<div class="pc-bg" id="pcBg" hidden>
+  <form class="pc-box" id="pcForm" autocomplete="off">
+    <h3>ປ່ຽນລະຫັດ PIN</h3>
+    <label>PIN ເກົ່າ<input id="pcOld" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off"></label>
+    <label>PIN ໃໝ່ (6 ຫຼັກ)<input id="pcNew" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off"></label>
+    <label>ຢືນຢັນ PIN ໃໝ່<input id="pcNew2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off"></label>
+    <p class="pc-msg" id="pcMsg" aria-live="polite"></p>
+    <div class="pc-row"><button type="button" class="pc-cancel" id="pcCancel">ຍົກເລີກ</button><button type="submit" class="pc-ok" id="pcOk">ບັນທຶກ</button></div>
+  </form>
+</div>
 <style>
+.pc-open{flex:none;height:34px;padding:0 18px;border-radius:99px;border:1px solid var(--redline);background:var(--redsoft);color:var(--red);font:inherit;font-weight:600;cursor:pointer}
+.pc-bg{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.7)}
+.pc-bg[hidden]{display:none}
+.pc-box{width:min(360px,100%);display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;background:var(--card);border:1px solid var(--redline);color:var(--text)}
+.pc-box h3{font-size:17px}
+.pc-box label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.pc-box input{height:44px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font:inherit;font-size:18px;letter-spacing:6px;text-align:center}
+.pc-box input:focus{outline:none;border-color:var(--red)}
+.pc-msg{min-height:18px;font-size:13px;color:var(--red)}
+.pc-msg.ok{color:#2fbf71}
+.pc-row{display:flex;gap:10px}
+.pc-row button{flex:1;height:44px;border-radius:12px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text)}
+.pc-row .pc-ok{background:var(--red);border-color:var(--red);color:#fff}
+.pc-row button:disabled{opacity:.6}
 .pinsw{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 14px;padding:14px 17px;border-radius:22px;background:var(--card);border:1px solid var(--border)}
 .pinsw-t{display:flex;flex-direction:column;gap:3px;min-width:0}
 .pinsw-t b{font-size:14.5px;font-weight:600}
@@ -366,6 +394,40 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   function show(on){b.setAttribute('aria-checked',on?'true':'false');t.textContent=on?'ໃສ່ທຸກຄັ້ງທີ່ເຂົ້າ':'ໃສ່ຄັ້ງດຽວ (ຈື່ໄວ້ 30 ນາທີ)'}
   show(get());
   b.addEventListener('click',function(){var on=!get();try{localStorage.setItem('exPinMode',on?'every':'once')}catch(e){}show(on)});
+})();
+</script>
+<script>
+(function(){
+  var SB={url:'https://mjalctpfeizjukuprqti.supabase.co',key:'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ'};
+  var $=function(i){return document.getElementById(i)};
+  var bg=$('pcBg'),o=$('pcOld'),n=$('pcNew'),n2=$('pcNew2'),msg=$('pcMsg'),ok=$('pcOk'),busy=false;
+  function tok(){try{return localStorage.getItem('exSession')||sessionStorage.getItem('exSession')||''}catch(e){return ''}}
+  function say(t,good){msg.textContent=t||'';msg.className='pc-msg'+(good?' ok':'')}
+  function open(){o.value=n.value=n2.value='';say('');bg.hidden=false;setTimeout(function(){o.focus()},50)}
+  function close(){bg.hidden=true}
+  $('pcOpen').addEventListener('click',open);
+  $('pcCancel').addEventListener('click',close);
+  bg.addEventListener('click',function(e){if(e.target===bg)close()});
+  [o,n,n2].forEach(function(i){i.addEventListener('input',function(){i.value=i.value.replace(/\D/g,'').slice(0,6)})});
+  $('pcForm').addEventListener('submit',function(e){
+    e.preventDefault(); if(busy) return;
+    if(!/^\d{6}$/.test(o.value)) return say('ກະລຸນາໃສ່ PIN ເກົ່າ 6 ຫຼັກ');
+    if(!/^\d{6}$/.test(n.value)) return say('PIN ໃໝ່ຕ້ອງເປັນຕົວເລກ 6 ຫຼັກ');
+    if(n.value!==n2.value) return say('PIN ໃໝ່ທັງສອງຊ່ອງບໍ່ຕົງກັນ');
+    if(n.value===o.value) return say('PIN ໃໝ່ຕ້ອງບໍ່ຊ້ຳກັບ PIN ເກົ່າ');
+    busy=true; ok.disabled=true; say('ກຳລັງບັນທຶກ...');
+    var ctl=new AbortController(),t=setTimeout(function(){ctl.abort()},15000);
+    fetch(SB.url+'/rest/v1/rpc/adm_pin_set',{method:'POST',signal:ctl.signal,headers:{'Content-Type':'application/json',apikey:SB.key,Authorization:'Bearer '+SB.key},body:JSON.stringify({p_token:tok(),p_new:n.value,p_old:o.value})})
+    .then(function(r){return r.json().catch(function(){return null})}).then(function(r){
+      if(r&&r.ok){say('ປ່ຽນ PIN ສຳເລັດ ✓',true);setTimeout(close,1200);return}
+      var c=r&&r.code;
+      if(c==='weak_pin') say('PIN ງ່າຍເກີນໄປ (ເຊັ່ນ 123456 ຫຼື 111111)');
+      else if(c==='locked'||(r&&r.retry_sec>0)) say('ລອງຜິດຫຼາຍເກີນໄປ ລໍຖ້າ '+(r.retry_sec||30)+' ວິນາທີ');
+      else if(c==='not_admin') say('ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່');
+      else if(c==='bad_format') say('ຮູບແບບ PIN ບໍ່ຖືກຕ້ອງ');
+      else say('PIN ເກົ່າບໍ່ຖືກຕ້ອງ'+(r&&r.left!=null?' (ເຫຼືອ '+r.left+' ຄັ້ງ)':''));
+    },function(){say('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ລອງໃໝ່ອີກຄັ້ງ')}).finally(function(){clearTimeout(t);busy=false;ok.disabled=false});
+  });
 })();
 </script>
   <div class="note" id="note" hidden></div>
