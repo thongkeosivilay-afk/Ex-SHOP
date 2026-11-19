@@ -115,6 +115,7 @@
   const byId = id => GUIDES.find(g => g.id === id);
 
   function menu() {
+    if (window.GXSIM) GXSIM.stopAll();
     title.textContent = 'ວິທີການສັ່ງຊື້';
     document.title = 'ວິທີການສັ່ງຊື້';
     app.innerHTML = `
@@ -131,10 +132,11 @@
     window.scrollTo(0, 0);
   }
 
-  function step(s, i) {
+  function step(s, i, id) {
     return `<li class="hw-step"><span class="hw-n">${i + 1}</span><div class="hw-b">
       <h3>${s.t}</h3><p>${s.p}</p>
       ${s.list ? `<ul>${s.list.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
+      ${window.GXSIM && GXSIM.has(id, i) ? GXSIM.html(id, i) : ''}
       ${s.note ? `<div class="hw-note ${s.note.k}">${ic(s.note.k === 'tip' ? 'h-tip' : 'h-warn')}<span>${s.note.x}</span></div>` : ''}
     </div></li>`;
   }
@@ -152,11 +154,12 @@
         <div class="hw-need"><b>ສິ່ງທີ່ຕ້ອງມີ</b>${g.need.map(n => `<span>• ${n}</span>`).join('')}</div>
       </div>
       <h3 class="hw-h">ຂັ້ນຕອນ (${g.steps.length} ຂັ້ນ)</h3>
-      <ol class="hw-steps">${g.steps.map(step).join('')}</ol>
+      <ol class="hw-steps">${g.steps.map((s, i) => step(s, i, g.id)).join('')}</ol>
       <h3 class="hw-h">ຄຳຖາມທີ່ພົບບໍ່ຍາກ</h3>
       <div class="hw-faq">${g.faq.map(f => `<details><summary><span>${f.q}</span>${ic('h-down')}</summary><p>${f.a}</p></details>`).join('')}</div>
       <a class="hw-go" href="${g.go.href}">${g.go.label}</a>`;
     window.scrollTo(0, 0);
+    if (window.GXSIM) GXSIM.mount(app, 0);
   }
 
   function route() {
@@ -165,7 +168,7 @@
   }
 
   app.addEventListener('click', e => {
-    const b = e.target.closest('[data-id]');
+    const b = e.target.closest('.hw-item[data-id],.hw-tab[data-id]');
     if (b) { location.hash = b.dataset.id; }
   });
   back.addEventListener('click', e => {

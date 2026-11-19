@@ -52,3 +52,7 @@
 .hw-go:active{transform:scale(.97)}
 .hw-go svg{width:18px;height:18px}
 @media (prefers-reduced-motion:reduce){.hw-faq summary svg,.hw-item{transition:none}}
+
+/* ภาพจำลองเล่นเอง (guide-sim) */
+.hw-b{--gx-red:var(--red,#ff2d3d);--gx-rg:var(--red-rgb,255,45,61);--gx-mut:#9a9aa5;--gx-ok:#2fbf71;--gx-warn:#f0a500;--gx-f:inherit}
+.gx-demo{position:relative;display:flex;align-items:center;justify-content:center;margin-top:12px;border-radius:15px;background:#000;border:1px solid #1c1c20;overflow:hidden;background-image:radial-gradient(circle at 1px 1px,#1f1f24 1px,transparent 0);background-size:14px 14px}
