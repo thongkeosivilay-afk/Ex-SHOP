@@ -427,7 +427,12 @@ html.is-in .hb-bal{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) 
 .rp-ic svg{width:16px;height:16px;display:block}
 .rp-t h2{font-size:17px;font-weight:600;line-height:1.25;color:var(--text)}
 .rp-t p{font-size:13px;font-weight:400;line-height:1.35;color:var(--muted);margin-top:1px}
-.rb-vp{overflow:hidden}
+.rb-vp{overflow:hidden;position:relative;--rb-fade:rgba(251,251,251,.96)}
+:root[data-theme="dark"] .rb-vp{--rb-fade:rgba(0,0,0,.96)}
+/* ขอบซ้าย-ขวาของแถบ: เบลอจาง ๆ + เงาไล่เป็นสีพื้นหลัง (ดำในธีมมืด) */
+.rb-vp::before,.rb-vp::after{content:"";position:absolute;top:0;bottom:0;width:46px;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.rb-vp::before{left:0;background:linear-gradient(to right,var(--rb-fade),transparent);-webkit-mask-image:linear-gradient(to right,#000 20%,transparent);mask-image:linear-gradient(to right,#000 20%,transparent)}
+.rb-vp::after{right:0;background:linear-gradient(to left,var(--rb-fade),transparent);-webkit-mask-image:linear-gradient(to left,#000 20%,transparent);mask-image:linear-gradient(to left,#000 20%,transparent)}
 .rb-track{display:flex;flex:none;width:max-content;white-space:nowrap;animation:rbmq var(--rb-t,20s) linear infinite;will-change:transform;backface-visibility:hidden}
 .rb-g{display:flex;flex:none}
 @keyframes rbmq{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--rb-dn,-50%),0,0)}}
