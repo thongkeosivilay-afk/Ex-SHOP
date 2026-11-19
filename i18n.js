@@ -6,6 +6,7 @@
 (function () {
   const ORDER = ['th', 'en', 'vi', 'hi', 'pt'];
   const D = {
+"ສິນຄ້າທີ່ຊື້ລ່າສຸດ": ["สินค้าที่ซื้อล่าสุด", "Recent purchases", "Sản phẩm mua gần đây", "हाल की खरीदारी", "Compras recentes"],
 "ບໍ່ສະແດງອີກເປັນເວລາ 1 ຊົ່ວໂມງ": ["ไม่แสดงอีกเป็นเวลา 1 ชั่วโมง", "Don't show again for 1 hour", "Không hiển thị lại trong 1 giờ", "1 घंटे तक दोबारा न दिखाएँ", "Não mostrar novamente por 1 hora"],
 "ອອນລາຍ": ["ออนไลน์", "Online", "Trực tuyến", "ऑनलाइन", "Online"],
 "ຈື່ບັນຊີນີ້": ["จดจำบัญชีนี้", "Remember this account", "Ghi nhớ tài khoản này", "इस खाते को याद रखें", "Lembrar desta conta"],

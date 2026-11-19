@@ -314,17 +314,25 @@ const featUI = (function(){
   const sec = $('#featSec'), vp = $('#rbVp');
   let rows = [], copies = 0, lastW = 0, raf = 0, ro, track;
   const sp = () => Math.max(10, Math.min(120, +((typeof SITE !== 'undefined' && SITE.recSpeed) || 40)));
+  /* เวลา "x ชม.ที่แล้ว" ตามภาษาที่เลือก (th / lo / en …) */
+  const AGO = {
+    th: { now: 'เมื่อสักครู่', m: n => n + ' นาทีที่แล้ว', h: n => n + ' ชม.ที่แล้ว', d: n => n + ' วันที่แล้ว' },
+    lo: { now: 'ຕອນນີ້', m: n => n + ' ນາທີກ່ອນ', h: n => n + ' ຊມ.ກ່ອນ', d: n => n + ' ມື້ກ່ອນ' },
+    en: { now: 'just now', m: n => n + ' min ago', h: n => n + ' hr ago', d: n => n + ' d ago' }
+  };
   function ago(t){
     const s = Math.max(0, (Date.now() - new Date(t).getTime()) / 1000);
     if(!isFinite(s)) return '';
-    if(s < 60) return 'ຕອນນີ້';
-    if(s < 3600) return Math.floor(s / 60) + ' ນາທີກ່ອນ';
-    if(s < 86400) return Math.floor(s / 3600) + ' ຊົ່ວໂມງກ່ອນ';
-    return Math.floor(s / 86400) + ' ມື້ກ່ອນ';
+    let l = 'lo'; try { l = document.documentElement.dataset.lang || localStorage.getItem('lang') || 'lo'; } catch(e){}
+    const L = AGO[l] || AGO.en;
+    if(s < 60) return L.now;
+    if(s < 3600) return L.m(Math.floor(s / 60));
+    if(s < 86400) return L.h(Math.floor(s / 3600));
+    return L.d(Math.floor(s / 86400));
   }
   const itemsHTML = () => rows.map(r => {
-    const nm = String(r.p || '') + (r.d ? ' · ' + r.d : '') + ((+r.q || 1) > 1 ? ' ×' + r.q : '');
-    return `<span class="rb-i"><span class="rb-im">${r.img ? `<img src="${escH(r.img)}" alt="" loading="lazy" draggable="false">` : ic('s-bag')}</span><span class="rb-tx"><b>${escH(r.u)}</b> ຊື້ <em>${escH(nm)}</em></span><span class="rb-tm">${escH(ago(r.t))}</span></span>`;
+    const US = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4" fill="currentColor"/><path fill="currentColor" d="M4 20c0-3.9 3.6-6.5 8-6.5s8 2.6 8 6.5z"/></svg>';
+    return `<span class="rb-i"><span class="rb-im">${r.img ? `<img src="${escH(r.img)}" alt="" loading="lazy" draggable="false">` : ic('s-bag')}</span><span class="rb-tx"><b>${escH(r.p || '')}</b><span class="rb-mt">${US}<span>${escH(r.u)}</span><span aria-hidden="true">·</span><span>${escH(ago(r.t))}</span></span></span></span>`;
   }).join('');
   function build(n){
     copies = n; lastW = 0;
@@ -366,7 +374,8 @@ const featUI = (function(){
   if(window.ResizeObserver) ro = new ResizeObserver(schedule);
   window.addEventListener('resize', schedule);
   window.addEventListener('orientationchange', schedule);
-  document.addEventListener('site:ready', schedule);       // ความเร็วเปลี่ยนจากหน้าแอดมิน → คำนวณใหม่
+  document.addEventListener('site:ready', schedule);
+  document.addEventListener('langchange', () => { if(rows.length) paint(); });       // ความเร็วเปลี่ยนจากหน้าแอดมิน → คำนวณใหม่
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
   document.addEventListener('visibilitychange', () => { if(!document.hidden) load(); });
   setInterval(load, 60000);

@@ -117,7 +117,6 @@ html.is-in .hb-reg,html.is-in .dr-f{display:none}
 @media (prefers-reduced-motion:reduce){.wrot .wslide,.wrot .wslide.on{filter:none;transform:none;transition:opacity .4s linear}}
 
 /* featured carousel */
-.feat{margin:78px 23px 0}
 .feat-vp{overflow:hidden;border-radius:14px}
 .feat-track{display:flex;transition:transform .5s ease}
 .fcard{flex:none;width:100%;height:54px;border:1px solid var(--border);border-radius:14px;background:var(--card);display:flex;align-items:center;overflow:hidden}
@@ -411,24 +410,27 @@ html.is-in .hb-bal{display:flex;animation:userPop .5s cubic-bezier(.3,1.4,.5,1) 
 .pc.is-ag .pname{margin-top:8.6cqw}
 
 /* ===== แถบ "ซื้อล่าสุด" (หน้าแรก): คนที่ซื้อสินค้าล่าสุด เลื่อนวนไม่มีสะดุด · ไม่มีคนซื้อ = ซ่อนทั้งแถบ ===== */
-.rb-box{display:flex;align-items:center;height:56px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden}
-.rb-lb{flex:none;position:relative;z-index:2;display:flex;align-items:center;gap:8px;height:100%;padding:0 14px 0 16px;background:var(--card);border-right:1px solid var(--border);color:var(--red);font-size:14.5px;font-weight:600;white-space:nowrap}
-.rb-dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(255,40,40,.55);animation:rbPulse 1.8s ease-out infinite}
-@keyframes rbPulse{70%,100%{box-shadow:0 0 0 7px rgba(255,40,40,0)}}
-.rb-vp{flex:1;min-width:0;overflow:hidden;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%)}
+/* สินค้าที่ซื้อล่าสุด — หัวข้อ (กล่องไอคอน + ชื่อ) + การ์ดเลื่อนวน */
+.feat{margin:40px 23px 0;padding-bottom:30px;position:relative}
+.feat::after{content:"";position:absolute;left:-23px;right:-23px;bottom:0;height:1px;background:var(--border)}
+.rp-h{display:flex;align-items:center;gap:11px;margin-bottom:20px}
+.rp-ic{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;color:var(--red);background:color-mix(in srgb,var(--red) 14%,var(--card));border:1px solid color-mix(in srgb,var(--red) 38%,transparent)}
+.rp-ic svg{width:16px;height:16px;display:block}
+.rp-t h2{font-size:17px;font-weight:600;line-height:1.25;color:var(--text)}
+.rp-t p{font-size:13px;font-weight:400;line-height:1.35;color:var(--muted);margin-top:1px}
+.rb-vp{overflow:hidden}
 .rb-track{display:flex;flex:none;width:max-content;white-space:nowrap;animation:rbmq var(--rb-t,20s) linear infinite;will-change:transform;backface-visibility:hidden}
 .rb-g{display:flex;flex:none}
 @keyframes rbmq{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--rb-dn,-50%),0,0)}}
-.rb-i{flex:none;display:flex;align-items:center;gap:10px;margin-right:34px;white-space:nowrap}
-.rb-im{width:34px;height:34px;border-radius:9px;overflow:hidden;flex:none;display:grid;place-items:center;background:rgba(127,127,127,.14)}
+.rb-i{flex:none;display:flex;align-items:center;gap:12px;box-sizing:border-box;min-width:209px;height:62px;padding:0 14px;margin-right:14px;border-radius:14px;border:1px solid var(--border);background:var(--card);white-space:nowrap}
+.rb-im{width:41px;height:41px;border-radius:10px;overflow:hidden;flex:none;display:grid;place-items:center;border:1px solid var(--border);background:rgba(127,127,127,.1)}
 .rb-im img{width:100%;height:100%;object-fit:cover;display:block}
-.rb-im svg{width:18px;height:18px;color:var(--red)}
-.rb-tx{font-size:14.5px}
-.rb-tx b{font-weight:600}
-.rb-tx em{font-style:normal;color:var(--red)}
-.rb-tm{font-size:12.5px;color:var(--muted)}
-@media (prefers-reduced-motion:reduce){.rb-track{animation:none}.rb-dot{animation:none}}
+.rb-im svg{width:20px;height:20px;color:var(--red)}
+.rb-tx{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0}
+.rb-tx b{font-size:15px;font-weight:600;line-height:1.25;color:var(--text);max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.rb-mt{display:flex;align-items:center;gap:6px;font-size:13px;line-height:1.3;color:var(--muted)}
+.rb-mt svg{width:14px;height:14px;flex:none}
+@media (prefers-reduced-motion:reduce){.rb-track{animation:none}}
 
 /* ===== ปรับภาพพอดีอัตโนมัติ — สินค้า (เปิดที่ แอดมิน → ตั้งค่าเว็บ → ปรับภาพพอดีอัตโนมัติ) =====
    class fit-p บน <html> + --ar ต่อรูป (ตั้งใน data.js: exFit*) → ปรับเฉพาะความยาวการ์ดตามสัดส่วนรูป ความกว้างคงเดิม
