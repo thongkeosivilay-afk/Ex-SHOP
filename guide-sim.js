@@ -4,10 +4,11 @@
    ทุกข้อความเป็นคู่ [ลาว, ไทย] ผ่านฟังก์ชัน T(ลาว, ไทย)
 
    องค์ประกอบ (els):  title note in(ช่องกรอก) sel(ช่องเลือก) btn ib(ปุ่มไอคอน) tabs chips tiles item(แถวรายการ) list r(แถวนอน) g(กลุ่ม ซ่อน/โชว์ได้)
-                      tgl up sl sws pv mq fnt bar hdr cardpv dlg slip dc
+                      tgl up sl sws pv mq fnt bar hdr cardpv dlg slip dc sale(การ์ดนับถอยหลัง)
    การกระทำ (seq):   ['w',ms] รอ · ['mv',id] เลื่อนเคอร์เซอร์ · ['pt',id] ชี้ · ['ck',id] กด · ['ty',id,ข้อความ,{f,m,sp}] พิมพ์ · ['pk',id,ลำดับตัวเลือก] เลือกในช่องเลือก
                       ['sh',id] แสดง · ['hd',id] ซ่อน · ['dn',id] ลบแถว · ['ts',ข้อความ] แจ้งผลสีเขียว · ['hl',id] เน้นการ์ดตัวเลข · ['cl',id,คลาส] สลับคลาส
-                      ['st',id,ข้อความ,คลาส] ตั้งข้อความ · ['sl',id,%] เลื่อนแถบ · ['ft',idรายการ,คำ] กรองรายการ · ['hw',id,คำ] ไฮไลต์คำ */
+                      ['st',id,ข้อความ,คลาส] ตั้งข้อความ · ['sl',id,%] เลื่อนแถบ · ['ft',idรายการ,คำ] กรองรายการ · ['hw',id,คำ] ไฮไลต์คำ
+                      ['ss',id,idle|running|expired] เปลี่ยนสถานะการ์ด sale · ['cd',id,วัน,ชม,นาที,วินาที] ตั้งตัวเลขนับถอยหลัง · ['ts',ข้อความ,'bad'] แจ้งผลสีแดง */
 (function () {
   'use strict';
   var RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
@@ -30,10 +31,21 @@
     key: '<circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.3-9.3M17 6l3 3"/>', power: '<path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>',
     user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>', dl: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
     bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
-    wallet: '<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/>'
+    wallet: '<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/>',
+    clock: '<circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/>',
+    chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/>'
   };
   function ic(k) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">' + IC[k] + '</svg>'; }
   var CUR = '<svg viewBox="0 0 24 24" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"><path d="M5 3l14 7-6 2-2 6z"/></svg>';
+
+  /* ---------- การ์ด “สถานะเว็บไซต์ / เปิดขาย 30 วัน” จำลอง (ใช้ในหัวข้อ sale) ---------- */
+  function p2(n) { return (n < 10 ? '0' : '') + n; }
+  function saleEnd() { var d = new Date(Date.now() + 30 * 864e5); return p2(d.getDate()) + '/' + p2(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
+  var SALE = {
+    idle: { p: 'Website Status: Active', t: T('ຍັງບໍ່ນັບ', 'ยังไม่นับ'), d: T('ຍັງບໍ່ໄດ້ເລີ່ມນັບເວລາແພັກເກັດຮ້ານ', 'ยังไม่ได้เริ่มนับเวลาแพ็กเกจร้าน'), b: T('ເປີດຂາຍ', 'เปิดขาย') },
+    running: { p: 'Website Status: Active', d: T('ເປີດຂາຍແລ້ວ · ໝົດອາຍຸ ' + saleEnd(), 'เปิดขายแล้ว · หมดอายุ ' + saleEnd()) },
+    expired: { p: 'Website Status: Expired', t: T('ໝົດເວລາເປີດຂາຍແລ້ວ', 'หมดเวลาเปิดขายแล้ว'), d: T('ລູກຄ້າຊື້ ແລະ ເຕີມເງິນບໍ່ໄດ້ · ຕິດຕໍ່ເພື່ອເຊົ່າເວັບຕໍ່', 'ลูกค้าซื้อและเติมเงินไม่ได้ · ติดต่อเพื่อเช่าเว็บต่อ'), b: T('ຕິດຕໍ່', 'ติดต่อ') }
+  };
 
   /* ---------- ตัวสร้าง HTML ขององค์ประกอบ ---------- */
   function hx(e) { return (e.h ? ' data-h="1"' : '') + (e.x ? ' data-x="' + e.x + '"' : ''); }
@@ -88,6 +100,15 @@
       case 'cardpv': return '<div class="sm-card2"><b' + di(e, '.t') + '></b><small' + di(e, '.m') + '></small></div>';
       case 'dc': return '<div class="sm-dc-msg"' + di(e) + hx(e) + '><span class="a">EX</span><div><b>ExShop Bot</b><small>' + esc(tx(e.lab)) + '</small></div></div>';
       case 'slip': return '<div class="sm-slip"><b' + di(e, 'a') + '>' + esc(tx(e.amt)) + '</b><span' + di(e, 't') + '>' + esc(tx(e.time)) + '</span><i></i><i></i></div>';
+      case 'sale': {
+        var st0 = e.s || 'idle', S0 = SALE[st0], un = [T('ວັນ', 'วัน'), T('ຊົ່ວໂມງ', 'ชั่วโมง'), T('ນາທີ', 'นาที'), T('ວິນາທີ', 'วินาที')], nn = e.n || [29, 23, 59, 58], run = st0 === 'running';
+        h = '<div class="sm-sale" data-s="' + st0 + '"' + di(e) + '><div class="sl-top"><span class="sl-ico">' + ic('clock') + '</span><div class="sl-bd"><span class="sl-pill"><i></i><em' + di(e, '.pill') + '>' + S0.p + '</em></span>' +
+          '<b class="sl-t"' + di(e, '.t') + (run ? ' data-h="1"' : '') + '>' + esc(tx(S0.t || SALE.idle.t)) + '</b>' +
+          '<small class="sl-d"' + di(e, '.d') + '>' + esc(tx(S0.d)) + '</small>' +
+          '<div class="sl-cd"' + di(e, '.cd') + (run ? '' : ' data-h="1"') + '>';
+        for (i = 0; i < 4; i++) h += '<div class="sl-u"' + di(e, '.u' + i) + '><b' + di(e, '.n' + i) + '>' + (i ? (nn[i] < 10 ? '0' : '') + nn[i] : nn[i]) + '</b><small>' + esc(tx(un[i])) + '</small></div>';
+        return h + '</div></div></div><div class="sm-b sl-btn blk"' + di(e, '.btn') + (run ? ' data-h="1"' : '') + '>' + ic(st0 === 'expired' ? 'chat' : 'power') + '<span class="v">' + esc(tx(S0.b || SALE.idle.b)) + '</span></div></div>';
+      }
       case 'dlg': return '<div class="sm-dlg"' + di(e) + '><div>' + RL(e.els) + '</div></div>';
     }
     return '';
@@ -417,6 +438,67 @@
       seq: [['w', 500], ['ck', 'sv'], ['w', 150], ['cl', 'c0', 'ok'], ['w', 200], ['cl', 'c1', 'ok'], ['w', 200], ['cl', 'c2', 'ok'], ['w', 200], ['cl', 'c3', 'ok'], ['ts', T('ບັນທຶກສຳເລັດ ✓', 'บันทึกสำเร็จ ✓')], ['w', 1100]] }
   ];
 
+  /* ───── 0 ★ ระบบนับเวลาถอยหลัง 30 วัน (ฉากเล่นเองของหัวข้อ sale) ───── */
+  var ARM = T('ແຕະອີກຄັ້ງເພື່ອຢືນຢັນ', 'แตะอีกครั้งเพื่อยืนยัน');
+  var ARMC = 'sm-b sl-btn blk arm', BTNC = 'sm-b sl-btn blk';
+  SCENES.sale = [
+    { /* 0 หลักการ: ยังไม่นับ → กำลังนับ → หมดเวลา */
+      els: [{ t: 'sale', id: 'sc' }],
+      seq: [['w', 700], ['pt', 'sc.t'], ['w', 400], ['ck', 'sc.btn'], ['st', 'sc.btn', ARM, ARMC], ['w', 600], ['ck', 'sc.btn'], ['ss', 'sc', 'running'], ['w', 400], ['cd', 'sc', 29, 23, 59, 57], ['w', 600], ['cd', 'sc', 29, 23, 59, 56], ['w', 600],
+        ['cd', 'sc', 0, 0, 0, 2], ['w', 700], ['cd', 'sc', 0, 0, 0, 1], ['w', 700], ['cd', 'sc', 0, 0, 0, 0], ['w', 400], ['ss', 'sc', 'expired'], ['w', 1200]]
+    },
+    { /* 1 หาการ์ด */
+      els: [{ t: 'hdr', id: 'hd', lab: 'ExShop Admin' }, { t: 'note', lab: T('ການ໌ດຢູ່ເທິງສຸດຂອງທຸກໜ້າແອດມິນ ↓', 'การ์ดอยู่บนสุดของทุกหน้าแอดมิน ↓') }, { t: 'sale', id: 'sc' }],
+      seq: [['w', 500], ['pt', 'hd.n'], ['w', 300], ['pt', 'sc.pill'], ['w', 400], ['pt', 'sc.t'], ['w', 400], ['pt', 'sc.btn'], ['w', 900]]
+    },
+    { /* 2 อ่าน 3 สถานะ */
+      els: [{ t: 'tabs', id: 'tb', items: [T('① ຍັງບໍ່ນັບ', '① ยังไม่นับ'), T('② ກຳລັງນັບ', '② กำลังนับ'), T('③ ໝົດເວລາ', '③ หมดเวลา')], on: 0 }, { t: 'sale', id: 'sc' }],
+      seq: [['w', 700], ['pt', 'sc.t'], ['w', 400], ['ck', 'tb1'], ['ss', 'sc', 'running'], ['cd', 'sc', 29, 23, 59, 50], ['w', 500], ['pt', 'sc.pill'], ['w', 700], ['ck', 'tb2'], ['ss', 'sc', 'expired'], ['w', 1000], ['ck', 'tb0'], ['ss', 'sc', 'idle'], ['w', 800]]
+    },
+    { /* 3 ตรวจความพร้อมก่อนเปิดขาย */
+      els: [{ t: 'title', ic: 'check', lab: T('ເຊັກລິດກ່ອນເປີດຂາຍ', 'เช็กลิสต์ก่อนเปิดขาย') },
+        { t: 'list', els: [
+          { t: 'item', id: 'k0', ck: 1, tg: 'sel', title: T('ສິນຄ້າ ແລະໝວດໝູ່', 'สินค้าและหมวดหมู่') },
+          { t: 'item', id: 'k1', ck: 1, tg: 'sel', title: T('ສະຕັອກເຕີມແລ້ວ', 'สต็อกเติมแล้ว') },
+          { t: 'item', id: 'k2', ck: 1, tg: 'sel', title: T('QR ຊຳລະເງິນຖືກຕ້ອງ', 'QR ชำระเงินถูกต้อง') },
+          { t: 'item', id: 'k3', ck: 1, tg: 'sel', title: T('Webhook Discord ແຈ້ງເຕືອນ', 'Webhook Discord แจ้งเตือน') },
+          { t: 'item', id: 'k4', ck: 1, tg: 'sel', title: T('ຕັ້ງຄ່າເວັບ (ໂລໂກ້ · ແບນເນີ · ຕິດຕໍ່)', 'ตั้งค่าเว็บ (โลโก้ · แบนเนอร์ · ติดต่อ)') }] }],
+      seq: [['w', 500], ['ck', 'k0'], ['ck', 'k1'], ['ck', 'k2'], ['ck', 'k3'], ['ck', 'k4'], ['w', 300], ['ts', T('ພ້ອມແລ້ວ — ກົດເປີດຂາຍໄດ້ ✓', 'พร้อมแล้ว — กดเปิดขายได้ ✓')], ['w', 900]]
+    },
+    { /* 4 กดครั้งที่ 1 */
+      els: [{ t: 'sale', id: 'sc' }, { t: 'note', id: 'tm', lab: T('ຍັງບໍ່ເລີ່ມນັບ', 'ยังไม่เริ่มนับ') }],
+      seq: [['w', 600], ['ck', 'sc.btn'], ['st', 'sc.btn', ARM, ARMC], ['st', 'tm', T('⏱ ມີເວລາຢືນຢັນ 4 ວິນາທີ · ຍັງບໍ່ເລີ່ມນັບ', '⏱ มีเวลายืนยัน 4 วินาที · ยังไม่เริ่มนับ')], ['w', 1700], ['st', 'sc.btn', T('ເປີດຂາຍ', 'เปิดขาย'), BTNC], ['st', 'tm', T('ບໍ່ແຕະ = ປຸ່ມກັບຄືນ ບໍ່ມີຫຍັງເກີດຂຶ້ນ', 'ไม่แตะ = ปุ่มกลับ ไม่มีอะไรเกิดขึ้น')], ['w', 1100]]
+    },
+    { /* 5 แตะยืนยัน */
+      els: [{ t: 'sale', id: 'sc' }, { t: 'note', id: 'tm', lab: T('ຍັງບໍ່ເລີ່ມນັບ', 'ยังไม่เริ่มนับ') }],
+      seq: [['w', 500], ['ck', 'sc.btn'], ['st', 'sc.btn', ARM, ARMC], ['w', 500], ['ck', 'sc.btn'], ['st', 'tm', T('ກຳລັງສົ່ງຄຳສັ່ງໄປເຊີບເວີ...', 'กำลังส่งคำสั่งไปเซิร์ฟเวอร์...')], ['w', 500], ['ss', 'sc', 'running'], ['cd', 'sc', 30, 0, 0, 0], ['st', 'tm', T('ເລີ່ມນັບແລ້ວ ✓ ຢຸດ / ຍ້ອນກັບບໍ່ໄດ້', 'เริ่มนับแล้ว ✓ หยุด / ย้อนกลับไม่ได้')], ['w', 700], ['cd', 'sc', 29, 23, 59, 59], ['w', 700], ['cd', 'sc', 29, 23, 59, 58], ['w', 1000]]
+    },
+    { /* 6 อ่านตัวนับ */
+      els: [{ t: 'sale', id: 'sc', s: 'running', n: [29, 23, 59, 58] }],
+      seq: [['w', 500], ['mv', 'sc.u0'], ['hl', 'sc.u0'], ['w', 650], ['mv', 'sc.u1'], ['hl', 'sc.u1'], ['w', 650], ['mv', 'sc.u2'], ['hl', 'sc.u2'], ['w', 650], ['mv', 'sc.u3'], ['hl', 'sc.u3'], ['cd', 'sc', 29, 23, 59, 57], ['w', 650], ['cd', 'sc', 29, 23, 59, 56], ['w', 650], ['pt', 'sc.d'], ['w', 1000]]
+    },
+    { /* 7 วางแผนต่ออายุ */
+      els: [{ t: 'title', ic: 'clock', lab: T('ແຜນເວລາທີ່ແນະນຳ', 'แผนเวลาที่แนะนำ') },
+        { t: 'tiles', id: 'tp', cols: 3, items: [[T('ກົດເປີດຂາຍ', 'กดเปิดขาย'), 'D-30', 'good'], [T('ຕິດຕໍ່ລ່ວງໜ້າ', 'ติดต่อล่วงหน้า'), 'D-7', 'warn'], [T('ໝົດເວລາ', 'หมดเวลา'), 'D-0', 'bad']] },
+        { t: 'note', lab: T('ແນະນຳ: ຕິດຕໍ່ 5–7 ວັນກ່ອນໝົດ ຢ່າລໍຖ້າຈົນວິນາທີສຸດທ້າຍ', 'แนะนำ: ติดต่อ 5–7 วันก่อนหมด อย่ารอจนวินาทีสุดท้าย') }],
+      seq: hlSeq('tp', 3).concat([['w', 700]])
+    },
+    { /* 8 ครบ 30 วัน */
+      els: [{ t: 'sale', id: 'sc', s: 'running', n: [0, 0, 0, 3] }],
+      seq: [['w', 700], ['cd', 'sc', 0, 0, 0, 2], ['w', 800], ['cd', 'sc', 0, 0, 0, 1], ['w', 800], ['cd', 'sc', 0, 0, 0, 0], ['w', 500], ['ss', 'sc', 'expired'], ['pt', 'sc.t'], ['w', 1300]]
+    },
+    { /* 9 ผลต่อลูกค้า */
+      els: [{ t: 'title', ic: 'eye', lab: T('ໜ້າຮ້ານ (ມຸມມອງລູກຄ້າ)', 'หน้าร้าน (มุมมองลูกค้า)') },
+        { t: 'item', th: 'bag', title: 'Netflix Premium', sub: K + '45,000', end: [B('by', T('ຊື້', 'ซื้อ'))] },
+        { t: 'item', th: 'wallet', title: T('ເຕີມເງິນ', 'เติมเงิน'), sub: T('ໜ້າເຕີມເງິນ', 'หน้าเติมเงิน'), end: [B('tu', T('ເຕີມເງິນ', 'เติมเงิน'), { v: 'gh' })] }],
+      seq: [['w', 600], ['ck', 'by'], ['ts', T('ຮ້ານຍັງບໍ່ເປີດຂາຍ ຫຼື ປິດຊົ່ວຄາວ', 'ร้านยังไม่เปิดขายหรือปิดชั่วคราว'), 'bad'], ['w', 1500], ['ck', 'tu'], ['ts', T('ເຕີມເງິນບໍ່ໄດ້ · ຕິດຕໍ່ແອດມິນ', 'เติมเงินไม่ได้ · ติดต่อแอดมิน'), 'bad'], ['w', 1500]]
+    },
+    { /* 10 ปุ่มติดต่อ */
+      els: [{ t: 'sale', id: 'sc', s: 'expired' }],
+      seq: [['w', 700], ['ck', 'sc.btn'], ['ts', T('ເປີດຊ່ອງທາງຕິດຕໍ່ ✓', 'เปิดช่องทางติดต่อ ✓')], ['w', 1300]]
+    }
+  ];
+
   /* ---------- เครื่องเล่นฉาก ---------- */
   function wait(I, ms, g) {
     return new Promise(function (res, rej) {
@@ -496,6 +578,17 @@
     Array.prototype.forEach.call(l.children, function (r) { r.classList.toggle('flt', !!s && (r.dataset.k || '').indexOf(s) < 0); });
   }
 
+  /* เปลี่ยนสถานะการ์ดจำลอง: idle / running / expired */
+  function setSale(I, root, id, st) {
+    var S1 = SALE[st], t = q(I, id + '.t'), d = q(I, id + '.d'), cd = q(I, id + '.cd'), b = q(I, id + '.btn'), pl = q(I, id + '.pill');
+    if (!t || !d || !cd || !b || !pl) return;
+    root.setAttribute('data-s', st); pl.textContent = S1.p; d.textContent = tx(S1.d);
+    if (st === 'running') { hide(t); show(I, cd); hide(b); return; }
+    t.textContent = tx(S1.t); b.className = 'sm-b sl-btn blk';
+    b.innerHTML = ic(st === 'expired' ? 'chat' : 'power') + '<span class="v">' + esc(tx(S1.b)) + '</span>';
+    hide(cd); show(I, t); show(I, b);
+  }
+
   async function act(I, a, g) {
     var op = a[0], e;
     switch (op) {
@@ -508,7 +601,9 @@
       case 'sh': a[1].split(' ').forEach(function (id) { var x = q(I, id); if (x) show(I, x); }); return wait(I, 350, g);
       case 'hd': a[1].split(' ').forEach(function (id) { var x = q(I, id); if (x) hide(x); }); return;
       case 'dn': e = q(I, a[1]); if (!e) return; if (e.classList.contains('sm-row')) e.classList.add('gone'); else e.style.opacity = '0'; await wait(I, 320, g); e.setAttribute('data-h', '1'); return;
-      case 'ts': e = q(I, 'toast'); if (!e) return; e.textContent = tx(a[1]); e.classList.remove('bad'); void e.offsetWidth; e.classList.add('in'); clearTimeout(I.tt); I.tt = setTimeout(function () { e.classList.remove('in'); }, 2200); return wait(I, 500, g);
+      case 'ss': e = q(I, a[1]); if (!e) return; setSale(I, e, a[1], a[2]); return wait(I, 550, g);
+      case 'cd': for (var k = 0; k < 4; k++) { var nd = q(I, a[1] + '.n' + k); if (nd) nd.textContent = k ? p2(a[2 + k]) : String(a[2 + k]); } return;
+      case 'ts': e = q(I, 'toast'); if (!e) return; e.textContent = tx(a[1]); e.classList.toggle('bad', a[2] === 'bad'); void e.offsetWidth; e.classList.add('in'); clearTimeout(I.tt); I.tt = setTimeout(function () { e.classList.remove('in'); }, 2200); return wait(I, 500, g);
       case 'hl': e = q(I, a[1]); if (e) sib(e, 'hl'); return;
       case 'cl': e = q(I, a[1]); if (e) e.classList.toggle(a[2]); return;
       case 'st': e = q(I, a[1]); if (!e) return; { var v = e.querySelector('.v') || e; v.textContent = tx(a[2]); v.classList && v.classList.remove('ph'); } if (a[3]) e.className = a[3]; return;

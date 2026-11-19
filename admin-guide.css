@@ -126,3 +126,31 @@ body{margin:0;min-height:100vh}
 .gx-pn button:disabled{opacity:.3;pointer-events:none}
 .gx-reset{display:block;margin:22px auto 0;border:0;background:none;color:#6d6d78;font-size:12.5px;text-decoration:underline}
 @media (prefers-reduced-motion:reduce){.gx *,.gx *::before,.gx *::after{animation:none!important;transition:none!important}.gx-rv{opacity:1;transform:none}}
+
+
+/* ===== ★ หัวข้อสำคัญที่สุด (ระบบนับเวลาถอยหลัง 30 วัน) ===== */
+.gx-sb2{display:inline-flex;align-items:center;gap:5px;margin-bottom:6px;padding:3px 11px 3px 8px;border-radius:99px;background:var(--gx-red);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.02em;box-shadow:0 4px 14px rgba(var(--gx-rg),.45)}
+.gx-sb2 svg{width:13px;height:13px;fill:currentColor;stroke:none}
+.gx-card.star{position:relative;overflow:hidden;padding:17px 14px 15px;border-color:rgba(var(--gx-rg),.75);background:linear-gradient(135deg,rgba(var(--gx-rg),.26),#0b0b0d 72%);box-shadow:0 0 0 1px rgba(var(--gx-rg),.25),0 10px 34px rgba(var(--gx-rg),.22);animation:gxStarGlow 2.8s ease-in-out infinite}
+.gx-card.star:hover{background:linear-gradient(135deg,rgba(var(--gx-rg),.34),#131316 72%)}
+.gx-card.star .gx-ci{width:56px;height:56px;border-radius:18px;background:var(--gx-red);color:#fff;box-shadow:0 6px 20px rgba(var(--gx-rg),.5)}
+.gx-card.star .gx-ci svg{width:28px;height:28px}
+.gx-card.star .gx-ct b{font-size:16.5px;font-weight:800;line-height:1.35}
+.gx-card.star .gx-ct small{color:#d4d4dc}
+.gx-card.star::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.09) 50%,transparent 65%);transform:translateX(-120%);animation:gxStarShine 3.6s ease-in-out infinite;pointer-events:none}
+@keyframes gxStarGlow{50%{box-shadow:0 0 0 1px rgba(var(--gx-rg),.6),0 12px 46px rgba(var(--gx-rg),.4)}}
+@keyframes gxStarShine{60%,100%{transform:translateX(120%)}}
+.gx-hero.star{border:2px solid rgba(var(--gx-rg),.75);background:linear-gradient(140deg,rgba(var(--gx-rg),.42),rgba(var(--gx-rg),.08) 62%,#000);box-shadow:0 12px 44px rgba(var(--gx-rg),.28)}
+.gx-hero.star h2{font-size:23px;font-weight:800;line-height:1.3;padding-right:0}
+.gx-key{margin-top:14px;padding:16px;border-radius:22px;border:2px solid rgba(var(--gx-rg),.7);background:linear-gradient(160deg,rgba(var(--gx-rg),.24),rgba(var(--gx-rg),.05) 70%,#000);box-shadow:0 8px 30px rgba(var(--gx-rg),.18)}
+.gx-key h4{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:15px;font-weight:800;color:#fff}
+.gx-key h4 svg{flex:none;width:20px;height:20px;color:var(--gx-warn)}
+.gx-kg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gx-kt{padding:11px 12px;border-radius:15px;background:rgba(0,0,0,.5);border:1px solid rgba(var(--gx-rg),.3)}
+.gx-kt i{display:inline-grid;place-items:center;width:20px;height:20px;margin-bottom:5px;border-radius:50%;background:var(--gx-red);color:#fff;font-size:11.5px;font-weight:800;font-style:normal}
+.gx-kt b{display:block;font-size:14px;font-weight:800;color:#fff;line-height:1.35}
+.gx-kt small{display:block;margin-top:2px;font-size:12px;line-height:1.45;color:#c9c9d1}
+.gx-view.star .gx-sb{border-color:rgba(var(--gx-rg),.3)}
+.gx-view.star .gx-num{border-color:rgba(var(--gx-rg),.55)}
+@media (max-width:340px){.gx-kg{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.gx-card.star,.gx-card.star::after{animation:none}}
