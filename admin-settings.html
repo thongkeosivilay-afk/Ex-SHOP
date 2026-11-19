@@ -161,6 +161,15 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   transition:opacity var(--wb) cubic-bezier(.2,.7,.2,1) calc(var(--wb)*.28),filter var(--wb) cubic-bezier(.2,.7,.2,1) calc(var(--wb)*.28),transform var(--wb) cubic-bezier(.2,.7,.2,1) calc(var(--wb)*.28),visibility 0s}
 .wpv-ib{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,rgba(var(--red-rgb),.24),rgba(var(--red-rgb),.08));border:1px solid rgba(var(--red-rgb),.3);color:var(--red)}
 .wpv-ib svg{width:22px;height:22px}
+.wdz{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.wdz button{font:inherit;cursor:pointer;text-align:left;padding:12px 14px;border-radius:14px;border:1.5px solid #2a2a2e;background:#0a0a0a;color:#cfcccc;display:flex;flex-direction:column;gap:4px;transition:border-color .2s,background .2s}
+.wdz button b{font-size:14px;color:#f2f2f2}
+.wdz button span{font-size:12px;color:#8d8a8a;line-height:1.4}
+.wdz button.on{border-color:var(--red);background:rgba(var(--red-rgb),.1)}
+.wpv.d2{display:flex;flex-direction:column;gap:12px;border:0;background:none;padding:0;overflow:visible}
+.wpv.d2 .wpv-s,.wpv.d2 .wpv-s.on{opacity:1;visibility:visible;filter:none;transform:none;transition:none;padding:16px;border:1px solid #2a2a2e;border-radius:16px;background:#0a0a0a;align-items:flex-start}
+.wpv.d2 .wpv-ib{border-radius:50%;background:rgba(var(--red-rgb),.1);border:2px solid rgba(var(--red-rgb),.75)}
+#whBox.d2off .wsp{opacity:.4;pointer-events:none}
 .wpv-s>div:last-child{min-width:0}
 .wpv-s h5{margin:0 0 5px;font-size:15.5px;font-weight:700;color:#f2f2f2;line-height:1.3}
 .wpv-s p{margin:0;font-size:13px;line-height:1.5;color:#8d8a8a;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
@@ -393,6 +402,12 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
         <textarea class="inp" id="w2d" maxlength="500"></textarea>
       </div>
       <div class="fld" id="whBox">
+        <div class="lsz-h"><b>ແບບດີໄຊນ໌</b></div>
+        <div class="wdz" id="whD" role="radiogroup" aria-label="ແບບດີໄຊນ໌">
+          <button type="button" role="radio" data-d="1"><b>ແບບ 1 · ເບລີສະຫຼັບ</b><span>ການ໌ດດຽວ ປ່ຽນຂໍ້ຄວາມວົນໄປເລື້ອຍໆ</span></button>
+          <button type="button" role="radio" data-d="2"><b>ແບບ 2 · ການ໌ດຊ້ອນ</b><span>ສະແດງ 2 ການ໌ດພ້ອມກັນ ບໍ່ສະຫຼັບ</span></button>
+        </div>
+        <div class="wsp">
         <div class="lsz-h"><b>ຄວາມໄວການປ່ຽນຂໍ້ຄວາມ</b></div>
         <div class="lsz-r">
           <input type="range" class="rng" id="whS" min="2" max="20" step="1" value="5" aria-label="ຄວາມໄວການປ່ຽນຂໍ້ຄວາມ">
@@ -405,6 +420,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
           <span class="lsz-v" id="whBVal">0.9s</span>
         </div>
         <div class="lsz-t">ເວລາເບລີ/ຈາງຕອນປ່ຽນ (ນ້ອຍ = ໄວ)</div>
+        </div>
         <div class="lsz-t" style="margin-top:20px">ຕົວຢ່າງການ໌ດ (ຄວາມໄວຈິງ)</div>
         <div class="wpv" id="whPv">
           <div class="wpv-s on"><div class="wpv-ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div><div><h5 id="wpT1"></h5><p id="wpD1"></p></div></div>
@@ -736,11 +752,11 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   }
   function setRc(n){ RC.v = spdClamp(n, RC.def); rcPaint(); dirty(); }
   /* ===== ການ໌ດ "ເປັນຫຍັງຕ້ອງເລືອກເຮົາ": ຄວາມໄວປ່ຽນຂໍ້ຄວາມ (ວິນາທີ) + ຄວາມໄວເບລີ (ໜ່ວຍ 0.1 ວິນາທີ) ເກັບຕໍ່ທ້າຍຂໍ້ຄວາມການ໌ດ 1 ເປັນ \n#why=ວິນາທີ,ເບລີ ===== */
-  var WH = { s:{ def:5, v:5 }, b:{ def:9, v:9 } }, whI = 0, whT;
+  var WH = { s:{ def:5, v:5 }, b:{ def:9, v:9 }, d:{ def:1, v:1 } }, whI = 0, whT;
   function whClamp(n, d){ n = Math.round(+n); if(!(n > 0)) n = d; return Math.max(2, Math.min(20, n)); }
-  function whParse(t){ t = t || ''; var m = /\n#why=(\d+),(\d+)\s*$/.exec(t); return { text: t.replace(/\n#why=\d+,\d+\s*$/, ''), s: m ? whClamp(m[1], 5) : 5, b: m ? whClamp(m[2], 9) : 9 }; }
+  function whParse(t){ t = t || ''; var m = /\n#why=(\d+),(\d+)(?:,([12]))?\s*$/.exec(t); return { text: t.replace(/\n#why=\d+,\d+(?:,[12])?\s*$/, ''), s: m ? whClamp(m[1], 5) : 5, b: m ? whClamp(m[2], 9) : 9, d: m && m[3] === '2' ? 2 : 1 }; }
   function whShow(){ var sl = document.querySelectorAll('#whPv .wpv-s'); for(var k = 0; k < sl.length; k++){ sl[k].classList.toggle('on', k === whI); sl[k].setAttribute('aria-hidden', k === whI ? 'false' : 'true'); } }
-  function whStart(){ clearInterval(whT); whT = setInterval(function(){ whI = 1 - whI; whShow(); }, WH.s.v * 1000); }
+  function whStart(){ clearInterval(whT); if(WH.d.v === 2) return; whT = setInterval(function(){ whI = 1 - whI; whShow(); }, WH.s.v * 1000); }
   function whPaint(restart){
     var rs = document.getElementById('whS'), rb = document.getElementById('whB');
     document.getElementById('whSVal').textContent = WH.s.v + 's';
@@ -748,6 +764,11 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     rs.value = WH.s.v; rs.style.setProperty('--r', (WH.s.v - 2) / 18);
     rb.value = WH.b.v; rb.style.setProperty('--r', (WH.b.v - 2) / 18);
     document.getElementById('whPv').style.setProperty('--wb', (WH.b.v / 10) + 's');
+    var d2 = WH.d.v === 2;
+    document.getElementById('whPv').classList.toggle('d2', d2);
+    document.getElementById('whBox').classList.toggle('d2off', d2);
+    [].forEach.call(document.querySelectorAll('#whD button'), function(bt){ var on = +bt.getAttribute('data-d') === WH.d.v; bt.classList.toggle('on', on); bt.setAttribute('aria-checked', on ? 'true' : 'false'); });
+    if(d2){ [].forEach.call(document.querySelectorAll('#whPv .wpv-s'), function(s){ s.classList.add('on'); s.setAttribute('aria-hidden', 'false'); }); } else { whShow(); }
     document.getElementById('wpT1').textContent = ($('w1t').value || '').trim() || 'ປອດໄພ ວ່ອງໄວ';
     document.getElementById('wpD1').textContent = ($('w1d').value || '').trim() || 'ໃສ່ໃຈໃນຄຸນນະພາບຂອງສິນຄ້າ ແລະ ການບໍລິການ';
     document.getElementById('wpT2').textContent = ($('w2t').value || '').trim() || 'ບໍລິການລູກຄ້າ';
@@ -755,6 +776,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     if(restart) whStart();
   }
   function setWh(k, n){ WH[k].v = whClamp(n, WH[k].def); whPaint(k === 's'); dirty(); }
+  function setWhD(n){ WH.d.v = n === 2 ? 2 : 1; whPaint(true); dirty(); }
   function lszClamp(n){ n = Math.round(+n); if(!(n > 0)) n = LSZ_DEF; return Math.max(LSZ_MIN, Math.min(LSZ_MAX, n)); }
   function lszParse(u){ u = u || ''; var m = /#sz=(\d+)$/.exec(u); return { url: u.replace(/#sz=\d+$/, ''), sz: m ? lszClamp(m[1]) : LSZ_DEF }; }
   /* ===== ຟອນເວັບໄຊ: ການ໌ດຕົວຢ່າງ 10 ຟອນ (ອ່ານ/ບັນທຶກຜ່ານ shop_font / admin_font_update — ເບິ່ງ font-setup.sql) ===== */
@@ -833,7 +855,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     ['mq','an'].forEach(function(k){ if(SPD[k].v !== SPD[k].def) o[TXT[k]] = String(o[TXT[k]]).replace(/\s+$/, '') + '\n#spd=' + SPD[k].v; });
     if(RC.v !== RC.def) o.why2_text = String(o.why2_text).replace(/\s+$/, '') + '\n#rec=' + RC.v;
     if(FIT.on && (FIT.p || FIT.c)) o.why2_text = String(o.why2_text).replace(/\s+$/, '') + '\n#fit=' + (FIT.p ? 1 : 0) + ',' + (FIT.c ? 1 : 0);
-    if(WH.s.v !== WH.s.def || WH.b.v !== WH.b.def) o.why1_text = String(o.why1_text).replace(/\s+$/, '') + '\n#why=' + WH.s.v + ',' + WH.b.v;
+    if(WH.s.v !== WH.s.def || WH.b.v !== WH.b.def || WH.d.v !== WH.d.def) o.why1_text = String(o.why1_text).replace(/\s+$/, '') + '\n#why=' + WH.s.v + ',' + WH.b.v + (WH.d.v === 2 ? ',2' : '');
     return o;
   }
   function dirty(){
@@ -848,7 +870,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     var fp = fitParse($('w2d').value); $('w2d').value = fp.text;
     FIT.on = fp.p || fp.c; if(FIT.on){ FIT.p = fp.p; FIT.c = fp.c; } else { FIT.p = true; FIT.c = true; }
     var rp = rcParse($('w2d').value); $('w2d').value = rp.text; RC.v = rp.v;
-    var wp = whParse($('w1d').value); $('w1d').value = wp.text; WH.s.v = wp.s; WH.b.v = wp.b;
+    var wp = whParse($('w1d').value); $('w1d').value = wp.text; WH.s.v = wp.s; WH.b.v = wp.b; WH.d.v = wp.d;
     $('s1').placeholder = String(j.real_users || 0); $('s3').placeholder = String(j.real_orders || 0);
     saved = collect();
     paint(); mqRefresh(); rcPaint(); rcBuild(); whPaint(true); fitPaint(); dirty();
@@ -935,6 +957,7 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
   });
   $('whS').addEventListener('input', function(){ setWh('s', this.value); });
   $('whB').addEventListener('input', function(){ setWh('b', this.value); });
+  [].forEach.call(document.querySelectorAll('#whD button'), function(bt){ bt.addEventListener('click', function(){ setWhD(+bt.getAttribute('data-d')); }); });
   ['w1t','w1d','w2t','w2d'].forEach(function(id){ $(id).addEventListener('input', function(){ whPaint(false); }); });
   whPaint(true);
   window.addEventListener('resize', function(){ clearTimeout(window.__mqT); window.__mqT = setTimeout(mqRefresh, 200); });

@@ -411,13 +411,19 @@ $('#products').hidden = !SHOW.products;
   const slides = [...box.querySelectorAll('.wslide')]; if(slides.length < 2) return;
   /* เวลาคั้งก่อนสลับ + เวลาเบลอ ตั้งที่หน้าแอดมิน (SITE.whyCfg: s = วินาที, b = หน่วย 0.1 วินาที) ค่าเริ่มต้น 5 วินาที / 0.9 วินาที */
   const cfg = () => (typeof SITE !== 'undefined' && SITE.whyCfg) || { s:5, b:9 };
-  const apply = () => box.style.setProperty('--wb', (cfg().b / 10) + 's');
+  const apply = () => {
+    box.style.setProperty('--wb', (cfg().b / 10) + 's');
+    const d2 = cfg().d === 2;                       /* ดีไซน์ 2 = การ์ดซ้อน ไม่สลับ */
+    box.classList.toggle('d2', d2);
+    slides.forEach(s => s.setAttribute('aria-hidden', 'false'));
+    if(d2) clearInterval(timer); else { slides.forEach((s,k) => s.setAttribute('aria-hidden', k === i ? 'false' : 'true')); if(!document.hidden) start(); }
+  };
   let i = 0, timer;
   const show = n => {
     i = (n + slides.length) % slides.length;
     slides.forEach((s,k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
   };
-  const start = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), cfg().s * 1000); };
+  const start = () => { clearInterval(timer); if(cfg().d === 2) return; timer = setInterval(() => show(i + 1), cfg().s * 1000); };
   document.addEventListener('visibilitychange', () => { if(document.hidden) clearInterval(timer); else start(); });  // แท็บไม่ได้เปิดอยู่ = หยุด ไม่ให้สลับรัวตอนกลับมา
   document.addEventListener('site:ready', () => { apply(); if(!document.hidden) start(); });
   apply(); start();

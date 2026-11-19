@@ -7,7 +7,7 @@
 const IMG = { product:'', category:'', banner:'' };
 /* ชื่อร้าน + โลโก้ (แสดงมุมซ้ายของแถบหัวเว็บ) — logo: ใส่ path/URL รูป (แนะนำสี่เหลี่ยมจัตุรัส 256×256 px)
    ถ้าเว้นว่าง จะโชว์ตัวย่อ 2 ตัวแรกของชื่อร้านในวงกลมสีแดงแทน */
-const SITE = { fit:{ p:false, c:false }, recSpeed:40, name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9 }, stat:{}, real:{} };
+const SITE = { fit:{ p:false, c:false }, recSpeed:40, name:'EXSHOP', logo:'', desc:'', marquee:'', announce:'', why:{}, whyCfg:{ s:5, b:9, d:1 }, stat:{}, real:{} };
 /* ตั้งค่าเว็บไซต์ (ชื่อ / โลโก้ / แบนเนอร์ / คำอธิบาย) — ดึงจาก Supabase (shop_site) แก้ได้ที่หน้าแอดมิน → ການຕັ້ງຄ່າເວັບໄຊ
    โหลดเสร็จแล้วยิงอีเวนต์ 'site:ready' ให้หน้าวาดส่วนหัว/แบนเนอร์/คำอธิบายใหม่ */
 /* ===== ปรับภาพพอดีอัตโนมัติ (เปิด/ปิดที่ แอดมิน → ตั้งค่าเว็บ → ปรับภาพพอดีอัตโนมัติ) =====
@@ -56,8 +56,9 @@ function setSite(j){
   SITE.stat = { users:j.stat_users, products:j.stat_products, orders:j.stat_orders, sold:j.stat_sold };
   SITE.real = { users:j.real_users, orders:j.real_orders };
   /* ตั้งค่าการสลับการ์ด "ทำไมต้องเลือกเรา": เก็บต่อท้ายข้อความการ์ด 1 เป็น \n#why=วินาทีที่คั้ง,เวลาเบลอ(หน่วย 0.1 วินาที) */
-  const wm = /\n#why=(\d+),(\d+)\s*$/.exec(String(j.why1_text || ''));
-  SITE.whyCfg = { s: wm ? Math.max(2, Math.min(20, +wm[1])) : 5, b: wm ? Math.max(2, Math.min(20, +wm[2])) : 9 };
+  /* ค่าที่ 3 (ไม่บังคับ) = ดีไซน์ 1 (เบลอสลับวน) / 2 (การ์ดซ้อน 2 ใบ ไม่สลับ) */
+  const wm = /\n#why=(\d+),(\d+)(?:,([12]))?\s*$/.exec(String(j.why1_text || ''));
+  SITE.whyCfg = { s: wm ? Math.max(2, Math.min(20, +wm[1])) : 5, b: wm ? Math.max(2, Math.min(20, +wm[2])) : 9, d: wm && wm[3] === '2' ? 2 : 1 };
   /* ความเร็วแถบ "ซื้อล่าสุด" (px/วินาที): เก็บต่อท้ายข้อความการ์ด 2 เป็น \n#rec=ตัวเลข */
   /* ปรับภาพพอดีอัตโนมัติ (ปรับเฉพาะ "ความยาว" การ์ดตามสัดส่วนรูป): เก็บต่อท้ายสุดของข้อความการ์ด 2 เป็น \n#fit=สินค้า,หมวดหมู่ (1 = เปิด · 0 = ปิด)
      ลำดับท้ายข้อความ: ...\n#rec=ตัวเลข\n#fit=P,C  (อ่าน #fit ออกก่อน แล้วค่อยอ่าน #rec) */
@@ -67,7 +68,7 @@ function setSite(j){
   const w2 = w2raw.replace(/\n#fit=[01],[01]\s*$/, '');
   const rm = /\n#rec=(\d+)\s*$/.exec(w2);
   SITE.recSpeed = rm ? Math.max(10, Math.min(120, +rm[1])) : 40;
-  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+\s*$/, ''), t2:j.why2_title||'', d2:w2.replace(/\n#rec=\d+\s*$/, '') };
+  SITE.why = { t1:j.why1_title||'', d1:String(j.why1_text||'').replace(/\n#why=\d+,\d+(?:,[12])?\s*$/, ''), t2:j.why2_title||'', d2:w2.replace(/\n#rec=\d+\s*$/, '') };
   exFitApply();
   IMG.banner = j.banner || '';
   document.dispatchEvent(new Event('site:ready'));

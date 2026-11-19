@@ -116,6 +116,15 @@ html.is-in .hb-reg,html.is-in .dr-f{display:none}
 .wrot .wslide>div:last-child{min-width:0}
 @media (prefers-reduced-motion:reduce){.wrot .wslide,.wrot .wslide.on{filter:none;transform:none;transition:opacity .4s linear}}
 
+/* ดีไซน์ 2: การ์ดซ้อน 2 ใบ (ไอคอนวงกลมขอบแดง) ไม่สลับ ไม่เบลอ — เปิดด้วย .wrot.d2 (เลือกที่หน้าแอดมิน) */
+.wrot.d2{display:flex;flex-direction:column;gap:21px;overflow:visible;background:none;border:0;box-shadow:none;padding:0;border-radius:0}
+.wrot.d2 .wslide,.wrot.d2 .wslide.on{opacity:1;visibility:visible;filter:none;transform:none;transition:none;
+  gap:20px;align-items:flex-start;padding:24px 22px;background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)}
+.wrot.d2 .ib{width:48px;height:48px;border-radius:50%;margin-top:4px;background:rgba(var(--red-rgb),.1);border:2px solid rgba(var(--red-rgb),.75);color:var(--red);box-shadow:0 0 14px rgba(var(--red-rgb),.25)}
+.wrot.d2 .ib svg{width:24px;height:24px}
+.wrot.d2 h3{font-size:19px;font-weight:500;margin-bottom:8px}
+.wrot.d2 p{font-size:14.5px;line-height:1.65}
+
 /* featured carousel */
 .feat-vp{overflow:hidden;border-radius:14px}
 .feat-track{display:flex;transition:transform .5s ease}
