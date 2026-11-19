@@ -551,6 +551,7 @@ function openWait(file){
       if(j && j.ok){ myReq.id = j.id; store.set('exshop_topup_pending', myReq); startPoll(myReq); return; }
       const c = j && j.code;
       failWait(c==='bad_session' ? 'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'
+             : c==='sale_closed' ? 'ຮ້ານຍັງບໍ່ເປີດຂາຍ ຫຼື ປິດຊົ່ວຄາວ ເຕີມເງິນບໍ່ໄດ້ ກະລຸນາຕິດຕໍ່ແອດມິນ'
              : c==='too_many' ? 'ມີລາຍການລໍຖ້າຢູ່ຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າແອດມິນກວດສອບກ່ອນ'
              : c==='slip_big' ? 'ຮູບສະລິບໃຫຍ່ເກີນໄປ'
              : c==='amount' ? 'ຈຳນວນເງິນບໍ່ຖືກຕ້ອງ' : 'ສົ່ງສະລິບບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');

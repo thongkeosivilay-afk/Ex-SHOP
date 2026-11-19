@@ -332,17 +332,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   </nav>
 </header>
 <main>
-  <section class="sub-card">
-    <div class="sub-top">
-      <div class="sub-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/></svg></div>
-      <div class="sub-body">
-        <span class="pill"><i></i>Website Status: Active</span>
-        <h2 class="sub-title" id="subTitle">ຍັງບໍ່ນັບ</h2>
-        <p class="sub-desc" id="subDesc">ຍັງບໍ່ໄດ້ເລີ່ມນັບເວລາແພັກເກັດຮ້ານ</p>
-      </div>
-    </div>
-    <button class="sub-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.5-4.2L3 9.5"/><path d="M3 4v5.5h5.5"/><path d="M4 13a8 8 0 0 0 14.5 4.2L21 14.5"/><path d="M21 20v-5.5h-5.5"/></svg>ຕໍ່ອາຍຸເວັບໄຊ</button>
-  </section>
+  <div id="saleMount"></div>
     <div class="view" id="vDash">
 <div class="crumb">ແຜງຄວບຄຸມລະບົບ / ພາບລວມລະບົບ / ລາຍໄດ້ສະສົມ</div>
 <div class="pinsw" id="pinSw">
@@ -1381,6 +1371,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   document.addEventListener('visibilitychange', function(){ if(!document.hidden && !document.getElementById('vProd').hidden) load(); });
 })();
 </script>
+<script src="admin-sale.js"></script>
 <script src="notify.js"></script>
 </body>
 
