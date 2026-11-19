@@ -345,6 +345,29 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   </section>
     <div class="view" id="vDash">
 <div class="crumb">ແຜງຄວບຄຸມລະບົບ / ພາບລວມລະບົບ / ລາຍໄດ້ສະສົມ</div>
+<div class="pinsw" id="pinSw">
+  <div class="pinsw-t"><b>ລະຫັດ PIN ເຂົ້າແຜງ</b><span id="pinSwTxt">ໃສ່ທຸກຄັ້ງທີ່ເຂົ້າ</span></div>
+  <button type="button" class="pinsw-b" id="pinSwBtn" role="switch" aria-checked="true" aria-label="ໃສ່ PIN ທຸກຄັ້ງທີ່ເຂົ້າ"><i></i></button>
+</div>
+<style>
+.pinsw{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 14px;padding:14px 17px;border-radius:22px;background:var(--card);border:1px solid var(--border)}
+.pinsw-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pinsw-t b{font-size:14.5px;font-weight:600}
+.pinsw-t span{font-size:12.5px;color:var(--muted)}
+.pinsw-b{flex:none;position:relative;width:52px;height:30px;border-radius:99px;border:1px solid var(--border);background:#555;cursor:pointer;padding:0;transition:background .25s,box-shadow .25s;-webkit-tap-highlight-color:transparent}
+.pinsw-b i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .25s}
+.pinsw-b[aria-checked="true"]{background:var(--red);box-shadow:0 0 14px rgba(var(--red-rgb),.45)}
+.pinsw-b[aria-checked="true"] i{transform:translateX(22px)}
+</style>
+<script>
+(function(){
+  var b=document.getElementById('pinSwBtn'),t=document.getElementById('pinSwTxt');
+  function get(){try{return localStorage.getItem('exPinMode')!=='once'}catch(e){return true}}
+  function show(on){b.setAttribute('aria-checked',on?'true':'false');t.textContent=on?'ໃສ່ທຸກຄັ້ງທີ່ເຂົ້າ':'ໃສ່ຄັ້ງດຽວ (ຈື່ໄວ້ 30 ນາທີ)'}
+  show(get());
+  b.addEventListener('click',function(){var on=!get();try{localStorage.setItem('exPinMode',on?'every':'once')}catch(e){}show(on)});
+})();
+</script>
   <div class="note" id="note" hidden></div>
 
   <section class="adm">

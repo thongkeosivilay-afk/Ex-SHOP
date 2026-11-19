@@ -258,10 +258,18 @@
   }
   function relock() { if (el) return; start(); }
 
+  /* สวิตช์: localStorage 'exPinMode' = 'once' → ใส่ครั้งเดียวต่อ 30 นาที · ค่าอื่น/ไม่มี = ใส่ทุกครั้งที่เข้า (ค่าเริ่มต้น) */
+  var fresh = true;
+  function every() { try { return localStorage.getItem('exPinMode') !== 'once'; } catch (e) { return true; } }
   function check() {
     rpc('adm_pin_status', { p_token: tok() }).then(function (s) {
       if (!s || !s.ok) { release(1800, false); return; } /* ไม่ใช่แอดมิน/เซสชันหมด → ให้ระบบเดิมของหน้าจัดการต่อ */
-      if (s.unlocked) return release(s.unlock_sec, false);
+      if (s.unlocked) {
+        /* โหมด "ใส่ทุกครั้งที่เข้า": เปิดหน้าใหม่ครั้งแรกให้ล็อกก่อน แล้วตรวจใหม่ → ต้องใส่ PIN ทุกครั้ง */
+        if (fresh && every()) { fresh = false; rpc('adm_pin_lock', { p_token: tok() }).then(check, function () { setMode('offline'); }); return; }
+        fresh = false; return release(s.unlock_sec, false);
+      }
+      fresh = false;
       cdEnd = s.locked_sec > 0 ? Date.now() + s.locked_sec * 1000 : 0;
       setMode(s.has_pin ? 'verify' : 'setup1');
     }, function () { setMode('offline'); });
