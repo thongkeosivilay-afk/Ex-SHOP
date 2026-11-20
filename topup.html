@@ -454,8 +454,26 @@ function startQR(){
 $('#goBtn').onclick = startQR;
 $('#qBack').onclick = ()=>backToPick();
 
+/* ---------- เช็กรายการค้างซ้ำ (กรณีปิดหน้า/สลับไปแอปธนาคารแล้วกลับมา) ---------- */
+let rcBusy = false;
+function recheck(){
+  if(rcBusy) return; rcBusy = true;
+  pay({ action:'recheck' }).then(j=>{
+    if(j && j.ok){
+      saveBal(j.balance);
+      if(j.credited > 0){
+        if(window.ExLog) ExLog.addTopup(j.credited, 'laoqr');
+        toast('ເຕີມເງິນສຳເລັດ +' + fmt(j.credited));
+        if(!cur) setTimeout(()=>location.reload(), 1200);
+      }
+    }
+  }).catch(()=>{}).finally(()=>{ rcBusy = false; });
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) recheck(); });
+window.addEventListener('pageshow', e=>{ if(e.persisted) recheck(); });
+
 /* ---------- เริ่มต้น ---------- */
-setBal(); syncBal(); renderInfo(); renderChips(); syncInput(); ringSet(1);
+setBal(); syncBal(); recheck(); renderInfo(); renderChips(); syncInput(); ringSet(1);
 /* ถ้ารีโหลดหน้าระหว่างรอจ่าย (เช่น สลับไปแอปธนาคาร) → กลับมาที่ QR เดิมและโพลต่อ */
 (function resume(){
   const p = store.get(PEND, null);
