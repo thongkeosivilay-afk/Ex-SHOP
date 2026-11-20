@@ -25,7 +25,7 @@
   }
   const codesOf = o => Array.isArray(o.codes) ? o.codes.map(String).filter(Boolean) : [];
 
-  const BANK = { bcel: 'BCEL', ldb: 'LDB', jdb: 'JDB', apb: 'APB' };
+  const BANK = { bcel: 'BCEL', ldb: 'LDB', jdb: 'JDB', apb: 'APB', laoqr: 'LAOQR' };
   const ST = { pending: 'ລໍຖ້າກວດສອບ', approved: 'ສຳເລັດ', rejected: 'ບໍ່ຜ່ານ' };
   const bankName = r => BANK[String(r.bank || '').toLowerCase()] || String(r.bank || 'ເຕີມເງິນ').toUpperCase();
   const stName = r => ST[r.status] || String(r.status || '');

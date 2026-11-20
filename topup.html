@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#000000">
 <title>ເຕີມເງິນ</title>
 <script src="guard.js"></script>
-<script src="contacts.js"></script>
 <script>if(!exLoggedIn())exNeedLogin('topup.html');</script>
 <script src="exlog.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,6 +81,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .bit.off{opacity:.38!important;filter:grayscale(.7)}
 .bit.off .ck{display:none}
 .bit .soon{font:600 10.5px/1 var(--fl);color:var(--mut2);border:1px solid #262626;border-radius:99px;padding:5px 8px}
+
+.mtd{display:flex;align-items:center;gap:12px;margin:16px 0 6px;padding:10px 14px 10px 11px;border-radius:18px;background:#0a0a0a;border:1px solid #232323}
+.mtd .mt{display:flex;flex-direction:column;gap:4px}
+.mtd .mt small{font:400 11px/1 var(--fl);color:var(--mut2)}
+.mtd .mt b{font:700 15.5px/1.15 var(--f);color:#fff}
 
 /* ---------- main card ---------- */
 .card{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px 20px 22px}
@@ -195,26 +199,13 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 <section class="view" id="vPick">
   <a class="back" href="index.html"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>ກັບໜ້າຫຼັກ</a>
   <div class="bal" id="bal">₭0</div>
-  <p class="sub">ເລືອກທະນາຄານທີ່ສະດວກສຳລັບທ່ານ</p>
+  <p class="sub">ເຕີມເງິນຜ່ານ QR ເງິນເຂົ້າອັດຕະໂນມັດ</p>
 
-  <div class="bwrap" id="bwrap">
-    <div class="bsel" id="bsel">
-      <button class="bhead" id="bhead" type="button" aria-expanded="false">
-        <span id="bhLogo"></span>
-        <span class="bt"><small>ທະນາຄານ</small><b id="bhName"></b></span>
-        <span class="chev"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
-      </button>
-      <div class="bpanel">
-        <div class="bttl">ທະນາຄານລາວທຸກທະນາຄານ</div>
-        <div class="blist" id="blist"></div>
-      </div>
-    </div>
-  </div>
-  <div class="bdim" id="bdim"></div>
+  <div class="mtd"><span class="bl" style="--c:#d71920">QR</span><span class="mt"><small>ຊ່ອງທາງຊຳລະ</small><b>LAOQR</b></span></div>
 
   <div class="card">
-    <h2 id="cTitle"></h2>
-    <p class="s" id="cSub"></p>
+    <h2>ເຕີມເງິນດ້ວຍ LAOQR</h2>
+    <p class="s">ສະແກນຈ່າຍ ແລ້ວຍອດເງິນເຂົ້າທັນທີ</p>
 
     <label class="lbl" for="amt">ຈຳນວນເງິນ (ກີບ)</label>
     <input class="inp" id="amt" type="text" inputmode="numeric" autocomplete="off" value="100,000">
@@ -226,7 +217,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </button>
     <p class="hint" id="hint"></p>
 
-    <h3 class="how" id="howT"></h3>
+    <h3 class="how">ວິທີເຕີມເງິນ</h3>
     <ul class="steps" id="steps"></ul>
   </div>
   <div class="foot"></div>
@@ -238,7 +229,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     <button class="qback" id="qBack" type="button"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>ກັບຄືນ</button>
   </div>
   <div class="qamt" id="qAmt">₭0</div>
-  <p class="qbank" id="qBank"></p>
+  <p class="qbank" id="qBank">ສະແກນ QR ດ້ວຍແອັບທະນາຄານ ແລ້ວໂອນຕາມຍອດທີ່ສະແດງ</p>
 
   <div class="qcard">
     <div class="ring">
@@ -246,193 +237,80 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <path class="pg" id="pg" d="M120 3H211A26 26 0 0 1 237 29V211A26 26 0 0 1 211 237H29A26 26 0 0 1 3 211V29A26 26 0 0 1 29 3Z" fill="none" stroke-width="4" pathLength="1"/></svg>
       <div class="qrbox" id="qrbox"></div>
     </div>
-    <p class="cd" id="cd">ເຫຼືອເວລາ <b id="cdn">30</b> ວິນາທີ</p>
+    <p class="cd" id="cd"><span id="cdLbl">ເຫຼືອເວລາ</span> <b id="cdn">05:00</b></p>
 
     <div class="info">
-      <div class="row"><span>ຊື່ບັນຊີ</span><b id="iHolder"></b></div>
-      <div class="row"><span>ເລກບັນຊີ</span><div style="display:flex;align-items:center"><b id="iAcct"></b><button class="cp" id="cpBtn" type="button">ກ໊ອບ</button></div></div>
+      <div class="row"><span>ຊ່ອງທາງ</span><b>LAOQR</b></div>
       <div class="row"><span>ຈຳນວນເງິນ</span><b id="iAmt"></b></div>
+      <div class="row"><span>ສະຖານະ</span><b>ລໍຖ້າການໂອນ...</b></div>
     </div>
 
-    <label class="slip" id="slip">
-      <input type="file" id="slipIn" accept="image/*">
-      <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-      <span id="slipT">ແນບສະລິບການໂອນ</span>
-      <small id="slipS">ແຕະເພື່ອເລືອກຮູບສະລິບ</small>
-    </label>
   </div>
 </section>
 
 </div>
 
-<!-- การ์ดรอแอดมิน -->
+<!-- การ์ดผลลัพธ์ -->
 <div class="ov" id="ovWait">
-  <div class="pop" id="waitCard">
-    <div class="spin" id="spin"></div>
-    <h3 id="wT">ລໍຖ້າແອດມິນຢືນຢັນເງິນ</h3>
-    <div class="big" id="wTime">01:00</div>
-    <div class="bar"><i id="wBar"></i></div>
-    <p id="wP">ກຳລັງກວດສອບສະລິບຂອງທ່ານ ກະລຸນາຢ່າປິດໜ້ານີ້</p>
-    <p class="sum" id="wSum"></p>
-    <button class="link" id="wClose" type="button" style="display:none">ກັບໄປໜ້າເຕີມເງິນ</button>
-    <button class="link" id="wDemo" type="button" style="display:none">[ທົດລອງ] ຈຳລອງແອດມິນກົດຢືນຢັນ</button>
-  </div>
-</div>
-
-<!-- การ์ดช่องทางติดต่อ (เด้งเมื่อครบ 1 นาที) -->
-<div class="ct" id="ct">
-  <div class="pop">
-    <button class="x" id="ctX" type="button" aria-label="close">✕</button>
-    <h3>ແອດມິນຍັງບໍ່ຕອບກັບ?</h3>
-    <p>ຕິດຕໍ່ແອດມິນໂດຍກົງ ແລ້ວສົ່ງສະລິບໃຫ້ແອດມິນໄດ້ເລີຍ</p>
-    <div class="ctl" id="ctl"></div>
-  </div>
+  <div class="pop" id="waitCard"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 /* =====================================================================
-   ตั้งค่า — แก้เฉพาะส่วนนี้
+   เติมเงินผ่าน LAOQR — สร้าง QR / ตรวจสถานะ ทำผ่าน Edge Function "jvix-pay" (คีย์ API อยู่ฝั่งเซิร์ฟเวอร์เท่านั้น)
    ===================================================================== */
 const CONFIG = {
-  minAmount: 10000,          // ขั้นต่ำ (กีบ)
-  maxAmount: 50000000,       // สูงสุด (กีบ)
-  qrSeconds: 30,             // เวลา QR ถ้าไม่แนบสลิป → กลับหน้าเลือกราคา
-  waitSeconds: 60,           // รอแอดมินยืนยัน ถ้าครบ → เด้งการ์ดช่องทางติดต่อ
+  minAmount: 1000,
+  maxAmount: 50000000,
   amounts: [10000, 50000, 100000, 200000, 500000, 1000000],
-
-  /* ช่องทางติดต่อ — ใส่ลิงก์จริง (เว้นว่าง '' = ยังไม่แสดงปุ่มนั้น) */
+  pollMs: 3000,          // โพลเช็กสถานะทุก 3 วินาที
+  qrSeconds: 300,        // เวลานับถอยหลังที่โชว์ (ตัดสินสิ้นสุดจากเซิร์ฟเวอร์: จ่ายแล้ว / หมดอายุ)
+  graceSeconds: 90,      // เกินเวลาแล้วโพลต่ออีกช่วงหนึ่ง เผื่อเพิ่งโอน
   contacts: [
     { name:'Discord',  hint:'ແອດມິນ', short:'D', color:'#5865F2', url:'' },
     { name:'Facebook', hint:'ແອດມິນ', short:'f', color:'#1877F2', url:'' },
     { name:'WhatsApp', hint:'ແອດມິນ', short:'W', color:'#25D366', url:'' }
-  ],
-
-  /* ส่งสลิปไปให้ระบบหลังบ้าน — ตอนนี้ยังไม่มีหลังบ้านในโปรเจกต์
-     ให้แก้ฟังก์ชันนี้ให้อัปโหลด file + ข้อมูลไปที่ระบบจริง (เช่น Supabase / Discord webhook) */
-  /* (ใช้งานจริงแล้ว: ส่งผ่าน Supabase ฟังก์ชัน member_topup_submit ด้านล่าง) */
-
-  /* โหมดทดลอง: เปิดด้วย topup.html?demo=1 จะมีปุ่มจำลองแอดมินกดยืนยัน */
-  demo: false
+  ]
 };
+const PAY_URL = EX_SB.url + '/functions/v1/jvix-pay';
 
-/* รายชื่อธนาคารลาว — acct/holder = เลขบัญชีและชื่อบัญชีของร้านคุณ, qr = ไฟล์รูป QR ของธนาคารนั้น */
-const BANKS = [
-  { id:'bcel', color:'#d71920', logo:'logos/bcel.png',   tab:'BCEL',        name:'ທະນາຄານ ການຄ້າຕ່າງປະເທດລາວ (BCEL)',     acct:'', holder:'', qr:'qr/bcel.png' },
-  { id:'ldb', color:'#0d8a4b', logo:'logos/ldb.png',    tab:'LDB',         name:'ທະນາຄານ ພັດທະນາລາວ (LDB)',              acct:'', holder:'', qr:'qr/ldb.png' },
-  { id:'jdb', color:'#e8452c', logo:'logos/jdb.png',    tab:'JDB',         name:'ທະນາຄານ ຮ່ວມພັດທະນາ (JDB)',             acct:'', holder:'', qr:'qr/jdb.png' },
-  { id:'apb', color:'#1b7f3a', logo:'logos/apb.png',    tab:'APB',         name:'ທະນາຄານ ສົ່ງເສີມກະສິກຳ (APB)',           acct:'', holder:'', qr:'qr/apb.png' },
-  { id:'lvb', color:'#c8102e', logo:'logos/lvb.png',    tab:'LVB',         name:'ທະນາຄານ ລາວ-ຫວຽດ (LVB)',                acct:'', holder:'', qr:'qr/lvb.png' },
-  { id:'stb', color:'#0b5cab', logo:'logos/stb.png',    tab:'STB',         name:'ທະນາຄານ ຊາກອມແບັງ ລາວ (STB)',            acct:'', holder:'', qr:'qr/stb.png' },
-  { id:'psvb', color:'#7a3db8', logo:'logos/psvb.png',   tab:'PSVB',        name:'ທະນາຄານ ພົງສະຫວັນ (PSVB)',               acct:'', holder:'', qr:'qr/psvb.png' },
-  { id:'idcb', color:'#1d4fa3', logo:'logos/idcb.png',   tab:'IDCB',        name:'ທະນາຄານ ອິນໂດຈີນ (IDCB)',                acct:'', holder:'', qr:'qr/idcb.png' },
-  { id:'acleda', color:'#1c3f94', logo:'logos/acleda.png', tab:'ACLEDA',      name:'ທະນາຄານ ເອຊີລີດາ ລາວ (ACLEDA)',          acct:'', holder:'', qr:'qr/acleda.png' },
-  { id:'mjbl', color:'#b3001b', logo:'logos/mjbl.png',   tab:'MJBL',        name:'ທະນາຄານ ມາຣູຮັນ ເຈແປນ ລາວ (MJBL)',       acct:'', holder:'', qr:'qr/mjbl.png' },
-  { id:'bic', color:'#0a6ebd', logo:'logos/bic.png',    tab:'BIC',         name:'ທະນາຄານ ບີໄອຊີ ລາວ (BIC)',               acct:'', holder:'', qr:'qr/bic.png' },
-  { id:'vtb', color:'#0f5aa8', logo:'logos/vtb.png',    tab:'VietinBank',  name:'ທະນາຄານ ຫວຽດຕິນ ລາວ (VietinBank)',        acct:'', holder:'', qr:'qr/vtb.png' },
-  { id:'vcb', color:'#17814f', logo:'logos/vcb.png',    tab:'Vietcombank', name:'ທະນາຄານ ວຽດຄອມແບັງ ລາວ (Vietcombank)',    acct:'', holder:'', qr:'qr/vcb.png' },
-  { id:'bfl', color:'#1f3a93', logo:'logos/bfl.png',    tab:'BFL',         name:'ທະນາຄານ ຝຣັ່ງ-ລາວ (BFL)',                acct:'', holder:'', qr:'qr/bfl.png' },
-  { id:'icbc', color:'#c4161c', logo:'logos/icbc.png',   tab:'ICBC',        name:'ທະນາຄານ ໄອຊີບີຊີ ວຽງຈັນ (ICBC)',          acct:'', holder:'', qr:'qr/icbc.png' },
-  { id:'boc', color:'#a6192e', logo:'logos/boc.png',    tab:'BOC',         name:'ທະນາຄານ ແຫ່ງປະເທດຈີນ ວຽງຈັນ (BOC)',       acct:'', holder:'', qr:'qr/boc.png' },
-  { id:'pbl', color:'#e03a2f', logo:'logos/pbl.png',    tab:'Public Bank', name:'ທະນາຄານ ພັບບລິກ ລາວ (Public Bank)',        acct:'', holder:'', qr:'qr/pbl.png' },
-  { id:'lcnb', color:'#c0152a', logo:'logos/lcnb.png',   tab:'LCNB',        name:'ທະນາຄານ ລາວ-ຈີນ (LCNB)',                 acct:'', holder:'', qr:'qr/lcnb.png' }
-];
-
-/* =====================================================================
-   โค้ดทำงาน (ไม่ต้องแก้)
-   ===================================================================== */
 const $ = s => document.querySelector(s);
 const fmt = n => '₭' + Number(n).toLocaleString('en-US');
 const short = n => n >= 1000000 ? (n/1000000)+'M' : (n/1000)+'k';
 const store = {
   get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
-  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
 };
+const PEND = 'exshop_topup_pending';
 
-let bank = BANKS[0], amount = 100000;
-let qrT = null, qrLeft = 0, waitT = null, waitLeft = 0, curReq = null, toastT;
-let balance = store.get('exshop_balance', 0);
+let amount = 100000, balance = store.get('exshop_balance', 0);
+let cur = null, tickT = null, pollT = null, busy = false, polling = false, toastT;
 
-function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800); }
 function setBal(){ $('#bal').textContent = fmt(balance); }
 function saveBal(n){ balance = Number(n) || 0; store.set('exshop_balance', balance); setBal(); }
 function syncBal(){ try{ exRpc('member_me',{p_token:exToken()}).then(j=>{ if(j && j.ok) saveBal(j.balance); }).catch(()=>{}); }catch(e){} }
 
-/* ย่อรูปสลิปเป็น JPEG ก่อนส่ง (ไม่เกิน ~1200px) */
-function slipToData(file){
-  return new Promise((res,rej)=>{
-    const url = URL.createObjectURL(file), im = new Image();
-    im.onload = ()=>{
-      const k = Math.min(1, 1200/Math.max(im.width, im.height));
-      const c = document.createElement('canvas'); c.width = Math.round(im.width*k); c.height = Math.round(im.height*k);
-      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-      URL.revokeObjectURL(url);
-      let q = .8, d = c.toDataURL('image/jpeg', q);
-      while(d.length > 700000 && q > .3){ q -= .1; d = c.toDataURL('image/jpeg', q); }
-      res(d);
-    };
-    im.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error('img')); };
-    im.src = url;
-  });
+/* เรียก Edge Function */
+function pay(body){
+  const ctl = new AbortController(), t = setTimeout(()=>ctl.abort(), 20000);
+  return fetch(PAY_URL, {
+    method:'POST', signal: ctl.signal,
+    headers:{ 'Content-Type':'application/json', apikey: EX_SB.key },
+    body: JSON.stringify(Object.assign({ token: exToken() }, body))
+  }).then(r=>r.json()).finally(()=>clearTimeout(t));
 }
 
-/* ---------- หน้าเลือก ---------- */
-function blogo(b){
-  const t = (b.tab||'').replace(/[^A-Za-z]/g,'').slice(0,4).toUpperCase();
-  return `<span class="bl" style="--c:${b.color||'#333'}">${t}<img src="${b.logo||''}" alt="" onload="this.parentNode.classList.add('has')" onerror="this.remove()"></span>`;
-}
-function renderTabs(){
-  $('#bhLogo').innerHTML = blogo(bank);
-  $('#bhName').textContent = bank.tab;
-  const anyOn = BANKS.some(b=>b.on);
-  $('#blist').innerHTML = BANKS.map((b,i)=>{
-    const off = anyOn && !b.on;
-    return `<button class="bit${b.id===bank.id?' sel':''}${off?' off':''}" data-id="${b.id}" type="button" style="--i:${i}">
-      ${blogo(b)}<span class="bn"><b>${b.tab}</b><span>${b.name.replace(/\s*\(.*\)$/,'')}</span></span>
-      ${off?'<em class="soon" style="font-style:normal">ໄວໆນີ້</em>':'<span class="ck"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>'}</button>`;
-  }).join('');
-}
-let selOpen = false;
-function selSize(){
-  const l = $('#blist');
-  return 60 + 34 + Math.min(l.scrollHeight, 272) + 8;
-}
-function openSel(){
-  selOpen = true; renderTabs();
-  const el = $('#bsel');
-  el.style.height = selSize() + 'px';
-  el.classList.add('open'); $('#bdim').classList.add('show'); $('#bhead').setAttribute('aria-expanded','true');
-  const cur = $('#blist .sel'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'nearest'}), 120);
-}
-function closeSel(){
-  selOpen = false;
-  const el = $('#bsel');
-  el.style.height = ''; el.classList.remove('open'); $('#bdim').classList.remove('show'); $('#bhead').setAttribute('aria-expanded','false');
-}
-$('#bhead').addEventListener('click', ()=> selOpen ? closeSel() : openSel());
-$('#bdim').addEventListener('click', closeSel);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && selOpen) closeSel(); });
-$('#blist').addEventListener('click', e=>{
-  const t = e.target.closest('.bit'); if(!t) return;
-  const b = BANKS.find(x=>x.id===t.dataset.id); if(!b) return;
-  if(t.classList.contains('off')){ toast('ທະນາຄານນີ້ຍັງບໍ່ເປີດໃຫ້ບໍລິການ'); return; }
-  bank = b;
-  $('#blist').querySelectorAll('.bit').forEach(x=>x.classList.toggle('sel', x===t));
-  $('#bhLogo').innerHTML = blogo(bank); $('#bhName').textContent = bank.tab;
-  renderBank();
-  setTimeout(closeSel, 220);
-});
-function renderBank(){
-  $('#cTitle').textContent = 'ໂອນເງິນຜ່ານ ' + bank.tab;
-  $('#cSub').textContent   = bank.name;
-  $('#hint').textContent   = `ຂັ້ນຕ່ຳ ${fmt(CONFIG.minAmount)} • ສູງສຸດ ${fmt(CONFIG.maxAmount)} • QR ມີອາຍຸ ${CONFIG.qrSeconds} ວິນາທີ`;
-  $('#howT').textContent   = 'ວິທີເຕີມເງິນຜ່ານ ' + bank.tab;
+/* ---------- หน้าเลือกจำนวนเงิน ---------- */
+function renderInfo(){
+  $('#hint').textContent = `ຂັ້ນຕ່ຳ ${fmt(CONFIG.minAmount)} • ສູງສຸດ ${fmt(CONFIG.maxAmount)}`;
   const S = [
     'ໃສ່ຈຳນວນເງິນທີ່ຕ້ອງການເຕີມ ແລ້ວກົດ "ສ້າງ QR Code"',
-    `ເປີດແອັບທະນາຄານ ${bank.tab} ຂອງທ່ານ ເລືອກສະແກນ QR ແລ້ວໂອນຕາມຍອດທີ່ສະແດງເປະໆ`,
-    `ແຄັບໜ້າຈໍສະລິບການໂອນ ແລ້ວກົດແນບສະລິບພາຍໃນ ${CONFIG.qrSeconds} ວິນາທີ`,
-    'ລໍຖ້າແອດມິນຢືນຢັນ ເງິນຈະເຂົ້າບັນຊີຂອງທ່ານ ຖ້າບໍ່ແນບສະລິບທັນເວລາ ລະບົບຈະກັບໄປໜ້າເລືອກຈຳນວນເງິນ'
+    'ເປີດແອັບທະນາຄານຂອງທ່ານ ເລືອກສະແກນ QR ແລ້ວໂອນຕາມຍອດທີ່ສະແດງ',
+    'ຍອດເງິນຈະເຂົ້າບັນຊີຂອງທ່ານໂດຍອັດຕະໂນມັດ ບໍ່ຕ້ອງແນບສະລິບ ກະລຸນາຢ່າປິດໜ້ານີ້ຈົນກວ່າຈະສຳເລັດ'
   ];
   $('#steps').innerHTML = S.map((t,i)=>`<li><i>${i+1}</i><span>${t}</span></li>`).join('');
 }
@@ -440,7 +318,6 @@ function renderChips(){
   $('#chips').innerHTML = CONFIG.amounts.map(a=>`<button class="chip${a===amount?' on':''}" data-a="${a}" type="button">${short(a)}</button>`).join('');
 }
 function syncInput(){ $('#amt').value = amount ? amount.toLocaleString('en-US') : ''; }
-
 $('#chips').addEventListener('click', e=>{
   const c=e.target.closest('.chip'); if(!c) return;
   amount = +c.dataset.a; syncInput(); renderChips();
@@ -462,207 +339,127 @@ function swap(from, to, cb){
   }, 480);
 }
 
-/* ---------- สร้าง QR ---------- */
-function drawQR(){
+/* ---------- แสดง QR ---------- */
+function drawQR(url){
   const box = $('#qrbox');
-  const ph = `<div class="qrph"><svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>ຍັງບໍ່ໄດ້ໃສ່ຮູບ QR<br>${bank.qr}</span></div>`;
-  box.innerHTML = '';
-  if(!bank.qr){ box.innerHTML = ph; return; }
-  const img = new Image(); img.alt='QR';
-  img.onload = ()=>{ box.innerHTML=''; box.appendChild(img); };
-  img.onerror = ()=>{ box.innerHTML = ph; };
-  img.src = bank.qr;
+  const ph = '<div class="qrph"><svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>ກຳລັງໂຫຼດ QR...</span></div>';
   box.innerHTML = ph;
+  if(!url) return;
+  const img = new Image(); img.alt = 'QR';
+  img.onload = ()=>{ box.innerHTML=''; box.appendChild(img); };
+  img.onerror = ()=>{ box.innerHTML = '<div class="qrph"><span>ໂຫຼດ QR ບໍ່ສຳເລັດ<br>ກະລຸນາກັບຄືນ ແລ້ວສ້າງໃໝ່</span></div>'; };
+  img.src = url;
 }
-
 function ringSet(f){
   const p=$('#pg'); p.style.strokeDasharray = '1 1'; p.style.strokeDashoffset = (1-f);
   p.style.opacity = f <= 0.003 ? 0 : 1;
 }
+function mmss(s){ s=Math.max(0,Math.ceil(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 
-function startQR(){
-  if(amount < CONFIG.minAmount){ toast('ຂັ້ນຕ່ຳ ' + fmt(CONFIG.minAmount)); return; }
-  if(amount > CONFIG.maxAmount){ toast('ສູງສຸດ ' + fmt(CONFIG.maxAmount)); return; }
-  $('#qAmt').textContent = fmt(amount);
-  $('#qBank').textContent = bank.name;
-  $('#iHolder').textContent = bank.holder || '—';
-  $('#iAcct').textContent = bank.acct || '—';
-  $('#iAmt').textContent = fmt(amount);
-  $('#cpBtn').style.display = bank.acct ? '' : 'none';
-  resetSlip(); drawQR();
-  swap($('#vPick'), $('#vQR'), ()=>{
-    qrLeft = CONFIG.qrSeconds; tickQR(true);
-    clearInterval(qrT);
-    const t0 = Date.now();
-    qrT = setInterval(()=>{
-      const el = (Date.now()-t0)/1000;
-      qrLeft = Math.max(0, CONFIG.qrSeconds - el);
-      tickQR();
-      if(qrLeft <= 0){ clearInterval(qrT); qrT=null; backToPick('ໝົດເວລາ ບໍ່ໄດ້ແນບສະລິບ ກະລຸນາເລືອກຈຳນວນເງິນໃໝ່'); }
-    }, 60);
-  });
+function showQR(req, animate){
+  $('#qAmt').textContent = fmt(req.amount);
+  $('#iAmt').textContent = fmt(req.amount);
+  drawQR(req.qr_url);
+  const go = ()=>{ startTick(req); startPoll(req); };
+  if(animate) swap($('#vPick'), $('#vQR'), go);
+  else { $('#vPick').classList.add('hide'); $('#vQR').classList.remove('hide'); go(); }
 }
-function tickQR(){
-  ringSet(qrLeft / CONFIG.qrSeconds);
-  const s = Math.ceil(qrLeft);
-  $('#cdn').textContent = s;
-  $('#cd').classList.toggle('low', s <= 10);
-  document.querySelector('.ring').classList.toggle('low', s <= 10);
+
+function startTick(req){
+  clearInterval(tickT);
+  const run = ()=>{
+    const el = (Date.now() - req.at) / 1000;
+    const left = Math.max(0, CONFIG.qrSeconds - el);
+    ringSet(left / CONFIG.qrSeconds);
+    $('#cdn').textContent = mmss(left);
+    const low = left <= 30;
+    $('#cd').classList.toggle('low', low);
+    document.querySelector('.ring').classList.toggle('low', low);
+    $('#cdLbl').textContent = left > 0 ? 'ເຫຼືອເວລາ' : 'ກຳລັງກວດສອບການໂອນ...';
+    if(el > CONFIG.qrSeconds + CONFIG.graceSeconds){ finish('expired'); }
+  };
+  run(); tickT = setInterval(run, 250);
 }
-function stopQR(){ clearInterval(qrT); qrT=null; }
+
+/* ---------- โพลสถานะทุก 3 วินาที ---------- */
+function startPoll(req){
+  stopPoll();
+  const tick = ()=>{
+    if(polling || cur !== req) return;
+    polling = true;
+    pay({ action:'check', id: req.id }).then(j=>{
+      if(cur !== req) return;
+      if(j && j.ok){
+        if(j.status === 'paid') finish('paid', j);
+        else if(j.status === 'expired') finish('expired');
+      } else if(j && j.code === 'bad_session'){ finish('session'); }
+    }).catch(()=>{}).finally(()=>{ polling = false; });
+  };
+  pollT = setInterval(tick, CONFIG.pollMs); tick();
+}
+function stopPoll(){ clearInterval(pollT); pollT = null; polling = false; }
 
 function backToPick(msg){
-  stopQR();
-  swap($('#vQR'), $('#vPick'), ()=>{ if(msg) toast(msg); });
+  clearInterval(tickT); stopPoll(); cur = null; store.del(PEND);
+  const vq = $('#vQR');
+  if(vq.classList.contains('hide')){ if(msg) toast(msg); return; }
+  swap(vq, $('#vPick'), ()=>{ if(msg) toast(msg); });
+}
+
+function finish(kind, j){
+  if(!cur) return;
+  const req = cur;
+  clearInterval(tickT); stopPoll(); cur = null; store.del(PEND);
+  if(kind === 'paid'){
+    const n = Number(j.amount) || req.amount;
+    saveBal(j.balance);
+    if(window.ExLog) ExLog.addTopup(n, 'laoqr');
+    $('#waitCard').innerHTML = `<div class="ok"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+      <h3>ເຕີມເງິນສຳເລັດ</h3><div class="big">+${fmt(n)}</div><p>ຍອດເງິນຄົງເຫຼືອ ${fmt(balance)}</p>
+      <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
+    $('#ovWait').classList.add('show');
+    $('#okBtn').onclick = ()=>location.reload();
+  } else if(kind === 'session'){
+    exClearLocal(); exNeedLogin('topup.html');
+  } else {
+    backToPick('QR ໝົດອາຍຸແລ້ວ ກະລຸນາສ້າງ QR ໃໝ່');
+  }
+}
+
+/* ---------- สร้าง QR ---------- */
+function startQR(){
+  if(busy) return;
+  if(amount < CONFIG.minAmount){ toast('ຂັ້ນຕ່ຳ ' + fmt(CONFIG.minAmount)); return; }
+  if(amount > CONFIG.maxAmount){ toast('ສູງສຸດ ' + fmt(CONFIG.maxAmount)); return; }
+  busy = true; const btn = $('#goBtn'); btn.style.opacity = .6;
+  pay({ action:'create', amount })
+    .then(j=>{
+      if(j && j.ok){
+        const req = { id: j.id, amount: j.amount || amount, qr_url: j.qr_url || '', at: Date.now() };
+        cur = req; store.set(PEND, req); showQR(req, true); return;
+      }
+      const c = j && j.code;
+      toast(c==='bad_session' ? 'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'
+          : c==='sale_closed' ? 'ຮ້ານຍັງບໍ່ເປີດຂາຍ ຫຼື ປິດຊົ່ວຄາວ ເຕີມເງິນບໍ່ໄດ້'
+          : c==='too_many' ? 'ມີລາຍການລໍຖ້າຢູ່ຫຼາຍເກີນໄປ ກະລຸນາລອງໃໝ່ພາຍຫຼັງ'
+          : c==='amount' ? 'ຈຳນວນເງິນບໍ່ຖືກຕ້ອງ' : 'ສ້າງ QR ບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');
+      if(c==='bad_session'){ exClearLocal(); setTimeout(()=>exNeedLogin('topup.html'), 900); }
+    })
+    .catch(()=>toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້ ກະລຸນາກວດອິນເຕີເນັດແລ້ວລອງໃໝ່'))
+    .finally(()=>{ busy = false; btn.style.opacity = ''; });
 }
 $('#goBtn').onclick = startQR;
 $('#qBack').onclick = ()=>backToPick();
-$('#cpBtn').onclick = ()=>{
-  const v = bank.acct;
-  const done = ()=>toast('ກ໊ອບເລກບັນຊີແລ້ວ');
-  if(navigator.clipboard) navigator.clipboard.writeText(v).then(done, ()=>toast(v)); else toast(v);
-};
-
-/* ---------- แนบสลิป ---------- */
-function resetSlip(){
-  const s=$('#slip'); s.querySelectorAll('img').forEach(i=>i.remove());
-  $('#slipIn').value=''; $('#slipT').textContent='ແນບສະລິບການໂອນ'; $('#slipS').textContent='ແຕະເພື່ອເລືອກຮູບສະລິບ';
-}
-$('#slipIn').addEventListener('change', e=>{
-  const f = e.target.files && e.target.files[0]; if(!f) return;
-  if(!/^image\//.test(f.type)){ toast('ກະລຸນາເລືອກໄຟລ໌ຮູບພາບ'); e.target.value=''; return; }
-  if(!qrT){ return; }
-  stopQR();                                   // แนบแล้ว → หยุดนับ 30 วิ
-  const url = URL.createObjectURL(f);
-  const img = new Image(); img.src = url;
-  $('#slip').appendChild(img);
-  $('#slipT').textContent = 'ແນບສະລິບແລ້ວ'; $('#slipS').textContent = f.name;
-  setTimeout(()=>openWait(f), 700);
-});
-
-/* ---------- การ์ดรอแอดมิน (1 นาที) ---------- */
-function mmss(s){ s=Math.max(0,Math.ceil(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
-function openWait(file){
-  curReq = { bank: bank.id, amount, name: file.name, at: Date.now(), id: null };
-  const myReq = curReq;
-  slipToData(file)
-    .then(d => exRpc('member_topup_submit', { p_token: exToken(), p_amount: amount, p_bank: bank.id, p_slip: d }))
-    .then(j => {
-      if(j && j.ok){ myReq.id = j.id; store.set('exshop_topup_pending', myReq); startPoll(myReq); return; }
-      const c = j && j.code;
-      failWait(c==='bad_session' ? 'ເຊດຊັນໝົດອາຍຸ ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່'
-             : c==='sale_closed' ? 'ຮ້ານຍັງບໍ່ເປີດຂາຍ ຫຼື ປິດຊົ່ວຄາວ ເຕີມເງິນບໍ່ໄດ້ ກະລຸນາຕິດຕໍ່ແອດມິນ'
-             : c==='too_many' ? 'ມີລາຍການລໍຖ້າຢູ່ຫຼາຍເກີນໄປ ກະລຸນາລໍຖ້າແອດມິນກວດສອບກ່ອນ'
-             : c==='slip_big' ? 'ຮູບສະລິບໃຫຍ່ເກີນໄປ'
-             : c==='amount' ? 'ຈຳນວນເງິນບໍ່ຖືກຕ້ອງ' : 'ສົ່ງສະລິບບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');
-    })
-    .catch(()=>failWait('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້ ກະລຸນາກວດອິນເຕີເນັດແລ້ວລອງໃໝ່'));
-
-  $('#spin').style.display=''; $('#wT').textContent='ລໍຖ້າແອດມິນຢືນຢັນເງິນ';
-  $('#wTime').style.display=''; $('#wBar').parentElement.style.display='';
-  $('#wP').textContent='ກຳລັງກວດສອບສະລິບຂອງທ່ານ ກະລຸນາຢ່າປິດໜ້ານີ້';
-  $('#wSum').innerHTML = `${bank.tab} • <b>${fmt(amount)}</b>`;
-  $('#wClose').style.display='none';
-  $('#wDemo').style.display = CONFIG.demo ? '' : 'none';
-  $('#ct').classList.remove('show');
-  $('#ovWait').classList.add('show');
-
-  waitLeft = CONFIG.waitSeconds;
-  $('#wTime').textContent = mmss(waitLeft);
-  const bar=$('#wBar'); bar.style.transition='none'; bar.style.width='100%';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{ bar.style.transition='width 1s linear'; }));
-  clearInterval(waitT);
-  const t0 = Date.now();
-  waitT = setInterval(()=>{
-    waitLeft = Math.max(0, CONFIG.waitSeconds - Math.floor((Date.now()-t0)/1000));
-    $('#wTime').textContent = mmss(waitLeft);
-    bar.style.width = (waitLeft/CONFIG.waitSeconds*100)+'%';
-    if(waitLeft <= 0){ clearInterval(waitT); waitT=null; waitTimeout(); }
-  }, 250);
-}
-function waitTimeout(){
-  $('#wP').textContent = 'ແອດມິນຍັງບໍ່ໄດ້ຢືນຢັນ ທ່ານສາມາດຕິດຕໍ່ແອດມິນໄດ້ເລີຍ';
-  $('#wClose').style.display='';
-  openContact();
-}
-async function openContact(){
-  $('#ctl').innerHTML = '<p style="margin-top:0">ກຳລັງໂຫຼດ...</p>';
-  $('#ct').classList.add('show');
-  let list = [];
-  try { list = await exContactsLoad(); } catch(e) {}
-  if(!list.length){                                   // ยังไม่มีใน Supabase → ใช้ค่าเดิมใน CONFIG.contacts
-    list = CONFIG.contacts.filter(c=>c.url).map(c=>({ name:c.name, hint:c.hint||'', color:c.color, short:c.short, href:c.url }));
-  }
-  $('#ctl').innerHTML = list.length
-    ? list.map(exContactHTML).join('')
-    : '<p style="margin-top:0">ຍັງບໍ່ໄດ້ຕັ້ງຊ່ອງທາງຕິດຕໍ່ (ແອດມິນຕັ້ງໄດ້ທີ່ ການຕັ້ງຄ່າເວັບໄຊ → ຊ່ອງທາງຕິດຕໍ່)</p>';
-}
-$('#ctX').onclick = ()=>$('#ct').classList.remove('show');
-
-function closeWait(){
-  clearInterval(waitT); waitT=null; stopPoll(); syncBal();
-  $('#ovWait').classList.remove('show'); $('#ct').classList.remove('show');
-  $('#vQR').classList.add('hide');
-  const p=$('#vPick'); p.classList.remove('hide','blur-out'); p.classList.add('blur-in');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.remove('blur-in')));
-  window.scrollTo(0,0);
-}
-$('#wClose').onclick = closeWait;
-
-/* ---------- ผลจากแอดมิน (ดึงสถานะจากเซิร์ฟเวอร์ทุก 3 วินาที) ---------- */
-let pollT = null;
-function stopPoll(){ clearInterval(pollT); pollT = null; }
-function startPoll(req){
-  stopPoll();
-  const tick = ()=>exRpc('member_topup_status', { p_token: exToken(), p_id: req.id }).then(j=>{
-    if(!j || !j.ok || curReq !== req) return;
-    if(j.status === 'approved') approved(j);
-    else if(j.status === 'rejected') rejected(j);
-  }).catch(()=>{});
-  pollT = setInterval(tick, 3000); tick();
-}
-function failWait(msg){
-  clearInterval(waitT); waitT=null; stopPoll();
-  $('#spin').style.display='none'; $('#wT').textContent='ເກີດຂໍ້ຜິດພາດ';
-  $('#wTime').style.display='none'; $('#wBar').parentElement.style.display='none';
-  $('#wP').textContent = msg; $('#wClose').style.display='';
-}
-function approved(j){
-  clearInterval(waitT); waitT=null; stopPoll();
-  const n = Number(j.amount) || 0;
-  saveBal(j.balance);
-  if(window.ExLog) ExLog.addTopup(n, bank && bank.id);
-  localStorage.removeItem('exshop_topup_pending');
-  $('#ct').classList.remove('show');
-  $('#spin').style.display='none';
-  $('#waitCard').innerHTML = `<div class="ok"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-    <h3>ເຕີມເງິນສຳເລັດ</h3><div class="big">+${fmt(n)}</div><p>ຍອດເງິນຄົງເຫຼືອ ${fmt(balance)}</p>
-    <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
-  $('#okBtn').onclick = ()=>location.reload();
-}
-function rejected(j){
-  clearInterval(waitT); waitT=null; stopPoll();
-  localStorage.removeItem('exshop_topup_pending');
-  $('#ct').classList.remove('show');
-  $('#spin').style.display='none';
-  const note = (j.note||'').replace(/[<>&]/g,'');
-  $('#waitCard').innerHTML = `<h3>ແອດມິນບໍ່ອະນຸມັດລາຍການ</h3><p>${note || 'ກະລຸນາກວດສອບສະລິບ ແລ້ວລອງໃໝ່ ຫຼືຕິດຕໍ່ແອດມິນ'}</p>
-    <button class="go" id="okBtn" type="button" style="margin-top:18px">ຕົກລົງ</button>`;
-  $('#okBtn').onclick = ()=>location.reload();
-}
 
 /* ---------- เริ่มต้น ---------- */
-/* โหลด QR / เลขบัญชี ที่แอดมินตั้งไว้จากฐานข้อมูล — มีธนาคารไหนตั้งไว้ จะแสดงเฉพาะธนาคารนั้น */
-function loadPay(){
-  exRpc('shop_payment', {}).then(rows=>{
-    if(!Array.isArray(rows) || !rows.length) return;
-    BANKS.forEach(b=>{ b.on = false; });
-    rows.forEach(r=>{ const b = BANKS.find(x=>x.id===r.bank); if(b){ b.qr = r.qr; b.acct = r.acct || ''; b.holder = r.holder || ''; b.on = true; } });
-    const on = BANKS.filter(b=>b.on);
-    if(on.length){ bank = on.find(b=>b.id===bank.id) || on[0]; renderTabs(); renderBank(); }
-  }).catch(()=>{});
-}
-setBal(); syncBal(); loadPay(); renderTabs(); renderBank(); renderChips(); syncInput(); ringSet(1);
+setBal(); syncBal(); renderInfo(); renderChips(); syncInput(); ringSet(1);
+/* ถ้ารีโหลดหน้าระหว่างรอจ่าย (เช่น สลับไปแอปธนาคาร) → กลับมาที่ QR เดิมและโพลต่อ */
+(function resume(){
+  const p = store.get(PEND, null);
+  if(p && p.id && p.at && Date.now() - p.at < (CONFIG.qrSeconds + CONFIG.graceSeconds) * 1000){
+    cur = p; showQR(p, false);
+  } else store.del(PEND);
+})();
 </script>
 <script src="notify.js"></script>
 </body>
