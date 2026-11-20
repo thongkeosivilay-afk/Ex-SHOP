@@ -864,8 +864,8 @@ textarea.inp{height:auto;min-height:92px;padding:12px 17px;resize:none;line-heig
     saved = collect();
     paint(); mqRefresh(); rcPaint(); rcBuild(); whPaint(true); fitPaint(); dirty();
   }
-  exRpc('shop_products', {}).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
-  exRpc('shop_site', {}).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
+  exRpc('shop_products', { p_token: exToken() }).then(function(rows){ rows = Array.isArray(rows) ? rows : []; $('s2').placeholder = String(rows.length); $('s4').placeholder = String(rows.reduce(function(a, p){ return a + (+p.sold || 0); }, 0)); }).catch(function(){});
+  exRpc('shop_site', { p_token: exToken() }).then(fill).catch(function(){ toast('ໂຫຼດຂໍ້ມູນບໍ່ສຳເລັດ'); });
 
 
   /* ===== ຮູບໂປຣໂມຊັນ ↔ Supabase (shop_promos / admin_promos_save) — ສູງສຸດ 10 ຮູບ ===== */

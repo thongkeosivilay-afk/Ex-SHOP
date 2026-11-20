@@ -173,7 +173,7 @@ tr:last-child td{border-bottom:0}
     b.classList.toggle('on', !!SEL[id]);
   });
   function loadProds(){
-    exRpc('shop_products', {}).then(function(r){
+    exRpc('shop_products', { p_token: exToken() }).then(function(r){
       PRODS = Array.isArray(r) ? r : (r && r.rows) || []; drawProds();
     }).catch(function(){ $('#c_prods').innerHTML = '<div class="pe">ໂຫຼດສິນຄ້າບໍ່ໄດ້</div>'; });
   }

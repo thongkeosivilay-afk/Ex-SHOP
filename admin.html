@@ -1314,7 +1314,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   document.addEventListener('cats:ready', render);
   async function load(){
     try{
-      var rows = await rpc('shop_categories', {});
+      var rows = await rpc('shop_categories', { p_token: tok() });
       if(!Array.isArray(rows)) throw new Error('bad');
       state = 'ok'; setCats(rows);
     }catch(e){ state = 'error'; render(); toast(L.loadFail); return; }

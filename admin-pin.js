@@ -134,7 +134,7 @@
     var c = el.querySelector('#plName'); if (c) c.textContent = nm;
   }
   function refreshSite() {
-    rpc('shop_site', {}).then(function (j) { if (j && el && el.parentNode) paintLogo(j); }, function () {});
+    rpc('shop_site', { p_token: tok() }).then(function (j) { if (j && el && el.parentNode) paintLogo(j); }, function () {});
   }
 
   function mount() {

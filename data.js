@@ -45,7 +45,9 @@ new MutationObserver(ms => {
   }));
 }).observe(document.documentElement, { childList: true, subtree: true });
 
-const SCACHE = 'exSiteCache';
+const EX_TK = (function(){ try { return localStorage.getItem('exSession') || sessionStorage.getItem('exSession') || ''; } catch(e){ return ''; } })();
+const EX_SCOPE = EX_TK ? ':' + EX_TK.slice(0, 8) : '';
+const SCACHE = 'exSiteCache' + EX_SCOPE;
 function setSite(j){
   if(!j || typeof j !== 'object') return;
   if(j.name) SITE.name = String(j.name);
@@ -80,7 +82,7 @@ function loadSite(){
   return fetch(EX_DB.url + '/rest/v1/rpc/shop_site', {
     method: 'POST', signal: ctl.signal,
     headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
-    body: '{}'
+    body: JSON.stringify({ p_token: EX_TK })
   }).then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
     .then(j => { try { localStorage.setItem(SCACHE, JSON.stringify(j)); } catch(e){} setSite(j); })
     .catch(() => {})
@@ -151,7 +153,7 @@ const products = [];
 window.productsLoaded = false;
 window.productsFailed = false;
 const EX_DB = { url: 'https://mjalctpfeizjukuprqti.supabase.co', key: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ' };
-const PCACHE = 'exProductsCache';
+const PCACHE = 'exProductsCache' + EX_SCOPE;
 
 const fmtKip = n => '₭' + (Number(n) || 0).toLocaleString('en-US');
 const escH = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -222,7 +224,7 @@ function loadProducts(){
   return fetch(EX_DB.url + '/rest/v1/rpc/shop_products', {
     method: 'POST', signal: ctl.signal,
     headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
-    body: '{}'
+    body: JSON.stringify({ p_token: EX_TK })
   }).then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
     .then(rows => {
       if(!Array.isArray(rows)) throw new Error('bad');
@@ -238,7 +240,7 @@ function loadProducts(){
    เพิ่ม/แก้/ลบหมวดที่หน้าแอดมิน (admin.html → ຈັດການໝວດໝູ່) — โหลดเสร็จแล้วยิงอีเวนต์ 'cats:ready' ให้ทุกหน้าวาดใหม่ */
 const cats = [];
 window.catsLoaded = false;
-const CCACHE = 'exCatsCache';
+const CCACHE = 'exCatsCache' + EX_SCOPE;
 function setCats(rows){
   cats.length = 0;
   (Array.isArray(rows) ? rows : []).forEach(r => cats.push({ id: r.id, k: String(r.k || ''), n: r.name || '', img: catImgSrc(r.img || r.image || r.img_url || r.cover || r.image_url || ''), c: 0 }));
@@ -253,7 +255,7 @@ function loadCategories(){
   return fetch(EX_DB.url + '/rest/v1/rpc/shop_categories', {
     method: 'POST', signal: ctl.signal,
     headers: { 'Content-Type': 'application/json', apikey: EX_DB.key, Authorization: 'Bearer ' + EX_DB.key },
-    body: '{}'
+    body: JSON.stringify({ p_token: EX_TK })
   }).then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
     .then(rows => {
       if(!Array.isArray(rows)) throw new Error('bad');
