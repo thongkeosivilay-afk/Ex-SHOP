@@ -114,6 +114,8 @@ html.chk body{visibility:hidden}
 .cf-b button:disabled{opacity:.5}
 .cf-b .no{color:#ff8a87;border-color:#d95b58}
 .cf-b .ok{background:#2fbf71;border-color:#2fbf71;color:#000}
+.cf-st{font-size:12px;font-weight:700;padding:2px 9px;border-radius:8px;border:1px solid;margin-left:6px}
+.cf-st.paid{color:#2fbf71;border-color:#1e6b43}.cf-st.pending{color:#f0a531;border-color:#7a5617}.cf-st.expired,.cf-st.rejected{color:#ff6b63;border-color:#7a2f2b}
 .cf-e{text-align:center;color:#6d6d72;font-size:14px;padding:22px 0 26px}
 .cf-ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:18px}
 .cf-ov.show{display:flex}
@@ -324,7 +326,7 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
     <a class="nr nr-dash on" href="#top" id="goDash" aria-current="page"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM5.7 11.5a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM7.800000000000001 7.2a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM13.2 7.2a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM15.3 11.5a1.5 1.5 0 1 0 3.0 0a1.5 1.5 0 1 0 -3.0 0zM10 16a2 2 0 1 0 4 0a2 2 0 1 0 -4 0z"/></svg><span>Dashboard</span></a>
     <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="2.5" width="8" height="8" rx="1.6"/><rect x="2.5" y="12.5" width="8" height="8.5" rx="1.6"/><rect x="13.5" y="12.5" width="8" height="8.5" rx="1.6"/></svg><span>ສິນຄ້າ &amp; ໝວດໝູ່</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" id="goProd"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5 3h14a2 2 0 0 1 2 2v2.500H3V5a2 2 0 0 1 2-2zM4.500 9h15v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zM10 12.200h4a.9.9 0 0 1 0 1.800h-4a.9.9 0 0 1 0-1.800z"/></svg><span>ຈັດການສິນຄ້າ &amp; ໝວດໝູ່</span></button><button class="si" type="button" onclick="location.href='admin-coupons.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg><span>ຄູປອງ &amp; ໂຄ້ດຟຣີ</span></button><button class="si" type="button" onclick="location.href='admin-flash.html'"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2 4.5 13.5H11L9.8 22l9.7-12H13z"/></svg><span>Flash Sale</span></button><button class="si" type="button" onclick="location.href='admin-stock.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v8a2 2 0 0 1-1 1.7l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.7l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/><path d="M12 8v8M8 12h8"/></svg><span>ເຕີມສະຕັອກ</span></button></div></div></div></div>
     <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.2"/><circle cx="4.8" cy="9.5" r="2.4"/><circle cx="19.2" cy="9.5" r="2.4"/><path d="M5.8 19c0-3.3 2.8-5.5 6.2-5.5s6.2 2.2 6.2 5.5z"/><path d="M1.5 17c0-2.3 1.6-3.8 3.6-3.8.8 0 1.5.2 2 .6-1.2 1-1.9 2.3-2 3.9z"/><path d="M22.5 17c0-2.3-1.6-3.8-3.6-3.8-.8 0-1.5.2-2 .6 1.2 1 1.9 2.3 2 3.9z"/></svg><span>ສະມາຊິກ &amp; ລາຍການ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-members.html'"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="4"/><path d="M1.800 20c0-3.600 3.200-6.200 7.200-6.200 1 0 1.900.2 2.800.5l-.6 5.700z"/><path fill-rule="evenodd" d="M18.300 12.600l.8.100.5 1.300 1.200.5 1.200-.7 1 1-.7 1.200.5 1.200 1.300.5v1.400l-1.300.5-.5 1.200.7 1.200-1 1-1.200-.7-1.200.5-.5 1.300h-1.400l-.5-1.300-1.200-.5-1.200.7-1-1 .7-1.200-.5-1.200-1.300-.5v-1.400l1.300-.5.5-1.200-.7-1.200 1-1 1.200.7 1.200-.5.5-1.300zM18 17a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800z" transform="translate(-1.800 -4.200) scale(.92)"/></svg><span>ຈັດການສະມາຊິກ</span></button><button class="si" type="button" onclick="location.href='admin-agents.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.500 2.500a1 1 0 1 0 3-3l-3.880-3.880a3 3 0 0 0-4.240 0l-.88.880a1 1 0 1 1-3-3l2.810-2.810a5.790 5.790 0 0 1 7.060-.870l.470.280a2 2 0 0 0 1.420.250L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.500 6.500a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg><span>ຕົວແທນຈຳໜ່າຍ</span></button></div></div></div></div>
-    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg><span>ລະບົບຊຳລະເງິນ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-topup.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/></svg><span>ອະນຸມັດເຕີມເງິນ</span></button><button class="si" type="button" onclick="location.href='admin-payment.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>QR ຊຳລະເງິນ</span></button></div></div></div></div>
+    <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H17a1.5 1.5 0 0 1 1.5 1.5V8H20a1.5 1.5 0 0 1 1.5 1.5v8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5zM17 13.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6z"/></svg><span>ລະບົບຊຳລະເງິນ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-topup.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2Z"/></svg><span>ທຸລະກຳ</span></button><button class="si" type="button" onclick="location.href='admin-payment.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3m4-3v.01M14 21h.01M17 21h4v-4"/></svg><span>QR ຊຳລະເງິນ</span></button></div></div></div></div>
     <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2.5v4.5M15 2.5v4.5M12 17.5v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5.5 7h13v3.5a6.5 6.5 0 0 1-13 0z"/></svg><span>ເຊື່ອມຕໍ່ API</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-webhook.html'"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5 5.600Q8.200 3.700 12 3.500q3.800.2 7 2.100 2.700 4.100 3 11-2.600 2.200-5.800 3l-1.200-1.900H9L7.800 19.600q-3.200-.8-5.800-3 .3-6.900 3-11zM8.800 10.300a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800zM15.200 10.300a1.900 1.900 0 1 0 0 3.800 1.900 1.900 0 0 0 0-3.800z"/></svg><span>Webhook Discord</span></button></div></div></div></div>
     <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5h-8M9 5H3M21 12h-3M14 12H3M21 19h-9M8 19H3"/><path d="M11 3v4M16 10v4M10 17v4"/></svg><span>ຕັ້ງຄ່າທົ່ວໄປ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-settings.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>ຕັ້ງຄ່າເວັບໄຊ</span></button></div></div></div></div>
     <div class="grp"><button class="nr" type="button" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span>ຄູ່ມືສອນໃຊ້ງານ</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="gw"><div class="gi"><div class="sp"><button class="si" type="button" onclick="location.href='admin-guide.html'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>ພາບລວມທຸກໜ້າ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#products'"><span class="gn">1</span><span>ຈັດການສິນຄ້າ &amp; ໝວດໝູ່</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#stock'"><span class="gn">4</span><span>ເຕີມສະຕັອກ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#members'"><span class="gn">5</span><span>ຈັດການສະມາຊິກ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#agents'"><span class="gn">6</span><span>ຕົວແທນຈຳໜ່າຍ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#topup'"><span class="gn">7</span><span>ອະນຸມັດເຕີມເງິນ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#payment'"><span class="gn">8</span><span>QR ຊຳລະເງິນ</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#webhook'"><span class="gn">9</span><span>Webhook Discord</span></button><button class="si" type="button" onclick="location.href='admin-guide.html#settings'"><span class="gn">10</span><span>ຕັ້ງຄ່າເວັບໄຊ</span></button></div></div></div></div>
@@ -464,13 +466,13 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
   <section class="cf" id="cfCard">
     <div class="cf-h">
       <div class="cf-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.8 12.3l2.7 2.7 5.7-5.9"/></svg></div>
-      <div><h3 class="cf-t">ຢືນຢັນເຕີມເງິນ</h3><p class="cf-s">ລາຍການລໍຖ້າອະນຸມັດ ກົດຢືນຢັນໄດ້ທັນທີ</p></div>
+      <div><h3 class="cf-t">ທຸລະກຳລ່າສຸດ</h3><p class="cf-s">ການຊຳລະຜ່ານ LAO QR ເຂົ້າອັດຕະໂນມັດ</p></div>
       <span class="cf-n z" id="cfN">0</span>
     </div>
     <div class="cf-l" id="cfList"><div class="cf-e">ກຳລັງໂຫຼດ...</div></div>
+    <div class="cf-b" style="margin:0 0 12px"><button type="button" onclick="location.href='admin-topup.html'">ເບິ່ງທຸລະກຳທັງໝົດ</button></div>
   </section>
-  <div class="cf-ov" id="cfOv"><b>✕</b><img id="cfImg" alt="slip"></div>
-  </div>
+    </div>
   <div class="view" id="vProd" hidden>
     <div class="tabs" id="tabs" role="tablist">
       <span class="tab-ind no-anim" id="tabInd"></span>
@@ -712,25 +714,19 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
 })();
 </script>
 <script>
-/* ===== ຢືນຢັນເຕີມເງິນ — ໃຊ້ຟັງຊັນເດີມຂອງໜ້າ admin-topup: adm_topup_list / adm_topup_slip / adm_topup_review (ກວດສິດແອດມິນຝັ່ງ Supabase) ===== */
+/* ===== ທຸລະກຳລ່າສຸດ — ດຶງຈາກ adm_tx_list (ກວດສິດແອດມິນຝັ່ງ Supabase) ===== */
 (function () {
   var SB = { url: 'https://mjalctpfeizjukuprqti.supabase.co', key: 'sb_publishable_3EZ-Ulah6h9Xzze_DE0xow_E6iGHNiJ' };
-  var TOKEN_KEY = 'exSession';
-  var list = document.getElementById('cfList'), cnt = document.getElementById('cfN'),
-      ov = document.getElementById('cfOv'), img = document.getElementById('cfImg');
+  var list = document.getElementById('cfList'), cnt = document.getElementById('cfN');
   if (!list) return;
-  var busy = false, tt, nf = new Intl.NumberFormat('en-US');
+  var nf = new Intl.NumberFormat('en-US');
   var fmt = function (n) { return '\u20ad' + nf.format(Number(n) || 0); };
-  var BANK = { bcel:'BCEL', ldb:'LDB', jdb:'JDB', apb:'APB', lvb:'LVB', stb:'STB', psvb:'PSVB', idcb:'IDCB', acleda:'ACLEDA', mjbl:'MJBL', bic:'BIC', vtb:'VietinBank', vcb:'Vietcombank', bfl:'BFL', icbc:'ICBC', boc:'BOC', pbl:'Public Bank', lcnb:'LCNB' };
+  var ST = { paid: '\u0eaa\u0ebb\u0ec9\u0ea5\u0eb3\u0ec0\u0ea5\u0eb1\u0e94', pending: '\u0ea5\u0ecd\u0ea5\u0ecd\u0eb2', expired: '\u0ec4\u0ebb\u0ea5\u0eb2\u0e8d\u0eb8', rejected: '\u0e9a\u0ecd\u0ec8\u0e9c\u0ec8\u0eb2\u0e99' };
+  ST = { paid: 'ສຳເລັດ', pending: 'ລໍຖ້າ', expired: 'ໝົດອາຍຸ', rejected: 'ບໍ່ຜ່ານ' };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function tok() {
-    try { if (window.exToken) return window.exToken(); return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || ''; }
+    try { if (window.exToken) return window.exToken(); return localStorage.getItem('exSession') || sessionStorage.getItem('exSession') || ''; }
     catch (e) { return ''; }
-  }
-  function toast(m) {
-    var sn = document.getElementById('snack'); if (!sn) return;
-    sn.textContent = m; sn.classList.add('show'); clearTimeout(tt);
-    tt = setTimeout(function () { sn.classList.remove('show'); }, 2600);
   }
   function rpc(name, body) {
     var ctl = new AbortController(), to = setTimeout(function () { ctl.abort(); }, 15000);
@@ -741,53 +737,27 @@ header.open .nav{opacity:1;visibility:visible;transform:none}
     }).then(function (r) { return r.json().catch(function () { return null; }); })
       .finally(function () { clearTimeout(to); });
   }
-  function render(rows) {
-    cnt.textContent = rows.length > 99 ? '99+' : String(rows.length);
-    cnt.classList.toggle('z', !rows.length);
-    if (!rows.length) { list.innerHTML = '<div class="cf-e">ບໍ່ມີລາຍການລໍຖ້າ</div>'; return; }
-    list.innerHTML = rows.map(function (r) {
+  function render(rows, pending) {
+    cnt.textContent = pending > 99 ? '99+' : String(pending);
+    cnt.classList.toggle('z', !pending);
+    if (!rows.length) { list.innerHTML = '<div class="cf-e">ຍັງບໍ່ມີທຸລະກຳ</div>'; return; }
+    list.innerHTML = rows.slice(0, 5).map(function (r) {
       var d = ''; try { d = new Date(r.at).toLocaleString('en-GB', { hour12: false, timeZone: 'Asia/Vientiane' }); } catch (e) {}
-      var bank = BANK[r.bank] || r.bank || '';
-      return '<div class="cf-it"><div class="cf-r"><span class="cf-u">' + esc(r.username || '\u2014') + '</span><span class="cf-a">' + fmt(r.amount) + '</span></div>'
-        + '<div class="cf-m">' + esc(bank) + ' \u2022 ' + esc(d) + '</div>'
-        + '<div class="cf-b"><button type="button" data-a="slip" data-id="' + r.id + '">ເບິ່ງສະລິບ</button>'
-        + '<button type="button" class="no" data-a="no" data-id="' + r.id + '">ປະຕິເສດ</button>'
-        + '<button type="button" class="ok" data-a="ok" data-id="' + r.id + '">ອະນຸມັດ</button></div></div>';
+      var m = r.method === 'PROMPTPAY' ? 'PromptPay LAO QR' : String(r.bank || 'QR').toUpperCase();
+      return '<div class="cf-it"><div class="cf-r"><span class="cf-u">' + esc(r.username || '\u2014') + '<span class="cf-st ' + esc(r.status) + '">' + esc(ST[r.status] || r.status) + '</span></span><span class="cf-a">' + fmt(r.amount) + '</span></div>'
+        + '<div class="cf-m">' + esc(m) + ' \u2022 ' + esc(d) + '</div></div>';
     }).join('');
   }
   function load() {
-    var t = tok(); if (!t || busy) return;
-    rpc('adm_topup_list', { p_token: t, p_status: 'pending' }).then(function (j) {
+    var t = tok(); if (!t) return;
+    rpc('adm_tx_list', { p_token: t }).then(function (j) {
       if (!j || !j.ok) { if (!list.querySelector('.cf-it')) list.innerHTML = '<div class="cf-e">ບໍ່ມີສິດເຂົ້າເຖິງ ຫຼື ເຊດຊັນໝົດອາຍຸ</div>'; return; }
-      render(j.rows || []);
+      render(j.rows || [], Number(j.pending) || 0);
     }).catch(function () { if (!list.querySelector('.cf-it')) list.innerHTML = '<div class="cf-e">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
   }
-  list.addEventListener('click', function (e) {
-    var b = e.target.closest && e.target.closest('button[data-a]'); if (!b || busy) return;
-    var id = Number(b.getAttribute('data-id')), a = b.getAttribute('data-a');
-    if (a === 'slip') {
-      rpc('adm_topup_slip', { p_token: tok(), p_id: id }).then(function (j) {
-        if (j && j.ok && j.slip) { img.src = j.slip; ov.classList.add('show'); } else toast('ບໍ່ພົບສະລິບ');
-      }).catch(function () { toast('ໂຫຼດສະລິບບໍ່ໄດ້'); });
-      return;
-    }
-    var ok = a === 'ok';
-    if (!confirm(ok ? 'ຢືນຢັນອະນຸມັດ ແລະເພີ່ມເງິນເຂົ້າບັນຊີສະມາຊິກ?' : 'ປະຕິເສດລາຍການນີ້?')) return;
-    busy = true;
-    Array.prototype.forEach.call(list.querySelectorAll('button'), function (x) { x.disabled = true; });
-    rpc('adm_topup_review', { p_token: tok(), p_id: id, p_approve: ok, p_note: '' }).then(function (j) {
-      busy = false;
-      if (j && j.ok) {
-        toast(ok ? 'ອະນຸມັດແລ້ວ \u2014 ຍອດໃໝ່ ' + fmt(j.balance) : 'ປະຕິເສດແລ້ວ');
-        var p = document.querySelector('.adm-pill'); if (p) p.click();
-        document.dispatchEvent(new Event('exrefresh'));
-      } else toast(j && j.code === 'nf' ? 'ລາຍການນີ້ຖືກດຳເນີນການແລ້ວ' : 'ເຮັດບໍ່ສຳເລັດ');
-      load();
-    }).catch(function () { busy = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); load(); });
-  });
-  ov.addEventListener('click', function () { ov.classList.remove('show'); img.removeAttribute('src'); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
-  setInterval(load, 30000);
+  document.addEventListener('exrefresh', load);
+  setInterval(load, 15000);
   load();
 })();
 </script>

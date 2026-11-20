@@ -4,46 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>ອະນຸມັດເຕີມເງິນ</title>
+<title>ທຸລະກຳ</title>
 <script src="guard.js"></script>
 <link rel="stylesheet" href="admin-nav.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Lao+Looped:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ff0000;--red-rgb:255,0,0;--bg:#000;--card:#000;--line:#2a2a2e;--txt:#fff;--mut:#bdbdc7;--ok:#2fbf71;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
+:root{--red:#ff0000;--red-rgb:255,0,0;--line:#262629;--mut:#9a9aa3;--ok:#2fbf71;--warn:#f0a531;--bad:#ff6b63;--f:'Outfit','Noto Sans Lao Looped',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:#000;color:var(--txt);font-family:var(--f);min-height:100%}
+html,body{background:#000;color:#fff;font-family:var(--f);min-height:100%}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 .wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
-.box{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:14px;margin-bottom:14px}
-.box h2{font-size:15px;font-weight:700;margin-bottom:10px}
-.row{display:flex;gap:8px}
+.hd{border:1px solid var(--line);border-radius:22px;background:#0a0a0a;padding:16px 16px 14px;margin-bottom:12px}
+.hd-t{display:flex;align-items:center;gap:12px}
+.hd-i{flex:none;width:44px;height:44px;border-radius:13px;background:#1b1b1d;border:1px solid #2c2c30;display:grid;place-items:center;color:#cfcfd6}
+.hd-i svg{width:22px;height:22px}
+.hd-t h2{font-size:24px;font-weight:700;line-height:1.2}
+.hd-t p{margin-top:2px;color:var(--mut);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 15px;border-radius:999px;border:1px solid #2c2c30;background:#0f0f10;font-size:14px;color:#c4c4cb}
+.chip b{color:#fff;font-weight:700;font-size:15px}
+.srch{border:1px solid var(--line);border-radius:18px;background:#0a0a0a;padding:0 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;height:54px}
+.srch svg{width:19px;height:19px;color:var(--mut);flex:none}
+.srch input{flex:1;min-width:0;height:100%;background:none;border:0;outline:0;font-size:15px}
+.srch input::placeholder{color:#55555c}
+.srch span{flex:none;color:var(--mut);font-size:13px;display:flex;align-items:center;gap:5px}
+.tl{position:relative;padding-left:30px}
+.tl:before{content:"";position:absolute;left:8px;top:14px;bottom:14px;width:2px;background:#232326;border-radius:2px}
+.tx{position:relative;border:1px solid var(--line);border-radius:20px;background:#0a0a0a;padding:14px 15px;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px}
+.tx:before{content:"";position:absolute;left:-27px;top:26px;width:12px;height:12px;border-radius:50%;background:#3a3a3f;border:2px solid #000}
+.tx.paid:before{background:var(--ok)}.tx.pending:before{background:var(--warn)}
+.tx-l{min-width:0}
+.bd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mth{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 6px;border-radius:999px;background:#1b1b1d;border:1px solid #2c2c30;font-weight:600;font-size:14px;white-space:nowrap}
+.mth i{width:24px;height:24px;border-radius:7px;background:#fff;color:#d71920;display:grid;place-items:center;font:800 8px/1 var(--f);font-style:normal;letter-spacing:-.2px}
+.st{height:28px;padding:0 11px;border-radius:9px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;border:1px solid}
+.st.paid{color:var(--ok);border-color:#1e6b43;background:rgba(47,191,113,.1)}
+.st.pending{color:var(--warn);border-color:#7a5617;background:rgba(240,165,49,.1)}
+.st.expired,.st.rejected{color:var(--bad);border-color:#7a2f2b;background:rgba(255,107,99,.1)}
+.id{margin-top:11px;font-size:17px;font-weight:700;word-break:break-all;line-height:1.3}
+.dt{margin-top:6px;color:var(--mut);font-size:13.5px}
+.us{color:#c4c4cb}
+.tx-r{text-align:right;flex:none}
+.am{font-size:19px;font-weight:800;white-space:nowrap}
+.am.paid{color:var(--ok)}
+.al{margin-top:5px;color:var(--mut);font-size:13px}
+.empty{text-align:center;color:var(--mut);padding:34px 0;font-size:14px}
+.box{border:1px solid var(--line);border-radius:18px;background:#0a0a0a;padding:14px;margin-top:6px}
+.box summary{font-size:15px;font-weight:700;cursor:pointer;list-style:none}
+.box summary::-webkit-details-marker{display:none}
+.box .r{display:flex;gap:8px;margin-top:12px}
 .in{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--line);background:#000;padding:0 12px;outline:none}
 .in:focus{border-color:var(--red)}
 .btn{height:44px;padding:0 16px;border-radius:12px;background:var(--red);color:#fff;font-weight:700;white-space:nowrap}
 .btn:disabled{opacity:.5}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{flex:1;height:38px;border-radius:10px;border:1px solid var(--line);color:var(--mut);font-weight:600;font-size:14px}
-.tab.on{border-color:var(--red);color:#fff;background:rgba(var(--red-rgb),.12)}
-.it{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--card)}
-.it .h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.it .u{font-weight:700;font-size:15px;word-break:break-all}
-.it .a{font-weight:800;font-size:18px;color:var(--red)}
-.it .m{margin-top:4px;color:var(--mut);font-size:12.5px}
-.it .act{display:flex;gap:8px;margin-top:10px}
-.sm{flex:1;height:40px;border-radius:10px;border:1px solid var(--line);font-weight:600;font-size:13.5px}
-.sm.ok{background:var(--ok);border-color:var(--ok);color:#000}
-.sm.no{color:#ff8a87;border-color:#d95b58}
-.tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:7px;border:1px solid}
-.tag.approved{color:var(--ok);border-color:var(--ok)}.tag.rejected{color:#ff8a87;border-color:#d95b58}
-.empty{text-align:center;color:var(--mut);padding:30px 0;font-size:14px}
-.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:18px}
-.ov.show{display:flex}
-.ov img{max-width:100%;max-height:82vh;border-radius:12px;border:1px solid var(--line)}
-.ov .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;width:40px;height:40px;border-radius:50%;background:#1a1a1d;font-size:18px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,20px);background:#1b1b1f;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90%}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-
 </style>
 <script>window.EX_THEME_ADMIN=1</script>
 <script src="theme.js"></script>
@@ -53,97 +69,77 @@ button{cursor:pointer;border:0;background:none}
 </head>
 <body>
 <script src="admin-nav.js"></script>
-<h2 class="pg-title">ອະນຸມັດເຕີມເງິນ</h2>
 <div class="wrap">
-  <div class="box">
-    <h2>ເຕີມເງິນໃຫ້ສະມາຊິກໂດຍກົງ</h2>
-    <div class="row">
+  <section class="hd">
+    <div class="hd-t">
+      <div class="hd-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2-3 2V4a1 1 0 0 1 1-1z"/><path d="M9 8h6M9 12h6"/></svg></div>
+      <div><h2>ທຸລະກຳ</h2><p>ປະຫວັດການຊຳລະຜ່ານ API</p></div>
+    </div>
+    <div class="chips">
+      <span class="chip">ລາຍຮັບ <b id="sInc">0 ₭</b></span>
+      <span class="chip">ທຸລະກຳ <b id="sCnt">0</b></span>
+      <span class="chip">ລໍຖ້າ <b id="sPen">0</b></span>
+    </div>
+  </section>
+
+  <label class="srch">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="ຄົ້ນຫາ Transaction ID / ຊື່ຜູ້ໃຊ້..." autocomplete="off" autocapitalize="off">
+    <span>LAK (₭)</span>
+  </label>
+
+  <div class="tl" id="list"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+
+  <details class="box">
+    <summary>ເຕີມເງິນໃຫ້ສະມາຊິກໂດຍກົງ</summary>
+    <div class="r">
       <input class="in" id="mu" placeholder="ຊື່ຜູ້ໃຊ້" autocapitalize="off" autocomplete="off">
       <input class="in" id="ma" placeholder="ຈຳນວນ (₭)" inputmode="numeric" autocomplete="off" style="max-width:130px">
     </div>
     <button class="btn" id="mgo" type="button" style="width:100%;margin-top:8px">ເຕີມເງິນ</button>
-  </div>
-
-  <div class="tabs" id="tabs">
-    <button class="tab on" data-s="pending" type="button">ລໍຖ້າ</button>
-    <button class="tab" data-s="approved" type="button">ອະນຸມັດແລ້ວ</button>
-    <button class="tab" data-s="rejected" type="button">ປະຕິເສດ</button>
-  </div>
-  <div id="list"><div class="empty">ກຳລັງໂຫຼດ...</div></div>
+  </details>
 </div>
-
-<div class="ov" id="ov"><button class="x" id="ovx" type="button">✕</button><img id="ovi" alt="slip"></div>
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
   var $ = function(s){ return document.querySelector(s); };
-  var cur = 'pending', busy = false, tt;
-  var nf = new Intl.NumberFormat('en-US');
-  var fmt = function(n){ return '₭' + nf.format(Number(n) || 0); };
-  var BANK = { bcel:'BCEL', ldb:'LDB', jdb:'JDB', apb:'APB', lvb:'LVB', stb:'STB', psvb:'PSVB', idcb:'IDCB', acleda:'ACLEDA', mjbl:'MJBL', bic:'BIC', vtb:'VietinBank', vcb:'Vietcombank', bfl:'BFL', icbc:'ICBC', boc:'BOC', pbl:'Public Bank', lcnb:'LCNB' };
+  var rows = [], tt, nf = new Intl.NumberFormat('en-US');
+  var fmt = function(n){ return nf.format(Math.round(Number(n) || 0)) + ' ₭'; };
+  var ST = { paid:'ສຳເລັດ', pending:'ລໍຖ້າ', expired:'ໝົດອາຍຸ', rejected:'ບໍ່ຜ່ານ' };
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
   function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove('show'); }, 2600); }
   function tok(){ return exToken(); }
-
-  
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function stamp(t){ var d = new Date(t); if(isNaN(d)) return ''; return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes()); }
+  function mname(r){ return r.method === 'PROMPTPAY' ? 'PromptPay LAO QR' : (String(r.bank || 'QR').toUpperCase() + ' (ສະລິບ)'); }
 
   function gate(){
     if(!tok()){ try{ sessionStorage.setItem('exNext','admin-topup.html'); }catch(e){} location.replace('index.html?auth=login'); return; }
     exRpc('member_is_admin', { p_token: tok() }).then(function(j){
-      if(j && j.ok && j.admin){ load(); } else { location.replace('index.html'); }
+      if(j && j.ok && j.admin){ load(); setInterval(function(){ if(!document.hidden) load(); }, 10000); }
+      else location.replace('index.html');
     }).catch(function(){ $('#list').innerHTML = '<div class="empty">ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້</div>'; });
   }
-
   function load(){
-    exRpc('adm_topup_list', { p_token: tok(), p_status: cur }).then(function(j){
+    exRpc('adm_tx_list', { p_token: tok() }).then(function(j){
       if(!j || !j.ok){ $('#list').innerHTML = '<div class="empty">ບໍ່ມີສິດເຂົ້າເຖິງ</div>'; return; }
-      render(j.rows || []);
-    }).catch(function(){ $('#list').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
+      rows = j.rows || [];
+      $('#sInc').textContent = fmt(j.income); $('#sCnt').textContent = j.count; $('#sPen').textContent = j.pending;
+      render();
+    }).catch(function(){ if(!rows.length) $('#list').innerHTML = '<div class="empty">ໂຫຼດບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div>'; });
   }
-
-  function render(rows){
-    if(!rows.length){ $('#list').innerHTML = '<div class="empty">ບໍ່ມີລາຍການ</div>'; return; }
-    $('#list').innerHTML = rows.map(function(r){
-      var d = new Date(r.at).toLocaleString('en-GB', { hour12:false });
-      var bank = BANK[r.bank] || r.bank || '';
-      var act = r.status === 'pending'
-        ? '<div class="act"><button class="sm" data-a="slip" data-id="'+r.id+'" type="button">ເບິ່ງສະລິບ</button><button class="sm no" data-a="no" data-id="'+r.id+'" type="button">ປະຕິເສດ</button><button class="sm ok" data-a="ok" data-id="'+r.id+'" type="button">ອະນຸມັດ</button></div>'
-        : '<div class="act"><button class="sm" data-a="slip" data-id="'+r.id+'" type="button">ເບິ່ງສະລິບ</button></div>';
-      var tag = r.status === 'pending' ? '' : ' <span class="tag '+esc(r.status)+'">'+(r.status === 'approved' ? 'ອະນຸມັດແລ້ວ' : 'ປະຕິເສດ')+'</span>';
-      return '<div class="it"><div class="h"><span class="u">'+esc(r.username || '—')+tag+'</span><span class="a">'+fmt(r.amount)+'</span></div>'
-        + '<div class="m">'+esc(bank)+' • '+esc(d)+'</div>'+act+'</div>';
+  function render(){
+    var k = $('#q').value.trim().toLowerCase();
+    var f = rows.filter(function(r){ return !k || [r.txid, r.username, r.amount, mname(r), ST[r.status]].some(function(v){ return String(v == null ? '' : v).toLowerCase().indexOf(k) >= 0; }); });
+    if(!f.length){ $('#list').innerHTML = '<div class="empty">' + (rows.length ? 'ບໍ່ພົບລາຍການທີ່ຄົ້ນຫາ' : 'ຍັງບໍ່ມີທຸລະກຳ') + '</div>'; return; }
+    $('#list').innerHTML = f.map(function(r){
+      return '<article class="tx ' + esc(r.status) + '"><div class="tx-l"><div class="bd"><span class="mth"><i>LAO<br>QR</i>' + esc(mname(r)) + '</span><span class="st ' + esc(r.status) + '">' + esc(ST[r.status] || r.status) + '</span></div>'
+        + '<div class="id">' + esc(r.txid) + '</div><div class="dt">' + esc(stamp(r.at)) + (r.username ? ' · <span class="us">' + esc(r.username) + '</span>' : '') + '</div></div>'
+        + '<div class="tx-r"><div class="am ' + (r.status === 'paid' ? 'paid' : '') + '">' + (r.status === 'paid' ? '+' : '') + fmt(r.amount) + '</div><div class="al">ຈຳນວນເງິນ</div></div></article>';
     }).join('');
   }
-
-  $('#tabs').addEventListener('click', function(e){
-    var b = e.target.closest('.tab'); if(!b) return;
-    cur = b.dataset.s;
-    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === b); });
-    $('#list').innerHTML = '<div class="empty">ກຳລັງໂຫຼດ...</div>'; load();
-  });
-
-  $('#list').addEventListener('click', function(e){
-    var b = e.target.closest('button[data-a]'); if(!b || busy) return;
-    var id = Number(b.dataset.id), a = b.dataset.a;
-    if(a === 'slip'){
-      exRpc('adm_topup_slip', { p_token: tok(), p_id: id }).then(function(j){
-        if(j && j.ok){ $('#ovi').src = j.slip; $('#ov').classList.add('show'); } else toast('ບໍ່ພົບສະລິບ');
-      }).catch(function(){ toast('ໂຫຼດສະລິບບໍ່ໄດ້'); });
-      return;
-    }
-    var ok = a === 'ok';
-    if(!confirm(ok ? 'ຢືນຢັນອະນຸມັດ ແລະເພີ່ມເງິນເຂົ້າບັນຊີສະມາຊິກ?' : 'ປະຕິເສດລາຍການນີ້?')) return;
-    busy = true;
-    exRpc('adm_topup_review', { p_token: tok(), p_id: id, p_approve: ok, p_note: '' }).then(function(j){
-      busy = false;
-      if(j && j.ok){ toast(ok ? 'ອະນຸມັດແລ້ວ — ຍອດໃໝ່ ' + fmt(j.balance) : 'ປະຕິເສດແລ້ວ'); }
-      else toast(j && j.code === 'nf' ? 'ລາຍການນີ້ຖືກດຳເນີນການແລ້ວ' : 'ເຮັດບໍ່ສຳເລັດ');
-      load();
-    }).catch(function(){ busy = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
-  });
-
-  $('#ov').onclick = function(){ $('#ov').classList.remove('show'); $('#ovi').removeAttribute('src'); };
+  var st; $('#q').addEventListener('input', function(){ clearTimeout(st); st = setTimeout(render, 120); });
 
   $('#ma').addEventListener('input', function(e){
     var n = parseInt(e.target.value.replace(/[^\d]/g,''), 10) || 0; e.target.value = n ? nf.format(n) : '';
@@ -159,8 +155,6 @@ button{cursor:pointer;border:0;background:none}
       else toast(j && j.code === 'nf' ? 'ບໍ່ພົບຊື່ຜູ້ໃຊ້ນີ້' : 'ເຕີມເງິນບໍ່ສຳເລັດ');
     }).catch(function(){ btn.disabled = false; toast('ເຊື່ອມຕໍ່ເຊີບເວີບໍ່ໄດ້'); });
   };
-
-  setInterval(function(){ if(!document.hidden && cur === 'pending') load(); }, 15000);
   gate();
 })();
 </script>
