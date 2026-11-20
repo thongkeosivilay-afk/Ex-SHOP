@@ -3,10 +3,7 @@
   document.body.insertAdjacentHTML('afterbegin', HTML + '<div class="snack" id="snack"></div>');
 
   /* การ์ดสถานะเว็บไซต์ / เปิดขาย 30 วัน — แสดงบนทุกหน้าแอดมิน (admin.html มี #saleMount ของตัวเองแล้ว) ตัวการ์ดอยู่ใน admin-sale.js */
-  (function(){
-    if(document.getElementById('saleMount')||window.__exSale) return;
-    var sc=document.createElement('script'); sc.src='admin-sale.js'; document.body.appendChild(sc);
-  })();
+  /* (ยกเลิกระบบเปิดขายแล้ว — ไม่โหลดการ์ดเปิดขายอีก) */
   var h=document.getElementById('hdr'),b=document.getElementById('menuBtn'),sn=document.getElementById('snack'),st;
   function set(o){h.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false')}
   function toast(t){sn.textContent=t;sn.classList.add('show');clearTimeout(st);st=setTimeout(function(){sn.classList.remove('show')},2200)}
