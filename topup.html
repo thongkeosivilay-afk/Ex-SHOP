@@ -266,7 +266,7 @@ const CONFIG = {
   maxAmount: 50000000,
   amounts: [10000, 50000, 100000, 200000, 500000, 1000000],
   pollMs: 3000,          // โพลเช็กสถานะทุก 3 วินาที
-  qrSeconds: 300,        // เวลานับถอยหลังที่โชว์ (ตัดสินสิ้นสุดจากเซิร์ฟเวอร์: จ่ายแล้ว / หมดอายุ)
+  qrSeconds: 300,        // ค่าสำรอง ถ้า Jvix ไม่ส่ง expires_at มา (ปกติใช้เวลาหมดอายุจริงจาก Jvix)
   graceSeconds: 90,      // เกินเวลาแล้วโพลต่ออีกช่วงหนึ่ง เผื่อเพิ่งโอน
   contacts: [
     { name:'Discord',  hint:'ແອດມິນ', short:'D', color:'#5865F2', url:'' },
@@ -368,15 +368,17 @@ function showQR(req, animate){
 function startTick(req){
   clearInterval(tickT);
   const run = ()=>{
+    const total = req.exp ? Math.max(30, (req.exp - req.at) / 1000) : CONFIG.qrSeconds;
+    const end = req.exp || (req.at + CONFIG.qrSeconds * 1000);
     const el = (Date.now() - req.at) / 1000;
-    const left = Math.max(0, CONFIG.qrSeconds - el);
-    ringSet(left / CONFIG.qrSeconds);
+    const left = Math.max(0, (end - Date.now()) / 1000);
+    ringSet(Math.min(1, left / total));
     $('#cdn').textContent = mmss(left);
     const low = left <= 30;
     $('#cd').classList.toggle('low', low);
     document.querySelector('.ring').classList.toggle('low', low);
     $('#cdLbl').textContent = left > 0 ? 'ເຫຼືອເວລາ' : 'ກຳລັງກວດສອບການໂອນ...';
-    if(el > CONFIG.qrSeconds + CONFIG.graceSeconds){ finish('expired'); }
+    if(Date.now() > end + CONFIG.graceSeconds * 1000){ finish('expired'); }
   };
   run(); tickT = setInterval(run, 250);
 }
@@ -392,6 +394,7 @@ function startPoll(req){
       if(j && j.ok){
         if(j.status === 'paid') finish('paid', j);
         else if(j.status === 'expired') finish('expired');
+        else if(j.expires_at && !req.exp){ req.exp = j.expires_at * 1000; store.set(PEND, req); }
       } else if(j && j.code === 'bad_session'){ finish('session'); }
     }).catch(()=>{}).finally(()=>{ polling = false; });
   };
@@ -435,7 +438,7 @@ function startQR(){
   pay({ action:'create', amount })
     .then(j=>{
       if(j && j.ok){
-        const req = { id: j.id, amount: j.amount || amount, qr_url: j.qr_url || '', at: Date.now() };
+        const req = { id: j.id, amount: j.amount || amount, qr_url: j.qr_url || '', at: Date.now(), exp: j.expires_at ? j.expires_at * 1000 : 0 };
         cur = req; store.set(PEND, req); showQR(req, true); return;
       }
       const c = j && j.code;
@@ -456,7 +459,7 @@ setBal(); syncBal(); renderInfo(); renderChips(); syncInput(); ringSet(1);
 /* ถ้ารีโหลดหน้าระหว่างรอจ่าย (เช่น สลับไปแอปธนาคาร) → กลับมาที่ QR เดิมและโพลต่อ */
 (function resume(){
   const p = store.get(PEND, null);
-  if(p && p.id && p.at && Date.now() - p.at < (CONFIG.qrSeconds + CONFIG.graceSeconds) * 1000){
+  if(p && p.id && p.at && Date.now() < (p.exp || p.at + CONFIG.qrSeconds * 1000) + CONFIG.graceSeconds * 1000){
     cur = p; showQR(p, false);
   } else store.del(PEND);
 })();
